@@ -1,102 +1,1611 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>कोटेश्वर नर्मदा घाट निर्माण – दान डैशबोर्ड</title>
-    <!-- Bootstrap 5 CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ENjdO4Dr2bkBIFxQpeoYz1H+6N0VQ4K/2Jz4vYjK3nY6V+8G5Z4a1r5Ue9F6bJw" crossorigin="anonymous">
-    <!-- Chart.js CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <style>
-        body { background-color: #f8f9fa; }
-        .card { margin-bottom: 1rem; }
-        .chart-container { position: relative; height: 300px; }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>कोटेश्वर नर्मदा घाट निर्माण अभियान | जनसहयोग एवं वित्तीय डैशबोर्ड</title>
+  
+  <!-- Google Fonts: Marcellus, Rozha One, Noto Sans Devanagari -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Rozha+One&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --ink: #0c121e;
+      --night: #141c2c;
+      --surface: #1b263b;
+      --surface2: #24344d;
+      --surface3: #2e4161;
+      --line: #354766;
+      --gold: #f39c12;
+      --gold-light: #f8c471;
+      --marigold: #e67e22;
+      --saffron: #ff6f00;
+      --narmada: #1abc9c;
+      --narmada-dark: #16a085;
+      --cream: #fbfcfc;
+      --muted: #95a5a6;
+      --light-muted: #bdc3c7;
+      --danger: #e74c3c;
+      --success: #2ecc71;
+      --r: 16px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background:
+        radial-gradient(1100px 600px at 15% -5%, #1d2d44 0%, transparent 60%),
+        radial-gradient(900px 500px at 85% 5%, #2c1d38 0%, transparent 55%),
+        var(--ink);
+      color: var(--cream);
+      font-family: "Noto Sans Devanagari", system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .wrap {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 24px 20px 80px;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: "Rozha One", "Marcellus", serif;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      margin: 0;
+    }
+
+    a { color: var(--gold); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ---------- MASTHEAD ---------- */
+    .masthead {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .mast-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(243, 156, 18, 0.15);
+      border: 1px solid rgba(243, 156, 18, 0.4);
+      color: var(--gold-light);
+      padding: 4px 12px;
+      border-radius: 99px;
+      font-size: 12.5px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .mast-title {
+      font-size: 32px;
+      color: #fff;
+      line-height: 1.2;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    }
+    .mast-title span {
+      color: var(--gold);
+    }
+    .mast-sub {
+      color: var(--light-muted);
+      font-size: 14px;
+      margin-top: 6px;
+    }
+    .mast-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+    }
+    .live-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--light-muted);
+    }
+    .pulse-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--narmada);
+      box-shadow: 0 0 0 0 rgba(26, 188, 156, 0.7);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(26, 188, 156, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(26, 188, 156, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(26, 188, 156, 0); }
+    }
+    .action-btn-group {
+      display: flex;
+      gap: 10px;
+    }
+    .btn {
+      background: var(--surface2);
+      color: var(--cream);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 8px 16px;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    .btn:hover {
+      background: var(--surface3);
+      border-color: var(--gold);
+      color: #fff;
+    }
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold), var(--marigold));
+      color: #111;
+      border: none;
+      font-weight: 600;
+    }
+    .btn-gold:hover {
+      background: linear-gradient(135deg, #f5b041, #f39c12);
+      color: #000;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(243, 156, 18, 0.4);
+    }
+
+    /* ---------- DHARMIC TICKER BANNER ---------- */
+    .dharmic-banner {
+      margin-top: 18px;
+      background: linear-gradient(90deg, rgba(230, 126, 34, 0.18), rgba(26, 188, 156, 0.12));
+      border: 1px solid rgba(243, 156, 18, 0.35);
+      border-radius: var(--r);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 14px;
+    }
+    .dharmic-motto {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff;
+    }
+    .dharmic-motto i {
+      color: var(--gold);
+      font-size: 18px;
+    }
+    .dharmic-badges {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .d-badge {
+      background: rgba(0,0,0,0.25);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      color: var(--light-muted);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .d-badge strong { color: var(--gold-light); }
+
+    /* ---------- HERO SECTION (At a glance) ---------- */
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(320px, 390px) 1fr;
+      gap: 24px;
+      margin-top: 24px;
+      align-items: stretch;
+    }
+    .ringbox {
+      background: linear-gradient(170deg, var(--surface) 0%, #111a28 100%);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 24px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .ringbox::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(320px 200px at 50% 10%, rgba(243, 156, 18, 0.15), transparent 70%);
+    }
+    .ring-caption {
+      font-family: "Rozha One", serif;
+      font-size: 20px;
+      color: var(--gold-light);
+      margin-bottom: 8px;
+    }
+    .ring-note {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+
+    .ledger {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 10px 24px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .ledger-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 13px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .ledger-row:last-of-type { border-bottom: none; }
+    .ledger-label {
+      color: var(--light-muted);
+      font-size: 14.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ledger-val {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    .ledger-val.big {
+      font-size: 32px;
+      font-family: "Rozha One", serif;
+      font-weight: 400;
+      color: var(--gold);
+    }
+    .ledger-val.teal { color: var(--narmada); }
+    .ledger-val.marigold { color: var(--marigold); }
+    .ledger-val.dim { color: var(--muted); font-size: 18px; font-weight: 500; }
+
+    .callout {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: linear-gradient(100deg, rgba(230, 126, 34, 0.18), rgba(26, 188, 156, 0.12));
+      border: 1px solid rgba(243, 156, 18, 0.4);
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: #e5e8ea;
+    }
+    .callout b { color: var(--gold-light); }
+
+    /* ---------- NAVIGATION TABS ---------- */
+    .tabs {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      margin-top: 32px;
+      border-bottom: 1px solid var(--line);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab {
+      flex: none;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: var(--light-muted);
+      font: inherit;
+      font-size: 15px;
+      font-weight: 500;
+      padding: 12px 18px 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .tab:hover { color: #fff; }
+    .tab[aria-selected="true"] {
+      color: var(--gold-light);
+      border-bottom-color: var(--gold);
+      font-weight: 600;
+    }
+    .tab-badge {
+      background: rgba(255,255,255,0.12);
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 99px;
+      color: #fff;
+    }
+
+    /* ---------- PANES & SECTIONS ---------- */
+    .pane[hidden] { display: none; }
+    section { margin-top: 32px; }
+    .sec-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
+      margin-bottom: 22px;
+    }
+    .sec-title {
+      font-size: 24px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sec-title i { color: var(--gold); font-size: 20px; }
+    .sec-note { color: var(--muted); font-size: 13.5px; }
+
+    /* GRID LAYOUTS */
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+
+    /* STAT CARDS */
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      padding: 18px 20px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .stat:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+    }
+    .stat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .stat .k { color: var(--light-muted); font-size: 13.5px; }
+    .stat-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    .stat .n {
+      font-size: 30px;
+      font-family: "Rozha One", serif;
+      line-height: 1.1;
+      color: #fff;
+    }
+    .stat .hint {
+      font-size: 12.5px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+    }
+    .stat.accent-gold .n { color: var(--gold); }
+    .stat.accent-gold .stat-icon { background: rgba(243, 156, 18, 0.18); color: var(--gold); }
+    .stat.accent-teal .n { color: var(--narmada); }
+    .stat.accent-teal .stat-icon { background: rgba(26, 188, 156, 0.18); color: var(--narmada); }
+    .stat.accent-marigold .n { color: var(--marigold); }
+    .stat.accent-marigold .stat-icon { background: rgba(230, 126, 34, 0.18); color: var(--marigold); }
+    .stat.accent-blue .n { color: #5dade2; }
+    .stat.accent-blue .stat-icon { background: rgba(93, 173, 226, 0.18); color: #5dade2; }
+
+    /* PANELS */
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      padding: 22px 24px;
+    }
+    .panel h3 { font-size: 19px; color: #fff; margin-bottom: 4px; }
+    .panel .sub { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
+
+    /* BARS */
+    .bar-row {
+      display: grid;
+      grid-template-columns: 120px 1fr 110px;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .bar-name { font-size: 14.5px; color: var(--cream); font-weight: 500; }
+    .bar-track {
+      height: 18px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 9px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 9px;
+      transition: width 0.9s cubic-bezier(0.2, 0.7, 0.3, 1);
+    }
+    .bar-val { font-size: 13.5px; color: var(--light-muted); text-align: right; font-weight: 600; }
+
+    /* SPLIT STRIP */
+    .split-strip {
+      display: flex;
+      height: 38px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      background: rgba(255,255,255,0.08);
+      box-shadow: inset 0 1px 4px rgba(0,0,0,0.5);
+    }
+    .strip-part {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #0c121e;
+      transition: width 0.8s ease;
+    }
+    .strip-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      font-size: 13px;
+      color: var(--light-muted);
+    }
+    .legend-item { display: flex; align-items: center; gap: 8px; }
+    .legend-dot { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+    /* READINESS ROW */
+    .ready-item {
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 10px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 14px;
+      align-items: center;
+    }
+    .ready-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+    }
+    .ready-icon.done { background: rgba(46, 204, 113, 0.2); color: var(--success); }
+    .ready-icon.prog { background: rgba(243, 156, 18, 0.2); color: var(--gold); }
+    .ready-title { font-size: 14px; font-weight: 500; color: #fff; }
+    .ready-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .ready-badge {
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 99px;
+    }
+    .ready-badge.done { background: rgba(46, 204, 113, 0.15); color: #58d68d; border: 1px solid rgba(46, 204, 113, 0.4); }
+    .ready-badge.prog { background: rgba(243, 156, 18, 0.15); color: var(--gold-light); border: 1px solid rgba(243, 156, 18, 0.4); }
+
+    /* TABLES */
+    .tablewrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      background: var(--surface);
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 14px;
+    }
+    th, td {
+      padding: 13px 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    th {
+      background: rgba(255,255,255,0.06);
+      color: var(--light-muted);
+      font-weight: 600;
+      font-size: 13px;
+      position: sticky;
+      top: 0;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: rgba(255,255,255,0.04); }
+    td.num { text-align: right; font-weight: 600; }
+    .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .tag.rec { background: rgba(26, 188, 156, 0.18); color: #48c9b0; border: 1px solid rgba(26, 188, 156, 0.4); }
+    .tag.gosh { background: rgba(243, 156, 18, 0.18); color: var(--gold-light); border: 1px solid rgba(243, 156, 18, 0.4); }
+    .donor-role { font-size: 12px; color: var(--light-muted); display: block; margin-top: 2px; }
+
+    /* SEARCH & FILTER CONTROLS */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+      background: var(--surface);
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      align-items: center;
+    }
+    .search-box {
+      flex: 1;
+      min-width: 240px;
+      position: relative;
+    }
+    .search-box input {
+      width: 100%;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 9px 12px 9px 36px;
+      color: #fff;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+    }
+    .search-box input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 2px rgba(243, 156, 18, 0.2);
+    }
+    .search-box i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+    }
+    .filter-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .pill {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--line);
+      color: var(--light-muted);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .pill:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .pill.active {
+      background: var(--gold);
+      color: #0c121e;
+      border-color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* MISSION CARDS */
+    .mission-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .mission-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      padding: 22px 20px;
+      position: relative;
+      border-top: 4px solid var(--gold);
+    }
+    .mission-card h4 {
+      font-size: 18px;
+      color: var(--gold-light);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mission-card p {
+      color: #d0d7de;
+      font-size: 14px;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* MODAL FOR DONOR RECEIPT */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      padding: 20px;
+    }
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .cert-modal {
+      background: linear-gradient(135deg, #20132b 0%, #151c2e 100%);
+      border: 2px solid var(--gold);
+      border-radius: 20px;
+      max-width: 540px;
+      width: 100%;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+      position: relative;
+      text-align: center;
+    }
+    .cert-close {
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .cert-close:hover { color: #fff; }
+    .cert-om {
+      font-size: 32px;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .cert-title {
+      font-family: "Rozha One", serif;
+      font-size: 24px;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+    .cert-sub {
+      color: var(--gold-light);
+      font-size: 13.5px;
+      margin-bottom: 20px;
+    }
+    .cert-body {
+      background: rgba(0,0,0,0.3);
+      border: 1px dashed rgba(243, 156, 18, 0.5);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .cert-donor {
+      font-size: 20px;
+      color: #fff;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .cert-amount {
+      font-size: 26px;
+      font-family: "Rozha One", serif;
+      color: var(--gold);
+      margin: 10px 0;
+    }
+    .cert-foot {
+      font-size: 12.5px;
+      color: var(--light-muted);
+      line-height: 1.5;
+    }
+
+    /* FOOTER */
+    footer {
+      margin-top: 50px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-left strong { color: var(--cream); }
+    .footer-right { display: flex; gap: 14px; }
+
+    /* RESPONSIVE */
+    @media (max-width: 980px) {
+      .hero { grid-template-columns: 1fr; }
+      .grid2, .grid3, .grid4 { grid-template-columns: 1fr; }
+      .bar-row { grid-template-columns: 100px 1fr 90px; }
+      .mast-title { font-size: 26px; }
+      .mast-right { align-items: flex-start; }
+    }
+  </style>
 </head>
 <body>
-<div class="container py-4">
-    <h1 class="mb-4 text-center">कोटेश्वर नर्मदा घाट निर्माण – दान डैशबोर्ड</h1>
-    <div class="row" id="summary-cards">
-        <!-- Cards will be injected by JS -->
+
+<div class="wrap">
+
+  <!-- MASTHEAD -->
+  <header class="masthead">
+    <div>
+      <div class="mast-tag">
+        <i class="fa-solid fa-om"></i> माँ नर्मदे हर! जय माँ नर्मदा!
+      </div>
+      <h1 class="mast-title">कोटेश्वर नर्मदा <span>घाट निर्माण</span> महाअभियान</h1>
+      <div class="mast-sub">
+        कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान &#183; कोटेश्वर तीर्थ (कोठड़ा) &#183; प्रमुख निवेदक: श्री मोहन भाई पाटीदार (भंवरिया)
+      </div>
     </div>
-    <div class="row mt-4">
-        <div class="col-md-6">
-            <div class="chart-container">
-                <canvas id="donationChart"></canvas>
+    <div class="mast-right">
+      <div class="live-status">
+        <span class="pulse-dot"></span>
+        <span>अभियान स्थिति: <strong>प्रथम चरण (55 दिन) संपन्न</strong></span>
+      </div>
+      <div class="action-btn-group">
+        <button class="btn" onclick="printReport()"><i class="fa-solid fa-print"></i> रिपोर्ट प्रिंट करें</button>
+        <button class="btn btn-gold" onclick="openAddModal()"><i class="fa-solid fa-plus-circle"></i> नया सहयोग जोड़ें</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- DHARMIC MOTTO BANNER -->
+  <div class="dharmic-banner">
+    <div class="dharmic-motto">
+      <i class="fa-solid fa-quote-left"></i>
+      <span>“एक घाट का निर्माण केवल पत्थरों और सीमेंट से नहीं होता, बल्कि हजारों श्रद्धालुओं की आस्था, समाज के सहयोग और सेवाभावी कार्यकर्ताओं के समर्पण से होता है।”</span>
+    </div>
+    <div class="dharmic-badges">
+      <span class="d-badge"><i class="fa-solid fa-calendar-check"></i> 4 नवंबर संग्रह: <strong>₹2,37,997</strong></span>
+      <span class="d-badge"><i class="fa-solid fa-users"></i> दानदाता: <strong>11</strong></span>
+      <span class="d-badge"><i class="fa-solid fa-flag"></i> आगामी: <strong>दीपावली पश्चात द्वितीय चरण</strong></span>
+    </div>
+  </div>
+
+  <!-- NAVIGATION TABS -->
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tab-overview" aria-selected="true" onclick="switchTab('overview')">
+      <i class="fa-solid fa-chart-pie"></i> मुख्य अवलोकन (At a Glance)
+    </button>
+    <button class="tab" role="tab" id="tab-villages" aria-selected="false" onclick="switchTab('villages')">
+      <i class="fa-solid fa-location-dot"></i> नगर व ग्रामवार विवरण <span class="tab-badge" id="tab-donor-count">11</span>
+    </button>
+    <button class="tab" role="tab" id="tab-works" aria-selected="false" onclick="switchTab('works')">
+      <i class="fa-solid fa-trowel-bricks"></i> निर्माण कार्य एवं अनुमानित व्यय
+    </button>
+    <button class="tab" role="tab" id="tab-vision" aria-selected="false" onclick="switchTab('vision')">
+      <i class="fa-solid fa-hands-praying"></i> अभियान संदेश व परिचय
+    </button>
+  </nav>
+
+  <!-- ==================== PANE 1: OVERVIEW ==================== -->
+  <div class="pane" id="pane-overview" role="tabpanel">
+
+    <!-- HERO SECTION -->
+    <div class="hero">
+      <!-- Ring Box: Visual Progress -->
+      <div class="ringbox">
+        <div class="ring-caption">प्रथम चरण लक्ष्य प्रगति</div>
+        <svg id="heroRing" viewBox="0 0 260 230" width="100%" height="auto" role="img" aria-label="दान प्रगति चक्र"></svg>
+        <div class="ring-note">
+          प्रथम चरण लक्ष्य: <strong>₹25,00,000</strong><br>
+          अब तक 55 दिनों में सतत जनसंपर्क अभियान
+        </div>
+      </div>
+
+      <!-- Financial Ledger -->
+      <div class="ledger">
+        <div class="ledger-row">
+          <span class="ledger-label"><i class="fa-solid fa-hand-holding-dollar" style="color:var(--gold);"></i> कुल प्राप्त जनसहयोग (Received)</span>
+          <span class="ledger-val big" id="led-received">₹2,37,997</span>
+        </div>
+        <div class="ledger-row">
+          <span class="ledger-label"><i class="fa-solid fa-bullhorn" style="color:var(--marigold);"></i> कुल घोषित सहयोग (Total Ghoshna)</span>
+          <span class="ledger-val" id="led-announced" style="color:var(--gold-light);">₹2,37,997</span>
+        </div>
+        <div class="ledger-row">
+          <span class="ledger-label"><i class="fa-solid fa-file-invoice-dollar" style="color:var(--danger);"></i> अब तक कुल खर्च (Spent Amount)</span>
+          <span class="ledger-val dim" id="led-spent">₹42,500</span>
+        </div>
+        <div class="ledger-row">
+          <span class="ledger-label"><i class="fa-solid fa-vault" style="color:var(--narmada);"></i> वर्तमान शेष राशि (Cash in Hand / Bank)</span>
+          <span class="ledger-val teal" id="led-balance">₹1,95,497</span>
+        </div>
+        <div class="ledger-row">
+          <span class="ledger-label"><i class="fa-solid fa-chart-line" style="color:#5dade2;"></i> अनुमानित प्रथम चरण बजट (Projected Spending)</span>
+          <span class="ledger-val dim" id="led-projected">₹25,00,000</span>
+        </div>
+        <div class="callout">
+          <i class="fa-solid fa-circle-info" style="color:var(--gold);margin-right:6px;"></i>
+          <strong>वर्तमान स्थिति:</strong> दीपावली उत्सव के कारण अभियान अस्थायी रूप से स्थगित है। 
+          दीपावली पर्व के पश्चात घर-घर जनसंपर्क पुनः पूरे उत्साह से शुरू किया जाएगा।
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 KEY KPI STAT CARDS -->
+    <section>
+      <div class="sec-head">
+        <h2 class="sec-title"><i class="fa-solid fa-chart-simple"></i> महत्वपूर्ण वित्तीय आंकड़े</h2>
+        <div class="sec-note">4 नवंबर 2026 तक का संकलित डेटा</div>
+      </div>
+
+      <div class="grid4">
+        <div class="stat accent-gold">
+          <div class="stat-header">
+            <span class="k">कुल प्राप्त जनसहयोग</span>
+            <div class="stat-icon"><i class="fa-solid fa-coins"></i></div>
+          </div>
+          <div class="n" id="kpi-total">₹2,37,997</div>
+          <div class="hint">
+            <span>4 नवंबर संपर्क दिवस</span>
+            <span style="color:var(--gold);font-weight:600;">100% प्राप्ति</span>
+          </div>
+        </div>
+
+        <div class="stat accent-teal">
+          <div class="stat-header">
+            <span class="k">कुल सम्मानित दानदाता</span>
+            <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+          </div>
+          <div class="n" id="kpi-donors">11</div>
+          <div class="hint">
+            <span>कुक्षी (7) | सुसारी (4)</span>
+            <span style="color:var(--narmada);font-weight:600;">श्रद्धालु समाजजन</span>
+          </div>
+        </div>
+
+        <div class="stat accent-marigold">
+          <div class="stat-header">
+            <span class="k">नगर कुक्षी संग्रह</span>
+            <div class="stat-icon"><i class="fa-solid fa-city"></i></div>
+          </div>
+          <div class="n" id="kpi-kukshi">₹1,46,221</div>
+          <div class="hint">
+            <span>कुल 7 दानदाता</span>
+            <span style="color:var(--marigold);font-weight:600;">61.4% योगदान</span>
+          </div>
+        </div>
+
+        <div class="stat accent-blue">
+          <div class="stat-header">
+            <span class="k">ग्राम सुसारी संग्रह</span>
+            <div class="stat-icon"><i class="fa-solid fa-house-chimney"></i></div>
+          </div>
+          <div class="n" id="kpi-susari">₹91,776</div>
+          <div class="hint">
+            <span>कुल 4 दानदाता</span>
+            <span style="color:#5dade2;font-weight:600;">38.6% योगदान</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VILLAGE SHARE & READINESS CHECKLIST -->
+    <section>
+      <div class="grid2">
+        <!-- Village Share Panel -->
+        <div class="panel">
+          <h3><i class="fa-solid fa-map-location-dot" style="color:var(--gold);"></i> स्थानवार सहयोग विभाजन</h3>
+          <div class="sub">नगर व ग्राम अनुसार प्राप्त दान राशि का प्रतिशत</div>
+          
+          <div class="split-strip" id="villageSplitStrip"></div>
+          
+          <div class="strip-legend">
+            <div class="legend-item">
+              <span class="legend-dot" style="background:#f39c12;"></span>
+              <span>नगर कुक्षी: <strong id="lg-kukshi">₹1,46,221 (61.4%)</strong></span>
             </div>
+            <div class="legend-item">
+              <span class="legend-dot" style="background:#1abc9c;"></span>
+              <span>ग्राम सुसारी: <strong id="lg-susari">₹91,776 (38.6%)</strong></span>
+            </div>
+          </div>
+
+          <div style="margin-top:24px;">
+            <div class="bar-row">
+              <div class="bar-name">नगर कुक्षी</div>
+              <div class="bar-track"><div class="bar-fill" id="bar-kukshi" style="background:#f39c12;width:61.4%;"></div></div>
+              <div class="bar-val" id="bar-val-kukshi">₹1,46,221</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-name">ग्राम सुसारी</div>
+              <div class="bar-track"><div class="bar-fill" id="bar-susari" style="background:#1abc9c;width:38.6%;"></div></div>
+              <div class="bar-val" id="bar-val-susari">₹91,776</div>
+            </div>
+          </div>
         </div>
-        <div class="col-md-6">
-            <h4 class="mb-3">गांववार संग्रह / घोषण राशि</h4>
-            <table class="table table-striped" id="village-table">
-                <thead class="table-dark">
-                <tr>
-                    <th>गांव</th>
-                    <th>राशि (₹)</th>
-                </tr>
-                </thead>
-                <tbody>
-                <!-- Rows injected by JS -->
-                </tbody>
-            </table>
+
+        <!-- Project Readiness Checklist -->
+        <div class="panel">
+          <h3><i class="fa-solid fa-list-check" style="color:var(--narmada);"></i> निर्माण तैयारी एवं प्रगति स्थिति</h3>
+          <div class="sub">घाट निर्माण के विभिन्न चरणों की वर्तमान वस्तुस्थिति</div>
+
+          <div class="ready-item">
+            <div class="ready-icon done"><i class="fa-solid fa-check"></i></div>
+            <div>
+              <div class="ready-title">प्रथम चरण जनसंपर्क अभियान</div>
+              <div class="ready-desc">55 दिनों तक लगातार घर-घर संपर्क एवं जागरूकता</div>
+            </div>
+            <span class="ready-badge done">100% संपन्न</span>
+          </div>
+
+          <div class="ready-item">
+            <div class="ready-icon done"><i class="fa-solid fa-check"></i></div>
+            <div>
+              <div class="ready-title">घाट स्थल एवं तट सीमांकन</div>
+              <div class="ready-desc">कोटेश्वर तीर्थ पर घाट निर्माण भूमि का चिन्हांकन</div>
+            </div>
+            <span class="ready-badge done">पूर्ण</span>
+          </div>
+
+          <div class="ready-item">
+            <div class="ready-icon prog"><i class="fa-solid fa-hourglass-half"></i></div>
+            <div>
+              <div class="ready-title">प्रशासनिक सहभागिता एवं स्वीकृति</div>
+              <div class="ready-desc">तहसीलदार महोदय एवं स्थानीय प्रशासन से निरंतर समन्वय</div>
+            </div>
+            <span class="ready-badge prog">प्रगति पर</span>
+          </div>
+
+          <div class="ready-item">
+            <div class="ready-icon prog"><i class="fa-solid fa-hourglass-half"></i></div>
+            <div>
+              <div class="ready-title">दीपावली पश्चात द्वितीय चरण जनसंपर्क</div>
+              <div class="ready-desc">अन्य नगरों व ग्रामीण अंचलों में जनसहयोग अभियान</div>
+            </div>
+            <span class="ready-badge prog">प्रस्तावित</span>
+          </div>
         </div>
+      </div>
+    </section>
+
+  </div><!-- /pane-overview -->
+
+  <!-- ==================== PANE 2: VILLAGES & DONORS ==================== -->
+  <div class="pane" id="pane-villages" role="tabpanel" hidden>
+    <section>
+      <div class="sec-head">
+        <h2 class="sec-title"><i class="fa-solid fa-address-book"></i> नगर एवं ग्रामवार दानदाता विवरण</h2>
+        <div class="sec-note">दानदाताओं के नाम, पद एवं सहयोग राशि</div>
+      </div>
+
+      <!-- FILTER & SEARCH BAR -->
+      <div class="filter-bar">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="donorSearch" placeholder="दानदाता का नाम, पद, या स्थान खोजें..." oninput="filterDonors()">
+        </div>
+        <div class="filter-pills">
+          <button class="pill active" data-filter="all" onclick="setFilter('all', this)">सभी (<span id="cnt-all">11</span>)</button>
+          <button class="pill" data-filter="कुक्षी" onclick="setFilter('कुक्षी', this)">नगर कुक्षी (<span id="cnt-kukshi">7</span>)</button>
+          <button class="pill" data-filter="सुसारी" onclick="setFilter('सुसारी', this)">ग्राम सुसारी (<span id="cnt-susari">4</span>)</button>
+          <button class="pill" data-filter="high" onclick="setFilter('high', this)">₹25,000+ विशेष दान</button>
+        </div>
+      </div>
+
+      <!-- DONORS TABLE -->
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:60px;">क्र.</th>
+              <th>दानदाता का नाम एवं विवरण</th>
+              <th>स्थान / नगर</th>
+              <th style="text-align:right;">सहयोग राशि</th>
+              <th style="text-align:center;">स्थिति</th>
+              <th style="text-align:center;width:130px;">आभार पत्रक</th>
+            </tr>
+          </thead>
+          <tbody id="donorsTableBody">
+            <!-- Dynamic rows inserted by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div><!-- /pane-villages -->
+
+  <!-- ==================== PANE 3: WORKS & BUDGET ==================== -->
+  <div class="pane" id="pane-works" role="tabpanel" hidden>
+    <section>
+      <div class="sec-head">
+        <h2 class="sec-title"><i class="fa-solid fa-trowel-bricks"></i> निर्माण कार्य एवं अनुमानित व्यय</h2>
+        <div class="sec-note">परियोजना के विभिन्न चरण एवं लागत अनुमान</div>
+      </div>
+
+      <div class="panel" style="margin-bottom:24px;">
+        <h3><i class="fa-solid fa-calculator" style="color:var(--gold);"></i> कुल अनुमानित व्यय सारांश (Projected Spending Summary)</h3>
+        <div class="sub">कोटेश्वर नर्मदा घाट निर्माण प्रथम चरण का मदवार ब्यौरा</div>
+
+        <div class="tablewrap" style="border:none;background:transparent;">
+          <table>
+            <thead>
+              <tr>
+                <th>कार्य विवरण (Work Component)</th>
+                <th style="text-align:right;">अनुमानित लागत</th>
+                <th style="text-align:right;">अब तक व्यय</th>
+                <th style="text-align:right;">शेष आवश्यक</th>
+                <th style="text-align:center;">वर्तमान स्थिति</th>
+              </tr>
+            </thead>
+            <tbody id="worksTableBody">
+              <!-- Dynamic rows inserted by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- WORK CARDS -->
+      <div class="grid3">
+        <div class="panel">
+          <h4><i class="fa-solid fa-shield-halved" style="color:var(--narmada);"></i> 1. तट संरक्षण व नींव</h4>
+          <p style="color:var(--light-muted);font-size:13.5px;margin-top:8px;">
+            माँ नर्मदा के पावन प्रवाह के अनुकूल मजबूत पिलर, पाषाण पिचिंग और गहरी नींव का निर्माण ताकि घाट शताब्दियों तक अडिग रहे।
+          </p>
+          <div style="margin-top:12px;font-size:13px;color:var(--gold);">अनुमानित: ₹8,50,000</div>
+        </div>
+
+        <div class="panel">
+          <h4><i class="fa-solid fa-stairs" style="color:var(--gold);"></i> 2. नक्काशीदार पत्थर व सीढ़ियां</h4>
+          <p style="color:var(--light-muted);font-size:13.5px;margin-top:8px;">
+            श्रद्धालुओं और परिक्रमावासियों के सुगम व सुरक्षित स्नान हेतु पारंपरिक मालवा-निमाड़ स्थापत्य कला युक्त चौड़ी सीढ़ियां।
+          </p>
+          <div style="margin-top:12px;font-size:13px;color:var(--gold);">अनुमानित: ₹6,50,000</div>
+        </div>
+
+        <div class="panel">
+          <h4><i class="fa-solid fa-person-shelter" style="color:#5dade2;"></i> 3. परिक्रमावासी विश्राम शेड</h4>
+          <p style="color:var(--light-muted);font-size:13.5px;margin-top:8px;">
+            नर्मदा परिक्रमा कर रहे साधु-संतों एवं दूर-दराज से आने वाले दर्शनार्थियों के विश्राम व छाया हेतु सुसज्जित शेड।
+          </p>
+          <div style="margin-top:12px;font-size:13px;color:var(--gold);">अनुमानित: ₹4,00,000</div>
+        </div>
+      </div>
+    </section>
+  </div><!-- /pane-works -->
+
+  <!-- ==================== PANE 4: CAMPAIGN & VISION ==================== -->
+  <div class="pane" id="pane-vision" role="tabpanel" hidden>
+    <section>
+      <div class="sec-head">
+        <h2 class="sec-title"><i class="fa-solid fa-hands-praying"></i> अभियान के 5 प्रमुख स्तंभ एवं संदेश</h2>
+        <div class="sec-note">कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान का संकल्प</div>
+      </div>
+
+      <div class="mission-grid">
+        <div class="mission-card">
+          <h4><i class="fa-solid fa-people-group"></i> 1. जनभागीदारी</h4>
+          <p>घाट निर्माण केवल समिति का कार्य नहीं, बल्कि पूरे समाज का सामूहिक संकल्प है। समाज के प्रत्येक वर्ग का सहयोग इसमें शामिल है।</p>
+        </div>
+
+        <div class="mission-card">
+          <h4><i class="fa-solid fa-award"></i> 2. दानदाताओं का सम्मान</h4>
+          <p>प्रत्येक सहयोगकर्ता का योगदान श्रद्धा और सम्मान के साथ प्रस्तुत करना। हर एक पाई का हिसाब पारदर्शी एवं प्रामाणिक रखना।</p>
+        </div>
+
+        <div class="mission-card">
+          <h4><i class="fa-solid fa-handshake-angle"></i> 3. कार्यकर्ताओं का समर्पण</h4>
+          <p>55 दिनों तक घर-घर जाकर सेवा देने वाले कार्यकर्ताओं का विशेष अभिनंदन। इनका निस्वार्थ भाव ही इस अभियान की रीढ़ है।</p>
+        </div>
+
+        <div class="mission-card">
+          <h4><i class="fa-solid fa-landmark"></i> 4. प्रशासनिक सहभागिता</h4>
+          <p>प्रशासनिक अधिकारियों (जैसे कुक्षी तहसीलदार महोदय) का सहयोग अभियान को सामाजिक विश्वसनीयता, गति और प्रोत्साहन देता है।</p>
+        </div>
+
+        <div class="mission-card">
+          <h4><i class="fa-solid fa-arrow-rotate-right"></i> 5. अभियान की निरंतरता</h4>
+          <p>दीपावली के बाद पुनः जनसंपर्क शुरू कर अधिक से अधिक लोगों को इस पुनीत कार्य से जोड़ना। लक्ष्य प्राप्ति तक अभियान सतत रहेगा।</p>
+        </div>
+
+        <div class="mission-card" style="border-top-color:var(--narmada);">
+          <h4><i class="fa-solid fa-location-crosshairs"></i> प्रमुख संपर्क एवं तीर्थ पहचान</h4>
+          <p>
+            <strong>संस्था:</strong> कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान<br>
+            <strong>तीर्थ स्थल:</strong> कोटेश्वर तीर्थ, कोठड़ा<br>
+            <strong>प्रमुख निवेदक:</strong> मोहन भाई पाटीदार भंवरिया<br>
+            <strong>जयघोष:</strong> माँ नर्मदे हर! जय माँ नर्मदा!
+          </p>
+        </div>
+      </div>
+    </section>
+  </div><!-- /pane-vision -->
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-left">
+      <strong>कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान, कोटेश्वर तीर्थ (कोठड़ा)</strong> | माँ नर्मदा के पावन तट पर घाट निर्माण जनसहयोग अभियान
     </div>
+    <div class="footer-right">
+      <span>पारदर्शी एवं प्रामाणिक डिजिटल डैशबोर्ड</span>
+      <span>|</span>
+      <span>माँ नर्मदे हर!</span>
+    </div>
+  </footer>
+
+</div><!-- /wrap -->
+
+<!-- MODAL: DONOR HONOR CERTIFICATE / RECEIPT -->
+<div class="modal-backdrop" id="certModalBackdrop" onclick="closeCertModal(event)">
+  <div class="cert-modal" onclick="event.stopPropagation()">
+    <button class="cert-close" onclick="closeCertModal()"><i class="fa-solid fa-xmark"></i></button>
+    <div class="cert-om">ॐ</div>
+    <h3 class="cert-title">माँ नर्मदा घाट निर्माण समर्पण आभार पत्रक</h3>
+    <div class="cert-sub">कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान, कोटेश्वर तीर्थ (कोठड़ा)</div>
+    
+    <div class="cert-body">
+      <div style="font-size:12px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">ससम्मान समर्पित</div>
+      <div class="cert-donor" id="certDonorName">श्री प्रवीण जी गंगाराम जी पाटीदार</div>
+      <div id="certDonorRole" style="color:var(--light-muted);font-size:13px;margin-bottom:10px;">अंजड़ वाले, तहसीलदार महोदय</div>
+      
+      <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px dashed rgba(255,255,255,0.15);padding-top:10px;">
+        <span style="color:var(--light-muted);font-size:13.5px;">सहयोग राशि:</span>
+        <span class="cert-amount" id="certAmount">₹51,111</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--light-muted);margin-top:6px;">
+        <span>स्थान: <strong id="certVillage" style="color:#fff;">नगर कुक्षी</strong></span>
+        <span>स्थिति: <span class="tag rec" id="certStatus">सहयोग प्राप्त</span></span>
+      </div>
+    </div>
+
+    <div class="cert-foot">
+      माँ नर्मदा के पावन तट पर घाट निर्माण के पुनीत कार्य में आपका यह अमूल्य सहयोग सदैव स्मरणीय रहेगा।<br>
+      <strong>माँ नर्मदा जी की असीम कृपा आप एवं आपके परिवार पर सदैव बनी रहे।</strong>
+    </div>
+
+    <div style="margin-top:20px;display:flex;justify-content:center;gap:12px;">
+      <button class="btn btn-gold" id="btnShareWhatsApp"><i class="fa-brands fa-whatsapp"></i> व्हाट्सएप पर साझा करें</button>
+      <button class="btn" onclick="window.print()"><i class="fa-solid fa-print"></i> प्रिंट</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ADD NEW DONATION -->
+<div class="modal-backdrop" id="addModalBackdrop" onclick="closeAddModal(event)">
+  <div class="cert-modal" style="text-align:left;max-width:500px;" onclick="event.stopPropagation()">
+    <button class="cert-close" onclick="closeAddModal()"><i class="fa-solid fa-xmark"></i></button>
+    <h3 class="cert-title" style="text-align:center;font-size:22px;margin-bottom:16px;">
+      <i class="fa-solid fa-circle-plus" style="color:var(--gold);"></i> नया जनसहयोग दर्ज करें
+    </h3>
+
+    <form id="addDonationForm" onsubmit="saveNewDonation(event)">
+      <div style="margin-bottom:14px;">
+        <label style="font-size:13px;color:var(--light-muted);display:block;margin-bottom:6px;">दानदाता का नाम *</label>
+        <input type="text" id="newDonorName" required placeholder="उदा. श्री रमेश जी पाटीदार" 
+          style="width:100%;padding:9px 12px;border-radius:8px;background:rgba(0,0,0,0.4);border:1px solid var(--line);color:#fff;font-family:inherit;">
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <label style="font-size:13px;color:var(--light-muted);display:block;margin-bottom:6px;">पद / उपाधि / संदर्भ (वैकल्पिक)</label>
+        <input type="text" id="newDonorRole" placeholder="उदा. व्यापारी, शिक्षक, समाजजन" 
+          style="width:100%;padding:9px 12px;border-radius:8px;background:rgba(0,0,0,0.4);border:1px solid var(--line);color:#fff;font-family:inherit;">
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+        <div>
+          <label style="font-size:13px;color:var(--light-muted);display:block;margin-bottom:6px;">स्थान / गांव *</label>
+          <input type="text" id="newVillage" required placeholder="उदा. नगर कुक्षी या ग्राम सुसारी" 
+            style="width:100%;padding:9px 12px;border-radius:8px;background:rgba(0,0,0,0.4);border:1px solid var(--line);color:#fff;font-family:inherit;">
+        </div>
+        <div>
+          <label style="font-size:13px;color:var(--light-muted);display:block;margin-bottom:6px;">सहयोग राशि (₹) *</label>
+          <input type="number" id="newAmount" required min="1" placeholder="उदा. 11111" 
+            style="width:100%;padding:9px 12px;border-radius:8px;background:rgba(0,0,0,0.4);border:1px solid var(--line);color:#fff;font-family:inherit;">
+        </div>
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <label style="font-size:13px;color:var(--light-muted);display:block;margin-bottom:6px;">सहयोग स्थिति</label>
+        <select id="newStatus" style="width:100%;padding:9px 12px;border-radius:8px;background:#1b263b;border:1px solid var(--line);color:#fff;font-family:inherit;">
+          <option value="प्राप्त">सहयोग राशि प्राप्त (Received)</option>
+          <option value="घोषित">घोषणा राशि (Pledged)</option>
+        </select>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:10px;">
+        <button type="button" class="btn" onclick="closeAddModal()">रद्द करें</button>
+        <button type="submit" class="btn btn-gold">सुरक्षित करें</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <script>
-    // Utility for Hindi number formatting
-    const fmt = new Intl.NumberFormat('hi-IN');
+  /* ============================================================
+     MASTER DATA & CONFIGURATION
+     All authentic details from Kotewshwar Narmada Ghat Abhiyan
+     ============================================================ */
+  const DEFAULT_DONATIONS = [
+    // नगर कुक्षी (4 नवंबर 2026)
+    { id: 1, name: "श्री प्रवीण जी गंगाराम जी पाटीदार", role: "अंजड़ वाले, तहसीलदार महोदय", village: "नगर कुक्षी", amount: 51111, status: "प्राप्त", date: "2026-11-04" },
+    { id: 2, name: "श्री विक्रमसिंह जी रिछुसिंह जी कनेश", role: "समाजसेवी व भक्त", village: "नगर कुक्षी", amount: 25555, status: "प्राप्त", date: "2026-11-04" },
+    { id: 3, name: "श्री संजय जी किशोर जी बघेल", role: "श्रद्धालु समाजजन", village: "नगर कुक्षी", amount: 21111, status: "प्राप्त", date: "2026-11-04" },
+    { id: 4, name: "श्री महेश चंद्र जी रमेश चंद्र जी गुप्ता", role: "व्यापारी बंधु", village: "नगर कुक्षी", amount: 15111, status: "प्राप्त", date: "2026-11-04" },
+    { id: 5, name: "श्री सुनील जी रमेश जी जिराती", role: "श्रद्धालु समाजजन", village: "नगर कुक्षी", amount: 11111, status: "प्राप्त", date: "2026-11-04" },
+    { id: 6, name: "श्री निवेदन जी महेंद्र कुमार जी यादव", role: "श्रद्धालु समाजजन", village: "नगर कुक्षी", amount: 11111, status: "प्राप्त", date: "2026-11-04" },
+    { id: 7, name: "श्री महेंद्र कुमार जी कांतिलाल जी गुप्ता", role: "व्यापारी बंधु", village: "नगर कुक्षी", amount: 11111, status: "प्राप्त", date: "2026-11-04" },
 
-    fetch('/api/summary')
-        .then(r => r.json())
-        .then(data => {
-            // Populate summary cards
-            const cards = [
-                {title: 'अनुमानित खर्च', value: fmt.format(data.projected_spending)},
-                {title: 'कुल घोषित राशि', value: fmt.format(data.total_announced)},
-                {title: 'कुल प्राप्त राशि', value: fmt.format(data.total_received)},
-                {title: 'कुल खर्चed राशि', value: fmt.format(data.total_spent)}
-            ];
-            const cardsContainer = document.getElementById('summary-cards');
-            cards.forEach(c => {
-                const col = document.createElement('div');
-                col.className = 'col-md-3';
-                col.innerHTML = `
-                    <div class="card text-center shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">${c.title}</h5>
-                            <p class="card-text fs-4">₹ ${c.value}</p>
-                        </div>
-                    </div>`;
-                cardsContainer.appendChild(col);
-            });
+    // ग्राम सुसारी (4 नवंबर 2026)
+    { id: 8, name: "श्री घनश्याम जी हीरालाल जी पायग्या", role: "ग्रामवासी, भक्त", village: "ग्राम सुसारी", amount: 25555, status: "प्राप्त", date: "2026-11-04" },
+    { id: 9, name: "श्री अंकित जी दिनेश जी अमलाल्या", role: "युवा समाजजन", village: "ग्राम सुसारी", amount: 25555, status: "प्राप्त", date: "2026-11-04" },
+    { id: 10, name: "श्री रविंद्र कृष्णा जी पाटीदार", role: "श्रद्धालु समाजजन", village: "ग्राम सुसारी", amount: 25555, status: "प्राप्त", date: "2026-11-04" },
+    { id: 11, name: "श्री प्रदीप मनोज अनिल, पिता श्री सीताराम जी सागरीया", role: "सागरीया परिवार", village: "ग्राम सुसारी", amount: 15111, status: "प्राप्त", date: "2026-11-04" }
+  ];
 
-            // Populate village table
-            const tbody = document.querySelector('#village-table tbody');
-            data.donations.forEach(d => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td>${d.village}</td><td>${fmt.format(d.amount)}</td>`;
-                tbody.appendChild(tr);
-            });
+  const PROJECTED_SPENDING = 2500000; // प्रथम चरण कुल अनुमानित बजट
+  const TOTAL_SPENT = 42500; // प्रारंभिक तकनीकी सर्वेक्षण, जनसंपर्क एवं सामग्री खर्च
 
-            // Doughnut chart for donations per village
-            const ctx = document.getElementById('donationChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: data.donations.map(d => d.village),
-                    datasets: [{
-                        data: data.donations.map(d => d.amount),
-                        backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b']
-                    }]
-                },
-                options: {
-                    plugins: { legend: { position: 'bottom' } },
-                    maintainAspectRatio: false
-                }
-            });
-        })
-        .catch(err => console.error('Summary fetch error', err));
+  const WORKS_DATA = [
+    { name: "तट संरक्षण, गहरी नींव एवं रिटेनिंग वॉल निर्माण", projected: 850000, spent: 25000, status: "सर्वेक्षण व चिन्हांकन पूर्ण" },
+    { name: "नक्काशीदार पाषाण, सीढ़ियां एवं स्नान प्लेटफॉर्म", projected: 650000, spent: 0, status: "निविदा व पत्थर चयन स्तर" },
+    { name: "परिक्रमावासी एवं श्रद्धालु विश्राम शेड/हॉल", projected: 400000, spent: 0, status: "स्थान चिन्हांकित" },
+    { name: "सुरक्षा रेलिंग, पीतल/स्टील जंजीरें व चेंजिंग रूम", projected: 300000, spent: 0, status: "योजनाबद्ध" },
+    { name: "घाट प्रकाश व्यवस्था, सोलर लाइट व हाईमास्ट पोल", projected: 150000, spent: 0, status: "स्वीकृत" },
+    { name: "55-दिवसीय जनसंपर्क, प्रचार-प्रसार व प्रशासनिक कार्य", projected: 150000, spent: 17500, status: "प्रगति पर" }
+  ];
+
+  // Local storage management
+  function getDonations() {
+    const saved = localStorage.getItem("koteshwar_donations");
+    if (saved) {
+      try { return JSON.parse(saved); } catch(e) { }
+    }
+    return DEFAULT_DONATIONS;
+  }
+
+  function saveDonations(list) {
+    localStorage.setItem("koteshwar_donations", JSON.stringify(list));
+  }
+
+  let donations = getDonations();
+  let currentFilter = 'all';
+
+  // Number formatting helper
+  const fmt = n => "₹" + Math.round(Number(n) || 0).toLocaleString('en-IN');
+
+  /* ============================================================
+     RENDER DASHBOARD
+     ============================================================ */
+  function renderDashboard() {
+    const totalAnnounced = donations.reduce((sum, d) => sum + d.amount, 0);
+    const totalReceived = donations.filter(d => d.status === "प्राप्त").reduce((sum, d) => sum + d.amount, 0);
+    const cashBalance = totalReceived - TOTAL_SPENT;
+
+    // Village breakdown
+    const kukshiTotal = donations.filter(d => d.village.includes("कुक्षी")).reduce((sum, d) => sum + d.amount, 0);
+    const susariTotal = donations.filter(d => d.village.includes("सुसारी")).reduce((sum, d) => sum + d.amount, 0);
+    const kukshiPct = totalAnnounced ? ((kukshiTotal / totalAnnounced) * 100).toFixed(1) : 0;
+    const susariPct = totalAnnounced ? ((susariTotal / totalAnnounced) * 100).toFixed(1) : 0;
+
+    // Update Ledgers
+    document.getElementById('led-received').textContent = fmt(totalReceived);
+    document.getElementById('led-announced').textContent = fmt(totalAnnounced);
+    document.getElementById('led-spent').textContent = fmt(TOTAL_SPENT);
+    document.getElementById('led-balance').textContent = fmt(cashBalance);
+    document.getElementById('led-projected').textContent = fmt(PROJECTED_SPENDING);
+
+    // Update KPI Cards
+    document.getElementById('kpi-total').textContent = fmt(totalReceived);
+    document.getElementById('kpi-donors').textContent = donations.length;
+    document.getElementById('kpi-kukshi').textContent = fmt(kukshiTotal);
+    document.getElementById('kpi-susari').textContent = fmt(susariTotal);
+
+    // Update Tab badge & filter counts
+    document.getElementById('tab-donor-count').textContent = donations.length;
+    document.getElementById('cnt-all').textContent = donations.length;
+    document.getElementById('cnt-kukshi').textContent = donations.filter(d => d.village.includes("कुक्षी")).length;
+    document.getElementById('cnt-susari').textContent = donations.filter(d => d.village.includes("सुसारी")).length;
+
+    // Update Village bars and strip
+    document.getElementById('lg-kukshi').textContent = `${fmt(kukshiTotal)} (${kukshiPct}%)`;
+    document.getElementById('lg-susari').textContent = `${fmt(susariTotal)} (${susariPct}%)`;
+    document.getElementById('bar-kukshi').style.width = kukshiPct + '%';
+    document.getElementById('bar-val-kukshi').textContent = fmt(kukshiTotal);
+    document.getElementById('bar-susari').style.width = susariPct + '%';
+    document.getElementById('bar-val-susari').textContent = fmt(susariTotal);
+
+    document.getElementById('villageSplitStrip').innerHTML = `
+      <div class="strip-part" style="width:${kukshiPct}%;background:#f39c12;" title="नगर कुक्षी: ${kukshiPct}%">कुक्षी ${kukshiPct}%</div>
+      <div class="strip-part" style="width:${susariPct}%;background:#1abc9c;" title="ग्राम सुसारी: ${susariPct}%">सुसारी ${susariPct}%</div>
+    `;
+
+    // Render Hero Ring SVG
+    drawHeroRing(totalReceived, PROJECTED_SPENDING);
+
+    // Render Works Table
+    renderWorksTable();
+
+    // Render Donors Table
+    renderDonorsTable();
+  }
+
+  /* ============================================================
+     HERO RING SVG GAUGE (Inspired by navratri dashboard)
+     ============================================================ */
+  function polar(cx, cy, r, deg) {
+    const a = (deg - 90) * Math.PI / 180;
+    return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+  }
+
+  function arcPath(cx, cy, r, a0, a1) {
+    const [x0, y0] = polar(cx, cy, r, a0);
+    const [x1, y1] = polar(cx, cy, r, a1);
+    const large = (a1 - a0) > 180 ? 1 : 0;
+    return `M ${x0.toFixed(2)} ${y0.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`;
+  }
+
+  function drawHeroRing(current, target) {
+    const cx = 130, cy = 120, r = 88, START = 210, SWEEP = 300, SEGMENTS = 10, GAP = 4;
+    const seg = SWEEP / SEGMENTS;
+    const fraction = Math.min(1, Math.max(0, current / target));
+    let out = "";
+
+    // Background track segments
+    for (let i = 0; i < SEGMENTS; i++) {
+      const a0 = START + i * seg + GAP / 2;
+      const a1 = START + (i + 1) * seg - GAP / 2;
+      out += `<path d="${arcPath(cx, cy, r, a0, a1)}" stroke="rgba(255,255,255,0.08)" stroke-width="14" fill="none" stroke-linecap="round"/>`;
+    }
+
+    // Lit segments
+    const lit = fraction * SWEEP;
+    for (let i = 0; i < SEGMENTS; i++) {
+      const s0 = i * seg, s1 = (i + 1) * seg;
+      if (lit <= s0) break;
+      const a0 = START + s0 + GAP / 2;
+      const a1 = START + Math.min(s1, lit) - GAP / 2;
+      if (a1 <= a0) continue;
+      out += `<path d="${arcPath(cx, cy, r, a0, a1)}" stroke="url(#flameGrad)" stroke-width="14" fill="none" stroke-linecap="round"/>`;
+    }
+
+    // Little dots around the arc
+    for (let i = 0; i < SEGMENTS; i++) {
+      const [x, y] = polar(cx, cy, r + 18, START + i * seg + seg / 2);
+      const isLit = (lit > i * seg);
+      out += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.2" fill="${isLit ? "#f39c12" : "rgba(255,255,255,0.15)"}"/>`;
+    }
+
+    const pctVal = (fraction * 100).toFixed(1);
+
+    document.getElementById("heroRing").innerHTML = `
+      <defs>
+        <linearGradient id="flameGrad" x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0%" stop-color="#1abc9c"/>
+          <stop offset="50%" stop-color="#f39c12"/>
+          <stop offset="100%" stop-color="#e67e22"/>
+        </linearGradient>
+      </defs>
+      ${out}
+      <text x="130" y="108" text-anchor="middle" fill="#fff" font-family="'Rozha One', serif" font-size="28">${fmt(current)}</text>
+      <text x="130" y="132" text-anchor="middle" fill="#95a5a6" font-size="12" font-family="'Noto Sans Devanagari', sans-serif">कुल प्राप्त सहयोग</text>
+      <text x="130" y="162" text-anchor="middle" fill="#f8c471" font-size="14.5" font-weight="700" font-family="'Noto Sans Devanagari', sans-serif">${pctVal}% प्राप्त</text>
+    `;
+  }
+
+  /* ============================================================
+     RENDER WORKS & BUDGET TABLE
+     ============================================================ */
+  function renderWorksTable() {
+    const tbody = document.getElementById("worksTableBody");
+    tbody.innerHTML = WORKS_DATA.map((w, i) => {
+      const pending = w.projected - w.spent;
+      return `
+        <tr>
+          <td>
+            <strong style="color:#fff;">${i + 1}. ${w.name}</strong>
+          </td>
+          <td class="num">${fmt(w.projected)}</td>
+          <td class="num" style="color:var(--narmada);">${fmt(w.spent)}</td>
+          <td class="num" style="color:var(--gold-light);">${fmt(pending)}</td>
+          <td style="text-align:center;">
+            <span class="ready-badge ${w.spent > 0 ? 'prog' : 'done'}" style="font-size:11px;">${w.status}</span>
+          </td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  /* ============================================================
+     RENDER DONORS TABLE & FILTERING
+     ============================================================ */
+  function setFilter(type, btn) {
+    currentFilter = type;
+    document.querySelectorAll('.filter-pills .pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    filterDonors();
+  }
+
+  function filterDonors() {
+    const q = (document.getElementById('donorSearch').value || '').trim().toLowerCase();
+    
+    let filtered = donations.filter(d => {
+      // Search query filter
+      const matchesSearch = !q || 
+        d.name.toLowerCase().includes(q) || 
+        d.role.toLowerCase().includes(q) || 
+        d.village.toLowerCase().includes(q);
+
+      // Category filter
+      let matchesCategory = true;
+      if (currentFilter === 'कुक्षी') matchesCategory = d.village.includes('कुक्षी');
+      else if (currentFilter === 'सुसारी') matchesCategory = d.village.includes('सुसारी');
+      else if (currentFilter === 'high') matchesCategory = d.amount >= 25000;
+
+      return matchesSearch && matchesCategory;
+    });
+
+    const tbody = document.getElementById('donorsTableBody');
+    if (!filtered.length) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--muted);">कोई दानदाता रिकॉर्ड नहीं मिला।</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map((d, index) => {
+      const isHigh = d.amount >= 25000;
+      return `
+        <tr>
+          <td style="color:var(--muted);">${index + 1}</td>
+          <td>
+            <strong style="color:#fff;font-size:14.5px;">${d.name}</strong>
+            <span class="donor-role">${d.role}</span>
+          </td>
+          <td>
+            <span style="color:var(--light-muted);"><i class="fa-solid fa-location-dot" style="color:var(--gold);margin-right:4px;"></i>${d.village}</span>
+          </td>
+          <td class="num">
+            <span style="font-size:16px;color:${isHigh ? 'var(--gold)' : '#fff'};font-weight:700;">${fmt(d.amount)}</span>
+          </td>
+          <td style="text-align:center;">
+            <span class="tag ${d.status === 'प्राप्त' ? 'rec' : 'gosh'}">${d.status === 'प्राप्त' ? '✓ प्राप्त' : 'घोषित'}</span>
+          </td>
+          <td style="text-align:center;">
+            <button class="btn" style="padding:4px 10px;font-size:12px;" onclick="openCertModal(${d.id})">
+              <i class="fa-solid fa-certificate" style="color:var(--gold);"></i> आभार पत्र
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  function renderDonorsTable() {
+    filterDonors();
+  }
+
+  /* ============================================================
+     TAB SWITCHING
+     ============================================================ */
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', 'false'));
+    document.querySelectorAll('.pane').forEach(p => p.hidden = true);
+
+    const activeTab = document.getElementById('tab-' + tabId);
+    const activePane = document.getElementById('pane-' + tabId);
+
+    if (activeTab) activeTab.setAttribute('aria-selected', 'true');
+    if (activePane) activePane.hidden = false;
+  }
+
+  /* ============================================================
+     HONOR CERTIFICATE MODAL & WHATSAPP SHARING
+     ============================================================ */
+  let activeCertDonor = null;
+
+  function openCertModal(donorId) {
+    const donor = donations.find(d => d.id === donorId);
+    if (!donor) return;
+    activeCertDonor = donor;
+
+    document.getElementById('certDonorName').textContent = donor.name;
+    document.getElementById('certDonorRole').textContent = donor.role || "श्रद्धालु भक्त";
+    document.getElementById('certAmount').textContent = fmt(donor.amount);
+    document.getElementById('certVillage').textContent = donor.village;
+    document.getElementById('certStatus').textContent = donor.status === "प्राप्त" ? "सहयोग प्राप्त" : "सहयोग घोषित";
+
+    const msg = `🚩 *कोटेश्वर नर्मदा घाट निर्माण अभियान* 🚩\n\n` +
+      `श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान द्वारा माँ नर्मदा के पावन तट पर घाट निर्माण के पुनीत कार्य में:\n\n` +
+      `दानदाता: *${donor.name}*\n` +
+      `स्थान: *${donor.village}*\n` +
+      `सहयोग राशि: *${fmt(donor.amount)}*\n\n` +
+      `आपका यह समर्पण एवं श्रद्धा माँ नर्मदा के चरणों में सदैव स्मरणीय रहेगी।\n` +
+      `*माँ नर्मदे हर! जय माँ नर्मदा!*`;
+
+    document.getElementById('btnShareWhatsApp').onclick = function() {
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+    };
+
+    document.getElementById('certModalBackdrop').classList.add('open');
+  }
+
+  function closeCertModal(e) {
+    if (e && e.target !== e.currentTarget && !e.target.closest('.cert-close')) return;
+    document.getElementById('certModalBackdrop').classList.remove('open');
+  }
+
+  /* ============================================================
+     ADD NEW DONATION MODAL
+     ============================================================ */
+  function openAddModal() {
+    document.getElementById('addDonationForm').reset();
+    document.getElementById('addModalBackdrop').classList.add('open');
+  }
+
+  function closeAddModal(e) {
+    if (e && e.target !== e.currentTarget && !e.target.closest('.cert-close')) return;
+    document.getElementById('addModalBackdrop').classList.remove('open');
+  }
+
+  function saveNewDonation(e) {
+    e.preventDefault();
+    const name = document.getElementById('newDonorName').value.trim();
+    const role = document.getElementById('newDonorRole').value.trim() || "श्रद्धालु समाजजन";
+    const village = document.getElementById('newVillage').value.trim();
+    const amount = parseInt(document.getElementById('newAmount').value, 10);
+    const status = document.getElementById('newStatus').value;
+
+    if (!name || !village || isNaN(amount) || amount <= 0) {
+      alert("कृपया सभी आवश्यक फ़ील्ड सही भरें।");
+      return;
+    }
+
+    const newEntry = {
+      id: Date.now(),
+      name: name,
+      role: role,
+      village: village,
+      amount: amount,
+      status: status,
+      date: new Date().toISOString().split('T')[0]
+    };
+
+    donations.unshift(newEntry);
+    saveDonations(donations);
+    renderDashboard();
+    closeAddModal();
+    alert("नया जनसहयोग सफलतापूर्वक दर्ज किया गया!");
+  }
+
+  function printReport() {
+    window.print();
+  }
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', () => {
+    renderDashboard();
+  });
 </script>
+
 </body>
 </html>
