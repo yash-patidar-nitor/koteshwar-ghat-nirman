@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>कोटेश्वर नर्मदा घाट निर्माण अभियान | जनसहयोग एवं वित्तीय डैशबोर्ड</title>
+  <title>माँ नर्मदा घाट निर्माण सेवा महाअभियान | कोटेश्वर तीर्थ (कोठड़ा)</title>
   
-  <!-- Google Fonts: Marcellus, Rozha One, Noto Sans Devanagari -->
+  <!-- Google Fonts: Marcellus, Rozha One, Noto Sans Devanagari, Yatra One -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Rozha+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Rozha+One&family=Yatra+One&display=swap" rel="stylesheet">
   
-  <!-- FontAwesome Icons -->
+  <!-- FontAwesome 6 Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
@@ -51,7 +51,7 @@
     }
 
     .wrap {
-      max-width: 1260px;
+      max-width: 1280px;
       margin: 0 auto;
       padding: 24px 20px 80px;
     }
@@ -79,28 +79,26 @@
     .mast-tag {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       background: rgba(243, 156, 18, 0.15);
       border: 1px solid rgba(243, 156, 18, 0.4);
       color: var(--gold-light);
-      padding: 4px 12px;
+      padding: 4px 14px;
       border-radius: 99px;
-      font-size: 12.5px;
+      font-size: 13px;
       font-weight: 600;
       margin-bottom: 8px;
     }
     .mast-title {
-      font-size: 32px;
+      font-size: 34px;
       color: #fff;
       line-height: 1.2;
       text-shadow: 0 2px 10px rgba(0,0,0,0.4);
     }
-    .mast-title span {
-      color: var(--gold);
-    }
+    .mast-title span { color: var(--gold); }
     .mast-sub {
       color: var(--light-muted);
-      font-size: 14px;
+      font-size: 14.5px;
       margin-top: 6px;
     }
     .mast-right {
@@ -172,43 +170,45 @@
       background: linear-gradient(90deg, rgba(230, 126, 34, 0.18), rgba(26, 188, 156, 0.12));
       border: 1px solid rgba(243, 156, 18, 0.35);
       border-radius: var(--r);
-      padding: 12px 18px;
+      padding: 14px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 12px;
-      font-size: 14px;
+      font-size: 14.5px;
     }
     .dharmic-motto {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       color: #fff;
+      flex: 1;
+      min-width: 300px;
     }
-    .dharmic-motto i {
-      color: var(--gold);
-      font-size: 18px;
-    }
+    .dharmic-motto i { color: var(--gold); font-size: 20px; flex-shrink: 0; }
     .dharmic-badges {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
     }
     .d-badge {
-      background: rgba(0,0,0,0.25);
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 12.5px;
+      background: rgba(0,0,0,0.3);
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 13px;
       color: var(--light-muted);
       border: 1px solid rgba(255,255,255,0.08);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
     .d-badge strong { color: var(--gold-light); }
 
     /* ---------- HERO SECTION (At a glance) ---------- */
     .hero {
       display: grid;
-      grid-template-columns: minmax(320px, 390px) 1fr;
+      grid-template-columns: minmax(320px, 400px) 1fr;
       gap: 24px;
       margin-top: 24px;
       align-items: stretch;
@@ -235,14 +235,14 @@
     }
     .ring-caption {
       font-family: "Rozha One", serif;
-      font-size: 20px;
+      font-size: 21px;
       color: var(--gold-light);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .ring-note {
       color: var(--muted);
       font-size: 13px;
-      margin-top: 12px;
+      margin-top: 10px;
       line-height: 1.5;
     }
 
@@ -250,7 +250,7 @@
       background: var(--surface);
       border: 1px solid var(--line);
       border-radius: 22px;
-      padding: 10px 24px 22px;
+      padding: 14px 24px 20px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -259,7 +259,7 @@
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      padding: 13px 0;
+      padding: 11px 0;
       border-bottom: 1px solid rgba(255,255,255,0.08);
     }
     .ledger-row:last-of-type { border-bottom: none; }
@@ -286,12 +286,12 @@
     .ledger-val.dim { color: var(--muted); font-size: 18px; font-weight: 500; }
 
     .callout {
-      margin-top: 16px;
-      padding: 14px 16px;
+      margin-top: 14px;
+      padding: 12px 16px;
       border-radius: 12px;
-      background: linear-gradient(100deg, rgba(230, 126, 34, 0.18), rgba(26, 188, 156, 0.12));
+      background: linear-gradient(100deg, rgba(230, 126, 34, 0.16), rgba(26, 188, 156, 0.12));
       border: 1px solid rgba(243, 156, 18, 0.4);
-      font-size: 13.5px;
+      font-size: 13px;
       line-height: 1.6;
       color: #e5e8ea;
     }
@@ -302,7 +302,7 @@
       display: flex;
       align-items: flex-end;
       gap: 6px;
-      margin-top: 32px;
+      margin-top: 30px;
       border-bottom: 1px solid var(--line);
       overflow-x: auto;
       scrollbar-width: none;
@@ -333,15 +333,15 @@
     }
     .tab-badge {
       background: rgba(255,255,255,0.12);
-      font-size: 11px;
-      padding: 2px 7px;
+      font-size: 11.5px;
+      padding: 2px 8px;
       border-radius: 99px;
       color: #fff;
     }
 
     /* ---------- PANES & SECTIONS ---------- */
     .pane[hidden] { display: none; }
-    section { margin-top: 32px; }
+    section { margin-top: 30px; }
     .sec-head {
       display: flex;
       align-items: baseline;
@@ -350,6 +350,7 @@
       border-bottom: 1px solid var(--line);
       padding-bottom: 10px;
       margin-bottom: 22px;
+      flex-wrap: wrap;
     }
     .sec-title {
       font-size: 24px;
@@ -395,7 +396,7 @@
       font-size: 16px;
     }
     .stat .n {
-      font-size: 30px;
+      font-size: 28px;
       font-family: "Rozha One", serif;
       line-height: 1.1;
       color: #fff;
@@ -431,7 +432,7 @@
     /* BARS */
     .bar-row {
       display: grid;
-      grid-template-columns: 120px 1fr 110px;
+      grid-template-columns: 140px 1fr 110px;
       gap: 14px;
       align-items: center;
       margin-bottom: 14px;
@@ -465,7 +466,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
       color: #0c121e;
       transition: width 0.8s ease;
@@ -473,7 +474,7 @@
     .strip-legend {
       display: flex;
       flex-wrap: wrap;
-      gap: 20px;
+      gap: 16px;
       font-size: 13px;
       color: var(--light-muted);
     }
@@ -527,7 +528,7 @@
       font-size: 14px;
     }
     th, td {
-      padding: 13px 16px;
+      padding: 12px 16px;
       text-align: left;
       border-bottom: 1px solid rgba(255,255,255,0.06);
     }
@@ -615,7 +616,64 @@
       font-weight: 600;
     }
 
-    /* MISSION CARDS */
+    /* STORY CARDS */
+    .story-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 22px;
+    }
+    .story-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      padding: 22px;
+      position: relative;
+      border-left: 4px solid var(--gold);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s ease;
+    }
+    .story-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+    }
+    .story-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--gold-light);
+      background: rgba(243, 156, 18, 0.15);
+      border: 1px solid rgba(243, 156, 18, 0.3);
+      padding: 3px 10px;
+      border-radius: 99px;
+      margin-bottom: 10px;
+      width: fit-content;
+    }
+    .story-title {
+      font-size: 18px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .story-text {
+      color: #d0d7de;
+      font-size: 13.5px;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    .story-highlight {
+      background: rgba(0,0,0,0.25);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      color: var(--light-muted);
+      border-left: 2px solid var(--narmada);
+    }
+    .story-highlight strong { color: var(--gold-light); }
+
+    /* MISSION / VISION CARDS */
     .mission-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -642,6 +700,37 @@
       font-size: 14px;
       line-height: 1.6;
       margin: 0;
+    }
+
+    /* COMMUNITY SPECTRUM PILLS */
+    .spectrum-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .spectrum-item {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13.5px;
+      color: #e5e8ea;
+    }
+    .spectrum-item i {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(243, 156, 18, 0.15);
+      color: var(--gold);
+      font-size: 15px;
+      flex-shrink: 0;
     }
 
     /* MODAL FOR DONOR RECEIPT */
@@ -747,7 +836,7 @@
     @media (max-width: 980px) {
       .hero { grid-template-columns: 1fr; }
       .grid2, .grid3, .grid4 { grid-template-columns: 1fr; }
-      .bar-row { grid-template-columns: 100px 1fr 90px; }
+      .bar-row { grid-template-columns: 120px 1fr 90px; }
       .mast-title { font-size: 26px; }
       .mast-right { align-items: flex-start; }
     }
@@ -763,18 +852,18 @@
       <div class="mast-tag">
         <i class="fa-solid fa-om"></i> माँ नर्मदे हर! जय माँ नर्मदा!
       </div>
-      <h1 class="mast-title">कोटेश्वर नर्मदा <span>घाट निर्माण</span> महाअभियान</h1>
+      <h1 class="mast-title">माँ नर्मदा घाट निर्माण <span>सेवा महाअभियान</span></h1>
       <div class="mast-sub">
-        कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान &#183; कोटेश्वर तीर्थ (कोठड़ा) &#183; प्रमुख निवेदक: श्री मोहन भाई पाटीदार (भंवरिया)
+        कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान &#183; कोटेश्वर तीर्थ, कोठड़ा (म.प्र.) &#183; मुख्य प्रेरणास्रोत एवं नेतृत्व: श्री मोहन भाई पाटीदार (भंवरिया)
       </div>
     </div>
     <div class="mast-right">
       <div class="live-status">
         <span class="pulse-dot"></span>
-        <span>अभियान स्थिति: <strong>प्रथम चरण (55 दिन) संपन्न</strong></span>
+        <span>अभियान स्थिति: <strong>प्रथम चरण (55 दिन) संपन्न</strong> | दीपावली उपरांत पुनः प्रारंभ</span>
       </div>
       <div class="action-btn-group">
-        <button class="btn" onclick="printReport()"><i class="fa-solid fa-print"></i> रिपोर्ट प्रिंट करें</button>
+        <button class="btn" onclick="window.print()"><i class="fa-solid fa-print"></i> रिपोर्ट प्रिंट करें</button>
         <button class="btn btn-gold" onclick="openAddModal()"><i class="fa-solid fa-plus-circle"></i> नया सहयोग जोड़ें</button>
       </div>
     </div>
@@ -784,12 +873,12 @@
   <div class="dharmic-banner">
     <div class="dharmic-motto">
       <i class="fa-solid fa-quote-left"></i>
-      <span>“एक घाट का निर्माण केवल पत्थरों और सीमेंट से नहीं होता, बल्कि हजारों श्रद्धालुओं की आस्था, समाज के सहयोग और सेवाभावी कार्यकर्ताओं के समर्पण से होता है।”</span>
+      <span>“यह केवल धन संग्रह का अभियान नहीं, बल्कि धार्मिक आस्था, सामाजिक सहभागिता, स्वैच्छिक सेवा और सामूहिक उत्तरदायित्व का विराट आंदोलन है।”</span>
     </div>
     <div class="dharmic-badges">
-      <span class="d-badge"><i class="fa-solid fa-calendar-check"></i> 4 नवंबर संग्रह: <strong>₹2,37,997</strong></span>
-      <span class="d-badge"><i class="fa-solid fa-users"></i> दानदाता: <strong>11</strong></span>
-      <span class="d-badge"><i class="fa-solid fa-flag"></i> आगामी: <strong>दीपावली पश्चात द्वितीय चरण</strong></span>
+      <span class="d-badge"><i class="fa-solid fa-bullhorn"></i> कुल घोषित सहयोग: <strong>₹19,48,429</strong></span>
+      <span class="d-badge"><i class="fa-solid fa-calendar-check"></i> 4 नवंबर प्राप्ति: <strong>₹2,37,997</strong></span>
+      <span class="d-badge"><i class="fa-solid fa-road"></i> जनसंपर्क: <strong>55 दिन निरंतर</strong></span>
     </div>
   </div>
 
@@ -798,14 +887,20 @@
     <button class="tab" role="tab" id="tab-overview" aria-selected="true" onclick="switchTab('overview')">
       <i class="fa-solid fa-chart-pie"></i> मुख्य अवलोकन (At a Glance)
     </button>
+    <button class="tab" role="tab" id="tab-campaign-days" aria-selected="false" onclick="switchTab('campaign-days')">
+      <i class="fa-solid fa-calendar-days"></i> अभियान दिवस एवं नगरवार ब्यौरा (₹19.48 लाख)
+    </button>
     <button class="tab" role="tab" id="tab-villages" aria-selected="false" onclick="switchTab('villages')">
-      <i class="fa-solid fa-location-dot"></i> नगर व ग्रामवार विवरण <span class="tab-badge" id="tab-donor-count">11</span>
+      <i class="fa-solid fa-address-book"></i> 4 नवंबर दानदाता सूची <span class="tab-badge" id="tab-donor-count">11</span>
     </button>
     <button class="tab" role="tab" id="tab-works" aria-selected="false" onclick="switchTab('works')">
       <i class="fa-solid fa-trowel-bricks"></i> निर्माण कार्य एवं अनुमानित व्यय
     </button>
+    <button class="tab" role="tab" id="tab-stories" aria-selected="false" onclick="switchTab('stories')">
+      <i class="fa-solid fa-star-and-crescent" style="color:var(--gold);"></i> प्रेरणादायी प्रसंग
+    </button>
     <button class="tab" role="tab" id="tab-vision" aria-selected="false" onclick="switchTab('vision')">
-      <i class="fa-solid fa-hands-praying"></i> अभियान संदेश व परिचय
+      <i class="fa-solid fa-hands-praying"></i> अभियान संदेश, नेतृत्व व सामाजिक एकता
     </button>
   </nav>
 
@@ -820,36 +915,35 @@
         <svg id="heroRing" viewBox="0 0 260 230" width="100%" height="auto" role="img" aria-label="दान प्रगति चक्र"></svg>
         <div class="ring-note">
           प्रथम चरण लक्ष्य: <strong>₹25,00,000</strong><br>
-          अब तक 55 दिनों में सतत जनसंपर्क अभियान
+          घोषित सहयोग: <strong>₹19,48,429 (77.9%)</strong>
         </div>
       </div>
 
       <!-- Financial Ledger -->
       <div class="ledger">
         <div class="ledger-row">
-          <span class="ledger-label"><i class="fa-solid fa-hand-holding-dollar" style="color:var(--gold);"></i> कुल प्राप्त जनसहयोग (Received)</span>
-          <span class="ledger-val big" id="led-received">₹2,37,997</span>
+          <span class="ledger-label"><i class="fa-solid fa-bullhorn" style="color:var(--gold);"></i> कुल घोषित जनसहयोग (Total Ghoshna)</span>
+          <span class="ledger-val big" id="led-announced">₹19,48,429</span>
         </div>
         <div class="ledger-row">
-          <span class="ledger-label"><i class="fa-solid fa-bullhorn" style="color:var(--marigold);"></i> कुल घोषित सहयोग (Total Ghoshna)</span>
-          <span class="ledger-val" id="led-announced" style="color:var(--gold-light);">₹2,37,997</span>
+          <span class="ledger-label"><i class="fa-solid fa-receipt" style="color:var(--narmada);"></i> 4 नवंबर संपर्क दिवस प्राप्ति (Kukshi & Susari)</span>
+          <span class="ledger-val" style="color:var(--narmada);" id="led-received-nov4">₹2,37,997</span>
         </div>
         <div class="ledger-row">
-          <span class="ledger-label"><i class="fa-solid fa-file-invoice-dollar" style="color:var(--danger);"></i> अब तक कुल खर्च (Spent Amount)</span>
+          <span class="ledger-label"><i class="fa-solid fa-file-invoice-dollar" style="color:var(--danger);"></i> अब तक कुल व्यय (Spent Amount)</span>
           <span class="ledger-val dim" id="led-spent">₹42,500</span>
         </div>
         <div class="ledger-row">
-          <span class="ledger-label"><i class="fa-solid fa-vault" style="color:var(--narmada);"></i> वर्तमान शेष राशि (Cash in Hand / Bank)</span>
-          <span class="ledger-val teal" id="led-balance">₹1,95,497</span>
+          <span class="ledger-label"><i class="fa-solid fa-vault" style="color:#5dade2;"></i> वर्तमान रोकड़ शेष (Cash in Hand / Bank)</span>
+          <span class="ledger-val dim" id="led-balance">₹1,95,497</span>
         </div>
         <div class="ledger-row">
-          <span class="ledger-label"><i class="fa-solid fa-chart-line" style="color:#5dade2;"></i> अनुमानित प्रथम चरण बजट (Projected Spending)</span>
+          <span class="ledger-label"><i class="fa-solid fa-chart-line" style="color:var(--gold-light);"></i> प्रथम चरण कुल अनुमानित बजट (Projected Goal)</span>
           <span class="ledger-val dim" id="led-projected">₹25,00,000</span>
         </div>
         <div class="callout">
           <i class="fa-solid fa-circle-info" style="color:var(--gold);margin-right:6px;"></i>
-          <strong>वर्तमान स्थिति:</strong> दीपावली उत्सव के कारण अभियान अस्थायी रूप से स्थगित है। 
-          दीपावली पर्व के पश्चात घर-घर जनसंपर्क पुनः पूरे उत्साह से शुरू किया जाएगा।
+          <strong>पारदर्शी लेखा-जोखा नोट:</strong> यह संकलन साझा दानदाता सूचियों के आधार पर की गई <strong>घोषित सहयोग राशि</strong> की गणना है। वास्तविक बैंक प्राप्ति एवं रसीद सत्यापन का लेखा अलग संधारित किया जाता है।
         </div>
       </div>
     </div>
@@ -857,92 +951,94 @@
     <!-- 4 KEY KPI STAT CARDS -->
     <section>
       <div class="sec-head">
-        <h2 class="sec-title"><i class="fa-solid fa-chart-simple"></i> महत्वपूर्ण वित्तीय आंकड़े</h2>
-        <div class="sec-note">4 नवंबर 2026 तक का संकलित डेटा</div>
+        <h2 class="sec-title"><i class="fa-solid fa-chart-simple"></i> अभियान के मुख्य वित्तीय स्तंभ</h2>
+        <div class="sec-note">55-दिवसीय प्रथम चरण का संकलित लेखा</div>
       </div>
 
       <div class="grid4">
         <div class="stat accent-gold">
           <div class="stat-header">
-            <span class="k">कुल प्राप्त जनसहयोग</span>
+            <span class="k">कुल घोषित जनसहयोग</span>
             <div class="stat-icon"><i class="fa-solid fa-coins"></i></div>
           </div>
-          <div class="n" id="kpi-total">₹2,37,997</div>
+          <div class="n">₹19,48,429</div>
           <div class="hint">
-            <span>4 नवंबर संपर्क दिवस</span>
-            <span style="color:var(--gold);font-weight:600;">100% प्राप्ति</span>
+            <span>8 प्रमुख अभियान दिवस</span>
+            <span style="color:var(--gold);font-weight:600;">77.9% लक्ष्य घोषित</span>
           </div>
         </div>
 
         <div class="stat accent-teal">
           <div class="stat-header">
-            <span class="k">कुल सम्मानित दानदाता</span>
-            <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+            <span class="k">4 नवंबर सत्यापित संग्रह</span>
+            <div class="stat-icon"><i class="fa-solid fa-check-double"></i></div>
           </div>
-          <div class="n" id="kpi-donors">11</div>
+          <div class="n">₹2,37,997</div>
           <div class="hint">
-            <span>कुक्षी (7) | सुसारी (4)</span>
-            <span style="color:var(--narmada);font-weight:600;">श्रद्धालु समाजजन</span>
+            <span>कुक्षी (₹1.46L) | सुसारी (₹91K)</span>
+            <span style="color:var(--narmada);font-weight:600;">11 दानदाता</span>
           </div>
         </div>
 
         <div class="stat accent-marigold">
           <div class="stat-header">
-            <span class="k">नगर कुक्षी संग्रह</span>
+            <span class="k">सर्वाधिक सहयोग केंद्र (कुक्षी)</span>
             <div class="stat-icon"><i class="fa-solid fa-city"></i></div>
           </div>
-          <div class="n" id="kpi-kukshi">₹1,46,221</div>
+          <div class="n">₹5,87,998</div>
           <div class="hint">
-            <span>कुल 7 दानदाता</span>
-            <span style="color:var(--marigold);font-weight:600;">61.4% योगदान</span>
+            <span>31 अक्टू + 4 नव संग्रह</span>
+            <span style="color:var(--marigold);font-weight:600;">4 दानदाता ₹1 लाख+</span>
           </div>
         </div>
 
         <div class="stat accent-blue">
           <div class="stat-header">
-            <span class="k">ग्राम सुसारी संग्रह</span>
-            <div class="stat-icon"><i class="fa-solid fa-house-chimney"></i></div>
+            <span class="k">प्रथम चरण जनसंपर्क अवधि</span>
+            <div class="stat-icon"><i class="fa-solid fa-calendar-days"></i></div>
           </div>
-          <div class="n" id="kpi-susari">₹91,776</div>
+          <div class="n">55 दिन</div>
           <div class="hint">
-            <span>कुल 4 दानदाता</span>
-            <span style="color:#5dade2;font-weight:600;">38.6% योगदान</span>
+            <span>घर-घर निस्वार्थ संपर्क</span>
+            <span style="color:#5dade2;font-weight:600;">द्वितीय चरण शीघ्र</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- VILLAGE SHARE & READINESS CHECKLIST -->
+    <!-- AREA-WISE AGGREGATION & READINESS -->
     <section>
       <div class="grid2">
-        <!-- Village Share Panel -->
+        <!-- Area Aggregate Panel -->
         <div class="panel">
-          <h3><i class="fa-solid fa-map-location-dot" style="color:var(--gold);"></i> स्थानवार सहयोग विभाजन</h3>
-          <div class="sub">नगर व ग्राम अनुसार प्राप्त दान राशि का प्रतिशत</div>
+          <h3><i class="fa-solid fa-map-location-dot" style="color:var(--gold);"></i> प्रमुख क्षेत्रों का घोषित योगदान</h3>
+          <div class="sub">विभिन्न नगरों एवं गांवों से प्राप्त सहयोग का संकलन (कुल ₹19.48 लाख में से)</div>
           
-          <div class="split-strip" id="villageSplitStrip"></div>
-          
-          <div class="strip-legend">
-            <div class="legend-item">
-              <span class="legend-dot" style="background:#f39c12;"></span>
-              <span>नगर कुक्षी: <strong id="lg-kukshi">₹1,46,221 (61.4%)</strong></span>
-            </div>
-            <div class="legend-item">
-              <span class="legend-dot" style="background:#1abc9c;"></span>
-              <span>ग्राम सुसारी: <strong id="lg-susari">₹91,776 (38.6%)</strong></span>
-            </div>
-          </div>
-
-          <div style="margin-top:24px;">
+          <div style="margin-top:16px;">
             <div class="bar-row">
-              <div class="bar-name">नगर कुक्षी</div>
-              <div class="bar-track"><div class="bar-fill" id="bar-kukshi" style="background:#f39c12;width:61.4%;"></div></div>
-              <div class="bar-val" id="bar-val-kukshi">₹1,46,221</div>
+              <div class="bar-name">कुक्षी क्षेत्र (दोनों दिवस)</div>
+              <div class="bar-track"><div class="bar-fill" style="background:#f39c12;width:30.2%;"></div></div>
+              <div class="bar-val">₹5,87,998</div>
             </div>
             <div class="bar-row">
-              <div class="bar-name">ग्राम सुसारी</div>
-              <div class="bar-track"><div class="bar-fill" id="bar-susari" style="background:#1abc9c;width:38.6%;"></div></div>
-              <div class="bar-val" id="bar-val-susari">₹91,776</div>
+              <div class="bar-name">निसरपुर क्षेत्र (4 दिवस)</div>
+              <div class="bar-track"><div class="bar-fill" style="background:#1abc9c;width:29.0%;"></div></div>
+              <div class="bar-val">₹5,62,882</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-name">नानपुर नगर (1 दिवस)</div>
+              <div class="bar-track"><div class="bar-fill" style="background:#e67e22;width:21.6%;"></div></div>
+              <div class="bar-val">₹4,20,665</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-name">कोठड़ा तीर्थ क्षेत्र</div>
+              <div class="bar-track"><div class="bar-fill" style="background:#5dade2;width:14.6%;"></div></div>
+              <div class="bar-val">₹2,85,108</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-name">ग्राम सुसारी (4 नवंबर)</div>
+              <div class="bar-track"><div class="bar-fill" style="background:#a569bd;width:4.7%;"></div></div>
+              <div class="bar-val">₹91,776</div>
             </div>
           </div>
         </div>
@@ -955,8 +1051,8 @@
           <div class="ready-item">
             <div class="ready-icon done"><i class="fa-solid fa-check"></i></div>
             <div>
-              <div class="ready-title">प्रथम चरण जनसंपर्क अभियान</div>
-              <div class="ready-desc">55 दिनों तक लगातार घर-घर संपर्क एवं जागरूकता</div>
+              <div class="ready-title">प्रथम चरण जनसंपर्क महाअभियान</div>
+              <div class="ready-desc">55 दिनों तक लगातार घर-घर संपर्क, समाज के हर वर्ग को जोड़ना</div>
             </div>
             <span class="ready-badge done">100% संपन्न</span>
           </div>
@@ -965,7 +1061,7 @@
             <div class="ready-icon done"><i class="fa-solid fa-check"></i></div>
             <div>
               <div class="ready-title">घाट स्थल एवं तट सीमांकन</div>
-              <div class="ready-desc">कोटेश्वर तीर्थ पर घाट निर्माण भूमि का चिन्हांकन</div>
+              <div class="ready-desc">कोटेश्वर तीर्थ पर घाट निर्माण भूमि का चिन्हांकन व प्रारंभिक लेवलिंग</div>
             </div>
             <span class="ready-badge done">पूर्ण</span>
           </div>
@@ -974,7 +1070,7 @@
             <div class="ready-icon prog"><i class="fa-solid fa-hourglass-half"></i></div>
             <div>
               <div class="ready-title">प्रशासनिक सहभागिता एवं स्वीकृति</div>
-              <div class="ready-desc">तहसीलदार महोदय एवं स्थानीय प्रशासन से निरंतर समन्वय</div>
+              <div class="ready-desc">तहसीलदार महोदय (कुक्षी) एवं स्थानीय प्रशासन से निरंतर समन्वय</div>
             </div>
             <span class="ready-badge prog">प्रगति पर</span>
           </div>
@@ -983,7 +1079,7 @@
             <div class="ready-icon prog"><i class="fa-solid fa-hourglass-half"></i></div>
             <div>
               <div class="ready-title">दीपावली पश्चात द्वितीय चरण जनसंपर्क</div>
-              <div class="ready-desc">अन्य नगरों व ग्रामीण अंचलों में जनसहयोग अभियान</div>
+              <div class="ready-desc">शेष गांवों, कस्बों और व्यापारिक केंद्रों में जनसहयोग अभियान</div>
             </div>
             <span class="ready-badge prog">प्रस्तावित</span>
           </div>
@@ -993,12 +1089,75 @@
 
   </div><!-- /pane-overview -->
 
-  <!-- ==================== PANE 2: VILLAGES & DONORS ==================== -->
+  <!-- ==================== PANE 2: CAMPAIGN DAYS ==================== -->
+  <div class="pane" id="pane-campaign-days" role="tabpanel" hidden>
+    <section>
+      <div class="sec-head">
+        <h2 class="sec-title"><i class="fa-solid fa-calendar-check"></i> अभियान दिवस एवं नगरवार घोषित सहयोग</h2>
+        <div class="sec-note">8 प्रमुख संपर्क दिवसों में घोषित कुल सहयोग: ₹19,48,429</div>
+      </div>
+
+      <div class="panel" style="margin-bottom:24px;">
+        <h3><i class="fa-solid fa-table-list" style="color:var(--gold);"></i> स्थान / अभियान दिवस संकलन</h3>
+        <div class="sub">उपलब्ध दानदाता सूचियों के अनुसार घोषित सहयोग का प्रमाणित लेखा</div>
+
+        <div class="tablewrap" style="border:none;background:transparent;">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:60px;">क्र.</th>
+                <th>स्थान / अभियान दिवस</th>
+                <th style="text-align:right;">घोषित सहयोग</th>
+                <th>अभियान संदर्भ एवं मुख्य आकर्षण</th>
+                <th style="text-align:center;">सहयोग स्वरूप</th>
+              </tr>
+            </thead>
+            <tbody id="timelineTableBody">
+              <!-- Inserted by JS -->
+            </tbody>
+            <tfoot>
+              <tr style="background:rgba(243,156,18,0.12);font-weight:700;">
+                <td colspan="2" style="font-size:16px;color:#fff;">कुल संकलित घोषित सहयोग</td>
+                <td class="num" style="font-size:18px;color:var(--gold);">₹19,48,429</td>
+                <td colspan="2" style="color:var(--light-muted);font-size:13px;">8 प्रमुख संपर्क दिवसों का विशाल जनसहयोग</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <!-- Highlights cards -->
+      <div class="grid3">
+        <div class="panel">
+          <h4><i class="fa-solid fa-hand-holding-heart" style="color:var(--gold);"></i> निसरपुर का अनवरत साथ</h4>
+          <p style="color:var(--light-muted);font-size:13.5px;margin-top:8px;">
+            निसरपुर में 8, 11, 14 एवं 16 अक्टूबर को चार बार जनसंपर्क हुआ। समाजजनों ने कुल मिलाकर <strong>₹5.62 लाख</strong> से अधिक का ऐतिहासिक घोषित सहयोग दिया।
+          </p>
+        </div>
+
+        <div class="panel">
+          <h4><i class="fa-solid fa-fire-flame-curved" style="color:var(--marigold);"></i> कुक्षी एवं नानपुर का उत्साह</h4>
+          <p style="color:var(--light-muted);font-size:13.5px;margin-top:8px;">
+            कुक्षी ने 31 अक्टूबर को ₹4,41,777 तथा नानपुर ने 1 नवंबर को ₹4,20,665 की घोषणा की। नानपुर में 3 समूहों ने ₹1.11 लाख+ तथा कुक्षी में 4 दानदाताओं ने ₹1 लाख+ की घोषणा की।
+          </p>
+        </div>
+
+        <div class="panel">
+          <h4><i class="fa-solid fa-water" style="color:var(--narmada);"></i> कोठड़ा की मातृभूमि भक्ति</h4>
+          <p style="color:var(--light-muted);font-size:13.5px;margin-top:8px;">
+            कोटेश्वर तीर्थ के मूल ग्राम कोठड़ा ने 12 अक्टूबर को <strong>₹2,85,108</strong> का सहयोग देकर अपने तीर्थ और माँ नर्मदा के प्रति अटूट निष्ठा सिद्ध की।
+          </p>
+        </div>
+      </div>
+    </section>
+  </div><!-- /pane-campaign-days -->
+
+  <!-- ==================== PANE 3: VILLAGES & DONORS ==================== -->
   <div class="pane" id="pane-villages" role="tabpanel" hidden>
     <section>
       <div class="sec-head">
-        <h2 class="sec-title"><i class="fa-solid fa-address-book"></i> नगर एवं ग्रामवार दानदाता विवरण</h2>
-        <div class="sec-note">दानदाताओं के नाम, पद एवं सहयोग राशि</div>
+        <h2 class="sec-title"><i class="fa-solid fa-address-book"></i> 4 नवंबर दानदाता सूची (कुक्षी एवं सुसारी)</h2>
+        <div class="sec-note">सत्यापित रसीद एवं दानदाता विवरण (कुल ₹2,37,997)</div>
       </div>
 
       <!-- FILTER & SEARCH BAR -->
@@ -1021,7 +1180,7 @@
           <thead>
             <tr>
               <th style="width:60px;">क्र.</th>
-              <th>दानदाता का नाम एवं विवरण</th>
+              <th>दानदाता का नाम एवं पद/विवरण</th>
               <th>स्थान / नगर</th>
               <th style="text-align:right;">सहयोग राशि</th>
               <th style="text-align:center;">स्थिति</th>
@@ -1036,7 +1195,7 @@
     </section>
   </div><!-- /pane-villages -->
 
-  <!-- ==================== PANE 3: WORKS & BUDGET ==================== -->
+  <!-- ==================== PANE 4: WORKS & BUDGET ==================== -->
   <div class="pane" id="pane-works" role="tabpanel" hidden>
     <section>
       <div class="sec-head">
@@ -1046,7 +1205,7 @@
 
       <div class="panel" style="margin-bottom:24px;">
         <h3><i class="fa-solid fa-calculator" style="color:var(--gold);"></i> कुल अनुमानित व्यय सारांश (Projected Spending Summary)</h3>
-        <div class="sub">कोटेश्वर नर्मदा घाट निर्माण प्रथम चरण का मदवार ब्यौरा</div>
+        <div class="sub">कोटेश्वर नर्मदा घाट निर्माण प्रथम चरण का मदवार ब्यौरा (कुल लक्ष्य: ₹25 लाख)</div>
 
         <div class="tablewrap" style="border:none;background:transparent;">
           <table>
@@ -1095,48 +1254,192 @@
     </section>
   </div><!-- /pane-works -->
 
-  <!-- ==================== PANE 4: CAMPAIGN & VISION ==================== -->
+  <!-- ==================== PANE 5: INSPIRATIONAL STORIES ==================== -->
+  <div class="pane" id="pane-stories" role="tabpanel" hidden>
+    <section>
+      <div class="sec-head">
+        <h2 class="sec-title"><i class="fa-solid fa-heart" style="color:var(--danger);"></i> अभियान के 6 प्रेरणादायी प्रसंग</h2>
+        <div class="sec-note">छोटे-बड़े दान के पीछे छिपी भावनात्मक कहानियां एवं निस्वार्थ सेवा</div>
+      </div>
+
+      <div class="story-grid">
+        <!-- Story 1: Kukshi -->
+        <div class="story-card">
+          <div>
+            <span class="story-badge"><i class="fa-solid fa-city"></i> नगर कुक्षी की उदारता</span>
+            <h3 class="story-title">चार श्रद्धालुओं द्वारा ₹1 लाख+ की घोषणाएँ</h3>
+            <p class="story-text">
+              कुक्षी नगर ने सदैव माँ नर्मदा के कार्यों में उदारता दिखाई है। अभियान में चार प्रमुख दानदाताओं ने ₹1 लाख से अधिक की सहयोग घोषणाएं कीं। वर्ष 2016 में भी कुक्षी ने घाट निर्माण में अद्वितीय योगदान दिया था।
+            </p>
+          </div>
+          <div class="story-highlight">
+            <strong>ऐतिहासिक परंपरा:</strong> श्रद्धा और सामाजिक दायित्व का निरंतर निर्वहन।
+          </div>
+        </div>
+
+        <!-- Story 2: Kothda -->
+        <div class="story-card">
+          <div>
+            <span class="story-badge"><i class="fa-solid fa-water"></i> कोठड़ा की मातृभूमि भक्ति</span>
+            <h3 class="story-title">अपने मूल गांव और नर्मदा से भावनात्मक जुड़ाव</h3>
+            <p class="story-text">
+              कोटेश्वर तीर्थ के मूल गांव कोठड़ा के ग्रामीणों ने अपने पुराने गांव और माँ नर्मदा की पावन स्मृतियों के सम्मान में विशेष समर्पण दिखाया। 12 अक्टूबर को एक ही दिन में ₹2.85 लाख का सहयोग घोषित हुआ।
+            </p>
+          </div>
+          <div class="story-highlight">
+            <strong>भावुक समर्पण:</strong> अपनी जड़ों और पुण्यसलिला के प्रति अटूट निष्ठा।
+          </div>
+        </div>
+
+        <!-- Story 3: Pappu Bhai -->
+        <div class="story-card" style="border-left-color:var(--marigold);">
+          <div>
+            <span class="story-badge" style="color:var(--marigold);background:rgba(230,126,34,0.15);border-color:rgba(230,126,34,0.3);">
+              <i class="fa-solid fa-cake-candles"></i> अभियान का सबसे भावुक उदाहरण
+            </span>
+            <h3 class="story-title">पप्पू भाई एवं उनकी पूज्य माताजी का समर्पण</h3>
+            <p class="story-text">
+              सीमित आर्थिक साधनों और कठिन आजीविका के बावजूद, पप्पू भाई और उनकी माताजी ने अपने पोते के जन्मदिन के पावन अवसर पर <strong>₹11,111</strong> का सहयोग समर्पित किया। यह सिद्ध करता है कि दान धन से नहीं, भाव से बड़ा होता है।
+            </p>
+          </div>
+          <div class="story-highlight">
+            <strong>अभियान की आत्मा:</strong> श्रद्धा के आगे आर्थिक सीमाएं गौण हो जाती हैं।
+          </div>
+        </div>
+
+        <!-- Story 4: Govt Staff & Teachers -->
+        <div class="story-card">
+          <div>
+            <span class="story-badge"><i class="fa-solid fa-graduation-cap"></i> शासकीय सेवक एवं शिक्षक</span>
+            <h3 class="story-title">अपनी आय का अंश माँ नर्मदा की सेवा में</h3>
+            <p class="story-text">
+              तहसीलदार महोदय श्री प्रवीण जी पाटीदार सहित शिक्षक, सेवानिवृत्त शिक्षक, अधिकारी एवं कर्मचारी अपनी मेहनत की आय का अंश माँ नर्मदा के घाट निर्माण में समर्पित कर रहे हैं, जिससे अभियान को सामाजिक विश्वसनीयता मिली।
+            </p>
+          </div>
+          <div class="story-highlight">
+            <strong>प्रशासनिक सहभागिता:</strong> समाज के बौद्धिक व प्रशासनिक वर्ग का संबल।
+          </div>
+        </div>
+
+        <!-- Story 5: Nanpur -->
+        <div class="story-card">
+          <div>
+            <span class="story-badge"><i class="fa-solid fa-users-rays"></i> नानपुर का सामूहिक संकल्प</span>
+            <h3 class="story-title">तीन समूहों द्वारा ₹1,11,111 की घोषणाएँ</h3>
+            <p class="story-text">
+              1 नवंबर को नानपुर जनसंपर्क के दौरान तीन अलग-अलग दानदाता समूहों ने ₹1,11,111 – ₹1,11,111 की बड़ी घोषणाएँ कीं। पूरे नगर ने मिलकर ₹4.20 लाख से अधिक की सहभागिता दर्ज की।
+            </p>
+          </div>
+          <div class="story-highlight">
+            <strong>सामूहिक सामर्थ्य:</strong> नगरवासियों का एकजुट संकल्प और समर्पण।
+          </div>
+        </div>
+
+        <!-- Story 6: Workers -->
+        <div class="story-card" style="border-left-color:var(--narmada);">
+          <div>
+            <span class="story-badge" style="color:var(--narmada);background:rgba(26,188,156,0.15);border-color:rgba(26,188,156,0.3);">
+              <i class="fa-solid fa-person-walking"></i> निस्वार्थ कार्यकर्ता
+            </span>
+            <h3 class="story-title">55 दिनों तक निजी वाहनों से सतत सेवा</h3>
+            <p class="story-text">
+              समिति के सेवाभावी कार्यकर्ताओं ने 50-55 दिनों तक गांव-गांव घर-घर जाकर बिना किसी पद, प्रचार या व्यक्तिगत प्रतिफल की चाह के अपने निजी दोपहिया एवं चारपहिया वाहनों से निरंतर जनसंपर्क किया।
+            </p>
+          </div>
+          <div class="story-highlight">
+            <strong>सच्चे कर्मयोगी:</strong> इन्हीं सेवाभावी कार्यकर्ताओं का पसीना अभियान की रीढ़ है।
+          </div>
+        </div>
+      </div>
+    </section>
+  </div><!-- /pane-stories -->
+
+  <!-- ==================== PANE 6: VISION & LEADERSHIP ==================== -->
   <div class="pane" id="pane-vision" role="tabpanel" hidden>
     <section>
       <div class="sec-head">
-        <h2 class="sec-title"><i class="fa-solid fa-hands-praying"></i> अभियान के 5 प्रमुख स्तंभ एवं संदेश</h2>
-        <div class="sec-note">कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान का संकल्प</div>
+        <h2 class="sec-title"><i class="fa-solid fa-hands-praying"></i> अभियान के 5 मूल स्तंभ एवं भावनाएँ</h2>
+        <div class="sec-note">कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान का मार्गदर्शक दर्शन</div>
       </div>
 
       <div class="mission-grid">
         <div class="mission-card">
-          <h4><i class="fa-solid fa-people-group"></i> 1. जनभागीदारी</h4>
-          <p>घाट निर्माण केवल समिति का कार्य नहीं, बल्कि पूरे समाज का सामूहिक संकल्प है। समाज के प्रत्येक वर्ग का सहयोग इसमें शामिल है।</p>
+          <h4><i class="fa-solid fa-hands-holding-circle"></i> 1. श्रद्धा (Faith)</h4>
+          <p>पुण्यसलिला माँ नर्मदा के प्रति अटूट आस्था और धार्मिक निष्ठा। प्रत्येक ईंट और पत्थर में श्रद्धालुओं की आस्था समाहित है।</p>
         </div>
 
         <div class="mission-card">
-          <h4><i class="fa-solid fa-award"></i> 2. दानदाताओं का सम्मान</h4>
-          <p>प्रत्येक सहयोगकर्ता का योगदान श्रद्धा और सम्मान के साथ प्रस्तुत करना। हर एक पाई का हिसाब पारदर्शी एवं प्रामाणिक रखना।</p>
+          <h4><i class="fa-solid fa-hand-holding-heart"></i> 2. सेवा (Service)</h4>
+          <p>बिना किसी स्वार्थ, पद-लालसा या व्यक्तिगत लाभ के समाज एवं परिक्रमावासियों के लिए किया जाने वाला सामूहिक निस्वार्थ प्रयास।</p>
         </div>
 
         <div class="mission-card">
-          <h4><i class="fa-solid fa-handshake-angle"></i> 3. कार्यकर्ताओं का समर्पण</h4>
-          <p>55 दिनों तक घर-घर जाकर सेवा देने वाले कार्यकर्ताओं का विशेष अभिनंदन। इनका निस्वार्थ भाव ही इस अभियान की रीढ़ है।</p>
+          <h4><i class="fa-solid fa-clock"></i> 3. समर्पण (Dedication)</h4>
+          <p>केवल धन नहीं, बल्कि कार्यकर्ताओं द्वारा अपना समय, निजी वाहन, शारीरिक श्रम और पारिवारिक समय का पुनीत त्याग।</p>
         </div>
 
         <div class="mission-card">
-          <h4><i class="fa-solid fa-landmark"></i> 4. प्रशासनिक सहभागिता</h4>
-          <p>प्रशासनिक अधिकारियों (जैसे कुक्षी तहसीलदार महोदय) का सहयोग अभियान को सामाजिक विश्वसनीयता, गति और प्रोत्साहन देता है।</p>
+          <h4><i class="fa-solid fa-people-roof"></i> 4. सामाजिक एकता (Social Unity)</h4>
+          <p>जाति, वर्ग, व्यवसाय और पद से ऊपर उठकर संपूर्ण समाज की एकजुट सहभागिता। छोटे से छोटे श्रद्धालु का योगदान पूजनीय है।</p>
         </div>
 
         <div class="mission-card">
-          <h4><i class="fa-solid fa-arrow-rotate-right"></i> 5. अभियान की निरंतरता</h4>
-          <p>दीपावली के बाद पुनः जनसंपर्क शुरू कर अधिक से अधिक लोगों को इस पुनीत कार्य से जोड़ना। लक्ष्य प्राप्ति तक अभियान सतत रहेगा।</p>
+          <h4><i class="fa-solid fa-monument"></i> 5. विरासत (Sacred Heritage)</h4>
+          <p>आने वाली पीढ़ियों एवं नर्मदा परिक्रमावासियों के लिए एक सुरक्षित, सुव्यवस्थित और भव्य तीर्थ धरोहर का निर्माण।</p>
         </div>
 
         <div class="mission-card" style="border-top-color:var(--narmada);">
-          <h4><i class="fa-solid fa-location-crosshairs"></i> प्रमुख संपर्क एवं तीर्थ पहचान</h4>
+          <h4><i class="fa-solid fa-bullhorn"></i> संचार के 5 आयाम</h4>
           <p>
-            <strong>संस्था:</strong> कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान<br>
-            <strong>तीर्थ स्थल:</strong> कोटेश्वर तीर्थ, कोठड़ा<br>
-            <strong>प्रमुख निवेदक:</strong> मोहन भाई पाटीदार भंवरिया<br>
-            <strong>जयघोष:</strong> माँ नर्मदे हर! जय माँ नर्मदा!
+            1. दानदाताओं का ससम्मान प्रस्तुतिकरण<br>
+            2. सेवाभावी कार्यकर्ताओं का अभिनंदन<br>
+            3. प्रेरणादायी प्रसंगों का दस्तावेजीकरण<br>
+            4. नगर व गांवों की सहभागिता की पहचान<br>
+            5. घाट निर्माण मिशन एवं भावी लक्ष्य
           </p>
+        </div>
+      </div>
+
+      <!-- SPECTRUM OF PARTICIPATION -->
+      <div class="panel" style="margin-top:24px;">
+        <h3><i class="fa-solid fa-network-wired" style="color:var(--gold);"></i> जनभागीदारी का व्यापक सामाजिक विस्तार</h3>
+        <div class="sub">इस महाअभियान में समाज के हर वर्ग ने अपनी सहभागिता दर्ज कराई है:</div>
+
+        <div class="spectrum-grid">
+          <div class="spectrum-item"><i class="fa-solid fa-om"></i> स्थानीय श्रद्धालु एवं आम नागरिक</div>
+          <div class="spectrum-item"><i class="fa-solid fa-shop"></i> व्यापारी एवं व्यवसायी बंधु</div>
+          <div class="spectrum-item"><i class="fa-solid fa-chalkboard-user"></i> शिक्षक एवं सेवानिवृत्त शिक्षक</div>
+          <div class="spectrum-item"><i class="fa-solid fa-building-user"></i> शासकीय अधिकारी एवं कर्मचारी</div>
+          <div class="spectrum-item"><i class="fa-solid fa-landmark"></i> निर्वाचित जनप्रतिनिधि</div>
+          <div class="spectrum-item"><i class="fa-solid fa-school"></i> निजी विद्यालयों के संचालक</div>
+          <div class="spectrum-item"><i class="fa-solid fa-basket-shopping"></i> छोटे व्यापारी एवं सीमित साधन वाले परिवार</div>
+          <div class="spectrum-item"><i class="fa-solid fa-people-group"></i> आसपास के नगरों व गांवों के समाजजन</div>
+        </div>
+      </div>
+
+      <!-- LEADERSHIP & IDENTITY -->
+      <div class="panel" style="margin-top:24px;">
+        <h3><i class="fa-solid fa-id-card" style="color:var(--narmada);"></i> अभियान की प्रमुख पहचान एवं नेतृत्व</h3>
+        <div class="sub">संस्था, तीर्थ स्थल एवं मार्गदर्शक मंडल</div>
+
+        <div class="grid3" style="margin-top:16px;">
+          <div style="background:rgba(255,255,255,0.03);padding:16px;border-radius:12px;border:1px solid var(--line);">
+            <div style="color:var(--gold);font-size:13px;text-transform:uppercase;">मुख्य प्रेरणास्रोत एवं नेतृत्व</div>
+            <div style="font-size:18px;font-weight:700;color:#fff;margin-top:4px;">श्री मोहन भाई पाटीदार (भंवरिया)</div>
+            <div style="color:var(--light-muted);font-size:13px;margin-top:4px;">अभियान की प्रेरणा, नेतृत्व और जनसंपर्क ऊर्जा</div>
+          </div>
+
+          <div style="background:rgba(255,255,255,0.03);padding:16px;border-radius:12px;border:1px solid var(--line);">
+            <div style="color:var(--gold);font-size:13px;text-transform:uppercase;">संस्था एवं तीर्थ स्थल</div>
+            <div style="font-size:18px;font-weight:700;color:#fff;margin-top:4px;">कोटेश्वर तीर्थ, कोठड़ा (म.प्र.)</div>
+            <div style="color:var(--light-muted);font-size:13px;margin-top:4px;">कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान</div>
+          </div>
+
+          <div style="background:rgba(255,255,255,0.03);padding:16px;border-radius:12px;border:1px solid var(--line);">
+            <div style="color:var(--gold);font-size:13px;text-transform:uppercase;">धार्मिक अभिवादन एवं जयघोष</div>
+            <div style="font-size:18px;font-weight:700;color:var(--narmada);margin-top:4px;">माँ नर्मदे हर! जय माँ नर्मदा!</div>
+            <div style="color:var(--light-muted);font-size:13px;margin-top:4px;">समस्त श्रद्धालुओं का पावन उद्घोष</div>
+          </div>
         </div>
       </div>
     </section>
@@ -1145,7 +1448,7 @@
   <!-- FOOTER -->
   <footer>
     <div class="footer-left">
-      <strong>कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान, कोटेश्वर तीर्थ (कोठड़ा)</strong> | माँ नर्मदा के पावन तट पर घाट निर्माण जनसहयोग अभियान
+      <strong>कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान, कोटेश्वर तीर्थ (कोठड़ा, म.प्र.)</strong> | माँ नर्मदा घाट निर्माण सेवा महाअभियान
     </div>
     <div class="footer-right">
       <span>पारदर्शी एवं प्रामाणिक डिजिटल डैशबोर्ड</span>
@@ -1246,6 +1549,22 @@
      MASTER DATA & CONFIGURATION
      All authentic details from Kotewshwar Narmada Ghat Abhiyan
      ============================================================ */
+
+  // 8 प्रमुख अभियान दिवसों का घोषित सहयोग संकलन (₹19,48,429)
+  const CAMPAIGN_TIMELINE = [
+    { id: 1, location: "निसरपुर", date: "8 अक्टूबर", amount: 161331, note: "प्रथम चरण का शुभारंभ, व्यापारी व नागरिक सहभागिता", type: "घोषित सहयोग" },
+    { id: 2, location: "निसरपुर", date: "11 अक्टूबर", amount: 78888, note: "निसरपुर समाजजनों द्वारा निरंतर समर्थन व सहयोग", type: "घोषित सहयोग" },
+    { id: 3, location: "कोठड़ा", date: "12 अक्टूबर", amount: 285108, note: "मूल गांव व तीर्थ स्थल से भावनात्मक समर्पण", type: "घोषित सहयोग" },
+    { id: 4, location: "निसरपुर एवं कोठड़ा", date: "14 अक्टूबर", amount: 157109, note: "संयुक्त संपर्क दिवस एवं समाजजन सहयोग", type: "घोषित सहयोग" },
+    { id: 5, location: "निसरपुर", date: "16 अक्टूबर", amount: 165554, note: "ग्रामीण व शहरी श्रद्धालुओं की सहभागिता", type: "घोषित सहयोग" },
+    { id: 6, location: "कुक्षी", date: "31 अक्टूबर", amount: 441777, note: "चार श्रद्धालुओं द्वारा ₹1 लाख+ की घोषणाएँ", type: "घोषित सहयोग" },
+    { id: 7, location: "नानपुर", date: "1 नवंबर", amount: 420665, note: "तीन समूहों द्वारा ₹1,11,111 की घोषणाएँ", type: "घोषित सहयोग" },
+    { id: 8, location: "कुक्षी एवं सुसारी", date: "4 नवंबर", amount: 237997, note: "तहसीलदार महोदय सहित 11 दानदाताओं का संग्रह", type: "प्राप्त / घोषित" }
+  ];
+
+  const TOTAL_DECLARED_ALL_DAYS = 1948429; // कुल संकलित घोषित सहयोग
+
+  // 4 नवंबर 2026 के सत्यापित 11 दानदाता
   const DEFAULT_DONATIONS = [
     // नगर कुक्षी (4 नवंबर 2026)
     { id: 1, name: "श्री प्रवीण जी गंगाराम जी पाटीदार", role: "अंजड़ वाले, तहसीलदार महोदय", village: "नगर कुक्षी", amount: 51111, status: "प्राप्त", date: "2026-11-04" },
@@ -1298,28 +1617,15 @@
      RENDER DASHBOARD
      ============================================================ */
   function renderDashboard() {
-    const totalAnnounced = donations.reduce((sum, d) => sum + d.amount, 0);
-    const totalReceived = donations.filter(d => d.status === "प्राप्त").reduce((sum, d) => sum + d.amount, 0);
-    const cashBalance = totalReceived - TOTAL_SPENT;
-
-    // Village breakdown
-    const kukshiTotal = donations.filter(d => d.village.includes("कुक्षी")).reduce((sum, d) => sum + d.amount, 0);
-    const susariTotal = donations.filter(d => d.village.includes("सुसारी")).reduce((sum, d) => sum + d.amount, 0);
-    const kukshiPct = totalAnnounced ? ((kukshiTotal / totalAnnounced) * 100).toFixed(1) : 0;
-    const susariPct = totalAnnounced ? ((susariTotal / totalAnnounced) * 100).toFixed(1) : 0;
+    const nov4Received = donations.filter(d => d.status === "प्राप्त").reduce((sum, d) => sum + d.amount, 0);
+    const cashBalance = nov4Received - TOTAL_SPENT;
 
     // Update Ledgers
-    document.getElementById('led-received').textContent = fmt(totalReceived);
-    document.getElementById('led-announced').textContent = fmt(totalAnnounced);
+    document.getElementById('led-announced').textContent = fmt(TOTAL_DECLARED_ALL_DAYS);
+    document.getElementById('led-received-nov4').textContent = fmt(nov4Received);
     document.getElementById('led-spent').textContent = fmt(TOTAL_SPENT);
     document.getElementById('led-balance').textContent = fmt(cashBalance);
     document.getElementById('led-projected').textContent = fmt(PROJECTED_SPENDING);
-
-    // Update KPI Cards
-    document.getElementById('kpi-total').textContent = fmt(totalReceived);
-    document.getElementById('kpi-donors').textContent = donations.length;
-    document.getElementById('kpi-kukshi').textContent = fmt(kukshiTotal);
-    document.getElementById('kpi-susari').textContent = fmt(susariTotal);
 
     // Update Tab badge & filter counts
     document.getElementById('tab-donor-count').textContent = donations.length;
@@ -1327,21 +1633,11 @@
     document.getElementById('cnt-kukshi').textContent = donations.filter(d => d.village.includes("कुक्षी")).length;
     document.getElementById('cnt-susari').textContent = donations.filter(d => d.village.includes("सुसारी")).length;
 
-    // Update Village bars and strip
-    document.getElementById('lg-kukshi').textContent = `${fmt(kukshiTotal)} (${kukshiPct}%)`;
-    document.getElementById('lg-susari').textContent = `${fmt(susariTotal)} (${susariPct}%)`;
-    document.getElementById('bar-kukshi').style.width = kukshiPct + '%';
-    document.getElementById('bar-val-kukshi').textContent = fmt(kukshiTotal);
-    document.getElementById('bar-susari').style.width = susariPct + '%';
-    document.getElementById('bar-val-susari').textContent = fmt(susariTotal);
+    // Render Hero Ring SVG (Pledge vs Goal)
+    drawHeroRing(TOTAL_DECLARED_ALL_DAYS, PROJECTED_SPENDING);
 
-    document.getElementById('villageSplitStrip').innerHTML = `
-      <div class="strip-part" style="width:${kukshiPct}%;background:#f39c12;" title="नगर कुक्षी: ${kukshiPct}%">कुक्षी ${kukshiPct}%</div>
-      <div class="strip-part" style="width:${susariPct}%;background:#1abc9c;" title="ग्राम सुसारी: ${susariPct}%">सुसारी ${susariPct}%</div>
-    `;
-
-    // Render Hero Ring SVG
-    drawHeroRing(totalReceived, PROJECTED_SPENDING);
+    // Render Timeline Table
+    renderTimelineTable();
 
     // Render Works Table
     renderWorksTable();
@@ -1351,7 +1647,7 @@
   }
 
   /* ============================================================
-     HERO RING SVG GAUGE (Inspired by navratri dashboard)
+     HERO RING SVG GAUGE (Declared vs Phase 1 Target)
      ============================================================ */
   function polar(cx, cy, r, deg) {
     const a = (deg - 90) * Math.PI / 180;
@@ -1407,10 +1703,32 @@
         </linearGradient>
       </defs>
       ${out}
-      <text x="130" y="108" text-anchor="middle" fill="#fff" font-family="'Rozha One', serif" font-size="28">${fmt(current)}</text>
-      <text x="130" y="132" text-anchor="middle" fill="#95a5a6" font-size="12" font-family="'Noto Sans Devanagari', sans-serif">कुल प्राप्त सहयोग</text>
-      <text x="130" y="162" text-anchor="middle" fill="#f8c471" font-size="14.5" font-weight="700" font-family="'Noto Sans Devanagari', sans-serif">${pctVal}% प्राप्त</text>
+      <text x="130" y="106" text-anchor="middle" fill="#fff" font-family="'Rozha One', serif" font-size="26">${fmt(current)}</text>
+      <text x="130" y="130" text-anchor="middle" fill="#95a5a6" font-size="12" font-family="'Noto Sans Devanagari', sans-serif">कुल घोषित सहयोग</text>
+      <text x="130" y="162" text-anchor="middle" fill="#f8c471" font-size="14.5" font-weight="700" font-family="'Noto Sans Devanagari', sans-serif">${pctVal}% लक्ष्य घोषित</text>
     `;
+  }
+
+  /* ============================================================
+     RENDER TIMELINE TABLE (8 CAMPAIGN DAYS)
+     ============================================================ */
+  function renderTimelineTable() {
+    const tbody = document.getElementById("timelineTableBody");
+    tbody.innerHTML = CAMPAIGN_TIMELINE.map((item, i) => {
+      return `
+        <tr>
+          <td style="color:var(--muted);">${i + 1}</td>
+          <td>
+            <strong style="color:#fff;font-size:14.5px;">${item.location} – ${item.date}</strong>
+          </td>
+          <td class="num" style="color:var(--gold);font-size:15.5px;">${fmt(item.amount)}</td>
+          <td style="color:var(--light-muted);font-size:13px;">${item.note}</td>
+          <td style="text-align:center;">
+            <span class="tag ${item.id === 8 ? 'rec' : 'gosh'}">${item.type}</span>
+          </td>
+        </tr>
+      `;
+    }).join("");
   }
 
   /* ============================================================
@@ -1437,7 +1755,7 @@
   }
 
   /* ============================================================
-     RENDER DONORS TABLE & FILTERING
+     RENDER DONORS TABLE & FILTERING (4 NOV DONORS)
      ============================================================ */
   function setFilter(type, btn) {
     currentFilter = type;
@@ -1450,13 +1768,11 @@
     const q = (document.getElementById('donorSearch').value || '').trim().toLowerCase();
     
     let filtered = donations.filter(d => {
-      // Search query filter
       const matchesSearch = !q || 
         d.name.toLowerCase().includes(q) || 
         d.role.toLowerCase().includes(q) || 
         d.village.toLowerCase().includes(q);
 
-      // Category filter
       let matchesCategory = true;
       if (currentFilter === 'कुक्षी') matchesCategory = d.village.includes('कुक्षी');
       else if (currentFilter === 'सुसारी') matchesCategory = d.village.includes('सुसारी');
@@ -1533,8 +1849,8 @@
     document.getElementById('certVillage').textContent = donor.village;
     document.getElementById('certStatus').textContent = donor.status === "प्राप्त" ? "सहयोग प्राप्त" : "सहयोग घोषित";
 
-    const msg = `🚩 *कोटेश्वर नर्मदा घाट निर्माण अभियान* 🚩\n\n` +
-      `श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान द्वारा माँ नर्मदा के पावन तट पर घाट निर्माण के पुनीत कार्य में:\n\n` +
+    const msg = `🚩 *माँ नर्मदा घाट निर्माण सेवा महाअभियान* 🚩\n\n` +
+      `श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान द्वारा माँ नर्मदा के पावन तट (कोटेश्वर तीर्थ, कोठड़ा) पर घाट निर्माण के पुनीत कार्य में:\n\n` +
       `दानदाता: *${donor.name}*\n` +
       `स्थान: *${donor.village}*\n` +
       `सहयोग राशि: *${fmt(donor.amount)}*\n\n` +
@@ -1595,10 +1911,6 @@
     renderDashboard();
     closeAddModal();
     alert("नया जनसहयोग सफलतापूर्वक दर्ज किया गया!");
-  }
-
-  function printReport() {
-    window.print();
   }
 
   // Initialize
