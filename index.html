@@ -15,14 +15,15 @@
   
   <style>
     :root {
-      --ink: #0c121e;
-      --night: #141c2c;
-      --surface: #1b263b;
-      --surface2: #24344d;
-      --surface3: #2e4161;
-      --line: #354766;
+      --ink: #0b111e;
+      --night: #121927;
+      --surface: #172235;
+      --surface2: #1f2f48;
+      --surface3: #293d5c;
+      --line: #324765;
       --gold: #f39c12;
       --gold-light: #f8c471;
+      --gold-glow: rgba(243, 156, 18, 0.25);
       --marigold: #e67e22;
       --saffron: #ff6f00;
       --narmada: #1abc9c;
@@ -98,7 +99,7 @@
     .mast-title span { color: var(--gold); }
     .mast-sub {
       color: var(--light-muted);
-      font-size: 14.5px;
+      font-size: 14px;
       margin-top: 6px;
     }
     .mast-right {
@@ -107,43 +108,24 @@
       align-items: flex-end;
       gap: 10px;
     }
-    .live-status {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      color: var(--light-muted);
-    }
-    .pulse-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--narmada);
-      box-shadow: 0 0 0 0 rgba(26, 188, 156, 0.7);
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(26, 188, 156, 0.7); }
-      70% { box-shadow: 0 0 0 10px rgba(26, 188, 156, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(26, 188, 156, 0); }
-    }
     .action-btn-group {
       display: flex;
-      gap: 10px;
+      gap: 8px;
+      flex-wrap: wrap;
     }
     .btn {
       background: var(--surface2);
       color: var(--cream);
       border: 1px solid var(--line);
       border-radius: 10px;
-      padding: 8px 16px;
+      padding: 8px 14px;
       font-family: inherit;
       font-size: 13.5px;
       font-weight: 500;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
       transition: all 0.2s ease;
     }
     .btn:hover {
@@ -163,40 +145,118 @@
       transform: translateY(-1px);
       box-shadow: 0 4px 14px rgba(243, 156, 18, 0.4);
     }
+    .btn-teal {
+      background: rgba(26, 188, 156, 0.18);
+      border-color: rgba(26, 188, 156, 0.4);
+      color: #48c9b0;
+    }
+    .btn-teal:hover {
+      background: rgba(26, 188, 156, 0.3);
+      border-color: var(--narmada);
+      color: #fff;
+    }
 
-    /* ---------- DHARMIC TICKER BANNER ---------- */
-    .dharmic-banner {
-      margin-top: 18px;
-      background: linear-gradient(90deg, rgba(230, 126, 34, 0.18), rgba(26, 188, 156, 0.12));
-      border: 1px solid rgba(243, 156, 18, 0.35);
+    /* ---------- GOOGLE SHEET SYNC TOOLBAR ---------- */
+    .sheet-sync-bar {
+      margin-top: 16px;
+      background: linear-gradient(90deg, rgba(20, 32, 50, 0.95), rgba(28, 42, 65, 0.95));
+      border: 1px solid rgba(243, 156, 18, 0.3);
       border-radius: var(--r);
-      padding: 14px 20px;
+      padding: 12px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 12px;
-      font-size: 14.5px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    }
+    .sync-status-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .sync-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 12px;
+      border-radius: 99px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .sync-pill.connected {
+      background: rgba(46, 204, 113, 0.15);
+      border: 1px solid rgba(46, 204, 113, 0.4);
+      color: #2ecc71;
+    }
+    .sync-pill.fallback {
+      background: rgba(243, 156, 18, 0.15);
+      border: 1px solid rgba(243, 156, 18, 0.4);
+      color: var(--gold-light);
+    }
+    .sync-pill.loading {
+      background: rgba(52, 152, 219, 0.15);
+      border: 1px solid rgba(52, 152, 219, 0.4);
+      color: #5dade2;
+    }
+    .pulse-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 0 0 currentColor;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(0.95); }
+      70% { opacity: 0; transform: scale(2.2); }
+      100% { opacity: 0; transform: scale(0.95); }
+    }
+    .sync-info {
+      font-size: 13px;
+      color: var(--light-muted);
+    }
+    .sync-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* ---------- DHARMIC TICKER BANNER ---------- */
+    .dharmic-banner {
+      margin-top: 14px;
+      background: linear-gradient(90deg, rgba(230, 126, 34, 0.15), rgba(26, 188, 156, 0.12));
+      border: 1px solid rgba(243, 156, 18, 0.25);
+      border-radius: var(--r);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 14px;
     }
     .dharmic-motto {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       color: #fff;
       flex: 1;
-      min-width: 300px;
+      min-width: 280px;
     }
-    .dharmic-motto i { color: var(--gold); font-size: 20px; flex-shrink: 0; }
+    .dharmic-motto i { color: var(--gold); font-size: 18px; flex-shrink: 0; }
     .dharmic-badges {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
     }
     .d-badge {
       background: rgba(0,0,0,0.3);
-      padding: 5px 12px;
+      padding: 4px 10px;
       border-radius: 8px;
-      font-size: 13px;
+      font-size: 12.5px;
       color: var(--light-muted);
       border: 1px solid rgba(255,255,255,0.08);
       display: inline-flex;
@@ -205,19 +265,81 @@
     }
     .d-badge strong { color: var(--gold-light); }
 
+    /* ---------- NAVIGATION TABS ---------- */
+    .tabs {
+      display: flex;
+      gap: 6px;
+      margin-top: 20px;
+      border-bottom: 2px solid var(--line);
+      overflow-x: auto;
+      padding-bottom: 0;
+      scrollbar-width: thin;
+    }
+    .tab {
+      background: transparent;
+      color: var(--muted);
+      border: none;
+      padding: 11px 18px;
+      font-family: inherit;
+      font-size: 14.5px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 12px 12px 0 0;
+      transition: all 0.2s ease;
+      position: relative;
+      white-space: nowrap;
+    }
+    .tab:hover {
+      color: var(--cream);
+      background: rgba(255,255,255,0.04);
+    }
+    .tab[aria-selected="true"] {
+      color: var(--gold);
+      background: var(--surface);
+      font-weight: 600;
+    }
+    .tab[aria-selected="true"]::after {
+      content: "";
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--marigold));
+      border-radius: 3px 3px 0 0;
+    }
+    .tab-badge {
+      background: rgba(243, 156, 18, 0.2);
+      color: var(--gold-light);
+      padding: 2px 7px;
+      border-radius: 99px;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+    .tab[aria-selected="true"] .tab-badge {
+      background: var(--gold);
+      color: #111;
+    }
+
+    /* ---------- PANES ---------- */
+    .pane { margin-top: 22px; }
+    .pane[hidden] { display: none; }
+
     /* ---------- HERO SECTION (At a glance) ---------- */
     .hero {
       display: grid;
-      grid-template-columns: minmax(320px, 400px) 1fr;
-      gap: 24px;
-      margin-top: 24px;
+      grid-template-columns: minmax(320px, 390px) 1fr;
+      gap: 22px;
       align-items: stretch;
     }
     .ringbox {
-      background: linear-gradient(170deg, var(--surface) 0%, #111a28 100%);
+      background: linear-gradient(170deg, var(--surface) 0%, #0f1724 100%);
       border: 1px solid var(--line);
-      border-radius: 22px;
-      padding: 24px 20px;
+      border-radius: 20px;
+      padding: 22px 18px;
       text-align: center;
       position: relative;
       overflow: hidden;
@@ -225,6 +347,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
     .ringbox::after {
       content: "";
@@ -235,32 +358,33 @@
     }
     .ring-caption {
       font-family: "Rozha One", serif;
-      font-size: 21px;
+      font-size: 20px;
       color: var(--gold-light);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
     .ring-note {
       color: var(--muted);
       font-size: 13px;
-      margin-top: 10px;
+      margin-top: 8px;
       line-height: 1.5;
     }
 
     .ledger {
       background: var(--surface);
       border: 1px solid var(--line);
-      border-radius: 22px;
-      padding: 14px 24px 20px;
+      border-radius: 20px;
+      padding: 22px 24px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
     .ledger-row {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
-      padding: 11px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
     .ledger-row:last-of-type { border-bottom: none; }
     .ledger-label {
@@ -268,259 +392,179 @@
       font-size: 14.5px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
     .ledger-val {
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: 0.3px;
+      font-family: "Rozha One", "Marcellus", serif;
+      font-size: 20px;
+      color: #fff;
+      font-variant-numeric: tabular-nums;
     }
     .ledger-val.big {
-      font-size: 32px;
-      font-family: "Rozha One", serif;
-      font-weight: 400;
+      font-size: 26px;
       color: var(--gold);
     }
-    .ledger-val.teal { color: var(--narmada); }
-    .ledger-val.marigold { color: var(--marigold); }
-    .ledger-val.dim { color: var(--muted); font-size: 18px; font-weight: 500; }
+    .ledger-val.dim {
+      color: var(--light-muted);
+      font-size: 18px;
+    }
 
     .callout {
-      margin-top: 14px;
-      padding: 12px 16px;
+      background: rgba(243, 156, 18, 0.08);
+      border: 1px solid rgba(243, 156, 18, 0.3);
       border-radius: 12px;
-      background: linear-gradient(100deg, rgba(230, 126, 34, 0.16), rgba(26, 188, 156, 0.12));
-      border: 1px solid rgba(243, 156, 18, 0.4);
+      padding: 12px 14px;
       font-size: 13px;
-      line-height: 1.6;
-      color: #e5e8ea;
-    }
-    .callout b { color: var(--gold-light); }
-
-    /* ---------- NAVIGATION TABS ---------- */
-    .tabs {
-      display: flex;
-      align-items: flex-end;
-      gap: 6px;
-      margin-top: 30px;
-      border-bottom: 1px solid var(--line);
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .tabs::-webkit-scrollbar { display: none; }
-    .tab {
-      flex: none;
-      background: none;
-      border: none;
-      border-bottom: 3px solid transparent;
       color: var(--light-muted);
-      font: inherit;
-      font-size: 15px;
-      font-weight: 500;
-      padding: 12px 18px 10px;
-      cursor: pointer;
+      margin-top: 14px;
+      line-height: 1.5;
+    }
+
+    /* ---------- STAT CARDS GRID ---------- */
+    .grid4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-top: 22px;
+    }
+    .grid3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .grid2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px 20px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .stat:hover {
+      transform: translateY(-2px);
+      border-color: rgba(243, 156, 18, 0.4);
+    }
+    .stat-header {
       display: flex;
       align-items: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-      white-space: nowrap;
+      justify-content: space-between;
+      margin-bottom: 8px;
     }
-    .tab:hover { color: #fff; }
-    .tab[aria-selected="true"] {
-      color: var(--gold-light);
-      border-bottom-color: var(--gold);
-      font-weight: 600;
+    .stat .k {
+      color: var(--muted);
+      font-size: 13.5px;
+      font-weight: 500;
     }
-    .tab-badge {
-      background: rgba(255,255,255,0.12);
-      font-size: 11.5px;
-      padding: 2px 8px;
-      border-radius: 99px;
+    .stat .stat-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+    }
+    .stat .n {
+      font-family: "Rozha One", serif;
+      font-size: 28px;
       color: #fff;
+      margin-bottom: 4px;
+    }
+    .stat .hint {
+      color: var(--muted);
+      font-size: 12.5px;
+      display: flex;
+      justify-content: space-between;
     }
 
-    /* ---------- PANES & SECTIONS ---------- */
-    .pane[hidden] { display: none; }
-    section { margin-top: 30px; }
+    .stat.accent-gold .stat-icon { background: rgba(243, 156, 18, 0.15); color: var(--gold); }
+    .stat.accent-teal .stat-icon { background: rgba(26, 188, 156, 0.15); color: var(--narmada); }
+    .stat.accent-marigold .stat-icon { background: rgba(230, 126, 34, 0.15); color: var(--marigold); }
+    .stat.accent-danger .stat-icon { background: rgba(231, 76, 60, 0.15); color: var(--danger); }
+    .stat.accent-blue .stat-icon { background: rgba(52, 152, 219, 0.15); color: #5dade2; }
+
+    /* ---------- SECTION HEADERS ---------- */
     .sec-head {
+      margin-top: 36px;
+      margin-bottom: 16px;
       display: flex;
-      align-items: baseline;
       justify-content: space-between;
-      gap: 16px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 12px;
       border-bottom: 1px solid var(--line);
       padding-bottom: 10px;
-      margin-bottom: 22px;
-      flex-wrap: wrap;
     }
     .sec-title {
-      font-size: 24px;
+      font-size: 22px;
       color: #fff;
       display: flex;
       align-items: center;
       gap: 10px;
     }
-    .sec-title i { color: var(--gold); font-size: 20px; }
-    .sec-note { color: var(--muted); font-size: 13.5px; }
-
-    /* GRID LAYOUTS */
-    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
-
-    /* STAT CARDS */
-    .stat {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--r);
-      padding: 18px 20px;
-      transition: transform 0.2s ease, border-color 0.2s ease;
-    }
-    .stat:hover {
-      transform: translateY(-2px);
-      border-color: var(--gold);
-    }
-    .stat-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    .stat .k { color: var(--light-muted); font-size: 13.5px; }
-    .stat-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-    }
-    .stat .n {
-      font-size: 28px;
-      font-family: "Rozha One", serif;
-      line-height: 1.1;
-      color: #fff;
-    }
-    .stat .hint {
-      font-size: 12.5px;
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(255,255,255,0.08);
+    .sec-title i { color: var(--gold); }
+    .sec-note {
       color: var(--muted);
-      display: flex;
-      justify-content: space-between;
+      font-size: 13px;
     }
-    .stat.accent-gold .n { color: var(--gold); }
-    .stat.accent-gold .stat-icon { background: rgba(243, 156, 18, 0.18); color: var(--gold); }
-    .stat.accent-teal .n { color: var(--narmada); }
-    .stat.accent-teal .stat-icon { background: rgba(26, 188, 156, 0.18); color: var(--narmada); }
-    .stat.accent-marigold .n { color: var(--marigold); }
-    .stat.accent-marigold .stat-icon { background: rgba(230, 126, 34, 0.18); color: var(--marigold); }
-    .stat.accent-blue .n { color: #5dade2; }
-    .stat.accent-blue .stat-icon { background: rgba(93, 173, 226, 0.18); color: #5dade2; }
 
-    /* PANELS */
-    .panel {
+    /* ---------- VILLAGE DISTRIBUTION BARS ---------- */
+    .dist-box {
       background: var(--surface);
       border: 1px solid var(--line);
-      border-radius: var(--r);
-      padding: 22px 24px;
+      border-radius: 18px;
+      padding: 22px;
     }
-    .panel h3 { font-size: 19px; color: #fff; margin-bottom: 4px; }
-    .panel .sub { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
-
-    /* BARS */
     .bar-row {
       display: grid;
-      grid-template-columns: 140px 1fr 110px;
-      gap: 14px;
+      grid-template-columns: 140px 1fr 100px;
       align-items: center;
-      margin-bottom: 14px;
+      gap: 14px;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
-    .bar-name { font-size: 14.5px; color: var(--cream); font-weight: 500; }
+    .bar-row:last-child { border-bottom: none; }
+    .bar-name { font-weight: 500; font-size: 14px; color: #fff; }
+    .bar-name small { display: block; font-size: 11.5px; color: var(--muted); }
     .bar-track {
-      height: 18px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 9px;
+      background: rgba(255,255,255,0.06);
+      height: 10px;
+      border-radius: 99px;
       overflow: hidden;
-      box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
+      position: relative;
     }
     .bar-fill {
       height: 100%;
-      border-radius: 9px;
-      transition: width 0.9s cubic-bezier(0.2, 0.7, 0.3, 1);
-    }
-    .bar-val { font-size: 13.5px; color: var(--light-muted); text-align: right; font-weight: 600; }
-
-    /* SPLIT STRIP */
-    .split-strip {
-      display: flex;
-      height: 38px;
-      border-radius: 10px;
-      overflow: hidden;
-      margin-bottom: 14px;
-      background: rgba(255,255,255,0.08);
-      box-shadow: inset 0 1px 4px rgba(0,0,0,0.5);
-    }
-    .strip-part {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12.5px;
-      font-weight: 700;
-      color: #0c121e;
-      transition: width 0.8s ease;
-    }
-    .strip-legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      font-size: 13px;
-      color: var(--light-muted);
-    }
-    .legend-item { display: flex; align-items: center; gap: 8px; }
-    .legend-dot { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
-
-    /* READINESS ROW */
-    .ready-item {
-      padding: 12px 14px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.06);
-      margin-bottom: 10px;
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 14px;
-      align-items: center;
-    }
-    .ready-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-    }
-    .ready-icon.done { background: rgba(46, 204, 113, 0.2); color: var(--success); }
-    .ready-icon.prog { background: rgba(243, 156, 18, 0.2); color: var(--gold); }
-    .ready-title { font-size: 14px; font-weight: 500; color: #fff; }
-    .ready-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .ready-badge {
-      font-size: 11.5px;
-      font-weight: 600;
-      padding: 4px 10px;
       border-radius: 99px;
+      transition: width 0.6s ease;
     }
-    .ready-badge.done { background: rgba(46, 204, 113, 0.15); color: #58d68d; border: 1px solid rgba(46, 204, 113, 0.4); }
-    .ready-badge.prog { background: rgba(243, 156, 18, 0.15); color: var(--gold-light); border: 1px solid rgba(243, 156, 18, 0.4); }
+    .bar-fill.gold { background: linear-gradient(90deg, var(--gold), var(--marigold)); }
+    .bar-fill.teal { background: linear-gradient(90deg, var(--narmada-dark), var(--narmada)); }
+    .bar-fill.orange { background: linear-gradient(90deg, var(--marigold), var(--saffron)); }
+    .bar-fill.blue { background: linear-gradient(90deg, #2980b9, #5dade2); }
+    .bar-val {
+      text-align: right;
+      font-family: "Rozha One", serif;
+      font-size: 15.5px;
+      color: var(--cream);
+    }
 
-    /* TABLES */
+    /* ---------- TABLES ---------- */
     .tablewrap {
       overflow-x: auto;
       border: 1px solid var(--line);
       border-radius: var(--r);
       background: var(--surface);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
     }
     table {
       border-collapse: collapse;
@@ -528,7 +572,7 @@
       font-size: 14px;
     }
     th, td {
-      padding: 12px 16px;
+      padding: 12px 14px;
       text-align: left;
       border-bottom: 1px solid rgba(255,255,255,0.06);
     }
@@ -539,29 +583,32 @@
       font-size: 13px;
       position: sticky;
       top: 0;
+      white-space: nowrap;
     }
     tbody tr:last-child td { border-bottom: none; }
     tbody tr:hover td { background: rgba(255,255,255,0.04); }
-    td.num { text-align: right; font-weight: 600; }
+    td.num { text-align: right; font-weight: 600; font-family: "Rozha One", serif; font-size: 15px; }
     .tag {
       display: inline-block;
-      padding: 3px 10px;
+      padding: 3px 9px;
       border-radius: 99px;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
+      white-space: nowrap;
     }
     .tag.rec { background: rgba(26, 188, 156, 0.18); color: #48c9b0; border: 1px solid rgba(26, 188, 156, 0.4); }
     .tag.gosh { background: rgba(243, 156, 18, 0.18); color: var(--gold-light); border: 1px solid rgba(243, 156, 18, 0.4); }
-    .donor-role { font-size: 12px; color: var(--light-muted); display: block; margin-top: 2px; }
+    .tag.exp { background: rgba(231, 76, 60, 0.18); color: #e74c3c; border: 1px solid rgba(231, 76, 60, 0.4); }
+    .tag.mode { background: rgba(52, 152, 219, 0.15); color: #85c1e9; border: 1px solid rgba(52, 152, 219, 0.3); }
 
-    /* SEARCH & FILTER CONTROLS */
+    /* ---------- SEARCH & FILTER CONTROLS ---------- */
     .filter-bar {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       background: var(--surface);
-      padding: 14px 18px;
+      padding: 12px 16px;
       border-radius: 12px;
       border: 1px solid var(--line);
       align-items: center;
@@ -576,9 +623,9 @@
       background: rgba(0,0,0,0.3);
       border: 1px solid var(--line);
       border-radius: 8px;
-      padding: 9px 12px 9px 36px;
+      padding: 8px 12px 8px 36px;
       color: #fff;
-      font-size: 14px;
+      font-size: 13.5px;
       font-family: inherit;
       outline: none;
     }
@@ -595,118 +642,164 @@
     }
     .filter-pills {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
     }
     .pill {
-      background: rgba(255,255,255,0.06);
+      background: var(--surface2);
       border: 1px solid var(--line);
       color: var(--light-muted);
-      border-radius: 20px;
-      padding: 6px 14px;
-      font-size: 13px;
+      padding: 5px 12px;
+      border-radius: 99px;
+      font-size: 12.5px;
       cursor: pointer;
+      font-family: inherit;
       transition: all 0.2s ease;
     }
-    .pill:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .pill:hover {
+      background: var(--surface3);
+      color: #fff;
+    }
     .pill.active {
       background: var(--gold);
-      color: #0c121e;
+      color: #111;
       border-color: var(--gold);
       font-weight: 600;
     }
 
-    /* STORY CARDS */
-    .story-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 22px;
-    }
-    .story-card {
+    /* ---------- WORKS CARDS ---------- */
+    .work-card {
       background: var(--surface);
       border: 1px solid var(--line);
-      border-radius: var(--r);
-      padding: 22px;
-      position: relative;
-      border-left: 4px solid var(--gold);
+      border-radius: 16px;
+      padding: 18px 20px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: transform 0.2s ease;
+      transition: transform 0.2s ease, border-color 0.2s ease;
     }
-    .story-card:hover {
+    .work-card:hover {
       transform: translateY(-2px);
-      border-color: var(--gold);
+      border-color: rgba(243, 156, 18, 0.4);
     }
-    .story-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+    .work-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+      gap: 10px;
+    }
+    .work-title {
+      font-size: 15.5px;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.4;
+    }
+    .work-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+    .work-meta-item small { display: block; color: var(--muted); font-size: 11.5px; }
+    .work-meta-item strong { font-family: "Rozha One", serif; font-size: 16px; color: var(--cream); }
+    .ready-badge {
       font-size: 11.5px;
       font-weight: 600;
-      color: var(--gold-light);
-      background: rgba(243, 156, 18, 0.15);
-      border: 1px solid rgba(243, 156, 18, 0.3);
-      padding: 3px 10px;
+      padding: 3px 9px;
       border-radius: 99px;
-      margin-bottom: 10px;
-      width: fit-content;
+      white-space: nowrap;
     }
-    .story-title {
-      font-size: 18px;
-      color: #fff;
-      margin-bottom: 8px;
-    }
-    .story-text {
-      color: #d0d7de;
-      font-size: 13.5px;
-      line-height: 1.6;
-      margin-bottom: 12px;
-    }
-    .story-highlight {
-      background: rgba(0,0,0,0.25);
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 12.5px;
-      color: var(--light-muted);
-      border-left: 2px solid var(--narmada);
-    }
-    .story-highlight strong { color: var(--gold-light); }
+    .ready-badge.done { background: rgba(46, 204, 113, 0.15); color: #58d68d; border: 1px solid rgba(46, 204, 113, 0.4); }
+    .ready-badge.prog { background: rgba(243, 156, 18, 0.15); color: var(--gold-light); border: 1px solid rgba(243, 156, 18, 0.4); }
 
-    /* MISSION / VISION CARDS */
-    .mission-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-    .mission-card {
+    /* ---------- STORIES & INSPIRATION CARDS ---------- */
+    .story-card {
       background: var(--surface);
       border: 1px solid var(--line);
-      border-radius: var(--r);
-      padding: 22px 20px;
+      border-radius: 18px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       position: relative;
-      border-top: 4px solid var(--gold);
+      overflow: hidden;
     }
-    .mission-card h4 {
-      font-size: 18px;
-      color: var(--gold-light);
-      margin-bottom: 8px;
+    .story-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--marigold));
+    }
+    .story-header {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
+      margin-bottom: 12px;
     }
-    .mission-card p {
-      color: #d0d7de;
+    .story-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(243, 156, 18, 0.15);
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      flex-shrink: 0;
+    }
+    .story-title { font-size: 17px; font-weight: 600; color: #fff; }
+    .story-tag { font-size: 12px; color: var(--gold-light); }
+    .story-body {
+      color: #d5dbdb;
       font-size: 14px;
       line-height: 1.6;
-      margin: 0;
+      margin-bottom: 14px;
+    }
+    .story-quote {
+      background: rgba(0,0,0,0.25);
+      border-left: 3px solid var(--gold);
+      padding: 8px 12px;
+      border-radius: 0 8px 8px 0;
+      font-style: italic;
+      color: var(--light-muted);
+      font-size: 13px;
     }
 
-    /* COMMUNITY SPECTRUM PILLS */
+    /* ---------- VALUES & COMMUNITY SPECTRUM ---------- */
+    .val-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+    .val-card:hover { transform: translateY(-2px); border-color: var(--gold); }
+    .val-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(243, 156, 18, 0.15);
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin: 0 auto 12px;
+    }
+    .val-name { font-size: 17px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+    .val-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
     .spectrum-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 14px;
+      gap: 12px;
       margin-top: 14px;
     }
     .spectrum-item {
@@ -733,12 +826,12 @@
       flex-shrink: 0;
     }
 
-    /* MODAL FOR DONOR RECEIPT */
+    /* ---------- MODAL BASE ---------- */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.75);
-      backdrop-filter: blur(4px);
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(5px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -752,71 +845,68 @@
       opacity: 1;
       pointer-events: auto;
     }
-    .cert-modal {
-      background: linear-gradient(135deg, #20132b 0%, #151c2e 100%);
-      border: 2px solid var(--gold);
+    .modal-box {
+      background: linear-gradient(135deg, #1b263b 0%, #101826 100%);
+      border: 1px solid var(--line);
       border-radius: 20px;
-      max-width: 540px;
+      max-width: 600px;
       width: 100%;
-      padding: 30px;
+      padding: 26px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.7);
       position: relative;
-      text-align: center;
+      max-height: 90vh;
+      overflow-y: auto;
     }
-    .cert-close {
+    .modal-close {
       position: absolute;
       top: 16px;
       right: 18px;
       background: none;
       border: none;
       color: var(--muted);
-      font-size: 20px;
+      font-size: 22px;
       cursor: pointer;
     }
-    .cert-close:hover { color: #fff; }
-    .cert-om {
-      font-size: 32px;
-      color: var(--gold);
-      margin-bottom: 4px;
+    .modal-close:hover { color: #fff; }
+
+    /* ---------- HONOR CERTIFICATE MODAL ---------- */
+    .cert-modal {
+      border: 2px solid var(--gold);
+      text-align: center;
+      max-width: 520px;
     }
-    .cert-title {
-      font-family: "Rozha One", serif;
-      font-size: 24px;
-      color: #fff;
-      margin-bottom: 2px;
-    }
-    .cert-sub {
-      color: var(--gold-light);
-      font-size: 13.5px;
-      margin-bottom: 20px;
-    }
+    .cert-om { font-size: 32px; color: var(--gold); margin-bottom: 2px; }
+    .cert-title { font-family: "Rozha One", serif; font-size: 23px; color: #fff; margin-bottom: 2px; }
+    .cert-sub { color: var(--gold-light); font-size: 13px; margin-bottom: 18px; }
     .cert-body {
       background: rgba(0,0,0,0.3);
       border: 1px dashed rgba(243, 156, 18, 0.5);
       border-radius: 14px;
-      padding: 20px;
-      margin-bottom: 20px;
+      padding: 18px;
+      margin-bottom: 18px;
       text-align: left;
     }
-    .cert-donor {
-      font-size: 20px;
-      color: #fff;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    .cert-amount {
-      font-size: 26px;
-      font-family: "Rozha One", serif;
-      color: var(--gold);
-      margin: 10px 0;
-    }
-    .cert-foot {
-      font-size: 12.5px;
-      color: var(--light-muted);
-      line-height: 1.5;
-    }
+    .cert-donor { font-size: 19px; color: #fff; font-weight: 600; margin-bottom: 3px; }
+    .cert-amount { font-size: 26px; font-family: "Rozha One", serif; color: var(--gold); margin: 8px 0; }
+    .cert-foot { font-size: 12px; color: var(--light-muted); line-height: 1.5; }
 
-    /* FOOTER */
+    /* ---------- FORM ELEMENTS ---------- */
+    .form-group { margin-bottom: 14px; text-align: left; }
+    .form-label { display: block; font-size: 13px; color: var(--light-muted); margin-bottom: 6px; }
+    .form-input, .form-select {
+      width: 100%;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 9px 12px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+    }
+    .form-input:focus, .form-select:focus { border-color: var(--gold); }
+
+    /* ---------- FOOTER ---------- */
     footer {
       margin-top: 50px;
       padding-top: 24px;
@@ -832,13 +922,23 @@
     .footer-left strong { color: var(--cream); }
     .footer-right { display: flex; gap: 14px; }
 
-    /* RESPONSIVE */
+    /* ---------- RESPONSIVE ---------- */
     @media (max-width: 980px) {
       .hero { grid-template-columns: 1fr; }
       .grid2, .grid3, .grid4 { grid-template-columns: 1fr; }
       .bar-row { grid-template-columns: 120px 1fr 90px; }
       .mast-title { font-size: 26px; }
       .mast-right { align-items: flex-start; }
+    }
+
+    /* PRINT STYLES */
+    @media print {
+      body { background: #fff !important; color: #000 !important; }
+      .tabs, .sheet-sync-bar, .action-btn-group, .filter-bar, .modal-backdrop { display: none !important; }
+      .pane[hidden] { display: block !important; }
+      .ringbox, .ledger, .stat, .tablewrap { background: #fff !important; color: #000 !important; border-color: #ccc !important; box-shadow: none !important; }
+      table th { background: #eee !important; color: #000 !important; }
+      table td { color: #000 !important; }
     }
   </style>
 </head>
@@ -858,16 +958,33 @@
       </div>
     </div>
     <div class="mast-right">
-      <div class="live-status">
-        <span class="pulse-dot"></span>
-        <span>अभियान स्थिति: <strong>प्रथम चरण (55 दिन) संपन्न</strong> | दीपावली उपरांत पुनः प्रारंभ</span>
-      </div>
       <div class="action-btn-group">
+        <button class="btn btn-teal" onclick="refreshGoogleSheets()"><i class="fa-solid fa-arrows-rotate" id="refreshIcon"></i> डेटा रीफ्रेश करें</button>
+        <button class="btn" onclick="openSheetModal()"><i class="fa-solid fa-table-list" style="color:var(--gold);"></i> शीट सेटअप गाइड</button>
         <button class="btn" onclick="window.print()"><i class="fa-solid fa-print"></i> रिपोर्ट प्रिंट करें</button>
         <button class="btn btn-gold" onclick="openAddModal()"><i class="fa-solid fa-plus-circle"></i> नया सहयोग जोड़ें</button>
       </div>
     </div>
   </header>
+
+  <!-- GOOGLE SHEET LIVE SYNC BAR -->
+  <div class="sheet-sync-bar">
+    <div class="sync-status-group">
+      <div class="sync-pill fallback" id="syncPill">
+        <span class="pulse-dot"></span>
+        <span id="syncStatusText">डेटा सिंक जांचा जा रहा है...</span>
+      </div>
+      <div class="sync-info" id="syncDetailText">
+        Google Sheet ID: 1Gw-tjQu... | टैब: Declarations, Collections, Expenses
+      </div>
+    </div>
+    <div class="sync-actions">
+      <span class="sync-info" id="syncTimeText">अंतिम सिंक: अभी</span>
+      <a href="https://docs.google.com/spreadsheets/d/1Gw-tjQuVRzp6jO57jdH7OzvfEx4Brw_DV6uRb1cUDt8/edit#gid=0" target="_blank" rel="noopener noreferrer" class="btn" style="padding:4px 10px;font-size:12px;">
+        <i class="fa-solid fa-arrow-up-right-from-square" style="color:var(--gold);"></i> Google Sheet खोलें
+      </a>
+    </div>
+  </div>
 
   <!-- DHARMIC MOTTO BANNER -->
   <div class="dharmic-banner">
@@ -876,8 +993,8 @@
       <span>“यह केवल धन संग्रह का अभियान नहीं, बल्कि धार्मिक आस्था, सामाजिक सहभागिता, स्वैच्छिक सेवा और सामूहिक उत्तरदायित्व का विराट आंदोलन है।”</span>
     </div>
     <div class="dharmic-badges">
-      <span class="d-badge"><i class="fa-solid fa-bullhorn"></i> कुल घोषित सहयोग: <strong>₹19,48,429</strong></span>
-      <span class="d-badge"><i class="fa-solid fa-calendar-check"></i> 4 नवंबर प्राप्ति: <strong>₹2,37,997</strong></span>
+      <span class="d-badge"><i class="fa-solid fa-bullhorn"></i> कुल घोषित सहयोग: <strong id="bannerTotalDeclared">₹19,48,429</strong></span>
+      <span class="d-badge"><i class="fa-solid fa-calendar-check"></i> कुल प्राप्त संग्रह: <strong id="bannerTotalCollected">₹2,37,997</strong></span>
       <span class="d-badge"><i class="fa-solid fa-road"></i> जनसंपर्क: <strong>55 दिन निरंतर</strong></span>
     </div>
   </div>
@@ -887,20 +1004,23 @@
     <button class="tab" role="tab" id="tab-overview" aria-selected="true" onclick="switchTab('overview')">
       <i class="fa-solid fa-chart-pie"></i> मुख्य अवलोकन (At a Glance)
     </button>
-    <button class="tab" role="tab" id="tab-campaign-days" aria-selected="false" onclick="switchTab('campaign-days')">
-      <i class="fa-solid fa-calendar-days"></i> अभियान दिवस एवं नगरवार ब्यौरा (₹19.48 लाख)
+    <button class="tab" role="tab" id="tab-declarations" aria-selected="false" onclick="switchTab('declarations')">
+      <i class="fa-solid fa-bullhorn"></i> घोषित सहयोग (Declarations) <span class="tab-badge" id="tab-decl-count">18</span>
     </button>
-    <button class="tab" role="tab" id="tab-villages" aria-selected="false" onclick="switchTab('villages')">
-      <i class="fa-solid fa-address-book"></i> 4 नवंबर दानदाता सूची <span class="tab-badge" id="tab-donor-count">11</span>
+    <button class="tab" role="tab" id="tab-collections" aria-selected="false" onclick="switchTab('collections')">
+      <i class="fa-solid fa-hand-holding-dollar"></i> प्राप्त संग्रह (Collections) <span class="tab-badge" id="tab-coll-count">11</span>
     </button>
-    <button class="tab" role="tab" id="tab-works" aria-selected="false" onclick="switchTab('works')">
-      <i class="fa-solid fa-trowel-bricks"></i> निर्माण कार्य एवं अनुमानित व्यय
+    <button class="tab" role="tab" id="tab-expenses" aria-selected="false" onclick="switchTab('expenses')">
+      <i class="fa-solid fa-file-invoice-dollar"></i> निर्माण व्यय (Expenses) <span class="tab-badge" id="tab-exp-count">2</span>
+    </button>
+    <button class="tab" role="tab" id="tab-timeline" aria-selected="false" onclick="switchTab('timeline')">
+      <i class="fa-solid fa-calendar-days"></i> 8-दिवसीय अभियान संकलन
     </button>
     <button class="tab" role="tab" id="tab-stories" aria-selected="false" onclick="switchTab('stories')">
       <i class="fa-solid fa-star-and-crescent" style="color:var(--gold);"></i> प्रेरणादायी प्रसंग
     </button>
     <button class="tab" role="tab" id="tab-vision" aria-selected="false" onclick="switchTab('vision')">
-      <i class="fa-solid fa-hands-praying"></i> अभियान संदेश, नेतृत्व व सामाजिक एकता
+      <i class="fa-solid fa-hands-praying"></i> अभियान संदेश व नेतृत्व
     </button>
   </nav>
 
@@ -915,22 +1035,22 @@
         <svg id="heroRing" viewBox="0 0 260 230" width="100%" height="auto" role="img" aria-label="दान प्रगति चक्र"></svg>
         <div class="ring-note">
           प्रथम चरण लक्ष्य: <strong>₹25,00,000</strong><br>
-          घोषित सहयोग: <strong>₹19,48,429 (77.9%)</strong>
+          घोषित सहयोग: <strong id="ringDeclaredNote">₹19,48,429 (77.9%)</strong>
         </div>
       </div>
 
       <!-- Financial Ledger -->
       <div class="ledger">
         <div class="ledger-row">
-          <span class="ledger-label"><i class="fa-solid fa-bullhorn" style="color:var(--gold);"></i> कुल घोषित जनसहयोग (Total Ghoshna)</span>
+          <span class="ledger-label"><i class="fa-solid fa-bullhorn" style="color:var(--gold);"></i> कुल घोषित जनसहयोग (Total Ghoshna Rashi)</span>
           <span class="ledger-val big" id="led-announced">₹19,48,429</span>
         </div>
         <div class="ledger-row">
-          <span class="ledger-label"><i class="fa-solid fa-receipt" style="color:var(--narmada);"></i> 4 नवंबर संपर्क दिवस प्राप्ति (Kukshi & Susari)</span>
-          <span class="ledger-val" style="color:var(--narmada);" id="led-received-nov4">₹2,37,997</span>
+          <span class="ledger-label"><i class="fa-solid fa-hand-holding-dollar" style="color:var(--narmada);"></i> कुल प्राप्त सहयोग (Total Received Amount)</span>
+          <span class="ledger-val" style="color:var(--narmada);" id="led-received">₹2,37,997</span>
         </div>
         <div class="ledger-row">
-          <span class="ledger-label"><i class="fa-solid fa-file-invoice-dollar" style="color:var(--danger);"></i> अब तक कुल व्यय (Spent Amount)</span>
+          <span class="ledger-label"><i class="fa-solid fa-file-invoice-dollar" style="color:var(--danger);"></i> अब तक कुल व्यय (Total Spent Amount)</span>
           <span class="ledger-val dim" id="led-spent">₹42,500</span>
         </div>
         <div class="ledger-row">
@@ -938,12 +1058,12 @@
           <span class="ledger-val dim" id="led-balance">₹1,95,497</span>
         </div>
         <div class="ledger-row">
-          <span class="ledger-label"><i class="fa-solid fa-chart-line" style="color:var(--gold-light);"></i> प्रथम चरण कुल अनुमानित बजट (Projected Goal)</span>
+          <span class="ledger-label"><i class="fa-solid fa-chart-line" style="color:var(--gold-light);"></i> प्रथम चरण कुल अनुमानित बजट (Projected Spending)</span>
           <span class="ledger-val dim" id="led-projected">₹25,00,000</span>
         </div>
         <div class="callout">
           <i class="fa-solid fa-circle-info" style="color:var(--gold);margin-right:6px;"></i>
-          <strong>पारदर्शी लेखा-जोखा नोट:</strong> यह संकलन साझा दानदाता सूचियों के आधार पर की गई <strong>घोषित सहयोग राशि</strong> की गणना है। वास्तविक बैंक प्राप्ति एवं रसीद सत्यापन का लेखा अलग संधारित किया जाता है।
+          <strong>पारदर्शी लेखा-जोखा:</strong> यह डैशबोर्ड Google Sheet के <code>Declarations</code>, <code>Collections</code>, एवं <code>Expenses</code> टैब से सीधे डेटा सिंक करता है।
         </div>
       </div>
     </div>
@@ -956,599 +1076,772 @@
       </div>
 
       <div class="grid4">
-        <div class="stat accent-gold">
+        <div class="stat accent-gold" onclick="switchTab('declarations')" style="cursor:pointer;">
           <div class="stat-header">
             <span class="k">कुल घोषित जनसहयोग</span>
             <div class="stat-icon"><i class="fa-solid fa-coins"></i></div>
           </div>
-          <div class="n">₹19,48,429</div>
+          <div class="n" id="kpi-declared">₹19,48,429</div>
           <div class="hint">
-            <span>8 प्रमुख अभियान दिवस</span>
-            <span style="color:var(--gold);font-weight:600;">77.9% लक्ष्य घोषित</span>
+            <span id="kpi-decl-count">18 दानदाता / समूह</span>
+            <span style="color:var(--gold);font-weight:600;" id="kpi-decl-pct">77.9% लक्ष्य घोषित</span>
           </div>
         </div>
 
-        <div class="stat accent-teal">
+        <div class="stat accent-teal" onclick="switchTab('collections')" style="cursor:pointer;">
           <div class="stat-header">
-            <span class="k">4 नवंबर सत्यापित संग्रह</span>
+            <span class="k">सत्यापित प्राप्त संग्रह</span>
             <div class="stat-icon"><i class="fa-solid fa-check-double"></i></div>
           </div>
-          <div class="n">₹2,37,997</div>
+          <div class="n" id="kpi-collected">₹2,37,997</div>
           <div class="hint">
-            <span>कुक्षी (₹1.46L) | सुसारी (₹91K)</span>
-            <span style="color:var(--narmada);font-weight:600;">11 दानदाता</span>
+            <span id="kpi-coll-count">11 रसीदें जारी</span>
+            <span style="color:var(--narmada);font-weight:600;">बैंक व नकद प्राप्त</span>
           </div>
         </div>
 
-        <div class="stat accent-marigold">
+        <div class="stat accent-danger" onclick="switchTab('expenses')" style="cursor:pointer;">
           <div class="stat-header">
-            <span class="k">सर्वाधिक सहयोग केंद्र (कुक्षी)</span>
-            <div class="stat-icon"><i class="fa-solid fa-city"></i></div>
+            <span class="k">अब तक कुल निर्माण व्यय</span>
+            <div class="stat-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div>
           </div>
-          <div class="n">₹5,87,998</div>
+          <div class="n" id="kpi-spent">₹42,500</div>
           <div class="hint">
-            <span>31 अक्टू + 4 नव संग्रह</span>
-            <span style="color:var(--marigold);font-weight:600;">4 दानदाता ₹1 लाख+</span>
+            <span id="kpi-exp-count">2 वाउचर स्वीकृत</span>
+            <span style="color:var(--danger);font-weight:600;">सर्वे व प्रचार व्यय</span>
           </div>
         </div>
 
         <div class="stat accent-blue">
           <div class="stat-header">
-            <span class="k">प्रथम चरण जनसंपर्क अवधि</span>
-            <div class="stat-icon"><i class="fa-solid fa-calendar-days"></i></div>
+            <span class="k">वर्तमान रोकड़ शेष (Balance)</span>
+            <div class="stat-icon"><i class="fa-solid fa-vault"></i></div>
           </div>
-          <div class="n">55 दिन</div>
+          <div class="n" id="kpi-balance">₹1,95,497</div>
           <div class="hint">
-            <span>घर-घर निस्वार्थ संपर्क</span>
-            <span style="color:#5dade2;font-weight:600;">द्वितीय चरण शीघ्र</span>
+            <span>संग्रह - व्यय</span>
+            <span style="color:#5dade2;font-weight:600;">निर्माण हेतु उपलब्ध</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- AREA-WISE AGGREGATION & READINESS -->
+    <!-- VILLAGE / REGION DISTRIBUTION -->
     <section>
+      <div class="sec-head">
+        <h2 class="sec-title"><i class="fa-solid fa-map-location-dot"></i> नगर एवं ग्रामवार घोषित सहयोग वितरण</h2>
+        <div class="sec-note">विभिन्न संपर्क दिवसों का संकलित जनसमर्थन</div>
+      </div>
+
       <div class="grid2">
-        <!-- Area Aggregate Panel -->
-        <div class="panel">
-          <h3><i class="fa-solid fa-map-location-dot" style="color:var(--gold);"></i> प्रमुख क्षेत्रों का घोषित योगदान</h3>
-          <div class="sub">विभिन्न नगरों एवं गांवों से प्राप्त सहयोग का संकलन (कुल ₹19.48 लाख में से)</div>
-          
-          <div style="margin-top:16px;">
-            <div class="bar-row">
-              <div class="bar-name">कुक्षी क्षेत्र (दोनों दिवस)</div>
-              <div class="bar-track"><div class="bar-fill" style="background:#f39c12;width:30.2%;"></div></div>
-              <div class="bar-val">₹5,87,998</div>
-            </div>
-            <div class="bar-row">
-              <div class="bar-name">निसरपुर क्षेत्र (4 दिवस)</div>
-              <div class="bar-track"><div class="bar-fill" style="background:#1abc9c;width:29.0%;"></div></div>
-              <div class="bar-val">₹5,62,882</div>
-            </div>
-            <div class="bar-row">
-              <div class="bar-name">नानपुर नगर (1 दिवस)</div>
-              <div class="bar-track"><div class="bar-fill" style="background:#e67e22;width:21.6%;"></div></div>
-              <div class="bar-val">₹4,20,665</div>
-            </div>
-            <div class="bar-row">
-              <div class="bar-name">कोठड़ा तीर्थ क्षेत्र</div>
-              <div class="bar-track"><div class="bar-fill" style="background:#5dade2;width:14.6%;"></div></div>
-              <div class="bar-val">₹2,85,108</div>
-            </div>
-            <div class="bar-row">
-              <div class="bar-name">ग्राम सुसारी (4 नवंबर)</div>
-              <div class="bar-track"><div class="bar-fill" style="background:#a569bd;width:4.7%;"></div></div>
-              <div class="bar-val">₹91,776</div>
-            </div>
+        <div class="dist-box">
+          <h3 style="font-size:17px;color:var(--gold-light);margin-bottom:14px;"><i class="fa-solid fa-city"></i> प्रमुख सहयोग केंद्र</h3>
+          <div class="bar-row">
+            <div class="bar-name">कुक्षी नगर <small>31 अक्टू + 4 नव</small></div>
+            <div class="bar-track"><div class="bar-fill gold" style="width: 30.2%;"></div></div>
+            <div class="bar-val">₹5,87,998</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-name">नानपुर क्षेत्र <small>1 नवंबर (3 समूह)</small></div>
+            <div class="bar-track"><div class="bar-fill teal" style="width: 21.6%;"></div></div>
+            <div class="bar-val">₹4,20,665</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-name">निसरपुर नगर <small>4 संपर्क दिवस</small></div>
+            <div class="bar-track"><div class="bar-fill orange" style="width: 20.8%;"></div></div>
+            <div class="bar-val">₹4,05,773</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-name">कोठड़ा तीर्थ <small>12 अक्टूबर (मातृभूमि)</small></div>
+            <div class="bar-track"><div class="bar-fill blue" style="width: 14.6%;"></div></div>
+            <div class="bar-val">₹2,85,108</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-name">ग्राम सुसारी <small>4 नवंबर संपर्क</small></div>
+            <div class="bar-track"><div class="bar-fill gold" style="width: 4.7%;"></div></div>
+            <div class="bar-val">₹91,332</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-name">संयुक्त संपर्क <small>14 अक्टूबर</small></div>
+            <div class="bar-track"><div class="bar-fill teal" style="width: 8.1%;"></div></div>
+            <div class="bar-val">₹1,57,109</div>
           </div>
         </div>
 
-        <!-- Project Readiness Checklist -->
-        <div class="panel">
-          <h3><i class="fa-solid fa-list-check" style="color:var(--narmada);"></i> निर्माण तैयारी एवं प्रगति स्थिति</h3>
-          <div class="sub">घाट निर्माण के विभिन्न चरणों की वर्तमान वस्तुस्थिति</div>
-
-          <div class="ready-item">
-            <div class="ready-icon done"><i class="fa-solid fa-check"></i></div>
-            <div>
-              <div class="ready-title">प्रथम चरण जनसंपर्क महाअभियान</div>
-              <div class="ready-desc">55 दिनों तक लगातार घर-घर संपर्क, समाज के हर वर्ग को जोड़ना</div>
+        <div class="dist-box" style="display:flex;flex-direction:column;justify-content:space-between;">
+          <div>
+            <h3 style="font-size:17px;color:var(--gold-light);margin-bottom:10px;"><i class="fa-solid fa-compass"></i> त्वरित टैब नेविगेशन</h3>
+            <p style="color:var(--muted);font-size:13.5px;line-height:1.6;margin-bottom:16px;">
+              अभियान की संपूर्ण पारदर्शिता सुनिश्चित करने के लिए सभी लेन-देन, घोषणाएं और व्यय अलग-अलग टैब में उपलब्ध हैं।
+            </p>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <button class="btn" style="justify-content:space-between;" onclick="switchTab('declarations')">
+                <span><i class="fa-solid fa-bullhorn" style="color:var(--gold);"></i> घोषित सहयोग सूची देखें</span>
+                <span class="tab-badge" id="quickDeclBadge">18 रिकॉर्ड</span>
+              </button>
+              <button class="btn" style="justify-content:space-between;" onclick="switchTab('collections')">
+                <span><i class="fa-solid fa-hand-holding-dollar" style="color:var(--narmada);"></i> प्राप्त रसीदें व आभार पत्र</span>
+                <span class="tab-badge" id="quickCollBadge">11 रसीदें</span>
+              </button>
+              <button class="btn" style="justify-content:space-between;" onclick="switchTab('expenses')">
+                <span><i class="fa-solid fa-file-invoice-dollar" style="color:var(--danger);"></i> निर्माण कार्य एवं व्यय लेखा</span>
+                <span class="tab-badge" id="quickExpBadge">2 वाउचर</span>
+              </button>
             </div>
-            <span class="ready-badge done">100% संपन्न</span>
           </div>
-
-          <div class="ready-item">
-            <div class="ready-icon done"><i class="fa-solid fa-check"></i></div>
-            <div>
-              <div class="ready-title">घाट स्थल एवं तट सीमांकन</div>
-              <div class="ready-desc">कोटेश्वर तीर्थ पर घाट निर्माण भूमि का चिन्हांकन व प्रारंभिक लेवलिंग</div>
-            </div>
-            <span class="ready-badge done">पूर्ण</span>
-          </div>
-
-          <div class="ready-item">
-            <div class="ready-icon prog"><i class="fa-solid fa-hourglass-half"></i></div>
-            <div>
-              <div class="ready-title">प्रशासनिक सहभागिता एवं स्वीकृति</div>
-              <div class="ready-desc">तहसीलदार महोदय (कुक्षी) एवं स्थानीय प्रशासन से निरंतर समन्वय</div>
-            </div>
-            <span class="ready-badge prog">प्रगति पर</span>
-          </div>
-
-          <div class="ready-item">
-            <div class="ready-icon prog"><i class="fa-solid fa-hourglass-half"></i></div>
-            <div>
-              <div class="ready-title">दीपावली पश्चात द्वितीय चरण जनसंपर्क</div>
-              <div class="ready-desc">शेष गांवों, कस्बों और व्यापारिक केंद्रों में जनसहयोग अभियान</div>
-            </div>
-            <span class="ready-badge prog">प्रस्तावित</span>
+          <div style="margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);font-size:12.5px;color:var(--muted);">
+            <i class="fa-solid fa-shield-halved" style="color:var(--gold);margin-right:6px;"></i> कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान द्वारा अधिकृत एवं संधारित।
           </div>
         </div>
       </div>
     </section>
 
-  </div><!-- /pane-overview -->
+  </div>
 
-  <!-- ==================== PANE 2: CAMPAIGN DAYS ==================== -->
-  <div class="pane" id="pane-campaign-days" role="tabpanel" hidden>
-    <section>
-      <div class="sec-head">
-        <h2 class="sec-title"><i class="fa-solid fa-calendar-check"></i> अभियान दिवस एवं नगरवार घोषित सहयोग</h2>
-        <div class="sec-note">8 प्रमुख संपर्क दिवसों में घोषित कुल सहयोग: ₹19,48,429</div>
+  <!-- ==================== PANE 2: DECLARATIONS ==================== -->
+  <div class="pane" id="pane-declarations" role="tabpanel" hidden>
+    <div class="sec-head">
+      <div>
+        <h2 class="sec-title"><i class="fa-solid fa-bullhorn"></i> घोषित जनसहयोग सूची (Declarations)</h2>
+        <div class="sec-note">विभिन्न नगरों एवं ग्रामों में संपर्क दिवसों पर श्रद्धालुओं द्वारा घोषित समर्पण राशि (Google Sheet से सिंक)</div>
+      </div>
+      <div class="action-btn-group">
+        <button class="btn btn-gold" onclick="openAddModal()"><i class="fa-solid fa-plus-circle"></i> नई घोषणा जोड़ें</button>
+        <button class="btn" onclick="downloadCsv('declarations')"><i class="fa-solid fa-download"></i> CSV डाउनलोड</button>
+      </div>
+    </div>
+
+    <!-- MINI STATS FOR DECLARATIONS -->
+    <div class="grid4" style="margin-bottom:18px;">
+      <div class="stat accent-gold" style="padding:14px 18px;">
+        <div class="k">कुल घोषित राशि</div>
+        <div class="n" style="font-size:24px;" id="declSumAmount">₹19,48,429</div>
+        <div class="hint">लक्ष्य का 77.9%</div>
+      </div>
+      <div class="stat accent-teal" style="padding:14px 18px;">
+        <div class="k">कुल प्रविष्टियां</div>
+        <div class="n" style="font-size:24px;" id="declSumCount">18</div>
+        <div class="hint">व्यक्तिगत व समूह दिवस</div>
+      </div>
+      <div class="stat accent-blue" style="padding:14px 18px;">
+        <div class="k">औसत घोषणा</div>
+        <div class="n" style="font-size:24px;" id="declSumAvg">₹1,08,246</div>
+        <div class="hint">प्रति प्रविष्टि औसत</div>
+      </div>
+      <div class="stat accent-marigold" style="padding:14px 18px;">
+        <div class="k">शीर्ष सहयोग केंद्र</div>
+        <div class="n" style="font-size:24px;">कुक्षी</div>
+        <div class="hint">₹5.88 लाख घोषित</div>
+      </div>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="declSearch" placeholder="दानदाता, स्थान या संदर्भ से खोजें..." oninput="filterDeclarations()">
+      </div>
+      <div class="filter-pills" id="declFilterPills">
+        <button class="pill active" onclick="setDeclFilter('all', this)">सभी</button>
+        <button class="pill" onclick="setDeclFilter('कुक्षी', this)">कुक्षी</button>
+        <button class="pill" onclick="setDeclFilter('निसरपुर', this)">निसरपुर</button>
+        <button class="pill" onclick="setDeclFilter('कोठड़ा', this)">कोठड़ा</button>
+        <button class="pill" onclick="setDeclFilter('नानपुर', this)">नानपुर</button>
+        <button class="pill" onclick="setDeclFilter('सुसारी', this)">सुसारी</button>
+        <button class="pill" onclick="setDeclFilter('high', this)">₹1 लाख+</button>
+      </div>
+    </div>
+
+    <!-- DECLARATIONS TABLE -->
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:50px;">क्र.</th>
+            <th style="width:110px;">दिनांक</th>
+            <th style="width:140px;">स्थान / नगर</th>
+            <th>दानदाता / समूह का नाम</th>
+            <th>पद / उपाधि / संदर्भ</th>
+            <th style="text-align:right;width:140px;">घोषित राशि</th>
+            <th style="text-align:center;width:90px;">स्थिति</th>
+            <th style="text-align:center;width:100px;">शेयर</th>
+          </tr>
+        </thead>
+        <tbody id="declTableBody">
+          <!-- Populated dynamically -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ==================== PANE 3: COLLECTIONS ==================== -->
+  <div class="pane" id="pane-collections" role="tabpanel" hidden>
+    <div class="sec-head">
+      <div>
+        <h2 class="sec-title"><i class="fa-solid fa-hand-holding-dollar"></i> प्राप्त एवं सत्यापित सहयोग संग्रह (Collections)</h2>
+        <div class="sec-note">संस्थान द्वारा अधिकृत रसीद कट्टे व बैंक माध्यम से प्राप्त वास्तविक सहयोग राशि</div>
+      </div>
+      <div class="action-btn-group">
+        <button class="btn btn-gold" onclick="openAddModal()"><i class="fa-solid fa-plus-circle"></i> नई प्राप्ति जोड़ें</button>
+        <button class="btn" onclick="downloadCsv('collections')"><i class="fa-solid fa-download"></i> CSV डाउनलोड</button>
+      </div>
+    </div>
+
+    <!-- MINI STATS FOR COLLECTIONS -->
+    <div class="grid4" style="margin-bottom:18px;">
+      <div class="stat accent-teal" style="padding:14px 18px;">
+        <div class="k">कुल प्राप्त संग्रह</div>
+        <div class="n" style="font-size:24px;" id="collSumAmount">₹2,37,997</div>
+        <div class="hint">सत्यापित प्राप्ति</div>
+      </div>
+      <div class="stat accent-gold" style="padding:14px 18px;">
+        <div class="k">कुल जारी रसीदें</div>
+        <div class="n" style="font-size:24px;" id="collSumCount">11</div>
+        <div class="hint">अधिकृत रसीद कट्टा</div>
+      </div>
+      <div class="stat accent-blue" style="padding:14px 18px;">
+        <div class="k">बैंक / ऑनलाइन प्राप्ति</div>
+        <div class="n" style="font-size:24px;" id="collSumBank">₹1,23,988</div>
+        <div class="hint">चेक व UPI माध्यम</div>
+      </div>
+      <div class="stat accent-marigold" style="padding:14px 18px;">
+        <div class="k">नकद संग्रह</div>
+        <div class="n" style="font-size:24px;" id="collSumCash">₹1,14,009</div>
+        <div class="hint">रसीद सहित नकद</div>
+      </div>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="collSearch" placeholder="दानदाता, रसीद क्र. या स्थान से खोजें..." oninput="filterCollections()">
+      </div>
+      <div class="filter-pills" id="collFilterPills">
+        <button class="pill active" onclick="setCollFilter('all', this)">सभी</button>
+        <button class="pill" onclick="setCollFilter('कुक्षी', this)">कुक्षी</button>
+        <button class="pill" onclick="setCollFilter('सुसारी', this)">सुसारी</button>
+        <button class="pill" onclick="setCollFilter('high', this)">₹25,000+</button>
+      </div>
+    </div>
+
+    <!-- COLLECTIONS TABLE -->
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:50px;">क्र.</th>
+            <th style="width:105px;">दिनांक</th>
+            <th style="width:95px;">रसीद क्र.</th>
+            <th>दानदाता का नाम</th>
+            <th>पद / संदर्भ</th>
+            <th style="width:130px;">स्थान / नगर</th>
+            <th style="text-align:right;width:130px;">प्राप्त राशि</th>
+            <th style="text-align:center;width:110px;">माध्यम</th>
+            <th style="text-align:center;width:80px;">स्थिति</th>
+            <th style="text-align:center;width:110px;">आभार पत्र</th>
+          </tr>
+        </thead>
+        <tbody id="collTableBody">
+          <!-- Populated dynamically -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ==================== PANE 4: EXPENSES ==================== -->
+  <div class="pane" id="pane-expenses" role="tabpanel" hidden>
+    <div class="sec-head">
+      <div>
+        <h2 class="sec-title"><i class="fa-solid fa-file-invoice-dollar"></i> निर्माण कार्य एवं व्यय लेखा (Expenses & Work Budget)</h2>
+        <div class="sec-note">अधिकृत वाउचर एवं तकनीकी कार्यों का पारदर्शी ब्यौरा (Google Sheet से सिंक)</div>
+      </div>
+      <div class="action-btn-group">
+        <button class="btn" onclick="downloadCsv('expenses')"><i class="fa-solid fa-download"></i> CSV डाउनलोड</button>
+      </div>
+    </div>
+
+    <!-- MINI STATS FOR EXPENSES -->
+    <div class="grid4" style="margin-bottom:18px;">
+      <div class="stat accent-danger" style="padding:14px 18px;">
+        <div class="k">अब तक कुल व्यय</div>
+        <div class="n" style="font-size:24px;" id="expSumAmount">₹42,500</div>
+        <div class="hint">सत्यापित वाउचर</div>
+      </div>
+      <div class="stat accent-blue" style="padding:14px 18px;">
+        <div class="k">वर्तमान रोकड़ शेष</div>
+        <div class="n" style="font-size:24px;" id="expSumBalance">₹1,95,497</div>
+        <div class="hint">प्राप्ति - व्यय</div>
+      </div>
+      <div class="stat accent-gold" style="padding:14px 18px;">
+        <div class="k">स्वीकृत प्रथम चरण बजट</div>
+        <div class="n" style="font-size:24px;">₹25,00,000</div>
+        <div class="hint">6 प्रमुख निर्माण मद</div>
+      </div>
+      <div class="stat accent-teal" style="padding:14px 18px;">
+        <div class="k">शेष बजट आवश्यकता</div>
+        <div class="n" style="font-size:24px;" id="expSumNeeded">₹23,04,503</div>
+        <div class="hint">लक्ष्य - संग्रह</div>
+      </div>
+    </div>
+
+    <!-- ACTUAL EXPENSES TABLE -->
+    <div class="sec-head" style="margin-top:20px;">
+      <h3 style="font-size:18px;color:#fff;"><i class="fa-solid fa-receipt" style="color:var(--danger);"></i> अधिकृत व्यय वाउचर सूची</h3>
+      <div class="sec-note">संस्थान द्वारा जारी वाउचर</div>
+    </div>
+
+    <div class="tablewrap" style="margin-bottom:30px;">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:50px;">क्र.</th>
+            <th style="width:110px;">दिनांक</th>
+            <th style="width:100px;">वाउचर क्र.</th>
+            <th>मद / कार्य विवरण</th>
+            <th style="width:150px;">श्रेणी</th>
+            <th style="text-align:right;width:130px;">व्यय राशि</th>
+            <th>भुगतान प्राप्तकर्ता</th>
+            <th style="text-align:center;width:90px;">स्थिति</th>
+          </tr>
+        </thead>
+        <tbody id="expTableBody">
+          <!-- Populated dynamically -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PHASE 1 WORKS BUDGET BREAKDOWN CARDS -->
+    <div class="sec-head">
+      <h3 style="font-size:18px;color:#fff;"><i class="fa-solid fa-trowel-bricks" style="color:var(--gold);"></i> प्रथम चरण 6 प्रमुख निर्माण कार्य एवं प्रगति</h3>
+      <div class="sec-note">कार्यवार अनुमानित बजट एवं वर्तमान भौतिक स्थिति</div>
+    </div>
+
+    <div class="grid3" id="worksGrid">
+      <!-- Populated dynamically -->
+    </div>
+  </div>
+
+  <!-- ==================== PANE 5: TIMELINE ==================== -->
+  <div class="pane" id="pane-timeline" role="tabpanel" hidden>
+    <div class="sec-head">
+      <div>
+        <h2 class="sec-title"><i class="fa-solid fa-calendar-days"></i> 8-दिवसीय अभियान संकलन (₹19,48,429)</h2>
+        <div class="sec-note">55-दिवसीय प्रथम चरण में विभिन्न नगरों व तिथियों पर प्राप्त जनसमर्थन की विस्तृत यात्रा</div>
+      </div>
+    </div>
+
+    <div class="tablewrap" style="margin-bottom:24px;">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:50px;">क्र.</th>
+            <th>अभियान दिवस एवं स्थान</th>
+            <th style="text-align:right;width:160px;">घोषित सहयोग राशि</th>
+            <th>विशेष विवरण व समाजजन सहभागिता</th>
+            <th style="text-align:center;width:120px;">श्रेणी</th>
+          </tr>
+        </thead>
+        <tbody id="timelineTableBody">
+          <!-- Populated dynamically -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid3">
+      <div class="dist-box">
+        <h4 style="font-size:16px;color:var(--gold-light);margin-bottom:8px;"><i class="fa-solid fa-hand-holding-heart" style="color:var(--gold);"></i> निसरपुर का अनवरत साथ</h4>
+        <p style="color:var(--light-muted);font-size:13.5px;line-height:1.6;">
+          निसरपुर में 8, 11, 14 एवं 16 अक्टूबर को चार बार जनसंपर्क हुआ। समाजजनों ने कुल मिलाकर <strong>₹5.62 लाख</strong> से अधिक का ऐतिहासिक घोषित सहयोग दिया।
+        </p>
       </div>
 
-      <div class="panel" style="margin-bottom:24px;">
-        <h3><i class="fa-solid fa-table-list" style="color:var(--gold);"></i> स्थान / अभियान दिवस संकलन</h3>
-        <div class="sub">उपलब्ध दानदाता सूचियों के अनुसार घोषित सहयोग का प्रमाणित लेखा</div>
-
-        <div class="tablewrap" style="border:none;background:transparent;">
-          <table>
-            <thead>
-              <tr>
-                <th style="width:60px;">क्र.</th>
-                <th>स्थान / अभियान दिवस</th>
-                <th style="text-align:right;">घोषित सहयोग</th>
-                <th>अभियान संदर्भ एवं मुख्य आकर्षण</th>
-                <th style="text-align:center;">सहयोग स्वरूप</th>
-              </tr>
-            </thead>
-            <tbody id="timelineTableBody">
-              <!-- Inserted by JS -->
-            </tbody>
-            <tfoot>
-              <tr style="background:rgba(243,156,18,0.12);font-weight:700;">
-                <td colspan="2" style="font-size:16px;color:#fff;">कुल संकलित घोषित सहयोग</td>
-                <td class="num" style="font-size:18px;color:var(--gold);">₹19,48,429</td>
-                <td colspan="2" style="color:var(--light-muted);font-size:13px;">8 प्रमुख संपर्क दिवसों का विशाल जनसहयोग</td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
+      <div class="dist-box">
+        <h4 style="font-size:16px;color:var(--marigold);margin-bottom:8px;"><i class="fa-solid fa-fire-flame-curved" style="color:var(--marigold);"></i> कुक्षी एवं नानपुर का उत्साह</h4>
+        <p style="color:var(--light-muted);font-size:13.5px;line-height:1.6;">
+          कुक्षी ने 31 अक्टूबर को ₹4,41,777 तथा नानपुर ने 1 नवंबर को ₹4,20,665 की घोषणा की। नानपुर में 3 समूहों ने ₹1.11 लाख+ तथा कुक्षी में 4 दानदाताओं ने ₹1 लाख+ की घोषणा की।
+        </p>
       </div>
 
-      <!-- Highlights cards -->
-      <div class="grid3">
-        <div class="panel">
-          <h4><i class="fa-solid fa-hand-holding-heart" style="color:var(--gold);"></i> निसरपुर का अनवरत साथ</h4>
-          <p style="color:var(--light-muted);font-size:13.5px;margin-top:8px;">
-            निसरपुर में 8, 11, 14 एवं 16 अक्टूबर को चार बार जनसंपर्क हुआ। समाजजनों ने कुल मिलाकर <strong>₹5.62 लाख</strong> से अधिक का ऐतिहासिक घोषित सहयोग दिया।
-          </p>
-        </div>
-
-        <div class="panel">
-          <h4><i class="fa-solid fa-fire-flame-curved" style="color:var(--marigold);"></i> कुक्षी एवं नानपुर का उत्साह</h4>
-          <p style="color:var(--light-muted);font-size:13.5px;margin-top:8px;">
-            कुक्षी ने 31 अक्टूबर को ₹4,41,777 तथा नानपुर ने 1 नवंबर को ₹4,20,665 की घोषणा की। नानपुर में 3 समूहों ने ₹1.11 लाख+ तथा कुक्षी में 4 दानदाताओं ने ₹1 लाख+ की घोषणा की।
-          </p>
-        </div>
-
-        <div class="panel">
-          <h4><i class="fa-solid fa-water" style="color:var(--narmada);"></i> कोठड़ा की मातृभूमि भक्ति</h4>
-          <p style="color:var(--light-muted);font-size:13.5px;margin-top:8px;">
-            कोटेश्वर तीर्थ के मूल ग्राम कोठड़ा ने 12 अक्टूबर को <strong>₹2,85,108</strong> का सहयोग देकर अपने तीर्थ और माँ नर्मदा के प्रति अटूट निष्ठा सिद्ध की।
-          </p>
-        </div>
+      <div class="dist-box">
+        <h4 style="font-size:16px;color:var(--narmada);margin-bottom:8px;"><i class="fa-solid fa-water" style="color:var(--narmada);"></i> कोठड़ा की मातृभूमि भक्ति</h4>
+        <p style="color:var(--light-muted);font-size:13.5px;line-height:1.6;">
+          कोटेश्वर तीर्थ के मूल ग्राम कोठड़ा ने 12 अक्टूबर को <strong>₹2,85,108</strong> का सहयोग देकर अपने तीर्थ और माँ नर्मदा के प्रति अटूट निष्ठा सिद्ध की।
+        </p>
       </div>
-    </section>
-  </div><!-- /pane-campaign-days -->
+    </div>
+  </div>
 
-  <!-- ==================== PANE 3: VILLAGES & DONORS ==================== -->
-  <div class="pane" id="pane-villages" role="tabpanel" hidden>
-    <section>
-      <div class="sec-head">
-        <h2 class="sec-title"><i class="fa-solid fa-address-book"></i> 4 नवंबर दानदाता सूची (कुक्षी एवं सुसारी)</h2>
-        <div class="sec-note">सत्यापित रसीद एवं दानदाता विवरण (कुल ₹2,37,997)</div>
-      </div>
-
-      <!-- FILTER & SEARCH BAR -->
-      <div class="filter-bar">
-        <div class="search-box">
-          <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="text" id="donorSearch" placeholder="दानदाता का नाम, पद, या स्थान खोजें..." oninput="filterDonors()">
-        </div>
-        <div class="filter-pills">
-          <button class="pill active" data-filter="all" onclick="setFilter('all', this)">सभी (<span id="cnt-all">11</span>)</button>
-          <button class="pill" data-filter="कुक्षी" onclick="setFilter('कुक्षी', this)">नगर कुक्षी (<span id="cnt-kukshi">7</span>)</button>
-          <button class="pill" data-filter="सुसारी" onclick="setFilter('सुसारी', this)">ग्राम सुसारी (<span id="cnt-susari">4</span>)</button>
-          <button class="pill" data-filter="high" onclick="setFilter('high', this)">₹25,000+ विशेष दान</button>
-        </div>
-      </div>
-
-      <!-- DONORS TABLE -->
-      <div class="tablewrap">
-        <table>
-          <thead>
-            <tr>
-              <th style="width:60px;">क्र.</th>
-              <th>दानदाता का नाम एवं पद/विवरण</th>
-              <th>स्थान / नगर</th>
-              <th style="text-align:right;">सहयोग राशि</th>
-              <th style="text-align:center;">स्थिति</th>
-              <th style="text-align:center;width:130px;">आभार पत्रक</th>
-            </tr>
-          </thead>
-          <tbody id="donorsTableBody">
-            <!-- Dynamic rows inserted by JavaScript -->
-          </tbody>
-        </table>
-      </div>
-    </section>
-  </div><!-- /pane-villages -->
-
-  <!-- ==================== PANE 4: WORKS & BUDGET ==================== -->
-  <div class="pane" id="pane-works" role="tabpanel" hidden>
-    <section>
-      <div class="sec-head">
-        <h2 class="sec-title"><i class="fa-solid fa-trowel-bricks"></i> निर्माण कार्य एवं अनुमानित व्यय</h2>
-        <div class="sec-note">परियोजना के विभिन्न चरण एवं लागत अनुमान</div>
-      </div>
-
-      <div class="panel" style="margin-bottom:24px;">
-        <h3><i class="fa-solid fa-calculator" style="color:var(--gold);"></i> कुल अनुमानित व्यय सारांश (Projected Spending Summary)</h3>
-        <div class="sub">कोटेश्वर नर्मदा घाट निर्माण प्रथम चरण का मदवार ब्यौरा (कुल लक्ष्य: ₹25 लाख)</div>
-
-        <div class="tablewrap" style="border:none;background:transparent;">
-          <table>
-            <thead>
-              <tr>
-                <th>कार्य विवरण (Work Component)</th>
-                <th style="text-align:right;">अनुमानित लागत</th>
-                <th style="text-align:right;">अब तक व्यय</th>
-                <th style="text-align:right;">शेष आवश्यक</th>
-                <th style="text-align:center;">वर्तमान स्थिति</th>
-              </tr>
-            </thead>
-            <tbody id="worksTableBody">
-              <!-- Dynamic rows inserted by JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- WORK CARDS -->
-      <div class="grid3">
-        <div class="panel">
-          <h4><i class="fa-solid fa-shield-halved" style="color:var(--narmada);"></i> 1. तट संरक्षण व नींव</h4>
-          <p style="color:var(--light-muted);font-size:13.5px;margin-top:8px;">
-            माँ नर्मदा के पावन प्रवाह के अनुकूल मजबूत पिलर, पाषाण पिचिंग और गहरी नींव का निर्माण ताकि घाट शताब्दियों तक अडिग रहे।
-          </p>
-          <div style="margin-top:12px;font-size:13px;color:var(--gold);">अनुमानित: ₹8,50,000</div>
-        </div>
-
-        <div class="panel">
-          <h4><i class="fa-solid fa-stairs" style="color:var(--gold);"></i> 2. नक्काशीदार पत्थर व सीढ़ियां</h4>
-          <p style="color:var(--light-muted);font-size:13.5px;margin-top:8px;">
-            श्रद्धालुओं और परिक्रमावासियों के सुगम व सुरक्षित स्नान हेतु पारंपरिक मालवा-निमाड़ स्थापत्य कला युक्त चौड़ी सीढ़ियां।
-          </p>
-          <div style="margin-top:12px;font-size:13px;color:var(--gold);">अनुमानित: ₹6,50,000</div>
-        </div>
-
-        <div class="panel">
-          <h4><i class="fa-solid fa-person-shelter" style="color:#5dade2;"></i> 3. परिक्रमावासी विश्राम शेड</h4>
-          <p style="color:var(--light-muted);font-size:13.5px;margin-top:8px;">
-            नर्मदा परिक्रमा कर रहे साधु-संतों एवं दूर-दराज से आने वाले दर्शनार्थियों के विश्राम व छाया हेतु सुसज्जित शेड।
-          </p>
-          <div style="margin-top:12px;font-size:13px;color:var(--gold);">अनुमानित: ₹4,00,000</div>
-        </div>
-      </div>
-    </section>
-  </div><!-- /pane-works -->
-
-  <!-- ==================== PANE 5: INSPIRATIONAL STORIES ==================== -->
+  <!-- ==================== PANE 6: STORIES ==================== -->
   <div class="pane" id="pane-stories" role="tabpanel" hidden>
-    <section>
-      <div class="sec-head">
-        <h2 class="sec-title"><i class="fa-solid fa-heart" style="color:var(--danger);"></i> अभियान के 6 प्रेरणादायी प्रसंग</h2>
-        <div class="sec-note">छोटे-बड़े दान के पीछे छिपी भावनात्मक कहानियां एवं निस्वार्थ सेवा</div>
+    <div class="sec-head">
+      <div>
+        <h2 class="sec-title"><i class="fa-solid fa-star-and-crescent" style="color:var(--gold);"></i> अभियान के प्रेरणादायी प्रसंग</h2>
+        <div class="sec-note">धार्मिक निष्ठा, सामाजिक समरसता और निस्वार्थ सेवा के अनूठे उदाहरण</div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <!-- Story 1 -->
+      <div class="story-card">
+        <div>
+          <div class="story-header">
+            <div class="story-icon"><i class="fa-solid fa-city"></i></div>
+            <div>
+              <div class="story-title">कुक्षी का ऐतिहासिक जनउत्साह</div>
+              <div class="story-tag">31 अक्टूबर एवं 4 नवंबर 2026 &#183; ₹5,87,998</div>
+            </div>
+          </div>
+          <div class="story-body">
+            31 अक्टूबर को कुक्षी नगर में संपर्क के दौरान श्रद्धालुओं में माँ नर्मदा के प्रति अपार आस्था देखने को मिली। नगर के चार प्रमुख समाजसेवियों एवं व्यापारियों ने मौके पर ही ₹1,00,000 से अधिक की सहयोग घोषणाएं कीं। कुल ₹4,41,777 की घोषणा के साथ कुक्षी इस अभियान का सबसे बड़ा जनसमर्थक केंद्र बनकर उभरा।
+          </div>
+        </div>
+        <div class="story-quote">
+          “माँ नर्मदा की सेवा में दिया गया हर कण, आने वाली पीढ़ियों के लिए पुण्य का वटवृक्ष बनेगा।”
+        </div>
       </div>
 
-      <div class="story-grid">
-        <!-- Story 1: Kukshi -->
-        <div class="story-card">
-          <div>
-            <span class="story-badge"><i class="fa-solid fa-city"></i> नगर कुक्षी की उदारता</span>
-            <h3 class="story-title">चार श्रद्धालुओं द्वारा ₹1 लाख+ की घोषणाएँ</h3>
-            <p class="story-text">
-              कुक्षी नगर ने सदैव माँ नर्मदा के कार्यों में उदारता दिखाई है। अभियान में चार प्रमुख दानदाताओं ने ₹1 लाख से अधिक की सहयोग घोषणाएं कीं। वर्ष 2016 में भी कुक्षी ने घाट निर्माण में अद्वितीय योगदान दिया था।
-            </p>
+      <!-- Story 2 -->
+      <div class="story-card">
+        <div>
+          <div class="story-header">
+            <div class="story-icon"><i class="fa-solid fa-house-chimney-crack"></i></div>
+            <div>
+              <div class="story-title">कोठड़ा की माटी का ऋण</div>
+              <div class="story-tag">12 अक्टूबर 2026 &#183; ₹2,85,108</div>
+            </div>
           </div>
-          <div class="story-highlight">
-            <strong>ऐतिहासिक परंपरा:</strong> श्रद्धा और सामाजिक दायित्व का निरंतर निर्वहन।
-          </div>
-        </div>
-
-        <!-- Story 2: Kothda -->
-        <div class="story-card">
-          <div>
-            <span class="story-badge"><i class="fa-solid fa-water"></i> कोठड़ा की मातृभूमि भक्ति</span>
-            <h3 class="story-title">अपने मूल गांव और नर्मदा से भावनात्मक जुड़ाव</h3>
-            <p class="story-text">
-              कोटेश्वर तीर्थ के मूल गांव कोठड़ा के ग्रामीणों ने अपने पुराने गांव और माँ नर्मदा की पावन स्मृतियों के सम्मान में विशेष समर्पण दिखाया। 12 अक्टूबर को एक ही दिन में ₹2.85 लाख का सहयोग घोषित हुआ।
-            </p>
-          </div>
-          <div class="story-highlight">
-            <strong>भावुक समर्पण:</strong> अपनी जड़ों और पुण्यसलिला के प्रति अटूट निष्ठा।
+          <div class="story-body">
+            कोटेश्वर तीर्थ के मूल ग्राम कोठड़ा के निवासियों ने इस अभियान को अपनी मातृभूमि और कुलदेवी माँ नर्मदा की सेवा का अवसर माना। आर्थिक सीमाओं के बावजूद प्रत्येक परिवार ने अपनी सामर्थ्य से बढ़कर योगदान दिया और एक ही दिन में ₹2,85,108 का अनुकरणीय समर्पण प्रस्तुत किया।
           </div>
         </div>
-
-        <!-- Story 3: Pappu Bhai -->
-        <div class="story-card" style="border-left-color:var(--marigold);">
-          <div>
-            <span class="story-badge" style="color:var(--marigold);background:rgba(230,126,34,0.15);border-color:rgba(230,126,34,0.3);">
-              <i class="fa-solid fa-cake-candles"></i> अभियान का सबसे भावुक उदाहरण
-            </span>
-            <h3 class="story-title">पप्पू भाई एवं उनकी पूज्य माताजी का समर्पण</h3>
-            <p class="story-text">
-              सीमित आर्थिक साधनों और कठिन आजीविका के बावजूद, पप्पू भाई और उनकी माताजी ने अपने पोते के जन्मदिन के पावन अवसर पर <strong>₹11,111</strong> का सहयोग समर्पित किया। यह सिद्ध करता है कि दान धन से नहीं, भाव से बड़ा होता है।
-            </p>
-          </div>
-          <div class="story-highlight">
-            <strong>अभियान की आत्मा:</strong> श्रद्धा के आगे आर्थिक सीमाएं गौण हो जाती हैं।
-          </div>
-        </div>
-
-        <!-- Story 4: Govt Staff & Teachers -->
-        <div class="story-card">
-          <div>
-            <span class="story-badge"><i class="fa-solid fa-graduation-cap"></i> शासकीय सेवक एवं शिक्षक</span>
-            <h3 class="story-title">अपनी आय का अंश माँ नर्मदा की सेवा में</h3>
-            <p class="story-text">
-              तहसीलदार महोदय श्री प्रवीण जी पाटीदार सहित शिक्षक, सेवानिवृत्त शिक्षक, अधिकारी एवं कर्मचारी अपनी मेहनत की आय का अंश माँ नर्मदा के घाट निर्माण में समर्पित कर रहे हैं, जिससे अभियान को सामाजिक विश्वसनीयता मिली।
-            </p>
-          </div>
-          <div class="story-highlight">
-            <strong>प्रशासनिक सहभागिता:</strong> समाज के बौद्धिक व प्रशासनिक वर्ग का संबल।
-          </div>
-        </div>
-
-        <!-- Story 5: Nanpur -->
-        <div class="story-card">
-          <div>
-            <span class="story-badge"><i class="fa-solid fa-users-rays"></i> नानपुर का सामूहिक संकल्प</span>
-            <h3 class="story-title">तीन समूहों द्वारा ₹1,11,111 की घोषणाएँ</h3>
-            <p class="story-text">
-              1 नवंबर को नानपुर जनसंपर्क के दौरान तीन अलग-अलग दानदाता समूहों ने ₹1,11,111 – ₹1,11,111 की बड़ी घोषणाएँ कीं। पूरे नगर ने मिलकर ₹4.20 लाख से अधिक की सहभागिता दर्ज की।
-            </p>
-          </div>
-          <div class="story-highlight">
-            <strong>सामूहिक सामर्थ्य:</strong> नगरवासियों का एकजुट संकल्प और समर्पण।
-          </div>
-        </div>
-
-        <!-- Story 6: Workers -->
-        <div class="story-card" style="border-left-color:var(--narmada);">
-          <div>
-            <span class="story-badge" style="color:var(--narmada);background:rgba(26,188,156,0.15);border-color:rgba(26,188,156,0.3);">
-              <i class="fa-solid fa-person-walking"></i> निस्वार्थ कार्यकर्ता
-            </span>
-            <h3 class="story-title">55 दिनों तक निजी वाहनों से सतत सेवा</h3>
-            <p class="story-text">
-              समिति के सेवाभावी कार्यकर्ताओं ने 50-55 दिनों तक गांव-गांव घर-घर जाकर बिना किसी पद, प्रचार या व्यक्तिगत प्रतिफल की चाह के अपने निजी दोपहिया एवं चारपहिया वाहनों से निरंतर जनसंपर्क किया।
-            </p>
-          </div>
-          <div class="story-highlight">
-            <strong>सच्चे कर्मयोगी:</strong> इन्हीं सेवाभावी कार्यकर्ताओं का पसीना अभियान की रीढ़ है।
-          </div>
+        <div class="story-quote">
+          “हमारा गांव डूब में आया, लेकिन माँ नर्मदा के प्रति हमारी श्रद्धा को कोई जलमग्न नहीं कर सकता।”
         </div>
       </div>
-    </section>
-  </div><!-- /pane-stories -->
 
-  <!-- ==================== PANE 6: VISION & LEADERSHIP ==================== -->
+      <!-- Story 3 -->
+      <div class="story-card">
+        <div>
+          <div class="story-header">
+            <div class="story-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+            <div>
+              <div class="story-title">पप्पू भाई का भावुक समर्पण</div>
+              <div class="story-tag">श्रद्धा और आंसुओं से भीगी भक्ति</div>
+            </div>
+          </div>
+          <div class="story-body">
+            एक सादे परिवार से आने वाले पप्पू भाई ने जब अपनी मेहनत की गाढ़ी कमाई से ₹11,111 का लिफाफा समिति को सौंपा, तो उनकी आंखों में श्रद्धा के अश्रु थे। उन्होंने कहा—‘यह पैसा मेरा नहीं, माँ रेवा की ही कृपा से मिला है, उन्हीं के चरणों में समर्पित है।’
+          </div>
+        </div>
+        <div class="story-quote">
+          “बड़ा दान धन की अधिकता से नहीं, हृदय की विशालता और पवित्र भाव से होता है।”
+        </div>
+      </div>
+
+      <!-- Story 4 -->
+      <div class="story-card">
+        <div>
+          <div class="story-header">
+            <div class="story-icon"><i class="fa-solid fa-user-tie"></i></div>
+            <div>
+              <div class="story-title">शासकीय सेवकों व शिक्षकों का धर्म-प्रेम</div>
+              <div class="story-tag">4 नवंबर 2026 &#183; तहसीलदार महोदय एवं प्रबुद्ध वर्ग</div>
+            </div>
+          </div>
+          <div class="story-body">
+            4 नवंबर को कुक्षी में संपर्क के दौरान अंजड़ मूल के तहसीलदार महोदय श्री प्रवीण जी गंगाराम जी पाटीदार ने व्यक्तिगत रूप से ₹51,111 का सहयोग देकर समाज के प्रबुद्ध वर्ग का मार्गदर्शन किया। उनके साथ शासकीय शिक्षकों, पटवारियों एवं कर्मचारियों ने भी बढ़-चढ़कर आहुति दी।
+          </div>
+        </div>
+        <div class="story-quote">
+          “प्रशासनिक सेवा के साथ धर्म और संस्कृति के संरक्षण का दायित्व निभाना ही सच्चा नागरिक धर्म है।”
+        </div>
+      </div>
+
+      <!-- Story 5 -->
+      <div class="story-card">
+        <div>
+          <div class="story-header">
+            <div class="story-icon"><i class="fa-solid fa-people-group"></i></div>
+            <div>
+              <div class="story-title">नानपुर की सामूहिक शक्ति</div>
+              <div class="story-tag">1 नवंबर 2026 &#183; ₹4,20,665</div>
+            </div>
+          </div>
+          <div class="story-body">
+            नानपुर में व्यक्तिगत सहयोग के साथ-साथ मोहल्लों, युवा मंडलों और व्यापारिक समूहों ने एकजुट होकर ₹1,11,111 के तीन बड़े सामूहिक संकल्प लिए। इस सामूहिक प्रयास ने यह सिद्ध किया कि जब समाज मिलकर कदम बढ़ाता है, तो कोई भी पावन संकल्प असंभव नहीं रहता।
+          </div>
+        </div>
+        <div class="story-quote">
+          “संगठन में ही शक्ति है और माँ नर्मदा की सेवा में यही शक्ति जन-आंदोलन का रूप ले चुकी है।”
+        </div>
+      </div>
+
+      <!-- Story 6 -->
+      <div class="story-card">
+        <div>
+          <div class="story-header">
+            <div class="story-icon"><i class="fa-solid fa-shoe-prints"></i></div>
+            <div>
+              <div class="story-title">55 दिन की निःस्वार्थ कार्यकर्ता साधना</div>
+              <div class="story-tag">बिना रुके, बिना थके पदयात्रा व संपर्क</div>
+            </div>
+          </div>
+          <div class="story-body">
+            संस्थान के मुख्य प्रेरणास्रोत श्री मोहन भाई पाटीदार (भंवरिया) एवं समर्पित कार्यकर्ताओं की टोली ने लगातार 55 दिन तक धूप, बारिश और त्योहारों की परवाह किए बिना घर-घर, दुकान-दुकान जाकर माँ नर्मदा के घाट निर्माण का पावन अलख जगाया।
+          </div>
+        </div>
+        <div class="story-quote">
+          “कार्यकर्ता का पसीना ही उस पाषाण घाट की नींव का सबसे मजबूत गारा बन रहा है।”
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PANE 7: VISION ==================== -->
   <div class="pane" id="pane-vision" role="tabpanel" hidden>
-    <section>
-      <div class="sec-head">
-        <h2 class="sec-title"><i class="fa-solid fa-hands-praying"></i> अभियान के 5 मूल स्तंभ एवं भावनाएँ</h2>
-        <div class="sec-note">कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान का मार्गदर्शक दर्शन</div>
+    <div class="sec-head">
+      <div>
+        <h2 class="sec-title"><i class="fa-solid fa-hands-praying"></i> अभियान संदेश, नेतृत्व व सामाजिक एकता</h2>
+        <div class="sec-note">कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान का दृष्टिकोण एवं मार्गदर्शक सिद्धांत</div>
+      </div>
+    </div>
+
+    <!-- 5 CORE VALUES -->
+    <h3 style="font-size:18px;color:#fff;margin-bottom:14px;"><i class="fa-solid fa-gem" style="color:var(--gold);"></i> 5 आधारभूत जीवन मूल्य</h3>
+    <div class="grid4" style="grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));">
+      <div class="val-card">
+        <div class="val-icon"><i class="fa-solid fa-heart"></i></div>
+        <div class="val-name">श्रद्धा (Devotion)</div>
+        <div class="val-desc">माँ नर्मदा के प्रति अनन्य भक्ति और कोटेश्वर महादेव के प्रति अटूट आस्था।</div>
+      </div>
+      <div class="val-card">
+        <div class="val-icon"><i class="fa-solid fa-hands-holding-circle"></i></div>
+        <div class="val-name">सेवा (Service)</div>
+        <div class="val-desc">लाखों परिक्रमावासियों, साधु-संतों एवं स्नानार्थियों की सुविधा हेतु निःस्वार्थ समर्पण।</div>
+      </div>
+      <div class="val-card">
+        <div class="val-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+        <div class="val-name">समर्पण (Sacrifice)</div>
+        <div class="val-desc">गाढ़ी कमाई का एक अंश धर्म और जनकल्याण के इस ऐतिहासिक यज्ञ में आहुति देना।</div>
+      </div>
+      <div class="val-card">
+        <div class="val-icon"><i class="fa-solid fa-people-roof"></i></div>
+        <div class="val-name">सामाजिक एकता (Unity)</div>
+        <div class="val-desc">जाति, वर्ग, पद और दल से ऊपर उठकर सम्पूर्ण समाज का एक सूत्र में बंधना।</div>
+      </div>
+      <div class="val-card">
+        <div class="val-icon"><i class="fa-solid fa-landmark-dome"></i></div>
+        <div class="val-name">विरासत (Heritage)</div>
+        <div class="val-desc">डूब क्षेत्र के उपरांत कोटेश्वर तीर्थ की प्राचीन धार्मिक गरिमा को पुनर्जीवित करना।</div>
+      </div>
+    </div>
+
+    <!-- COMMUNITY SPECTRUM -->
+    <div style="margin-top:36px;">
+      <h3 style="font-size:18px;color:#fff;margin-bottom:6px;"><i class="fa-solid fa-users" style="color:var(--gold);"></i> समुदाय का व्यापक स्वरूप (8 प्रमुख वर्ग)</h3>
+      <div class="sec-note" style="margin-bottom:14px;">समाज के प्रत्येक घटक की इस महाअभियान में सक्रिय सहभागिता</div>
+      <div class="spectrum-grid">
+        <div class="spectrum-item"><i class="fa-solid fa-seedling"></i> <strong>किसान बंधु:</strong> अपनी उपज और भूमि की श्रद्धा से समर्पण</div>
+        <div class="spectrum-item"><i class="fa-solid fa-shop"></i> <strong>व्यापारी वर्ग:</strong> व्यापार की समृद्धि माँ नर्मदा के चरणों में अर्पित</div>
+        <div class="spectrum-item"><i class="fa-solid fa-briefcase"></i> <strong>शासकीय सेवक व शिक्षक:</strong> धर्म-कर्म व समाज मार्गदर्शन</div>
+        <div class="spectrum-item"><i class="fa-solid fa-person-dress"></i> <strong>मातृशक्ति:</strong> परिवारों में भक्ति और संस्कारों की प्रेरणा</div>
+        <div class="spectrum-item"><i class="fa-solid fa-person-running"></i> <strong>युवा शक्ति:</strong> श्रमदान, सोशल मीडिया व संपर्क का संबल</div>
+        <div class="spectrum-item"><i class="fa-solid fa-person-cane"></i> <strong>वरिष्ठजन:</strong> अपने जीवन का अनुभव और आशीर्वाद</div>
+        <div class="spectrum-item"><i class="fa-solid fa-person-walking"></i> <strong>परिक्रमावासी:</strong> माँ नर्मदा के पदयात्रियों का मंगल आशीष</div>
+        <div class="spectrum-item"><i class="fa-solid fa-bell"></i> <strong>संत समाज:</strong> आध्यात्मिक प्रेरणा और पावन मार्गदर्शन</div>
+      </div>
+    </div>
+
+    <!-- COMMITTEE AND LEADERSHIP -->
+    <div style="margin-top:36px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px;">
+      <h3 style="font-size:18px;color:var(--gold-light);margin-bottom:10px;"><i class="fa-solid fa-sitemap"></i> अभियान का नेतृत्व एवं संगठनात्मक ढांचा</h3>
+      <div style="color:#d5dbdb;font-size:14px;line-height:1.7;">
+        <p><strong>संस्था:</strong> कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान (पंजीकृत)</p>
+        <p><strong>तीर्थ स्थल:</strong> माँ नर्मदा तट, कोटेश्वर तीर्थ, ग्राम कोठड़ा, तहसील कुक्षी, जिला धार (म.प्र.)</p>
+        <p><strong>मुख्य प्रेरणास्रोत एवं नेतृत्व:</strong> श्री मोहन भाई पाटीदार (भंवरिया) एवं समस्त समर्पित मातृभूमि सेवक</p>
+        <p><strong>द्वितीय चरण की तैयारी:</strong> 55-दिवसीय प्रथम संपर्क चरण के उपरांत, दीपावली के पावन पर्व के बाद अभियान को पुनः गति दी जाएगी जिसमें मनावर, बड़वानी, राजपुर, अंजड़ एवं धार के समाजजनों को भी जोड़ा जाएगा।</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- 1. GOOGLE SHEET SETUP GUIDE MODAL -->
+  <div class="modal-backdrop" id="sheetModalBackdrop" onclick="closeSheetModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeSheetModal()">&times;</button>
+      <div style="text-align:center;margin-bottom:18px;">
+        <i class="fa-solid fa-table-list" style="font-size:36px;color:var(--gold);"></i>
+        <h3 style="font-size:22px;color:#fff;margin:8px 0 4px;">Google Sheet डेटा सिंक गाइड</h3>
+        <p style="color:var(--gold-light);font-size:13px;margin:0;">अपनी Google Sheet को इस डैशबोर्ड से कैसे जोड़ें</p>
       </div>
 
-      <div class="mission-grid">
-        <div class="mission-card">
-          <h4><i class="fa-solid fa-hands-holding-circle"></i> 1. श्रद्धा (Faith)</h4>
-          <p>पुण्यसलिला माँ नर्मदा के प्रति अटूट आस्था और धार्मिक निष्ठा। प्रत्येक ईंट और पत्थर में श्रद्धालुओं की आस्था समाहित है।</p>
-        </div>
-
-        <div class="mission-card">
-          <h4><i class="fa-solid fa-hand-holding-heart"></i> 2. सेवा (Service)</h4>
-          <p>बिना किसी स्वार्थ, पद-लालसा या व्यक्तिगत लाभ के समाज एवं परिक्रमावासियों के लिए किया जाने वाला सामूहिक निस्वार्थ प्रयास।</p>
-        </div>
-
-        <div class="mission-card">
-          <h4><i class="fa-solid fa-clock"></i> 3. समर्पण (Dedication)</h4>
-          <p>केवल धन नहीं, बल्कि कार्यकर्ताओं द्वारा अपना समय, निजी वाहन, शारीरिक श्रम और पारिवारिक समय का पुनीत त्याग।</p>
-        </div>
-
-        <div class="mission-card">
-          <h4><i class="fa-solid fa-people-roof"></i> 4. सामाजिक एकता (Social Unity)</h4>
-          <p>जाति, वर्ग, व्यवसाय और पद से ऊपर उठकर संपूर्ण समाज की एकजुट सहभागिता। छोटे से छोटे श्रद्धालु का योगदान पूजनीय है।</p>
-        </div>
-
-        <div class="mission-card">
-          <h4><i class="fa-solid fa-monument"></i> 5. विरासत (Sacred Heritage)</h4>
-          <p>आने वाली पीढ़ियों एवं नर्मदा परिक्रमावासियों के लिए एक सुरक्षित, सुव्यवस्थित और भव्य तीर्थ धरोहर का निर्माण।</p>
-        </div>
-
-        <div class="mission-card" style="border-top-color:var(--narmada);">
-          <h4><i class="fa-solid fa-bullhorn"></i> संचार के 5 आयाम</h4>
-          <p>
-            1. दानदाताओं का ससम्मान प्रस्तुतिकरण<br>
-            2. सेवाभावी कार्यकर्ताओं का अभिनंदन<br>
-            3. प्रेरणादायी प्रसंगों का दस्तावेजीकरण<br>
-            4. नगर व गांवों की सहभागिता की पहचान<br>
-            5. घाट निर्माण मिशन एवं भावी लक्ष्य
-          </p>
-        </div>
+      <div style="background:rgba(0,0,0,0.3);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:18px;font-size:13.5px;line-height:1.6;">
+        <strong style="color:#fff;">आपकी लिंक्ड Google Sheet:</strong><br>
+        <a href="https://docs.google.com/spreadsheets/d/1Gw-tjQuVRzp6jO57jdH7OzvfEx4Brw_DV6uRb1cUDt8/edit#gid=0" target="_blank" rel="noopener noreferrer" style="word-break:break-all;color:var(--gold);">
+          https://docs.google.com/spreadsheets/d/1Gw-tjQuVRzp6jO57jdH7OzvfEx4Brw_DV6uRb1cUDt8/edit
+        </a>
       </div>
 
-      <!-- SPECTRUM OF PARTICIPATION -->
-      <div class="panel" style="margin-top:24px;">
-        <h3><i class="fa-solid fa-network-wired" style="color:var(--gold);"></i> जनभागीदारी का व्यापक सामाजिक विस्तार</h3>
-        <div class="sub">इस महाअभियान में समाज के हर वर्ग ने अपनी सहभागिता दर्ज कराई है:</div>
+      <div style="font-size:13.5px;color:#d5dbdb;line-height:1.6;margin-bottom:20px;">
+        <strong style="color:var(--gold-light);font-size:14.5px;">चरण 1: शीट में नीचे 3 टैब बनाएं</strong>
+        <p style="margin:4px 0 12px;">Google Sheet में नीचे <strong>+</strong> पर क्लिक करके ये 3 नाम वाले टैब बनाएं (Spelling समान रखें):</p>
+        <ul style="padding-left:20px;margin-bottom:14px;color:#fff;">
+          <li><code>Declarations</code> (घोषित सहयोग हेतु)</li>
+          <li><code>Collections</code> (प्राप्त संग्रह हेतु)</li>
+          <li><code>Expenses</code> (निर्माण व्यय हेतु)</li>
+        </ul>
 
-        <div class="spectrum-grid">
-          <div class="spectrum-item"><i class="fa-solid fa-om"></i> स्थानीय श्रद्धालु एवं आम नागरिक</div>
-          <div class="spectrum-item"><i class="fa-solid fa-shop"></i> व्यापारी एवं व्यवसायी बंधु</div>
-          <div class="spectrum-item"><i class="fa-solid fa-chalkboard-user"></i> शिक्षक एवं सेवानिवृत्त शिक्षक</div>
-          <div class="spectrum-item"><i class="fa-solid fa-building-user"></i> शासकीय अधिकारी एवं कर्मचारी</div>
-          <div class="spectrum-item"><i class="fa-solid fa-landmark"></i> निर्वाचित जनप्रतिनिधि</div>
-          <div class="spectrum-item"><i class="fa-solid fa-school"></i> निजी विद्यालयों के संचालक</div>
-          <div class="spectrum-item"><i class="fa-solid fa-basket-shopping"></i> छोटे व्यापारी एवं सीमित साधन वाले परिवार</div>
-          <div class="spectrum-item"><i class="fa-solid fa-people-group"></i> आसपास के नगरों व गांवों के समाजजन</div>
+        <strong style="color:var(--gold-light);font-size:14.5px;">चरण 2: तैयार CSV फाइलें डाउनलोड करके आयात (Import) करें</strong>
+        <p style="margin:4px 0 10px;">नीचे दिए गए बटनों से पहले से तैयार UTF-8 CSV फाइलें डाउनलोड करें, और Google Sheet में <code>File &gt; Import &gt; Upload</code> करके संबंधित टैब में डाल दें:</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+          <button class="btn btn-teal" onclick="downloadCsv('declarations')"><i class="fa-solid fa-download"></i> Declarations.csv</button>
+          <button class="btn btn-teal" onclick="downloadCsv('collections')"><i class="fa-solid fa-download"></i> Collections.csv</button>
+          <button class="btn btn-teal" onclick="downloadCsv('expenses')"><i class="fa-solid fa-download"></i> Expenses.csv</button>
         </div>
+
+        <strong style="color:var(--gold-light);font-size:14.5px;">चरण 3: शेयरिंग अनुमति (Sharing Permission)</strong>
+        <p style="margin:4px 0 0;">Google Sheet में ऊपर दाईं ओर <strong>Share</strong> बटन दबाएं और सुनिश्चित करें कि <strong>"Anyone with the link can view"</strong> (कोई भी देख सकता है) चुना गया है।</p>
       </div>
 
-      <!-- LEADERSHIP & IDENTITY -->
-      <div class="panel" style="margin-top:24px;">
-        <h3><i class="fa-solid fa-id-card" style="color:var(--narmada);"></i> अभियान की प्रमुख पहचान एवं नेतृत्व</h3>
-        <div class="sub">संस्था, तीर्थ स्थल एवं मार्गदर्शक मंडल</div>
-
-        <div class="grid3" style="margin-top:16px;">
-          <div style="background:rgba(255,255,255,0.03);padding:16px;border-radius:12px;border:1px solid var(--line);">
-            <div style="color:var(--gold);font-size:13px;text-transform:uppercase;">मुख्य प्रेरणास्रोत एवं नेतृत्व</div>
-            <div style="font-size:18px;font-weight:700;color:#fff;margin-top:4px;">श्री मोहन भाई पाटीदार (भंवरिया)</div>
-            <div style="color:var(--light-muted);font-size:13px;margin-top:4px;">अभियान की प्रेरणा, नेतृत्व और जनसंपर्क ऊर्जा</div>
-          </div>
-
-          <div style="background:rgba(255,255,255,0.03);padding:16px;border-radius:12px;border:1px solid var(--line);">
-            <div style="color:var(--gold);font-size:13px;text-transform:uppercase;">संस्था एवं तीर्थ स्थल</div>
-            <div style="font-size:18px;font-weight:700;color:#fff;margin-top:4px;">कोटेश्वर तीर्थ, कोठड़ा (म.प्र.)</div>
-            <div style="color:var(--light-muted);font-size:13px;margin-top:4px;">कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान</div>
-          </div>
-
-          <div style="background:rgba(255,255,255,0.03);padding:16px;border-radius:12px;border:1px solid var(--line);">
-            <div style="color:var(--gold);font-size:13px;text-transform:uppercase;">धार्मिक अभिवादन एवं जयघोष</div>
-            <div style="font-size:18px;font-weight:700;color:var(--narmada);margin-top:4px;">माँ नर्मदे हर! जय माँ नर्मदा!</div>
-            <div style="color:var(--light-muted);font-size:13px;margin-top:4px;">समस्त श्रद्धालुओं का पावन उद्घोष</div>
-          </div>
-        </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;">
+        <button class="btn" onclick="closeSheetModal()">समझ गया (Close)</button>
+        <button class="btn btn-gold" onclick="refreshGoogleSheets();closeSheetModal();"><i class="fa-solid fa-arrows-rotate"></i> अभी रीफ्रेश करें</button>
       </div>
-    </section>
-  </div><!-- /pane-vision -->
+    </div>
+  </div>
+
+  <!-- 2. HONOR CERTIFICATE MODAL -->
+  <div class="modal-backdrop" id="certModalBackdrop" onclick="closeCertModal(event)">
+    <div class="modal-box cert-modal" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeCertModal()">&times;</button>
+      <div class="cert-om"><i class="fa-solid fa-om"></i></div>
+      <h3 class="cert-title">समर्पण आभार पत्र</h3>
+      <div class="cert-sub">माँ नर्मदा घाट निर्माण सेवा महाअभियान | कोटेश्वर तीर्थ (कोठड़ा)</div>
+
+      <div class="cert-body">
+        <div style="font-size:12.5px;color:var(--muted);margin-bottom:6px;">परम आदरणीय दानदाता:</div>
+        <div class="cert-donor" id="certDonorName">दानदाता का नाम</div>
+        <div style="color:var(--gold-light);font-size:13.5px;" id="certDonorRole">पद / संदर्भ</div>
+        <div style="color:var(--light-muted);font-size:13px;margin-top:2px;" id="certVillage">स्थान / नगर</div>
+        <div class="cert-amount" id="certAmount">₹0</div>
+        <div style="font-size:12px;color:var(--narmada);" id="certStatus"><i class="fa-solid fa-check-circle"></i> सहयोग प्राप्त</div>
+      </div>
+
+      <div class="cert-foot">
+        माँ नर्मदा जी की असीम अनुकम्पा से कोटेश्वर तीर्थ के पावन तट पर घाट निर्माण के पुनीत कार्य में आपका यह समर्पण सदैव अविस्मरणीय रहेगा। माँ रेवा आपके परिवार में सुख, शांति और समृद्धि प्रदान करें।
+      </div>
+
+      <div style="margin-top:20px;display:flex;gap:10px;justify-content:center;">
+        <button class="btn btn-gold" id="btnShareWhatsApp">
+          <i class="fa-brands fa-whatsapp"></i> WhatsApp पर साझा करें
+        </button>
+        <button class="btn" onclick="window.print()">
+          <i class="fa-solid fa-print"></i> प्रिंट करें
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. ADD NEW DONATION MODAL -->
+  <div class="modal-backdrop" id="addModalBackdrop" onclick="closeAddModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeAddModal()">&times;</button>
+      <h3 style="font-size:20px;color:#fff;margin-bottom:4px;"><i class="fa-solid fa-hand-holding-dollar" style="color:var(--gold);margin-right:8px;"></i>नया जनसहयोग दर्ज करें</h3>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:16px;">नया घोषित अथवा प्राप्त सहयोग तुरंत डैशबोर्ड में जोड़ें।</p>
+
+      <form id="addDonationForm" onsubmit="saveNewDonation(event)">
+        <div class="form-group">
+          <label class="form-label">दानदाता / समूह का नाम *</label>
+          <input type="text" class="form-input" id="newDonorName" placeholder="उदा. श्री जगदीश जी पाटीदार" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">पद / उपाधि / संदर्भ</label>
+          <input type="text" class="form-input" id="newDonorRole" placeholder="उदा. समाजसेवी, शिक्षक, व्यापारी बंधु">
+        </div>
+        <div class="form-group">
+          <label class="form-label">स्थान / नगर / ग्राम *</label>
+          <input type="text" class="form-input" id="newVillage" placeholder="उदा. कुक्षी, सुसारी, निसरपुर" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">सहयोग राशि (₹) *</label>
+          <input type="number" class="form-input" id="newAmount" placeholder="उदा. 25000" min="1" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">सहयोग स्थिति</label>
+          <select class="form-select" id="newStatus">
+            <option value="प्राप्त">सत्यापित प्राप्त (रसीद जारी)</option>
+            <option value="घोषित" selected>घोषित सहयोग (Pledge)</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+          <button type="button" class="btn" onclick="closeAddModal()">रद्द करें</button>
+          <button type="submit" class="btn btn-gold">सहयोग सुरक्षित करें</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- FOOTER -->
   <footer>
     <div class="footer-left">
-      <strong>कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान, कोटेश्वर तीर्थ (कोठड़ा, म.प्र.)</strong> | माँ नर्मदा घाट निर्माण सेवा महाअभियान
+      <strong>कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान</strong> &#183; कोटेश्वर तीर्थ, कोठड़ा, तहसील कुक्षी, जिला धार (म.प्र.)
     </div>
     <div class="footer-right">
-      <span>पारदर्शी एवं प्रामाणिक डिजिटल डैशबोर्ड</span>
-      <span>|</span>
-      <span>माँ नर्मदे हर!</span>
+      <span><i class="fa-solid fa-om" style="color:var(--gold);"></i> माँ नर्मदे हर!</span>
     </div>
   </footer>
 
-</div><!-- /wrap -->
-
-<!-- MODAL: DONOR HONOR CERTIFICATE / RECEIPT -->
-<div class="modal-backdrop" id="certModalBackdrop" onclick="closeCertModal(event)">
-  <div class="cert-modal" onclick="event.stopPropagation()">
-    <button class="cert-close" onclick="closeCertModal()"><i class="fa-solid fa-xmark"></i></button>
-    <div class="cert-om">ॐ</div>
-    <h3 class="cert-title">माँ नर्मदा घाट निर्माण समर्पण आभार पत्रक</h3>
-    <div class="cert-sub">कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान, कोटेश्वर तीर्थ (कोठड़ा)</div>
-    
-    <div class="cert-body">
-      <div style="font-size:12px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">ससम्मान समर्पित</div>
-      <div class="cert-donor" id="certDonorName">श्री प्रवीण जी गंगाराम जी पाटीदार</div>
-      <div id="certDonorRole" style="color:var(--light-muted);font-size:13px;margin-bottom:10px;">अंजड़ वाले, तहसीलदार महोदय</div>
-      
-      <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px dashed rgba(255,255,255,0.15);padding-top:10px;">
-        <span style="color:var(--light-muted);font-size:13.5px;">सहयोग राशि:</span>
-        <span class="cert-amount" id="certAmount">₹51,111</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--light-muted);margin-top:6px;">
-        <span>स्थान: <strong id="certVillage" style="color:#fff;">नगर कुक्षी</strong></span>
-        <span>स्थिति: <span class="tag rec" id="certStatus">सहयोग प्राप्त</span></span>
-      </div>
-    </div>
-
-    <div class="cert-foot">
-      माँ नर्मदा के पावन तट पर घाट निर्माण के पुनीत कार्य में आपका यह अमूल्य सहयोग सदैव स्मरणीय रहेगा।<br>
-      <strong>माँ नर्मदा जी की असीम कृपा आप एवं आपके परिवार पर सदैव बनी रहे।</strong>
-    </div>
-
-    <div style="margin-top:20px;display:flex;justify-content:center;gap:12px;">
-      <button class="btn btn-gold" id="btnShareWhatsApp"><i class="fa-brands fa-whatsapp"></i> व्हाट्सएप पर साझा करें</button>
-      <button class="btn" onclick="window.print()"><i class="fa-solid fa-print"></i> प्रिंट</button>
-    </div>
-  </div>
 </div>
 
-<!-- MODAL: ADD NEW DONATION -->
-<div class="modal-backdrop" id="addModalBackdrop" onclick="closeAddModal(event)">
-  <div class="cert-modal" style="text-align:left;max-width:500px;" onclick="event.stopPropagation()">
-    <button class="cert-close" onclick="closeAddModal()"><i class="fa-solid fa-xmark"></i></button>
-    <h3 class="cert-title" style="text-align:center;font-size:22px;margin-bottom:16px;">
-      <i class="fa-solid fa-circle-plus" style="color:var(--gold);"></i> नया जनसहयोग दर्ज करें
-    </h3>
-
-    <form id="addDonationForm" onsubmit="saveNewDonation(event)">
-      <div style="margin-bottom:14px;">
-        <label style="font-size:13px;color:var(--light-muted);display:block;margin-bottom:6px;">दानदाता का नाम *</label>
-        <input type="text" id="newDonorName" required placeholder="उदा. श्री रमेश जी पाटीदार" 
-          style="width:100%;padding:9px 12px;border-radius:8px;background:rgba(0,0,0,0.4);border:1px solid var(--line);color:#fff;font-family:inherit;">
-      </div>
-
-      <div style="margin-bottom:14px;">
-        <label style="font-size:13px;color:var(--light-muted);display:block;margin-bottom:6px;">पद / उपाधि / संदर्भ (वैकल्पिक)</label>
-        <input type="text" id="newDonorRole" placeholder="उदा. व्यापारी, शिक्षक, समाजजन" 
-          style="width:100%;padding:9px 12px;border-radius:8px;background:rgba(0,0,0,0.4);border:1px solid var(--line);color:#fff;font-family:inherit;">
-      </div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
-        <div>
-          <label style="font-size:13px;color:var(--light-muted);display:block;margin-bottom:6px;">स्थान / गांव *</label>
-          <input type="text" id="newVillage" required placeholder="उदा. नगर कुक्षी या ग्राम सुसारी" 
-            style="width:100%;padding:9px 12px;border-radius:8px;background:rgba(0,0,0,0.4);border:1px solid var(--line);color:#fff;font-family:inherit;">
-        </div>
-        <div>
-          <label style="font-size:13px;color:var(--light-muted);display:block;margin-bottom:6px;">सहयोग राशि (₹) *</label>
-          <input type="number" id="newAmount" required min="1" placeholder="उदा. 11111" 
-            style="width:100%;padding:9px 12px;border-radius:8px;background:rgba(0,0,0,0.4);border:1px solid var(--line);color:#fff;font-family:inherit;">
-        </div>
-      </div>
-
-      <div style="margin-bottom:20px;">
-        <label style="font-size:13px;color:var(--light-muted);display:block;margin-bottom:6px;">सहयोग स्थिति</label>
-        <select id="newStatus" style="width:100%;padding:9px 12px;border-radius:8px;background:#1b263b;border:1px solid var(--line);color:#fff;font-family:inherit;">
-          <option value="प्राप्त">सहयोग राशि प्राप्त (Received)</option>
-          <option value="घोषित">घोषणा राशि (Pledged)</option>
-        </select>
-      </div>
-
-      <div style="display:flex;justify-content:flex-end;gap:10px;">
-        <button type="button" class="btn" onclick="closeAddModal()">रद्द करें</button>
-        <button type="submit" class="btn btn-gold">सुरक्षित करें</button>
-      </div>
-    </form>
-  </div>
-</div>
-
+<!-- JAVASCRIPT LOGIC -->
 <script>
   /* ============================================================
-     MASTER DATA & CONFIGURATION
-     All authentic details from Kotewshwar Narmada Ghat Abhiyan
+     GOOGLE SHEET ID & TAB CONFIGURATION
      ============================================================ */
+  const SHEET_ID = '1Gw-tjQuVRzp6jO57jdH7OzvfEx4Brw_DV6uRb1cUDt8';
+
+  // Fallback Master Data (Used if Sheet is offline or tabs not populated yet)
+  const DEFAULT_DECLARATIONS = [
+    { id: 1, date: "2026-10-08", village: "निसरपुर", name: "निसरपुर समाजजन एवं व्यापारी बंधु", role: "प्रथम चरण संपर्क दिवस", amount: 161331, status: "घोषित" },
+    { id: 2, date: "2026-10-11", village: "निसरपुर", name: "निसरपुर श्रद्धालु नागरिक", role: "द्वितीय संपर्क दिवस", amount: 78888, status: "घोषित" },
+    { id: 3, date: "2026-10-12", village: "कोठड़ा", name: "कोठड़ा तीर्थ ग्रामवासी एवं भक्त", role: "मातृभूमि समर्पण दिवस", amount: 285108, status: "घोषित" },
+    { id: 4, date: "2026-10-14", village: "निसरपुर एवं कोठड़ा", name: "संयुक्त क्षेत्र समाजजन", role: "संयुक्त संपर्क दिवस", amount: 157109, status: "घोषित" },
+    { id: 5, date: "2026-10-16", village: "निसरपुर", name: "निसरपुर ग्रामीण एवं नगर बंधु", role: "चतुर्थ संपर्क दिवस", amount: 165554, status: "घोषित" },
+    { id: 6, date: "2026-10-31", village: "कुक्षी", name: "कुक्षी नगर व्यापारी एवं भक्तजन (4 दानदाता ₹1L+)", role: "कुक्षी जनसंपर्क दिवस", amount: 441777, status: "घोषित" },
+    { id: 7, date: "2026-11-01", village: "नानपुर", name: "नानपुर समाजजन (3 समूहों द्वारा ₹1.11L+)", role: "नानपुर महाअभियान दिवस", amount: 420665, status: "घोषित" },
+    { id: 8, date: "2026-11-04", village: "कुक्षी", name: "श्री प्रवीण जी गंगाराम जी पाटीदार (अंजड़ वाले)", role: "तहसीलदार महोदय", amount: 51111, status: "घोषित" },
+    { id: 9, date: "2026-11-04", village: "कुक्षी", name: "श्री विक्रमसिंह जी रिछुसिंह जी कनेश", role: "समाजसेवी व भक्त", amount: 25555, status: "घोषित" },
+    { id: 10, date: "2026-11-04", village: "कुक्षी", name: "श्री संजय जी किशोर जी बघेल", role: "श्रद्धालु समाजजन", amount: 21111, status: "घोषित" },
+    { id: 11, date: "2026-11-04", village: "कुक्षी", name: "श्री महेश चंद्र जी रमेश चंद्र जी गुप्ता", role: "व्यापारी बंधु", amount: 15111, status: "घोषित" },
+    { id: 12, date: "2026-11-04", village: "कुक्षी", name: "श्री सुनील जी रमेश जी जिराती", role: "श्रद्धालु समाजजन", amount: 11111, status: "घोषित" },
+    { id: 13, date: "2026-11-04", village: "कुक्षी", name: "श्री निवेदन जी महेंद्र कुमार जी यादव", role: "श्रद्धालु समाजजन", amount: 11111, status: "घोषित" },
+    { id: 14, date: "2026-11-04", village: "कुक्षी", name: "श्री महेंद्र कुमार जी कांतिलाल जी गुप्ता", role: "व्यापारी बंधु", amount: 11111, status: "घोषित" },
+    { id: 15, date: "2026-11-04", village: "ग्राम सुसारी", name: "श्री घनश्याम जी हीरालाल जी पायग्या", role: "ग्रामवासी, भक्त", amount: 25555, status: "घोषित" },
+    { id: 16, date: "2026-11-04", village: "ग्राम सुसारी", name: "श्री अंकित जी दिनेश जी अमलाल्या", role: "युवा समाजजन", amount: 25555, status: "घोषित" },
+    { id: 17, date: "2026-11-04", village: "ग्राम सुसारी", name: "श्री रविंद्र कृष्णा जी पाटीदार", role: "श्रद्धालु समाजजन", amount: 25555, status: "घोषित" },
+    { id: 18, date: "2026-11-04", village: "ग्राम सुसारी", name: "श्री प्रदीप मनोज अनिल, पिता श्री सीताराम जी सागरीया", role: "सागरीया परिवार", amount: 15111, status: "घोषित" }
+  ];
+
+  const DEFAULT_COLLECTIONS = [
+    { id: 1, date: "2026-11-04", village: "नगर कुक्षी", name: "श्री प्रवीण जी गंगाराम जी पाटीदार", role: "अंजड़ वाले, तहसीलदार महोदय", amount: 51111, receipt: "REC-001", mode: "बैंक / चेक", status: "सत्यापित" },
+    { id: 2, date: "2026-11-04", village: "नगर कुक्षी", name: "श्री विक्रमसिंह जी रिछुसिंह जी कनेश", role: "समाजसेवी व भक्त", amount: 25555, receipt: "REC-002", mode: "नकद", status: "सत्यापित" },
+    { id: 3, date: "2026-11-04", village: "नगर कुक्षी", name: "श्री संजय जी किशोर जी बघेल", role: "श्रद्धालु समाजजन", amount: 21111, receipt: "REC-003", mode: "UPI / ऑनलाइन", status: "सत्यापित" },
+    { id: 4, date: "2026-11-04", village: "नगर कुक्षी", name: "श्री महेश चंद्र जी रमेश चंद्र जी गुप्ता", role: "व्यापारी बंधु", amount: 15111, receipt: "REC-004", mode: "नकद", status: "सत्यापित" },
+    { id: 5, date: "2026-11-04", village: "नगर कुक्षी", name: "श्री सुनील जी रमेश जी जिराती", role: "श्रद्धालु समाजजन", amount: 11111, receipt: "REC-005", mode: "नकद", status: "सत्यापित" },
+    { id: 6, date: "2026-11-04", village: "नगर कुक्षी", name: "श्री निवेदन जी महेंद्र कुमार जी यादव", role: "श्रद्धालु समाजजन", amount: 11111, receipt: "REC-006", mode: "बैंक ट्रांसफर", status: "सत्यापित" },
+    { id: 7, date: "2026-11-04", village: "नगर कुक्षी", name: "श्री महेंद्र कुमार जी कांतिलाल जी गुप्ता", role: "व्यापारी बंधु", amount: 11111, receipt: "REC-007", mode: "नकद", status: "सत्यापित" },
+    { id: 8, date: "2026-11-04", village: "ग्राम सुसारी", name: "श्री घनश्याम जी हीरालाल जी पायग्या", role: "ग्रामवासी, भक्त", amount: 25555, receipt: "REC-008", mode: "नकद", status: "सत्यापित" },
+    { id: 9, date: "2026-11-04", village: "ग्राम सुसारी", name: "श्री अंकित जी दिनेश जी अमलाल्या", role: "युवा समाजजन", amount: 25555, receipt: "REC-009", mode: "UPI", status: "सत्यापित" },
+    { id: 10, date: "2026-11-04", village: "ग्राम सुसारी", name: "श्री रविंद्र कृष्णा जी पाटीदार", role: "श्रद्धालु समाजजन", amount: 25555, receipt: "REC-010", mode: "नकद", status: "सत्यापित" },
+    { id: 11, date: "2026-11-04", village: "ग्राम सुसारी", name: "श्री प्रदीप मनोज अनिल, पिता श्री सीताराम जी सागरीया", role: "सागरीया परिवार", amount: 15111, receipt: "REC-011", mode: "नकद", status: "सत्यापित" }
+  ];
+
+  const DEFAULT_EXPENSES = [
+    { id: 1, date: "2026-10-20", item: "घाट स्थल तकनीकी सर्वेक्षण एवं सीमांकन", category: "तट संरक्षण व नींव", amount: 25000, payee: "इंजीनियरिंग सर्वे टीम", voucher: "VOUCH-01", status: "सत्यापित" },
+    { id: 2, date: "2026-10-25", item: "55-दिवसीय जनसंपर्क सामग्री, रसीद बुक व बैनर छपाई", category: "प्रचार व जनसंपर्क", amount: 17500, payee: "श्री गणेश प्रिंटर्स, कुक्षी", voucher: "VOUCH-02", status: "सत्यापित" }
+  ];
 
   // 8 प्रमुख अभियान दिवसों का घोषित सहयोग संकलन (₹19,48,429)
   const CAMPAIGN_TIMELINE = [
@@ -1562,28 +1855,7 @@
     { id: 8, location: "कुक्षी एवं सुसारी", date: "4 नवंबर", amount: 237997, note: "तहसीलदार महोदय सहित 11 दानदाताओं का संग्रह", type: "प्राप्त / घोषित" }
   ];
 
-  const TOTAL_DECLARED_ALL_DAYS = 1948429; // कुल संकलित घोषित सहयोग
-
-  // 4 नवंबर 2026 के सत्यापित 11 दानदाता
-  const DEFAULT_DONATIONS = [
-    // नगर कुक्षी (4 नवंबर 2026)
-    { id: 1, name: "श्री प्रवीण जी गंगाराम जी पाटीदार", role: "अंजड़ वाले, तहसीलदार महोदय", village: "नगर कुक्षी", amount: 51111, status: "प्राप्त", date: "2026-11-04" },
-    { id: 2, name: "श्री विक्रमसिंह जी रिछुसिंह जी कनेश", role: "समाजसेवी व भक्त", village: "नगर कुक्षी", amount: 25555, status: "प्राप्त", date: "2026-11-04" },
-    { id: 3, name: "श्री संजय जी किशोर जी बघेल", role: "श्रद्धालु समाजजन", village: "नगर कुक्षी", amount: 21111, status: "प्राप्त", date: "2026-11-04" },
-    { id: 4, name: "श्री महेश चंद्र जी रमेश चंद्र जी गुप्ता", role: "व्यापारी बंधु", village: "नगर कुक्षी", amount: 15111, status: "प्राप्त", date: "2026-11-04" },
-    { id: 5, name: "श्री सुनील जी रमेश जी जिराती", role: "श्रद्धालु समाजजन", village: "नगर कुक्षी", amount: 11111, status: "प्राप्त", date: "2026-11-04" },
-    { id: 6, name: "श्री निवेदन जी महेंद्र कुमार जी यादव", role: "श्रद्धालु समाजजन", village: "नगर कुक्षी", amount: 11111, status: "प्राप्त", date: "2026-11-04" },
-    { id: 7, name: "श्री महेंद्र कुमार जी कांतिलाल जी गुप्ता", role: "व्यापारी बंधु", village: "नगर कुक्षी", amount: 11111, status: "प्राप्त", date: "2026-11-04" },
-
-    // ग्राम सुसारी (4 नवंबर 2026)
-    { id: 8, name: "श्री घनश्याम जी हीरालाल जी पायग्या", role: "ग्रामवासी, भक्त", village: "ग्राम सुसारी", amount: 25555, status: "प्राप्त", date: "2026-11-04" },
-    { id: 9, name: "श्री अंकित जी दिनेश जी अमलाल्या", role: "युवा समाजजन", village: "ग्राम सुसारी", amount: 25555, status: "प्राप्त", date: "2026-11-04" },
-    { id: 10, name: "श्री रविंद्र कृष्णा जी पाटीदार", role: "श्रद्धालु समाजजन", village: "ग्राम सुसारी", amount: 25555, status: "प्राप्त", date: "2026-11-04" },
-    { id: 11, name: "श्री प्रदीप मनोज अनिल, पिता श्री सीताराम जी सागरीया", role: "सागरीया परिवार", village: "ग्राम सुसारी", amount: 15111, status: "प्राप्त", date: "2026-11-04" }
-  ];
-
   const PROJECTED_SPENDING = 2500000; // प्रथम चरण कुल अनुमानित बजट
-  const TOTAL_SPENT = 42500; // प्रारंभिक तकनीकी सर्वेक्षण, जनसंपर्क एवं सामग्री खर्च
 
   const WORKS_DATA = [
     { name: "तट संरक्षण, गहरी नींव एवं रिटेनिंग वॉल निर्माण", projected: 850000, spent: 25000, status: "सर्वेक्षण व चिन्हांकन पूर्ण" },
@@ -1594,56 +1866,254 @@
     { name: "55-दिवसीय जनसंपर्क, प्रचार-प्रसार व प्रशासनिक कार्य", projected: 150000, spent: 17500, status: "प्रगति पर" }
   ];
 
-  // Local storage management
-  function getDonations() {
-    const saved = localStorage.getItem("koteshwar_donations");
-    if (saved) {
-      try { return JSON.parse(saved); } catch(e) { }
-    }
-    return DEFAULT_DONATIONS;
-  }
+  // Application State
+  let declarationsData = [...DEFAULT_DECLARATIONS];
+  let collectionsData = [...DEFAULT_COLLECTIONS];
+  let expensesData = [...DEFAULT_EXPENSES];
 
-  function saveDonations(list) {
-    localStorage.setItem("koteshwar_donations", JSON.stringify(list));
-  }
-
-  let donations = getDonations();
-  let currentFilter = 'all';
+  let currentDeclFilter = 'all';
+  let currentCollFilter = 'all';
 
   // Number formatting helper
   const fmt = n => "₹" + Math.round(Number(n) || 0).toLocaleString('en-IN');
 
+  function parseCleanAmount(val) {
+    if (typeof val === 'number') return Math.round(val);
+    if (!val) return 0;
+    const cleaned = String(val).replace(/[^0-9.-]/g, '');
+    const num = parseFloat(cleaned);
+    return isNaN(num) ? 0 : Math.round(num);
+  }
+
   /* ============================================================
-     RENDER DASHBOARD
+     GOOGLE SHEET GViz API FETCHING
+     ============================================================ */
+  async function fetchGvizTab(tabName) {
+    try {
+      const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(tabName)}&_t=${Date.now()}`;
+      const resp = await fetch(url);
+      if (!resp.ok) return null;
+      const text = await resp.text();
+      const start = text.indexOf('{');
+      const end = text.lastIndexOf('}');
+      if (start === -1 || end === -1) return null;
+      const json = JSON.parse(text.substring(start, end + 1));
+      return json;
+    } catch(err) {
+      console.warn("GViz fetch failed for tab " + tabName, err);
+      return null;
+    }
+  }
+
+  async function refreshGoogleSheets() {
+    const syncPill = document.getElementById('syncPill');
+    const syncStatusText = document.getElementById('syncStatusText');
+    const syncDetailText = document.getElementById('syncDetailText');
+    const syncTimeText = document.getElementById('syncTimeText');
+    const refreshIcon = document.getElementById('refreshIcon');
+
+    if (refreshIcon) refreshIcon.classList.add('fa-spin');
+    syncPill.className = "sync-pill loading";
+    syncStatusText.textContent = "Google Sheet से डेटा लाया जा रहा है...";
+
+    let sheetsLoaded = 0;
+
+    try {
+      // 1. Declarations tab
+      const declGviz = await fetchGvizTab('Declarations');
+      if (declGviz && declGviz.table && declGviz.table.rows && declGviz.table.rows.length > 0) {
+        const parsed = [];
+        const rows = declGviz.table.rows;
+        let startIdx = 0;
+        const row0Val = (rows[0].c && rows[0].c[0] && rows[0].c[0].v) ? String(rows[0].c[0].v) : "";
+        if (row0Val.includes("क्र") || row0Val.toLowerCase().includes("id")) startIdx = 1;
+
+        for (let i = startIdx; i < rows.length; i++) {
+          const c = rows[i].c || [];
+          const name = c[3] && c[3].v !== null ? String(c[3].v).trim() : (c[2] && c[2].v ? String(c[2].v).trim() : "");
+          const amt = c[5] ? parseCleanAmount(c[5].v) : 0;
+          if (!name && amt === 0) continue;
+
+          parsed.push({
+            id: c[0] && c[0].v !== null ? c[0].v : i,
+            date: c[1] && c[1].v !== null ? String(c[1].v).trim() : "2026-11-04",
+            village: c[2] && c[2].v !== null ? String(c[2].v).trim() : "कुक्षी",
+            name: name,
+            role: c[4] && c[4].v !== null ? String(c[4].v).trim() : "श्रद्धालु भक्त",
+            amount: amt,
+            status: c[6] && c[6].v !== null ? String(c[6].v).trim() : "घोषित"
+          });
+        }
+        if (parsed.length > 0) {
+          declarationsData = parsed;
+          sheetsLoaded++;
+        }
+      }
+
+      // 2. Collections tab
+      const collGviz = await fetchGvizTab('Collections');
+      if (collGviz && collGviz.table && collGviz.table.rows && collGviz.table.rows.length > 0) {
+        const parsed = [];
+        const rows = collGviz.table.rows;
+        let startIdx = 0;
+        const row0Val = (rows[0].c && rows[0].c[0] && rows[0].c[0].v) ? String(rows[0].c[0].v) : "";
+        if (row0Val.includes("क्र") || row0Val.toLowerCase().includes("id")) startIdx = 1;
+
+        for (let i = startIdx; i < rows.length; i++) {
+          const c = rows[i].c || [];
+          const name = c[3] && c[3].v !== null ? String(c[3].v).trim() : "";
+          const amt = c[5] ? parseCleanAmount(c[5].v) : 0;
+          if (!name && amt === 0) continue;
+
+          parsed.push({
+            id: c[0] && c[0].v !== null ? c[0].v : i,
+            date: c[1] && c[1].v !== null ? String(c[1].v).trim() : "2026-11-04",
+            village: c[2] && c[2].v !== null ? String(c[2].v).trim() : "नगर कुक्षी",
+            name: name,
+            role: c[4] && c[4].v !== null ? String(c[4].v).trim() : "श्रद्धालु समाजजन",
+            amount: amt,
+            receipt: c[6] && c[6].v !== null ? String(c[6].v).trim() : `REC-${i}`,
+            mode: c[7] && c[7].v !== null ? String(c[7].v).trim() : "नकद",
+            status: c[8] && c[8].v !== null ? String(c[8].v).trim() : "सत्यापित"
+          });
+        }
+        if (parsed.length > 0) {
+          collectionsData = parsed;
+          sheetsLoaded++;
+        }
+      }
+
+      // 3. Expenses tab
+      const expGviz = await fetchGvizTab('Expenses');
+      if (expGviz && expGviz.table && expGviz.table.rows && expGviz.table.rows.length > 0) {
+        const parsed = [];
+        const rows = expGviz.table.rows;
+        let startIdx = 0;
+        const row0Val = (rows[0].c && rows[0].c[0] && rows[0].c[0].v) ? String(rows[0].c[0].v) : "";
+        if (row0Val.includes("क्र") || row0Val.toLowerCase().includes("id")) startIdx = 1;
+
+        for (let i = startIdx; i < rows.length; i++) {
+          const c = rows[i].c || [];
+          const item = c[2] && c[2].v !== null ? String(c[2].v).trim() : "";
+          const amt = c[4] ? parseCleanAmount(c[4].v) : 0;
+          if (!item && amt === 0) continue;
+
+          parsed.push({
+            id: c[0] && c[0].v !== null ? c[0].v : i,
+            date: c[1] && c[1].v !== null ? String(c[1].v).trim() : "2026-10-25",
+            item: item,
+            category: c[3] && c[3].v !== null ? String(c[3].v).trim() : "निर्माण कार्य",
+            amount: amt,
+            payee: c[5] && c[5].v !== null ? String(c[5].v).trim() : "संबंधित विक्रेता",
+            voucher: c[6] && c[6].v !== null ? String(c[6].v).trim() : `VOUCH-${i}`,
+            status: c[7] && c[7].v !== null ? String(c[7].v).trim() : "सत्यापित"
+          });
+        }
+        if (parsed.length > 0) {
+          expensesData = parsed;
+          sheetsLoaded++;
+        }
+      }
+
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      syncTimeText.textContent = "अंतिम सिंक: " + timeStr;
+
+      if (sheetsLoaded > 0) {
+        syncPill.className = "sync-pill connected";
+        syncStatusText.textContent = `Google Sheet से ${sheetsLoaded} टैब लाइव सिंक`;
+        syncDetailText.textContent = "लाइव डेटा सक्रिय (Declarations, Collections, Expenses)";
+      } else {
+        syncPill.className = "sync-pill fallback";
+        syncStatusText.textContent = "मास्टर बैकअप डेटा सक्रिय";
+        syncDetailText.textContent = "Google Sheet में टैब तैयार होने पर स्वतः लाइव होगा (गाइड देखें)";
+      }
+
+    } catch (e) {
+      console.error("Sheet sync error:", e);
+      syncPill.className = "sync-pill fallback";
+      syncStatusText.textContent = "ऑफलाइन मास्टर डेटा";
+      syncDetailText.textContent = "Google Sheet से संपर्क नहीं हुआ, बैकअप डेटा प्रदर्शित";
+    } finally {
+      if (refreshIcon) refreshIcon.classList.remove('fa-spin');
+      renderDashboard();
+    }
+  }
+
+  /* ============================================================
+     RENDER COMPLETE DASHBOARD
      ============================================================ */
   function renderDashboard() {
-    const nov4Received = donations.filter(d => d.status === "प्राप्त").reduce((sum, d) => sum + d.amount, 0);
-    const cashBalance = nov4Received - TOTAL_SPENT;
+    const totalDeclared = declarationsData.reduce((s, d) => s + (Number(d.amount) || 0), 0);
+    const totalCollected = collectionsData.reduce((s, c) => s + (Number(c.amount) || 0), 0);
+    const totalSpent = expensesData.reduce((s, e) => s + (Number(e.amount) || 0), 0);
+    const cashBalance = totalCollected - totalSpent;
+    const needed = Math.max(0, PROJECTED_SPENDING - totalCollected);
+
+    // Update Banner
+    document.getElementById('bannerTotalDeclared').textContent = fmt(totalDeclared);
+    document.getElementById('bannerTotalCollected').textContent = fmt(totalCollected);
 
     // Update Ledgers
-    document.getElementById('led-announced').textContent = fmt(TOTAL_DECLARED_ALL_DAYS);
-    document.getElementById('led-received-nov4').textContent = fmt(nov4Received);
-    document.getElementById('led-spent').textContent = fmt(TOTAL_SPENT);
+    document.getElementById('led-announced').textContent = fmt(totalDeclared);
+    document.getElementById('led-received').textContent = fmt(totalCollected);
+    document.getElementById('led-spent').textContent = fmt(totalSpent);
     document.getElementById('led-balance').textContent = fmt(cashBalance);
     document.getElementById('led-projected').textContent = fmt(PROJECTED_SPENDING);
 
-    // Update Tab badge & filter counts
-    document.getElementById('tab-donor-count').textContent = donations.length;
-    document.getElementById('cnt-all').textContent = donations.length;
-    document.getElementById('cnt-kukshi').textContent = donations.filter(d => d.village.includes("कुक्षी")).length;
-    document.getElementById('cnt-susari').textContent = donations.filter(d => d.village.includes("सुसारी")).length;
+    // Update KPI cards
+    document.getElementById('kpi-declared').textContent = fmt(totalDeclared);
+    document.getElementById('kpi-decl-count').textContent = declarationsData.length + " दानदाता / समूह";
+    const declPct = ((totalDeclared / PROJECTED_SPENDING) * 100).toFixed(1);
+    document.getElementById('kpi-decl-pct').textContent = declPct + "% लक्ष्य घोषित";
 
-    // Render Hero Ring SVG (Pledge vs Goal)
-    drawHeroRing(TOTAL_DECLARED_ALL_DAYS, PROJECTED_SPENDING);
+    document.getElementById('kpi-collected').textContent = fmt(totalCollected);
+    document.getElementById('kpi-coll-count').textContent = collectionsData.length + " रसीदें जारी";
 
-    // Render Timeline Table
+    document.getElementById('kpi-spent').textContent = fmt(totalSpent);
+    document.getElementById('kpi-exp-count').textContent = expensesData.length + " वाउचर स्वीकृत";
+
+    document.getElementById('kpi-balance').textContent = fmt(cashBalance);
+
+    // Update Tab Badges
+    document.getElementById('tab-decl-count').textContent = declarationsData.length;
+    document.getElementById('tab-coll-count').textContent = collectionsData.length;
+    document.getElementById('tab-exp-count').textContent = expensesData.length;
+    document.getElementById('quickDeclBadge').textContent = declarationsData.length + " रिकॉर्ड";
+    document.getElementById('quickCollBadge').textContent = collectionsData.length + " रसीदें";
+    document.getElementById('quickExpBadge').textContent = expensesData.length + " वाउचर";
+
+    // Ring Note
+    document.getElementById('ringDeclaredNote').textContent = `${fmt(totalDeclared)} (${declPct}%)`;
+
+    // Render Hero Ring Gauge
+    drawHeroRing(totalDeclared, PROJECTED_SPENDING);
+
+    // Declarations Mini Stats
+    document.getElementById('declSumAmount').textContent = fmt(totalDeclared);
+    document.getElementById('declSumCount').textContent = declarationsData.length;
+    const avgDecl = declarationsData.length ? Math.round(totalDeclared / declarationsData.length) : 0;
+    document.getElementById('declSumAvg').textContent = fmt(avgDecl);
+
+    // Collections Mini Stats
+    document.getElementById('collSumAmount').textContent = fmt(totalCollected);
+    document.getElementById('collSumCount').textContent = collectionsData.length;
+    const bankColl = collectionsData.filter(c => (c.mode && (c.mode.includes("बैंक") || c.mode.includes("UPI") || c.mode.includes("ऑनलाइन") || c.mode.includes("चेक")))).reduce((s, c) => s + c.amount, 0);
+    const cashColl = totalCollected - bankColl;
+    document.getElementById('collSumBank').textContent = fmt(bankColl);
+    document.getElementById('collSumCash').textContent = fmt(cashColl);
+
+    // Expenses Mini Stats
+    document.getElementById('expSumAmount').textContent = fmt(totalSpent);
+    document.getElementById('expSumBalance').textContent = fmt(cashBalance);
+    document.getElementById('expSumNeeded').textContent = fmt(needed);
+
+    // Render Tables
+    renderDeclarationsTable();
+    renderCollectionsTable();
+    renderExpensesTable();
+    renderWorksCards();
     renderTimelineTable();
-
-    // Render Works Table
-    renderWorksTable();
-
-    // Render Donors Table
-    renderDonorsTable();
   }
 
   /* ============================================================
@@ -1703,10 +2173,210 @@
         </linearGradient>
       </defs>
       ${out}
-      <text x="130" y="106" text-anchor="middle" fill="#fff" font-family="'Rozha One', serif" font-size="26">${fmt(current)}</text>
-      <text x="130" y="130" text-anchor="middle" fill="#95a5a6" font-size="12" font-family="'Noto Sans Devanagari', sans-serif">कुल घोषित सहयोग</text>
+      <text x="130" y="106" text-anchor="middle" fill="#fff" font-family="'Rozha One', serif" font-size="25">${fmt(current)}</text>
+      <text x="130" y="130" text-anchor="middle" fill="#95a5a6" font-size="12" font-family="'Noto Sans Devanagari', sans-serif">कुल घोषित जनसहयोग</text>
       <text x="130" y="162" text-anchor="middle" fill="#f8c471" font-size="14.5" font-weight="700" font-family="'Noto Sans Devanagari', sans-serif">${pctVal}% लक्ष्य घोषित</text>
     `;
+  }
+
+  /* ============================================================
+     RENDER DECLARATIONS TABLE & FILTERING
+     ============================================================ */
+  function setDeclFilter(type, btn) {
+    currentDeclFilter = type;
+    document.querySelectorAll('#declFilterPills .pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    filterDeclarations();
+  }
+
+  function filterDeclarations() {
+    const q = (document.getElementById('declSearch').value || '').trim().toLowerCase();
+
+    let filtered = declarationsData.filter(d => {
+      const matchesSearch = !q ||
+        (d.name && d.name.toLowerCase().includes(q)) ||
+        (d.role && d.role.toLowerCase().includes(q)) ||
+        (d.village && d.village.toLowerCase().includes(q));
+
+      let matchesCat = true;
+      if (currentDeclFilter === 'कुक्षी') matchesCat = d.village && d.village.includes('कुक्षी');
+      else if (currentDeclFilter === 'निसरपुर') matchesCat = d.village && d.village.includes('निसरपुर');
+      else if (currentDeclFilter === 'कोठड़ा') matchesCat = d.village && d.village.includes('कोठड़ा');
+      else if (currentDeclFilter === 'नानपुर') matchesCat = d.village && d.village.includes('नानपुर');
+      else if (currentDeclFilter === 'सुसारी') matchesCat = d.village && d.village.includes('सुसारी');
+      else if (currentDeclFilter === 'high') matchesCat = d.amount >= 100000;
+
+      return matchesSearch && matchesCat;
+    });
+
+    const tbody = document.getElementById('declTableBody');
+    if (!filtered.length) {
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--muted);">कोई घोषित रिकॉर्ड नहीं मिला।</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map((d, index) => {
+      const isHigh = d.amount >= 100000;
+      const shareMsg = `🚩 माँ नर्मदा घाट निर्माण सेवा महाअभियान (कोटेश्वर तीर्थ, कोठड़ा) 🚩\n\nघोषित जनसहयोग:\nदानदाता: ${d.name}\nस्थान: ${d.village}\nघोषित राशि: ${fmt(d.amount)}\n\nमाँ नर्मदे हर!`;
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareMsg)}`;
+
+      return `
+        <tr>
+          <td style="color:var(--muted);">${index + 1}</td>
+          <td style="color:var(--light-muted);font-size:13px;">${d.date}</td>
+          <td>
+            <span style="color:var(--light-muted);"><i class="fa-solid fa-location-dot" style="color:var(--gold);margin-right:4px;"></i>${d.village}</span>
+          </td>
+          <td>
+            <strong style="color:#fff;font-size:14.5px;">${d.name}</strong>
+          </td>
+          <td style="color:var(--light-muted);font-size:13px;">${d.role || '-'}</td>
+          <td class="num" style="color:${isHigh ? 'var(--gold)' : '#fff'};font-weight:700;">${fmt(d.amount)}</td>
+          <td style="text-align:center;">
+            <span class="tag gosh">${d.status || 'घोषित'}</span>
+          </td>
+          <td style="text-align:center;">
+            <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="btn" style="padding:4px 9px;font-size:12px;">
+              <i class="fa-brands fa-whatsapp" style="color:#25d366;"></i> शेयर
+            </a>
+          </td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  function renderDeclarationsTable() {
+    filterDeclarations();
+  }
+
+  /* ============================================================
+     RENDER COLLECTIONS TABLE & FILTERING
+     ============================================================ */
+  function setCollFilter(type, btn) {
+    currentCollFilter = type;
+    document.querySelectorAll('#collFilterPills .pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    filterCollections();
+  }
+
+  function filterCollections() {
+    const q = (document.getElementById('collSearch').value || '').trim().toLowerCase();
+
+    let filtered = collectionsData.filter(c => {
+      const matchesSearch = !q ||
+        (c.name && c.name.toLowerCase().includes(q)) ||
+        (c.role && c.role.toLowerCase().includes(q)) ||
+        (c.receipt && c.receipt.toLowerCase().includes(q)) ||
+        (c.village && c.village.toLowerCase().includes(q));
+
+      let matchesCat = true;
+      if (currentCollFilter === 'कुक्षी') matchesCat = c.village && c.village.includes('कुक्षी');
+      else if (currentCollFilter === 'सुसारी') matchesCat = c.village && c.village.includes('सुसारी');
+      else if (currentCollFilter === 'high') matchesCat = c.amount >= 25000;
+
+      return matchesSearch && matchesCat;
+    });
+
+    const tbody = document.getElementById('collTableBody');
+    if (!filtered.length) {
+      tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:30px;color:var(--muted);">कोई संग्रह रिकॉर्ड नहीं मिला।</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map((c, index) => {
+      const isHigh = c.amount >= 25000;
+      return `
+        <tr>
+          <td style="color:var(--muted);">${index + 1}</td>
+          <td style="color:var(--light-muted);font-size:13px;">${c.date}</td>
+          <td><code style="background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;color:var(--gold-light);">${c.receipt || 'REC-' + (index+1)}</code></td>
+          <td>
+            <strong style="color:#fff;font-size:14.5px;">${c.name}</strong>
+          </td>
+          <td style="color:var(--light-muted);font-size:13px;">${c.role || '-'}</td>
+          <td>
+            <span style="color:var(--light-muted);"><i class="fa-solid fa-location-dot" style="color:var(--gold);margin-right:4px;"></i>${c.village}</span>
+          </td>
+          <td class="num" style="color:${isHigh ? 'var(--gold)' : 'var(--narmada)'};font-weight:700;">${fmt(c.amount)}</td>
+          <td style="text-align:center;">
+            <span class="tag mode">${c.mode || 'नकद'}</span>
+          </td>
+          <td style="text-align:center;">
+            <span class="tag rec">✓ ${c.status || 'सत्यापित'}</span>
+          </td>
+          <td style="text-align:center;">
+            <button class="btn" style="padding:4px 9px;font-size:12px;" onclick="openCertModal(${c.id})">
+              <i class="fa-solid fa-certificate" style="color:var(--gold);"></i> आभार पत्र
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  function renderCollectionsTable() {
+    filterCollections();
+  }
+
+  /* ============================================================
+     RENDER EXPENSES TABLE & WORKS CARDS
+     ============================================================ */
+  function renderExpensesTable() {
+    const tbody = document.getElementById('expTableBody');
+    if (!expensesData.length) {
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--muted);">कोई व्यय रिकॉर्ड दर्ज नहीं है।</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = expensesData.map((e, index) => {
+      return `
+        <tr>
+          <td style="color:var(--muted);">${index + 1}</td>
+          <td style="color:var(--light-muted);font-size:13px;">${e.date}</td>
+          <td><code style="background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;color:#e74c3c;">${e.voucher || 'VOUCH-' + (index+1)}</code></td>
+          <td><strong style="color:#fff;">${e.item}</strong></td>
+          <td style="color:var(--light-muted);font-size:13px;">${e.category}</td>
+          <td class="num" style="color:var(--danger);">${fmt(e.amount)}</td>
+          <td style="color:var(--light-muted);font-size:13px;">${e.payee}</td>
+          <td style="text-align:center;"><span class="tag exp">✓ ${e.status}</span></td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  function renderWorksCards() {
+    const grid = document.getElementById('worksGrid');
+    grid.innerHTML = WORKS_DATA.map((w, index) => {
+      const pct = w.projected > 0 ? Math.round((w.spent / w.projected) * 100) : 0;
+      const isDone = w.spent > 0;
+      return `
+        <div class="work-card">
+          <div>
+            <div class="work-head">
+              <div class="work-title">${index + 1}. ${w.name}</div>
+              <span class="ready-badge ${isDone ? 'prog' : 'done'}">${w.status}</span>
+            </div>
+            <div class="work-meta">
+              <div class="work-meta-item">
+                <small>अनुमानित बजट</small>
+                <strong>${fmt(w.projected)}</strong>
+              </div>
+              <div class="work-meta-item">
+                <small>अब तक व्यय</small>
+                <strong style="color:${isDone ? 'var(--narmada)' : 'var(--muted)'};">${fmt(w.spent)}</strong>
+              </div>
+            </div>
+            <div class="bar-track" style="margin-top:10px;">
+              <div class="bar-fill teal" style="width:${Math.max(5, pct)}%;"></div>
+            </div>
+          </div>
+          <div style="margin-top:14px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);">
+            <span>शेष बजट: ${fmt(w.projected - w.spent)}</span>
+            <span>${pct}% व्यय</span>
+          </div>
+        </div>
+      `;
+    }).join("");
   }
 
   /* ============================================================
@@ -1732,94 +2402,6 @@
   }
 
   /* ============================================================
-     RENDER WORKS & BUDGET TABLE
-     ============================================================ */
-  function renderWorksTable() {
-    const tbody = document.getElementById("worksTableBody");
-    tbody.innerHTML = WORKS_DATA.map((w, i) => {
-      const pending = w.projected - w.spent;
-      return `
-        <tr>
-          <td>
-            <strong style="color:#fff;">${i + 1}. ${w.name}</strong>
-          </td>
-          <td class="num">${fmt(w.projected)}</td>
-          <td class="num" style="color:var(--narmada);">${fmt(w.spent)}</td>
-          <td class="num" style="color:var(--gold-light);">${fmt(pending)}</td>
-          <td style="text-align:center;">
-            <span class="ready-badge ${w.spent > 0 ? 'prog' : 'done'}" style="font-size:11px;">${w.status}</span>
-          </td>
-        </tr>
-      `;
-    }).join("");
-  }
-
-  /* ============================================================
-     RENDER DONORS TABLE & FILTERING (4 NOV DONORS)
-     ============================================================ */
-  function setFilter(type, btn) {
-    currentFilter = type;
-    document.querySelectorAll('.filter-pills .pill').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    filterDonors();
-  }
-
-  function filterDonors() {
-    const q = (document.getElementById('donorSearch').value || '').trim().toLowerCase();
-    
-    let filtered = donations.filter(d => {
-      const matchesSearch = !q || 
-        d.name.toLowerCase().includes(q) || 
-        d.role.toLowerCase().includes(q) || 
-        d.village.toLowerCase().includes(q);
-
-      let matchesCategory = true;
-      if (currentFilter === 'कुक्षी') matchesCategory = d.village.includes('कुक्षी');
-      else if (currentFilter === 'सुसारी') matchesCategory = d.village.includes('सुसारी');
-      else if (currentFilter === 'high') matchesCategory = d.amount >= 25000;
-
-      return matchesSearch && matchesCategory;
-    });
-
-    const tbody = document.getElementById('donorsTableBody');
-    if (!filtered.length) {
-      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--muted);">कोई दानदाता रिकॉर्ड नहीं मिला।</td></tr>`;
-      return;
-    }
-
-    tbody.innerHTML = filtered.map((d, index) => {
-      const isHigh = d.amount >= 25000;
-      return `
-        <tr>
-          <td style="color:var(--muted);">${index + 1}</td>
-          <td>
-            <strong style="color:#fff;font-size:14.5px;">${d.name}</strong>
-            <span class="donor-role">${d.role}</span>
-          </td>
-          <td>
-            <span style="color:var(--light-muted);"><i class="fa-solid fa-location-dot" style="color:var(--gold);margin-right:4px;"></i>${d.village}</span>
-          </td>
-          <td class="num">
-            <span style="font-size:16px;color:${isHigh ? 'var(--gold)' : '#fff'};font-weight:700;">${fmt(d.amount)}</span>
-          </td>
-          <td style="text-align:center;">
-            <span class="tag ${d.status === 'प्राप्त' ? 'rec' : 'gosh'}">${d.status === 'प्राप्त' ? '✓ प्राप्त' : 'घोषित'}</span>
-          </td>
-          <td style="text-align:center;">
-            <button class="btn" style="padding:4px 10px;font-size:12px;" onclick="openCertModal(${d.id})">
-              <i class="fa-solid fa-certificate" style="color:var(--gold);"></i> आभार पत्र
-            </button>
-          </td>
-        </tr>
-      `;
-    }).join("");
-  }
-
-  function renderDonorsTable() {
-    filterDonors();
-  }
-
-  /* ============================================================
      TAB SWITCHING
      ============================================================ */
   function switchTab(tabId) {
@@ -1831,30 +2413,29 @@
 
     if (activeTab) activeTab.setAttribute('aria-selected', 'true');
     if (activePane) activePane.hidden = false;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   /* ============================================================
      HONOR CERTIFICATE MODAL & WHATSAPP SHARING
      ============================================================ */
-  let activeCertDonor = null;
-
   function openCertModal(donorId) {
-    const donor = donations.find(d => d.id === donorId);
+    const donor = collectionsData.find(d => d.id === donorId) || declarationsData.find(d => d.id === donorId);
     if (!donor) return;
-    activeCertDonor = donor;
 
     document.getElementById('certDonorName').textContent = donor.name;
     document.getElementById('certDonorRole').textContent = donor.role || "श्रद्धालु भक्त";
     document.getElementById('certAmount').textContent = fmt(donor.amount);
     document.getElementById('certVillage').textContent = donor.village;
-    document.getElementById('certStatus').textContent = donor.status === "प्राप्त" ? "सहयोग प्राप्त" : "सहयोग घोषित";
+    document.getElementById('certStatus').textContent = donor.status === "सत्यापित" ? "✓ सहयोग राशि प्राप्त एवं सत्यापित" : "घोषित सहयोग";
 
     const msg = `🚩 *माँ नर्मदा घाट निर्माण सेवा महाअभियान* 🚩\n\n` +
       `श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान द्वारा माँ नर्मदा के पावन तट (कोटेश्वर तीर्थ, कोठड़ा) पर घाट निर्माण के पुनीत कार्य में:\n\n` +
       `दानदाता: *${donor.name}*\n` +
       `स्थान: *${donor.village}*\n` +
-      `सहयोग राशि: *${fmt(donor.amount)}*\n\n` +
-      `आपका यह समर्पण एवं श्रद्धा माँ नर्मदा के चरणों में सदैव स्मरणीय रहेगी।\n` +
+      `सहयोग राशि: *${fmt(donor.amount)}*\n` +
+      (donor.receipt ? `रसीद क्र.: *${donor.receipt}*\n` : ``) +
+      `\nआपका यह समर्पण एवं श्रद्धा माँ नर्मदा के चरणों में सदैव स्मरणीय रहेगी।\n` +
       `*माँ नर्मदे हर! जय माँ नर्मदा!*`;
 
     document.getElementById('btnShareWhatsApp').onclick = function() {
@@ -1866,12 +2447,24 @@
   }
 
   function closeCertModal(e) {
-    if (e && e.target !== e.currentTarget && !e.target.closest('.cert-close')) return;
+    if (e && e.target !== e.currentTarget && !e.target.closest('.modal-close')) return;
     document.getElementById('certModalBackdrop').classList.remove('open');
   }
 
   /* ============================================================
-     ADD NEW DONATION MODAL
+     GOOGLE SHEET SETUP MODAL
+     ============================================================ */
+  function openSheetModal() {
+    document.getElementById('sheetModalBackdrop').classList.add('open');
+  }
+
+  function closeSheetModal(e) {
+    if (e && e.target !== e.currentTarget && !e.target.closest('.modal-close')) return;
+    document.getElementById('sheetModalBackdrop').classList.remove('open');
+  }
+
+  /* ============================================================
+     ADD NEW DONATION MODAL (LOCAL PREVIEW)
      ============================================================ */
   function openAddModal() {
     document.getElementById('addDonationForm').reset();
@@ -1879,7 +2472,7 @@
   }
 
   function closeAddModal(e) {
-    if (e && e.target !== e.currentTarget && !e.target.closest('.cert-close')) return;
+    if (e && e.target !== e.currentTarget && !e.target.closest('.modal-close')) return;
     document.getElementById('addModalBackdrop').classList.remove('open');
   }
 
@@ -1896,6 +2489,7 @@
       return;
     }
 
+    const todayStr = new Date().toISOString().split('T')[0];
     const newEntry = {
       id: Date.now(),
       name: name,
@@ -1903,19 +2497,59 @@
       village: village,
       amount: amount,
       status: status,
-      date: new Date().toISOString().split('T')[0]
+      date: todayStr
     };
 
-    donations.unshift(newEntry);
-    saveDonations(donations);
+    if (status === 'प्राप्त') {
+      newEntry.receipt = `REC-${collectionsData.length + 1}`;
+      newEntry.mode = "नकद / UPI";
+      collectionsData.unshift(newEntry);
+    } else {
+      declarationsData.unshift(newEntry);
+    }
+
     renderDashboard();
     closeAddModal();
-    alert("नया जनसहयोग सफलतापूर्वक दर्ज किया गया!");
+    alert("सहयोग प्रविष्टि सफलतापूर्वक दर्ज की गई!");
   }
 
-  // Initialize
+  /* ============================================================
+     CSV TEMPLATES DOWNLOADER (UTF-8 with BOM)
+     ============================================================ */
+  function downloadCsv(type) {
+    let content = "";
+    let filename = "";
+
+    if (type === 'declarations') {
+      filename = "Declarations.csv";
+      content = `क्र.,दिनांक,स्थान / नगर,दानदाता का नाम,पद / उपाधि / संदर्भ,घोषित राशि,स्थिति\n` +
+        DEFAULT_DECLARATIONS.map(d => `${d.id},${d.date},"${d.village}","${d.name}","${d.role}",${d.amount},${d.status}`).join('\n');
+    } else if (type === 'collections') {
+      filename = "Collections.csv";
+      content = `क्र.,दिनांक,स्थान / नगर,दानदाता का नाम,पद / संदर्भ,प्राप्त राशि,रसीद क्र.,माध्यम,स्थिति\n` +
+        DEFAULT_COLLECTIONS.map(c => `${c.id},${c.date},"${c.village}","${c.name}","${c.role}",${c.amount},${c.receipt},"${c.mode}",${c.status}`).join('\n');
+    } else if (type === 'expenses') {
+      filename = "Expenses.csv";
+      content = `क्र.,दिनांक,मद / कार्य विवरण,श्रेणी,व्यय राशि,भुगतान प्राप्तकर्ता,वाउचर क्र.,स्थिति\n` +
+        DEFAULT_EXPENSES.map(e => `${e.id},${e.date},"${e.item}","${e.category}",${e.amount},"${e.payee}",${e.voucher},${e.status}`).join('\n');
+    }
+
+    const blob = new Blob(["\uFEFF" + content], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  // Initialize on page load
   document.addEventListener('DOMContentLoaded', () => {
     renderDashboard();
+    // Attempt live fetch from Google Sheets
+    refreshGoogleSheets();
   });
 </script>
 
