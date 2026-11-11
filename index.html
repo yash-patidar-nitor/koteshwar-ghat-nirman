@@ -2,30 +2,35 @@
 <html lang="hi">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
   <title>माँ नर्मदा घाट निर्माण सेवा महाअभियान | कोटेश्वर तीर्थ (कोठड़ा)</title>
+  <meta name="description" content="कोटेश्वर तीर्थ, कोठड़ा (म.प्र.) में माँ नर्मदा के पावन तट पर भव्य घाट निर्माण सेवा महाअभियान का प्रामाणिक पोर्टल।" />
   
-  <!-- Fonts: Inter for numerals, Noto Sans Devanagari for Hindi, Cinzel/Rozha style for shlokas -->
+  <!-- Favicon / Theme Color for Mobile Browsers -->
+  <meta name="theme-color" content="#123F42" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  
+  <!-- Fonts: Inter for numerals, Noto Sans Devanagari for crisp Hindi reading -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Rozha+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- FontAwesome 6 Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
     :root {
-      /* Primary Brand Colors */
+      /* Brand Color System */
       --teal: #123F42;
-      --teal-dark: #0A2527;
-      --teal-light: #1B5357;
+      --teal-dark: #0A2426;
+      --teal-light: #1C5458;
       --teal-subtle: rgba(18, 63, 66, 0.08);
+      
       --gold: #D19A50;
-      --gold-dark: #B8823B;
+      --gold-dark: #B57F37;
       --gold-light: #E8BF83;
       --gold-subtle: rgba(209, 154, 80, 0.12);
 
-      /* Surface & Canvas Colors */
       --ivory: #F8F5EE;
       --ivory-dark: #ECE5D8;
       --white: #FFFFFF;
@@ -33,24 +38,38 @@
       --sandstone-light: #F7F4EE;
       --sandstone-dark: #CDC4B4;
 
-      /* Supporting Colors */
       --terracotta: #B96F4B;
-      --sage: #507A68;
-      --sage-light: rgba(80, 122, 104, 0.12);
-      --amber: #C18B45;
-      --maroon: #7A2828;
+      --sage: #4E7866;
+      --sage-light: rgba(78, 120, 102, 0.12);
+      --whatsapp: #25D366;
+      --whatsapp-dark: #1EBE5D;
 
-      /* Typography & Shadows */
       --text-primary: #142223;
       --text-secondary: #4A5C5D;
-      --text-muted: #798C8D;
-      --border-radius: 12px;
-      --card-shadow: 0 2px 6px rgba(18, 63, 66, 0.05), 0 8px 24px rgba(18, 63, 66, 0.04);
-      --hover-shadow: 0 10px 30px rgba(18, 63, 66, 0.1);
+      --text-muted: #788C8D;
+      
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-pill: 30px;
+      
+      --shadow-sm: 0 1px 3px rgba(18, 63, 66, 0.06);
+      --shadow-card: 0 2px 8px rgba(18, 63, 66, 0.05), 0 8px 20px rgba(18, 63, 66, 0.03);
+      --shadow-lg: 0 8px 28px rgba(18, 63, 66, 0.12);
+      
+      --bottom-bar-height: 60px;
     }
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
     body {
       margin: 0;
       padding: 0;
@@ -58,613 +77,489 @@
       color: var(--text-primary);
       font-family: "Noto Sans Devanagari", "Inter", system-ui, -apple-system, sans-serif;
       font-size: 15px;
-      line-height: 1.65;
+      line-height: 1.6;
       -webkit-font-smoothing: antialiased;
-      font-variant-numeric: tabular-nums;
+      overflow-x: hidden;
+      padding-bottom: calc(var(--bottom-bar-height) + 20px); /* Space for sticky mobile bar */
     }
 
-    .num, .amount, .stat-value {
+    .num, .amount {
       font-family: "Inter", "Noto Sans Devanagari", sans-serif;
       font-feature-settings: "tnum";
       font-variant-numeric: tabular-nums;
     }
 
     a { color: var(--teal); text-decoration: none; }
-    a:hover { text-decoration: underline; }
 
-    /* ==================== TOP NAVIGATION HEADER ==================== */
+    /* ==================== 1. COMPACT MOBILE-FIRST TOP HEADER ==================== */
     .top-header {
       background: var(--teal);
       color: #fff;
-      border-bottom: 3px solid var(--gold);
-      box-shadow: 0 3px 12px rgba(0,0,0,0.18);
+      border-bottom: 2.5px solid var(--gold);
       position: sticky;
       top: 0;
       z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.18);
     }
     .header-inner {
-      max-width: 1340px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 12px 24px;
+      padding: 10px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
-      flex-wrap: wrap;
     }
     .header-brand {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 10px;
     }
-    .header-logo-icon {
-      width: 44px;
-      height: 44px;
+    .brand-logo-icon {
+      width: 38px;
+      height: 38px;
       border-radius: 10px;
       background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      font-size: 19px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+      flex-shrink: 0;
     }
-    .header-title {
-      font-size: 17px;
+    .brand-text h1 {
+      font-size: 15px;
       font-weight: 700;
-      color: #fff;
-      letter-spacing: 0.3px;
+      color: #FFFFFF;
       margin: 0;
       line-height: 1.25;
+      letter-spacing: 0.2px;
     }
-    .header-sub {
-      font-size: 12px;
+    .brand-text span {
+      font-size: 11px;
       color: var(--gold-light);
+      display: block;
       margin-top: 2px;
       font-weight: 500;
     }
 
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
+    /* Swipeable Horizontal Pill Navigation (Touch-optimized) */
+    .nav-scroller {
+      background: var(--teal-dark);
+      border-bottom: 1px solid rgba(209, 154, 80, 0.3);
+      padding: 7px 14px;
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
     }
-    .nav-link {
-      color: #E2ECE9;
-      font-size: 13px;
+    .nav-scroller::-webkit-scrollbar { display: none; }
+    .nav-pill-list {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .nav-pill {
+      font-size: 12px;
       font-weight: 600;
-      padding: 6px 12px;
-      border-radius: 6px;
+      color: #E0EAE8;
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      text-decoration: none;
       transition: all 0.2s ease;
+    }
+    .nav-pill:active, .nav-pill:hover {
+      background: var(--gold);
+      color: var(--teal-dark);
+      border-color: var(--gold);
+      text-decoration: none;
+    }
+    .nav-pill.active {
+      background: var(--gold);
+      color: var(--teal-dark);
+      border-color: var(--gold);
+    }
+
+    /* ==================== 2. MOBILE HERO & SACRED SANKALP ==================== */
+    .hero-section {
+      background: linear-gradient(180deg, var(--teal-dark) 0%, var(--teal) 70%, var(--teal-light) 100%);
+      color: #fff;
+      padding: 24px 16px 28px;
+      position: relative;
+      text-align: center;
+      border-bottom: 3px solid var(--gold);
+    }
+    .shloka-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-    }
-    .nav-link:hover {
-      background: rgba(255,255,255,0.12);
-      color: #fff;
-      text-decoration: none;
-    }
-    .nav-link.highlight {
-      background: var(--gold);
-      color: var(--teal-dark);
-    }
-    .nav-link.highlight:hover {
-      background: var(--gold-light);
-    }
-
-    /* ==================== HERO SECTION (STORY-FIRST & DEVOTIONAL) ==================== */
-    .hero-section {
-      background: linear-gradient(180deg, var(--teal-dark) 0%, var(--teal) 75%, var(--teal-light) 100%);
-      color: #fff;
-      padding: 56px 24px 64px;
-      position: relative;
-      overflow: hidden;
-      border-bottom: 4px solid var(--gold);
-    }
-    .hero-section::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-image: radial-gradient(circle at 20% 30%, rgba(209, 154, 80, 0.15) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 70%, rgba(209, 154, 80, 0.1) 0%, transparent 45%);
-      pointer-events: none;
-    }
-    .hero-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
-    .shloka-banner {
-      display: inline-block;
-      padding: 6px 20px;
+      padding: 4px 14px;
       background: rgba(209, 154, 80, 0.18);
-      border: 1px solid rgba(209, 154, 80, 0.4);
-      border-radius: 30px;
-      font-size: 14.5px;
+      border: 1px solid rgba(209, 154, 80, 0.45);
+      border-radius: var(--radius-pill);
+      font-size: 12px;
       color: var(--gold-light);
-      margin-bottom: 18px;
-      letter-spacing: 0.5px;
+      margin-bottom: 12px;
       font-weight: 500;
     }
-    .hero-main-title {
-      font-size: 38px;
-      font-weight: 700;
-      line-height: 1.25;
-      margin: 0 0 16px;
+    .hero-title {
+      font-size: 24px;
+      font-weight: 800;
+      line-height: 1.3;
+      margin: 0 0 10px;
       color: #FFFFFF;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
-    .hero-main-title span {
-      color: var(--gold-light);
-    }
-    .hero-desc {
-      font-size: 17px;
-      max-width: 880px;
-      margin: 0 auto 32px;
+    .hero-title span { color: var(--gold-light); }
+    .hero-subtitle {
+      font-size: 13.5px;
       color: #E2ECE9;
-      line-height: 1.7;
+      line-height: 1.6;
+      max-width: 680px;
+      margin: 0 auto 20px;
     }
 
-    /* Key Pledged Sankalp Strip (NO COLLECTION / NO PENDING) */
-    .hero-metrics-grid {
+    /* 2x2 Metric Grid on Mobile (Zero Collection, Zero Pending) */
+    .metric-grid-2x2 {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 16px;
-      max-width: 1040px;
-      margin: 0 auto 36px;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      max-width: 540px;
+      margin: 0 auto 20px;
     }
-    .hero-metric-card {
+    .metric-card-mobile {
       background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(8px);
       border: 1px solid rgba(209, 154, 80, 0.35);
-      border-radius: 14px;
-      padding: 18px 20px;
+      border-radius: var(--radius-md);
+      padding: 12px 10px;
       text-align: center;
-      transition: all 0.25s ease;
     }
-    .hero-metric-card:hover {
-      background: rgba(255, 255, 255, 0.12);
-      transform: translateY(-3px);
-      border-color: var(--gold);
-    }
-    .hero-metric-icon {
-      font-size: 22px;
+    .metric-icon-small {
+      font-size: 16px;
       color: var(--gold-light);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
-    .hero-metric-val {
-      font-size: 28px;
-      font-weight: 700;
+    .metric-val-mobile {
+      font-size: 21px;
+      font-weight: 800;
       color: #FFFFFF;
       margin: 2px 0;
-      font-family: "Inter", sans-serif;
+      line-height: 1.2;
     }
-    .hero-metric-val.highlight {
-      color: var(--gold-light);
-    }
-    .hero-metric-lbl {
-      font-size: 13px;
+    .metric-val-mobile.highlight { color: var(--gold-light); }
+    .metric-lbl-mobile {
+      font-size: 11px;
       color: #D3DFDC;
       font-weight: 500;
+      line-height: 1.3;
     }
 
-    /* 5 Spiritual Pillars Ribbon */
-    .pillars-container {
-      max-width: 1100px;
+    /* Touch Swipeable 5 Spiritual Pillars */
+    .pillars-scroller-wrap {
+      max-width: 600px;
       margin: 0 auto;
-      background: rgba(10, 37, 39, 0.7);
-      border: 1px solid rgba(209, 154, 80, 0.3);
-      border-radius: 16px;
-      padding: 22px 24px;
-    }
-    .pillars-heading {
-      font-size: 14px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--gold-light);
-      margin-bottom: 14px;
-      font-weight: 600;
-    }
-    .pillars-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 14px;
-    }
-    .pillar-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
       text-align: left;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 10px 14px;
-      border-radius: 10px;
-      border-left: 3px solid var(--gold);
     }
-    .pillar-icon {
-      font-size: 18px;
+    .pillars-header-mobile {
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
       color: var(--gold-light);
-      width: 24px;
+      margin-bottom: 8px;
+      font-weight: 700;
       text-align: center;
     }
-    .pillar-text strong {
-      display: block;
-      font-size: 14px;
-      color: #fff;
+    .pillars-row-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
     }
-    .pillar-text span {
-      font-size: 11.5px;
-      color: #BACBC8;
-      display: block;
+    .pillars-row-scroll::-webkit-scrollbar { display: none; }
+    .pillar-chip {
+      background: rgba(10, 36, 38, 0.85);
+      border: 1px solid rgba(209, 154, 80, 0.35);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
+    .pillar-chip i { color: var(--gold-light); font-size: 14px; }
+    .pillar-chip strong { font-size: 12.5px; color: #fff; }
+    .pillar-chip span { font-size: 10.5px; color: #BACBC8; margin-left: 3px; }
 
-    /* ==================== MAIN CONTENT WRAPPER ==================== */
-    .main-canvas {
-      max-width: 1340px;
+    /* ==================== 3. MAIN MOBILE CANVAS ==================== */
+    .mobile-container {
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 36px 24px 64px;
+      padding: 20px 14px 40px;
     }
 
     /* Section Headers */
-    .section-header-block {
-      margin-bottom: 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      flex-wrap: wrap;
-      gap: 14px;
+    .sec-block-header {
+      margin-bottom: 16px;
+      padding-bottom: 10px;
       border-bottom: 2px solid var(--sandstone);
-      padding-bottom: 12px;
     }
-    .sec-badge {
+    .sec-tag {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       background: var(--gold-subtle);
       color: var(--gold-dark);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 20px;
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
-    .section-title {
-      font-size: 24px;
-      font-weight: 700;
+    .sec-title-main {
+      font-size: 20px;
+      font-weight: 800;
       color: var(--teal);
       margin: 0;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      line-height: 1.3;
     }
-    .section-subtitle {
-      font-size: 14px;
+    .sec-desc-main {
+      font-size: 13px;
       color: var(--text-secondary);
       margin-top: 4px;
-      max-width: 800px;
+      line-height: 1.5;
     }
 
-    /* ==================== 1. FEATURED STORIES (PRERNA DAI PRASANG) ==================== */
-    .stories-showcase-section {
+    /* ==================== 4. PROMINENT STORIES (PRERNA DAI PRASANG) ==================== */
+    .stories-section-mobile {
       background: #FFFFFF;
       border: 1px solid var(--sandstone);
-      border-top: 4px solid var(--gold);
-      border-radius: 16px;
-      padding: 32px 28px;
-      box-shadow: var(--card-shadow);
-      margin-bottom: 44px;
+      border-top: 3.5px solid var(--gold);
+      border-radius: var(--radius-lg);
+      padding: 20px 16px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-card);
     }
-    .stories-grid-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 22px;
-    }
-    .story-card {
-      background: var(--sandstone-light);
-      border: 1px solid var(--sandstone);
-      border-radius: 14px;
-      padding: 24px;
-      transition: all 0.25s ease;
-      position: relative;
+    .stories-feed {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      gap: 16px;
     }
-    .story-card:hover {
-      background: #FFFFFF;
-      transform: translateY(-4px);
-      box-shadow: var(--hover-shadow);
-      border-color: var(--gold);
+    .story-card-mobile {
+      background: var(--sandstone-light);
+      border: 1px solid var(--sandstone);
+      border-radius: var(--radius-md);
+      padding: 18px 16px;
+      position: relative;
+      transition: transform 0.2s ease;
     }
-    .story-card.featured-card {
+    .story-card-mobile.featured {
       background: linear-gradient(135deg, #FAF7F2 0%, #FFFFFF 100%);
-      border: 2px solid var(--gold);
-      box-shadow: 0 4px 18px rgba(209, 154, 80, 0.15);
+      border: 1.5px solid var(--gold);
+      box-shadow: 0 3px 12px rgba(209, 154, 80, 0.12);
     }
-    .story-card.featured-card::after {
-      content: "★ विशेष प्रसंग";
+    .story-card-mobile.featured::after {
+      content: "★ पावन प्रसंग";
       position: absolute;
-      top: -12px;
-      right: 20px;
+      top: -10px;
+      right: 14px;
       background: var(--gold);
       color: var(--teal-dark);
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
-      padding: 2px 10px;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
     }
-    .story-header {
+    .story-top-row {
       display: flex;
       align-items: flex-start;
-      gap: 14px;
-      margin-bottom: 14px;
+      gap: 12px;
+      margin-bottom: 10px;
     }
-    .story-icon-wrap {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
+    .story-icon-box {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
       background: var(--gold-subtle);
       color: var(--gold-dark);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 19px;
+      font-size: 16px;
       flex-shrink: 0;
     }
-    .story-title {
-      font-size: 17px;
+    .story-head-text h3 {
+      font-size: 15.5px;
       font-weight: 700;
       color: var(--teal);
       margin: 0;
       line-height: 1.35;
     }
-    .story-tag {
-      font-size: 12px;
+    .story-head-text span {
+      font-size: 11.5px;
       color: var(--gold-dark);
       font-weight: 600;
       display: block;
-      margin-top: 3px;
+      margin-top: 2px;
     }
-    .story-quote {
+    .story-quote-box {
       font-style: italic;
-      font-size: 13.5px;
+      font-size: 13px;
       color: var(--teal-dark);
-      background: rgba(209, 154, 80, 0.08);
+      background: rgba(209, 154, 80, 0.1);
       border-left: 3px solid var(--gold);
-      padding: 10px 14px;
-      border-radius: 0 8px 8px 0;
-      margin: 12px 0;
-      line-height: 1.6;
+      padding: 8px 12px;
+      border-radius: 0 6px 6px 0;
+      margin: 10px 0;
+      line-height: 1.55;
     }
-    .story-body {
-      font-size: 14px;
+    .story-narrative-text {
+      font-size: 13.5px;
       color: var(--text-secondary);
-      line-height: 1.7;
-      margin: 0;
+      line-height: 1.65;
+      margin: 0 0 12px;
     }
-    .story-footer-badge {
-      margin-top: 16px;
-      padding-top: 12px;
-      border-top: 1px dashed var(--sandstone);
+    .story-bottom-action-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 8px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--sandstone);
+      flex-wrap: wrap;
+    }
+    .btn-story-share {
+      background: var(--whatsapp);
+      color: #fff;
       font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    /* ==================== 2. VOLUNTEER MOVEMENT & GHAT VISION ==================== */
-    .two-column-narrative {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-      gap: 24px;
-      margin-bottom: 44px;
-    }
-    .narrative-card {
-      background: #FFFFFF;
-      border: 1px solid var(--sandstone);
-      border-radius: 14px;
-      padding: 26px 28px;
-      box-shadow: var(--card-shadow);
-    }
-    .narrative-card-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--sandstone-light);
-    }
-    .narrative-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      background: var(--teal-subtle);
-      color: var(--teal);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-    }
-    .narrative-card h3 {
-      font-size: 18px;
       font-weight: 700;
-      color: var(--teal);
-      margin: 0;
-    }
-    .narrative-card p {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.7;
-      margin: 0 0 12px;
-    }
-    .narrative-highlights {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 16px;
-    }
-    .nh-item {
-      background: var(--sandstone-light);
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-size: 13px;
-    }
-    .nh-item strong {
-      color: var(--teal);
-      display: block;
-      font-size: 13.5px;
-    }
-
-    /* Ghat Features Grid */
-    .ghat-features-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
-      margin-top: 16px;
-    }
-    .gf-item {
-      background: #FAF7F2;
-      border: 1px solid var(--sandstone);
-      border-radius: 10px;
-      padding: 12px 14px;
-      font-size: 13px;
-    }
-    .gf-item i {
-      color: var(--gold-dark);
-      margin-right: 6px;
-    }
-    .gf-item strong {
-      display: block;
-      color: var(--teal);
-      margin-bottom: 2px;
-    }
-
-    /* ==================== 3. VILLAGE TABLE (WITHOUT SEPARATE SUMMARY) ==================== */
-    .village-table-section {
-      background: #FFFFFF;
-      border: 1px solid var(--sandstone);
-      border-radius: 14px;
-      padding: 26px 28px;
-      box-shadow: var(--card-shadow);
-      margin-bottom: 44px;
-    }
-
-    /* Modern Table Styles */
-    .table-responsive {
-      overflow-x: auto;
-      border: 1px solid var(--sandstone);
-      border-radius: 10px;
-    }
-    table.data-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13.5px;
-      text-align: left;
-      white-space: nowrap;
-    }
-    table.data-table th {
-      background: var(--sandstone-light);
-      color: var(--teal);
-      font-weight: 700;
-      padding: 12px 16px;
-      border-bottom: 2px solid var(--sandstone);
-      font-size: 12.5px;
-      letter-spacing: 0.3px;
-    }
-    table.data-table td {
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--sandstone-light);
-      color: var(--text-primary);
-    }
-    table.data-table tr:hover td {
-      background: #FAF7F2;
-    }
-
-    .badge-village {
-      background: var(--teal-subtle);
-      color: var(--teal);
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 12.5px;
-      display: inline-block;
-    }
-    .btn {
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 8px 16px;
-      font-size: 13px;
-      font-weight: 600;
-      border-radius: 8px;
+      border: none;
       cursor: pointer;
-      border: 1px solid transparent;
-      transition: all 0.2s ease;
       text-decoration: none;
+      transition: background 0.2s ease;
     }
-    .btn-sm {
-      padding: 5px 11px;
-      font-size: 12px;
-      border-radius: 6px;
-    }
-    .btn-primary {
-      background: var(--teal);
+    .btn-story-share:hover, .btn-story-share:active {
+      background: var(--whatsapp-dark);
       color: #fff;
-    }
-    .btn-primary:hover {
-      background: var(--teal-light);
-      text-decoration: none;
-      color: #fff;
-    }
-    .btn-gold {
-      background: var(--gold);
-      color: var(--teal-dark);
-    }
-    .btn-gold:hover {
-      background: var(--gold-light);
-      text-decoration: none;
-    }
-    .btn-white {
-      background: #fff;
-      border-color: var(--sandstone);
-      color: var(--text-primary);
-    }
-    .btn-white:hover {
-      background: var(--sandstone-light);
       text-decoration: none;
     }
 
-    /* ==================== 4. COMPLETE DONORS DIRECTORY ==================== */
-    .directory-section {
+    /* ==================== 5. VILLAGE TABLE & MOBILE CARDS ==================== */
+    .village-section-wrap {
       background: #FFFFFF;
       border: 1px solid var(--sandstone);
-      border-radius: 14px;
-      padding: 26px 28px;
-      box-shadow: var(--card-shadow);
-      margin-bottom: 44px;
+      border-radius: var(--radius-lg);
+      padding: 20px 16px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-card);
     }
-    .directory-toolbar {
+    
+    /* Mobile Village Cards (Visible on Mobile screens < 768px) */
+    .village-cards-mobile {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .v-card-item {
+      background: var(--sandstone-light);
+      border: 1px solid var(--sandstone);
+      border-radius: var(--radius-md);
+      padding: 14px 14px;
+      transition: border-color 0.2s ease;
+    }
+    .v-card-item:active { border-color: var(--gold); }
+    .v-card-top {
+      display: flex;
       align-items: center;
-      gap: 16px;
-      margin-bottom: 18px;
-      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
     }
-    .search-box-wrap {
+    .v-card-name {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: var(--teal);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .v-card-amount {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--gold-dark);
+      font-family: "Inter", sans-serif;
+    }
+    .v-card-participants {
+      font-size: 12px;
+      color: var(--teal);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .v-card-desc {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin: 0 0 10px;
+    }
+    .btn-view-village-donors {
+      width: 100%;
+      background: #FFFFFF;
+      border: 1px solid var(--sandstone);
+      color: var(--teal);
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .btn-view-village-donors:active {
+      background: var(--teal);
+      color: #fff;
+    }
+
+    /* Desktop Village Table (Hidden on Mobile < 768px) */
+    .village-table-desktop {
+      display: none;
+    }
+
+    /* ==================== 6. DONORS DIRECTORY (MOBILE-FIRST) ==================== */
+    .donors-section-wrap {
+      background: #FFFFFF;
+      border: 1px solid var(--sandstone);
+      border-radius: var(--radius-lg);
+      padding: 20px 16px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-card);
+    }
+    .donor-search-row {
+      margin-bottom: 12px;
+    }
+    .mobile-search-input-wrap {
       position: relative;
-      flex: 1;
-      max-width: 380px;
-      min-width: 240px;
+      width: 100%;
     }
-    .search-box-wrap i {
+    .mobile-search-input-wrap i {
       position: absolute;
       left: 14px;
       top: 50%;
@@ -672,182 +567,412 @@
       color: var(--text-muted);
       font-size: 14px;
     }
-    .search-input {
+    .mobile-search-input {
       width: 100%;
-      padding: 9px 14px 9px 38px;
+      padding: 10px 14px 10px 38px;
       border: 1px solid var(--sandstone);
-      border-radius: 8px;
+      border-radius: var(--radius-pill);
       font-size: 13.5px;
       outline: none;
       background: var(--sandstone-light);
-      transition: all 0.2s ease;
       font-family: inherit;
     }
-    .search-input:focus {
-      border-color: var(--gold);
+    .mobile-search-input:focus {
       background: #fff;
-      box-shadow: 0 0 0 3px var(--gold-subtle);
+      border-color: var(--gold);
     }
 
-    .filter-pills {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
+    /* Swipeable Village Filter Pills */
+    .donor-filter-scroller {
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 12px;
     }
-    .pill-btn {
+    .donor-filter-scroller::-webkit-scrollbar { display: none; }
+    .filter-pills-row {
+      display: inline-flex;
+      gap: 6px;
+    }
+    .donor-pill-btn {
       background: var(--sandstone-light);
       border: 1px solid var(--sandstone);
       color: var(--text-secondary);
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 600;
-      padding: 6px 13px;
-      border-radius: 20px;
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
       cursor: pointer;
-      transition: all 0.2s ease;
     }
-    .pill-btn:hover {
-      background: #FFFFFF;
-      border-color: var(--gold);
-      color: var(--teal);
-    }
-    .pill-btn.active {
+    .donor-pill-btn.active {
       background: var(--teal);
       color: #FFFFFF;
       border-color: var(--teal);
     }
 
-    /* ==================== 5. BANK & CONTRIBUTION SECTION ==================== */
-    .bank-section {
+    /* Mobile Donor Cards Feed */
+    .donor-cards-mobile {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .d-card-item {
+      background: var(--sandstone-light);
+      border: 1px solid var(--sandstone);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+    }
+    .d-card-top-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .d-card-donor-name {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--teal);
+      line-height: 1.3;
+    }
+    .d-card-village-badge {
+      background: var(--teal-subtle);
+      color: var(--teal);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      white-space: nowrap;
+    }
+    .d-card-role {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin: 3px 0 8px;
+    }
+    .d-card-bottom-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 8px;
+      border-top: 1px dashed var(--sandstone);
+    }
+    .d-card-amount {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--gold-dark);
+      font-family: "Inter", sans-serif;
+    }
+    .btn-cert-mini {
+      background: #FFFFFF;
+      border: 1px solid var(--gold);
+      color: var(--gold-dark);
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Desktop Donors Table (Hidden on Mobile < 768px) */
+    .donors-table-desktop {
+      display: none;
+    }
+
+    /* ==================== 7. 55-DAY MOVEMENT & GHAT VISION ==================== */
+    .narrative-card-mobile {
+      background: #FFFFFF;
+      border: 1px solid var(--sandstone);
+      border-radius: var(--radius-lg);
+      padding: 20px 16px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-card);
+    }
+    .narrative-head-mobile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .narrative-icon-mobile {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--teal-subtle);
+      color: var(--teal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .narrative-head-mobile h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--teal);
+      margin: 0;
+    }
+    .narrative-head-mobile span {
+      font-size: 11.5px;
+      color: var(--gold-dark);
+      font-weight: 600;
+      display: block;
+    }
+    .narrative-card-mobile p {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin: 0 0 12px;
+    }
+    .feature-chips-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .feat-chip {
+      background: var(--sandstone-light);
+      border: 1px solid var(--sandstone);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      font-size: 12px;
+    }
+    .feat-chip strong {
+      color: var(--teal);
+      display: block;
+      margin-bottom: 2px;
+      font-size: 12.5px;
+    }
+
+    /* ==================== 8. MOBILE-OPTIMIZED BANK SECTION ==================== */
+    .bank-card-mobile {
       background: linear-gradient(135deg, var(--teal-dark) 0%, var(--teal) 100%);
       color: #fff;
-      border-radius: 16px;
-      padding: 34px 32px;
-      margin-bottom: 44px;
-      box-shadow: var(--card-shadow);
-      border: 2px solid var(--gold);
+      border-radius: var(--radius-lg);
+      padding: 22px 16px;
+      margin-bottom: 28px;
+      border: 1.5px solid var(--gold);
+      box-shadow: var(--shadow-card);
     }
-    .bank-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-      align-items: center;
+    .bank-header-mobile {
+      text-align: center;
+      margin-bottom: 16px;
     }
-    .bank-info-box {
+    .bank-header-mobile h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin: 4px 0 6px;
+    }
+    .bank-header-mobile p {
+      font-size: 12.5px;
+      color: #D3DFDC;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .bank-details-box-mobile {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(209, 154, 80, 0.4);
-      border-radius: 12px;
-      padding: 20px;
+      border-radius: var(--radius-md);
+      padding: 14px;
     }
-    .bank-info-row {
+    .b-row {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       padding: 8px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      font-size: 13.5px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 13px;
     }
-    .bank-info-row:last-child { border-bottom: none; }
-    .bank-info-label { color: var(--gold-light); }
-    .bank-info-val { font-weight: 600; color: #fff; }
+    .b-row:last-child { border-bottom: none; }
+    .b-lbl { color: var(--gold-light); font-size: 12px; }
+    .b-val { font-weight: 600; color: #FFFFFF; }
+    .btn-copy-chip {
+      background: rgba(209, 154, 80, 0.25);
+      border: 1px solid var(--gold);
+      color: var(--gold-light);
+      font-size: 10.5px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 6px;
+    }
 
-    /* ==================== MODAL STYLES ==================== */
+    /* ==================== 9. STICKY MOBILE QUICK-NAV BOTTOM BAR ==================== */
+    .sticky-bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: var(--bottom-bar-height);
+      background: #FFFFFF;
+      border-top: 2px solid var(--gold);
+      box-shadow: 0 -2px 12px rgba(0,0,0,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 99;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    .b-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-decoration: none;
+      flex: 1;
+      height: 100%;
+    }
+    .b-nav-item i {
+      font-size: 16px;
+      margin-bottom: 3px;
+      color: var(--teal);
+    }
+    .b-nav-item.highlight-nav {
+      color: var(--gold-dark);
+    }
+    .b-nav-item.highlight-nav i {
+      color: var(--gold-dark);
+    }
+
+    /* ==================== 10. MODAL / BOTTOM-SHEET ==================== */
     .modal-backdrop {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(10, 37, 39, 0.7);
+      background: rgba(10, 36, 38, 0.75);
       backdrop-filter: blur(4px);
       z-index: 999;
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 14px;
     }
     .modal-backdrop.open { display: flex; }
-    .modal-panel {
+    .modal-card {
       background: #FFFFFF;
-      border-radius: 14px;
-      max-width: 580px;
+      border-radius: var(--radius-lg);
+      max-width: 500px;
       width: 100%;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-      overflow: hidden;
       border: 2px solid var(--gold);
-      animation: modalSlide 0.25s ease-out;
+      overflow: hidden;
+      animation: modalPop 0.25s ease-out;
+      box-shadow: var(--shadow-lg);
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
     }
-    @keyframes modalSlide {
-      from { transform: translateY(20px); opacity: 0; }
+    @keyframes modalPop {
+      from { transform: translateY(15px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
-    .modal-header {
+    .modal-head {
       background: var(--teal);
       color: #fff;
-      padding: 16px 22px;
+      padding: 12px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       border-bottom: 2px solid var(--gold);
     }
-    .modal-title { font-size: 16px; font-weight: 700; margin: 0; color: #fff; }
-    .modal-close {
+    .modal-head h4 { font-size: 15px; margin: 0; font-weight: 700; }
+    .btn-close-modal {
       background: none;
       border: none;
       color: #fff;
-      font-size: 22px;
+      font-size: 20px;
       cursor: pointer;
-      line-height: 1;
     }
-    .modal-body { padding: 22px; }
-    .modal-footer {
-      background: var(--sandstone-light);
-      padding: 14px 22px;
-      border-top: 1px solid var(--sandstone);
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
+    .modal-content-area {
+      padding: 16px;
+      overflow-y: auto;
     }
-
-    /* Devotional Certificate Inside Modal */
-    .cert-box {
+    .cert-scrollable-box {
       border: 2px solid var(--gold);
-      border-radius: 12px;
-      padding: 22px;
+      border-radius: var(--radius-md);
+      padding: 18px 14px;
       text-align: center;
       background: #FAF7F2;
       position: relative;
     }
-    .cert-box::before {
+    .cert-scrollable-box::before {
       content: "";
       position: absolute;
-      top: 6px; left: 6px; right: 6px; bottom: 6px;
+      top: 5px; left: 5px; right: 5px; bottom: 5px;
       border: 1px dashed var(--gold);
-      border-radius: 8px;
+      border-radius: 6px;
       pointer-events: none;
     }
-
-    /* ==================== FOOTER ==================== */
-    footer.page-footer {
-      background: var(--teal-dark);
-      color: #E2ECE9;
-      border-top: 3px solid var(--gold);
-      padding: 40px 24px 30px;
-      text-align: center;
-      font-size: 13.5px;
-    }
-    .footer-inner { max-width: 900px; margin: 0 auto; }
-    .footer-shloka {
-      font-size: 18px;
-      color: var(--gold-light);
-      font-weight: 700;
-      margin-bottom: 12px;
-      letter-spacing: 0.5px;
+    .modal-actions-bar {
+      background: var(--sandstone-light);
+      padding: 12px 16px;
+      border-top: 1px solid var(--sandstone);
+      display: flex;
+      gap: 10px;
+      justify-content: center;
     }
 
-    @media (max-width: 768px) {
-      .hero-main-title { font-size: 26px; }
-      .header-inner { flex-direction: column; align-items: flex-start; }
-      .nav-links { width: 100%; overflow-x: auto; padding-bottom: 4px; }
-      .stories-grid-container { grid-template-columns: 1fr; }
-      .two-column-narrative { grid-template-columns: 1fr; }
-      .narrative-highlights { grid-template-columns: 1fr; }
+    /* ==================== DESKTOP ENHANCEMENTS (>= 768px) ==================== */
+    @media (min-width: 768px) {
+      body {
+        font-size: 15.5px;
+        padding-bottom: 0; /* No mobile sticky bar needed on desktop */
+      }
+      .sticky-bottom-bar { display: none; }
+      .header-inner { padding: 12px 24px; }
+      .brand-text h1 { font-size: 17px; }
+      .hero-section { padding: 48px 24px 54px; }
+      .hero-title { font-size: 34px; }
+      .metric-grid-2x2 {
+        grid-template-columns: repeat(4, 1fr);
+        max-width: 1000px;
+      }
+      .metric-val-mobile { font-size: 26px; }
+      .pillars-row-scroll {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        overflow-x: visible;
+      }
+      .mobile-container { padding: 32px 24px 60px; }
+      .stories-feed {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      }
+      .two-col-desktop {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+      }
+      
+      /* Toggle tables on desktop */
+      .village-cards-mobile { display: none; }
+      .village-table-desktop { display: block; }
+      .donor-cards-mobile { display: none; }
+      .donors-table-desktop { display: block; }
+
+      /* Desktop Table Styles */
+      table.desktop-data-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13.5px;
+        text-align: left;
+      }
+      table.desktop-data-table th {
+        background: var(--sandstone-light);
+        color: var(--teal);
+        font-weight: 700;
+        padding: 12px 14px;
+        border-bottom: 2px solid var(--sandstone);
+      }
+      table.desktop-data-table td {
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--sandstone-light);
+      }
+      table.desktop-data-table tr:hover td { background: #FAF7F2; }
     }
   </style>
 </head>
@@ -857,457 +982,381 @@
   <header class="top-header">
     <div class="header-inner">
       <div class="header-brand">
-        <div class="header-logo-icon">
+        <div class="brand-logo-icon">
           <i class="fa-solid fa-water"></i>
         </div>
-        <div>
-          <h1 class="header-title">कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान</h1>
-          <div class="header-sub">माँ नर्मदा घाट निर्माण सेवा महाअभियान • कोटेश्वर तीर्थ, कोठड़ा (म.प्र.)</div>
+        <div class="brand-text">
+          <h1>कोटेश्वर नर्मदा सेवा संस्थान</h1>
+          <span>माँ नर्मदा घाट निर्माण सेवा महाअभियान • कोठड़ा (म.प्र.)</span>
         </div>
       </div>
-
-      <nav class="nav-links">
-        <a href="#stories" class="nav-link highlight"><i class="fa-solid fa-star"></i> प्रेरणादायी प्रसंग</a>
-        <a href="#movement" class="nav-link"><i class="fa-solid fa-shoe-prints"></i> कार्यकर्ता साधना</a>
-        <a href="#vision" class="nav-link"><i class="fa-solid fa-archway"></i> घाट परिकल्पना</a>
-        <a href="#villages" class="nav-link"><i class="fa-solid fa-city"></i> नगर / ग्राम सहभागिता</a>
-        <a href="#donors" class="nav-link"><i class="fa-solid fa-users"></i> दानदाता सूची</a>
-        <a href="#bank" class="nav-link"><i class="fa-solid fa-building-columns"></i> अधिकृत बैंक</a>
-      </nav>
     </div>
+
+    <!-- Swipeable Pill Navigation (Mobile Touch-First) -->
+    <nav class="nav-scroller">
+      <div class="nav-pill-list">
+        <a href="#stories" class="nav-pill active"><i class="fa-solid fa-star"></i> प्रेरणादायी प्रसंग</a>
+        <a href="#villages" class="nav-pill"><i class="fa-solid fa-city"></i> नगर / ग्राम सहभागिता</a>
+        <a href="#donors" class="nav-pill"><i class="fa-solid fa-users"></i> दानदाता नामावली</a>
+        <a href="#movement" class="nav-pill"><i class="fa-solid fa-shoe-prints"></i> कार्यकर्ता साधना</a>
+        <a href="#vision" class="nav-pill"><i class="fa-solid fa-archway"></i> घाट परिकल्पना</a>
+        <a href="#bank" class="nav-pill"><i class="fa-solid fa-building-columns"></i> अधिकृत बैंक खाता</a>
+      </div>
+    </nav>
   </header>
 
-  <!-- ==================== HERO SECTION (STORY & DEVOTIONAL SANKALP) ==================== -->
+  <!-- ==================== HERO SECTION (COMPACT & DEVOTIONAL) ==================== -->
   <section class="hero-section">
-    <div class="hero-inner">
-      <div class="shloka-banner">
-        <i class="fa-solid fa-om"></i> ॐ नर्मदे हर • त्वदीय पादपंकजं नमामि देवि नर्मदे! <i class="fa-solid fa-om"></i>
-      </div>
-      
-      <h2 class="hero-main-title">
-        माँ नर्मदा घाट निर्माण <span>सेवा महाअभियान</span>
-      </h2>
+    <div class="shloka-pill">
+      <i class="fa-solid fa-om"></i> ॐ नर्मदे हर • त्वदीय पादपंकजं नमामि देवि नर्मदे!
+    </div>
 
-      <p class="hero-desc">
-        कोटेश्वर तीर्थ, कोठड़ा की पावन धरा पर माँ नर्मदा के पावन तट पर भव्य घाट का निर्माण, लाखों परिक्रमावासियों की सेवा और सनातन संस्कृति के संवर्धन का यह एक विशाल, निस्वार्थ जन-आंदोलन है। यह केवल निर्माण कार्य नहीं, बल्कि श्रद्धा, समर्पण और सामाजिक एकता का संगम है।
-      </p>
+    <h2 class="hero-title">
+      माँ नर्मदा घाट निर्माण <span>सेवा महाअभियान</span>
+    </h2>
 
-      <!-- Key Pledged Devotional Metrics (NO COLLECTION / NO PENDING) -->
-      <div class="hero-metrics-grid">
-        <div class="hero-metric-card">
-          <div class="hero-metric-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
-          <div class="hero-metric-val highlight" id="heroPledgedVal">₹19,48,429</div>
-          <div class="hero-metric-lbl">कुल घोषित जनसहयोग संकल्प</div>
-        </div>
+    <p class="hero-subtitle">
+      कोटेश्वर तीर्थ (कोठड़ा) के पावन तट पर भव्य घाट निर्माण, परिक्रमावासियों की सेवा और सनातन संस्कृति के संवर्धन का निस्वार्थ जन-आंदोलन।
+    </p>
 
-        <div class="hero-metric-card">
-          <div class="hero-metric-icon"><i class="fa-solid fa-users"></i></div>
-          <div class="hero-metric-val" id="heroDonorCount">250+</div>
-          <div class="hero-metric-lbl">सहभागी श्रद्धालु परिवार व समूह</div>
-        </div>
-
-        <div class="hero-metric-card">
-          <div class="hero-metric-icon"><i class="fa-solid fa-city"></i></div>
-          <div class="hero-metric-val">5+</div>
-          <div class="hero-metric-lbl">प्रमुख नगर एवं ग्राम क्षेत्र</div>
-        </div>
-
-        <div class="hero-metric-card">
-          <div class="hero-metric-icon"><i class="fa-solid fa-bullseye"></i></div>
-          <div class="hero-metric-val">₹25,00,000</div>
-          <div class="hero-metric-lbl">प्रथम चरण निर्माण लक्ष्य</div>
-        </div>
+    <!-- 2x2 Metric Grid on Mobile (ZERO COLLECTION, ZERO PENDING) -->
+    <div class="metric-grid-2x2">
+      <div class="metric-card-mobile">
+        <div class="metric-icon-small"><i class="fa-solid fa-hand-holding-heart"></i></div>
+        <div class="metric-val-mobile highlight">₹19,48,429</div>
+        <div class="metric-lbl-mobile">कुल घोषित जनसहयोग</div>
       </div>
 
-      <!-- 5 Spiritual Pillars -->
-      <div class="pillars-container">
-        <div class="pillars-heading"><i class="fa-solid fa-dharmachakra"></i> अभियान के 5 पावन आधार स्तंभ</div>
-        <div class="pillars-grid">
-          <div class="pillar-item">
-            <div class="pillar-icon"><i class="fa-solid fa-hands-praying"></i></div>
-            <div class="pillar-text">
-              <strong>श्रद्धा</strong>
-              <span>माँ नर्मदा में अटूट आस्था</span>
-            </div>
-          </div>
-          <div class="pillar-item">
-            <div class="pillar-icon"><i class="fa-solid fa-heart"></i></div>
-            <div class="pillar-text">
-              <strong>सेवा</strong>
-              <span>निःस्वार्थ परिक्रमावासी सेवा</span>
-            </div>
-          </div>
-          <div class="pillar-item">
-            <div class="pillar-icon"><i class="fa-solid fa-gem"></i></div>
-            <div class="pillar-text">
-              <strong>समर्पण</strong>
-              <span>समय, श्रम व संसाधन दान</span>
-            </div>
-          </div>
-          <div class="pillar-item">
-            <div class="pillar-icon"><i class="fa-solid fa-people-group"></i></div>
-            <div class="pillar-text">
-              <strong>सामाजिक एकता</strong>
-              <span>सर्वसमाज की एकजुटता</span>
-            </div>
-          </div>
-          <div class="pillar-item">
-            <div class="pillar-icon"><i class="fa-solid fa-monument"></i></div>
-            <div class="pillar-text">
-              <strong>धरोहर</strong>
-              <span>आने वाली पीढ़ियों के लिए घाट</span>
-            </div>
-          </div>
-        </div>
+      <div class="metric-card-mobile">
+        <div class="metric-icon-small"><i class="fa-solid fa-users"></i></div>
+        <div class="metric-val-mobile">250+</div>
+        <div class="metric-lbl-mobile">सहभागी परिवार व समूह</div>
       </div>
 
+      <div class="metric-card-mobile">
+        <div class="metric-icon-small"><i class="fa-solid fa-city"></i></div>
+        <div class="metric-val-mobile">5+</div>
+        <div class="metric-lbl-mobile">प्रमुख नगर एवं ग्राम</div>
+      </div>
+
+      <div class="metric-card-mobile">
+        <div class="metric-icon-small"><i class="fa-solid fa-bullseye"></i></div>
+        <div class="metric-val-mobile">₹25,00,000</div>
+        <div class="metric-lbl-mobile">प्रथम चरण निर्माण लक्ष्य</div>
+      </div>
+    </div>
+
+    <!-- Swipeable 5 Spiritual Pillars -->
+    <div class="pillars-scroller-wrap">
+      <div class="pillars-header-mobile">॥ अभियान के 5 पावन आधार स्तंभ ॥</div>
+      <div class="pillars-row-scroll">
+        <div class="pillar-chip">
+          <i class="fa-solid fa-hands-praying"></i>
+          <strong>श्रद्धा</strong>
+          <span>अटूट आस्था</span>
+        </div>
+        <div class="pillar-chip">
+          <i class="fa-solid fa-heart"></i>
+          <strong>सेवा</strong>
+          <span>परिक्रमावासी सेवा</span>
+        </div>
+        <div class="pillar-chip">
+          <i class="fa-solid fa-gem"></i>
+          <strong>समर्पण</strong>
+          <span>समय व श्रम दान</span>
+        </div>
+        <div class="pillar-chip">
+          <i class="fa-solid fa-people-group"></i>
+          <strong>सामाजिक एकता</strong>
+          <span>सर्वसमाज जुड़ाव</span>
+        </div>
+        <div class="pillar-chip">
+          <i class="fa-solid fa-monument"></i>
+          <strong>धरोहर</strong>
+          <span>भावी पीढ़ी हेतु घाट</span>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- ==================== MAIN CANVAS ==================== -->
-  <main class="main-canvas">
+  <!-- ==================== MAIN MOBILE-FIRST CANVAS ==================== -->
+  <main class="mobile-container">
 
     <!-- ==================== 1. FEATURED: PRERNA DAI PRASANG (PROMINENT SHOWCASE) ==================== -->
-    <section id="stories" class="stories-showcase-section">
-      <div class="section-header-block">
-        <div>
-          <span class="sec-badge"><i class="fa-solid fa-star"></i> विशेष प्रस्तुति • हृदयस्पर्शी स्मृतियाँ</span>
-          <h2 class="section-title"><i class="fa-solid fa-star-and-crescent" style="color:var(--gold);"></i> अभियान के प्रेरणादायी प्रसंग (Inspirational Stories)</h2>
-          <div class="section-subtitle">
-            धार्मिक निष्ठा, सामाजिक समरसता और निस्वार्थ त्याग के वे मार्मिक उदाहरण जिन्होंने धन संग्रह को लोक-आराधना बना दिया
-          </div>
-        </div>
-        <div style="font-size:12.5px;color:var(--text-muted);">
-          <i class="fa-solid fa-heart" style="color:var(--terracotta);"></i> सच्ची भावना ही सबसे बड़ा दान है
+    <section id="stories" class="stories-section-mobile">
+      <div class="sec-block-header">
+        <span class="sec-tag"><i class="fa-solid fa-star"></i> विशेष प्रस्तुति • हृदयस्पर्शी स्मृतियाँ</span>
+        <h2 class="sec-title-main"><i class="fa-solid fa-star-and-crescent" style="color:var(--gold);"></i> अभियान के प्रेरणादायी प्रसंग</h2>
+        <div class="sec-desc-main">
+          माँ नर्मदा के प्रति अनन्य भक्ति, सामाजिक समरसता और त्याग के वे मार्मिक उदाहरण जिन्होंने इस महाअभियान को जन-आंदोलन बनाया।
         </div>
       </div>
 
-      <div class="stories-grid-container" id="storiesGridContainer">
-        <!-- Rendered dynamically with 8 rich story cards -->
+      <div class="stories-feed" id="storiesFeedContainer">
+        <!-- Dynamically populated with individual WhatsApp Share buttons on every card -->
       </div>
     </section>
 
-    <!-- ==================== 2. MOVEMENT & GHAT VISION (THE STORY) ==================== -->
-    <section id="movement" class="two-column-narrative">
-      <!-- 55-Day Volunteer Sadhana -->
-      <div class="narrative-card">
-        <div class="narrative-card-header">
-          <div class="narrative-icon"><i class="fa-solid fa-shoe-prints"></i></div>
+    <!-- ==================== 2. VILLAGE TABLE & MOBILE CARDS (WITHOUT SUMMARY BLOCKS) ==================== -->
+    <section id="villages" class="village-section-wrap">
+      <div class="sec-block-header">
+        <span class="sec-tag"><i class="fa-solid fa-map-location-dot"></i> क्षेत्रीय सहभागिता</span>
+        <h2 class="sec-title-main"><i class="fa-solid fa-city" style="color:var(--teal);"></i> नगर एवं ग्रामवार सहभागिता तालिका</h2>
+        <div class="sec-desc-main">
+          प्रत्येक नगर व ग्राम के श्रद्धालुओं द्वारा घोषित जनसहयोग एवं सहभागिता का प्रामाणिक विवरण।
+        </div>
+      </div>
+
+      <!-- Mobile Touch Cards (< 768px) -->
+      <div class="village-cards-mobile" id="villageCardsMobileContainer">
+        <!-- Populated dynamically -->
+      </div>
+
+      <!-- Desktop Table (>= 768px) -->
+      <div class="village-table-desktop">
+        <div style="overflow-x:auto;border:1px solid var(--sandstone);border-radius:var(--radius-sm);">
+          <table class="desktop-data-table">
+            <thead>
+              <tr>
+                <th style="width:40px;">क्र.</th>
+                <th>स्थान / नगर</th>
+                <th>घोषित जनसहयोग</th>
+                <th>सहभागी परिवार</th>
+                <th>अभियान की मुख्य विशेषताएं</th>
+                <th style="text-align:center;">दानदाता</th>
+              </tr>
+            </thead>
+            <tbody id="villageTableDesktopBody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 3. COMPLETE DONORS DIRECTORY (MOBILE-FIRST) ==================== -->
+    <section id="donors" class="donors-section-wrap">
+      <div class="sec-block-header">
+        <span class="sec-tag"><i class="fa-solid fa-users"></i> पावन दानदाता नामावली</span>
+        <h2 class="sec-title-main"><i class="fa-solid fa-scroll" style="color:var(--gold-dark);"></i> माँ नर्मदा जनसहयोग निर्देशिका</h2>
+        <div class="sec-desc-main">
+          माँ नर्मदा के चरणों में समर्पित सभी दानदाताओं, परिवारों एवं संस्थाओं का प्रामाणिक संकलन।
+        </div>
+      </div>
+
+      <!-- Mobile Search Input -->
+      <div class="donor-search-row">
+        <div class="mobile-search-input-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="donorSearchInput" class="mobile-search-input" placeholder="दानदाता का नाम, पद या स्थान खोजें..." oninput="handleDonorSearch()" />
+        </div>
+      </div>
+
+      <!-- Horizontal Swipeable Filter Pills -->
+      <div class="donor-filter-scroller">
+        <div class="filter-pills-row" id="villageFilterPills">
+          <button class="donor-pill-btn active" onclick="setVillageFilter('all', this)">सभी क्षेत्र</button>
+          <button class="donor-pill-btn" onclick="setVillageFilter('कुक्षी', this)">कुक्षी</button>
+          <button class="donor-pill-btn" onclick="setVillageFilter('निसरपुर', this)">निसरपुर</button>
+          <button class="donor-pill-btn" onclick="setVillageFilter('नानपुर', this)">नानपुर</button>
+          <button class="donor-pill-btn" onclick="setVillageFilter('कोठड़ा', this)">कोठड़ा</button>
+          <button class="donor-pill-btn" onclick="setVillageFilter('सुसारी', this)">सुसारी</button>
+        </div>
+      </div>
+
+      <!-- Mobile Donor Cards (< 768px) -->
+      <div class="donor-cards-mobile" id="donorCardsMobileContainer">
+        <!-- Populated dynamically -->
+      </div>
+
+      <!-- Desktop Donors Table (>= 768px) -->
+      <div class="donors-table-desktop">
+        <div style="overflow-x:auto;border:1px solid var(--sandstone);border-radius:var(--radius-sm);">
+          <table class="desktop-data-table">
+            <thead>
+              <tr>
+                <th style="width:40px;">क्र.</th>
+                <th>दानदाता का शुभ नाम एवं पद</th>
+                <th>स्थान / क्षेत्र</th>
+                <th>घोषित सहयोग संकल्प</th>
+                <th>संदर्भ / दिवस</th>
+                <th style="text-align:center;">सम्मान पत्र</th>
+              </tr>
+            </thead>
+            <tbody id="donorTableDesktopBody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 4. 55-DAY MOVEMENT & GHAT VISION ==================== -->
+    <div class="two-col-desktop">
+      <!-- 55-Day Volunteer Mobilization -->
+      <div class="narrative-card-mobile" id="movement">
+        <div class="narrative-head-mobile">
+          <div class="narrative-icon-mobile"><i class="fa-solid fa-shoe-prints"></i></div>
           <div>
             <h3>55-दिवसीय निरंतर जनसंपर्क साधना</h3>
-            <span style="font-size:12px;color:var(--gold-dark);font-weight:600;">श्री मोहन भाई पाटीदार (भंवरिया) व समर्पित युवा शक्ति</span>
+            <span>श्री मोहन भाई पाटीदार (भंवरिया) व समर्पित युवा साथी</span>
           </div>
         </div>
         <p>
-          माँ नर्मदा के पावन घाट निर्माण का यह महाअभियान किसी बड़े विज्ञापन या प्रचार पर नहीं, बल्कि कार्यकर्ताओं के पैरों के छालों और निस्वार्थ पसीने पर खड़ा है। संस्थान के मुख्य प्रेरणास्रोत <strong>श्री मोहन भाई पाटीदार (भंवरिया)</strong> एवं युवा साथियों की टोली ने लगातार <strong>50 से 55 दिनों तक</strong> बिना रुके, बिना थके पदयात्रा व घर-घर संपर्क किया।
+          माँ नर्मदा के पावन घाट निर्माण का यह महाअभियान कार्यकर्ताओं के पैरों के छालों और निस्वार्थ पसीने पर खड़ा है। संस्थान के मुख्य प्रेरणास्रोत <strong>श्री मोहन भाई पाटीदार (भंवरिया)</strong> एवं युवा साथियों की टोली ने लगातार <strong>50 से 55 दिनों तक</strong> बिना रुके, बिना थके पदयात्रा व घर-घर संपर्क किया।
         </p>
         <p>
-          धूप, बारिश और त्योहारों की व्यस्तताओं के बीच कार्यकर्ताओं ने अपने निजी दोपहिया एवं चारपहिया वाहनों को अभियान में समर्पित कर दिया। उनका एकमात्र संकल्प था—हर गाँव, हर मोहल्ले और हर परिवार तक माँ नर्मदा की पुकार पहुँचाना।
+          धूप, बारिश और त्योहारों के बीच कार्यकर्ताओं ने अपने निजी दोपहिया एवं चारपहिया वाहनों को अभियान में समर्पित कर दिया। उनका एकमात्र संकल्प था—हर गाँव, हर मोहल्ले और हर परिवार तक माँ नर्मदा की पुकार पहुँचाना।
         </p>
-        <div class="narrative-highlights">
-          <div class="nh-item">
+        <div class="feature-chips-grid">
+          <div class="feat-chip">
             <strong><i class="fa-solid fa-calendar-days" style="color:var(--gold-dark);"></i> 55 दिन लगातार</strong>
-            बिना विश्राम घर-घर पावन अलख
+            बिना थके घर-घर पावन अलख
           </div>
-          <div class="nh-item">
-            <strong><i class="fa-solid fa-motorcycle" style="color:var(--teal);"></i> निजी वाहन समर्पण</strong>
+          <div class="feat-chip">
+            <strong><i class="fa-solid fa-motorcycle" style="color:var(--teal);"></i> निजी वाहन सेवा</strong>
             कार्यकर्ताओं द्वारा स्वयं के व्यय पर यात्रा
-          </div>
-          <div class="nh-item">
-            <strong><i class="fa-solid fa-house-chimney" style="color:var(--sage);"></i> सर्वसमावेशी संपर्क</strong>
-            किसान, व्यापारी, शिक्षक व अधिकारी वर्ग
-          </div>
-          <div class="nh-item">
-            <strong><i class="fa-solid fa-handshake" style="color:var(--terracotta);"></i> शून्य व्यक्तिगत लाभ</strong>
-            केवल माँ नर्मदा के पावन तट की सेवा
           </div>
         </div>
       </div>
 
-      <!-- Koteshwar Ghat Vision -->
-      <div class="narrative-card" id="vision">
-        <div class="narrative-card-header">
-          <div class="narrative-icon"><i class="fa-solid fa-archway"></i></div>
+      <!-- Ghat Vision -->
+      <div class="narrative-card-mobile" id="vision">
+        <div class="narrative-head-mobile">
+          <div class="narrative-icon-mobile"><i class="fa-solid fa-archway"></i></div>
           <div>
             <h3>कोटेश्वर तीर्थ घाट निर्माण परिकल्पना</h3>
-            <span style="font-size:12px;color:var(--gold-dark);font-weight:600;">परिक्रमावासी संतों व श्रद्धालुओं की सुविधा हेतु</span>
+            <span>परिक्रमावासी संतों व श्रद्धालुओं की सुविधा हेतु</span>
           </div>
         </div>
         <p>
-          कोटेश्वर तीर्थ (कोठड़ा) माँ नर्मदा के तट पर स्थित एक अत्यंत प्राचीन एवं सिद्ध तपोभूमि है। प्रतिवर्ष लाखों परिक्रमावासी, संत-महात्मा एवं ग्रामीण यहाँ पावन स्नान व दर्शन के लिए आते हैं। वर्तमान में सुगम व पक्के घाट के अभाव में श्रद्धालुओं, विशेषकर माताओं, बहनों और वृद्धजनों को कठिनाइयों का सामना करना पड़ता है।
+          कोटेश्वर तीर्थ (कोठड़ा) माँ नर्मदा के तट पर स्थित एक प्राचीन एवं सिद्ध तपोभूमि है। प्रतिवर्ष लाखों परिक्रमावासी, संत-महात्मा एवं ग्रामीण यहाँ पावन स्नान के लिए आते हैं।
         </p>
-        <p>
-          इस महाअभियान का लक्ष्य यहाँ परम्परागत नक्काशीदार पत्थरों से एक सुरक्षित, भव्य एवं दीर्घकालिक घाट का निर्माण करना है।
-        </p>
-        <div class="ghat-features-list">
-          <div class="gf-item">
+        <div class="feature-chips-grid">
+          <div class="feat-chip">
             <strong><i class="fa-solid fa-stairs"></i> चौड़ी पाषाण सीढ़ियाँ</strong>
-            सुरक्षित व सुविधाजनक जल-प्रवेश
+            सुरक्षित व सुगम स्नान प्लेटफॉर्म
           </div>
-          <div class="gf-item">
-            <strong><i class="fa-solid fa-link"></i> सुरक्षा जंजीरें व रेलिंग</strong>
+          <div class="feat-chip">
+            <strong><i class="fa-solid fa-link"></i> सुरक्षा रेलिंग व जंजीरें</strong>
             जल-प्रवाह में स्नानार्थियों की सुरक्षा
           </div>
-          <div class="gf-item">
+          <div class="feat-chip">
             <strong><i class="fa-solid fa-person-dress"></i> चेंजिंग रूम सुविधा</strong>
             माताओं-बहनों हेतु सुरक्षित व्यवस्था
           </div>
-          <div class="gf-item">
+          <div class="feat-chip">
             <strong><i class="fa-solid fa-solar-panel"></i> हाईमास्ट सोलर लाइट</strong>
-            रात्रि में आरती व परिक्रमा पथ प्रकाश
-          </div>
-          <div class="gf-item">
-            <strong><i class="fa-solid fa-tents"></i> परिक्रमावासी शेड</strong>
-            साधु-संतों हेतु छाया व विश्राम स्थल
-          </div>
-          <div class="gf-item">
-            <strong><i class="fa-solid fa-leaf"></i> स्वच्छता व तट-संरक्षण</strong>
-            नर्मदा जल की पवित्रता का पूर्ण ध्यान
+            संध्या आरती व परिक्रमा पथ प्रकाश
           </div>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- ==================== 3. VILLAGE TABLE (WITHOUT SEPARATE SUMMARY) ==================== -->
-    <section id="villages" class="village-table-section">
-      <div class="section-header-block">
-        <div>
-          <span class="sec-badge"><i class="fa-solid fa-map-location-dot"></i> क्षेत्रीय सहभागिता</span>
-          <h2 class="section-title"><i class="fa-solid fa-city" style="color:var(--teal);"></i> नगर एवं ग्रामवार सहभागिता तालिका</h2>
-          <div class="section-subtitle">
-            विभिन्न क्षेत्रों के श्रद्धालुओं द्वारा घोषित जनसहयोग एवं सहभागिता का प्रामाणिक विवरण
-          </div>
+    <!-- ==================== 5. OFFICIAL BANK SECTION (1-CLICK COPY ON MOBILE) ==================== -->
+    <section id="bank" class="bank-card-mobile">
+      <div class="bank-header-mobile">
+        <span style="font-size:11px;color:var(--gold-light);text-transform:uppercase;letter-spacing:1px;font-weight:700;"><i class="fa-solid fa-building-columns"></i> अधिकृत बैंक खाता</span>
+        <h3>सीधे संस्थान के खाते में सहयोग प्रेषित करें</h3>
+        <p>श्रद्धालु भक्तजन सीधे समिति के अधिकृत बैंक खाते में NEFT / RTGS / IMPS द्वारा सहयोग समर्पित कर सकते हैं।</p>
+      </div>
+
+      <div class="bank-details-box-mobile">
+        <div class="b-row">
+          <span class="b-lbl">खाता धारक:</span>
+          <span class="b-val" style="font-size:12.5px;">कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान</span>
         </div>
-        <div>
-          <span style="font-size:13px;color:var(--text-secondary);background:var(--sandstone-light);padding:6px 12px;border-radius:6px;border:1px solid var(--sandstone);">
-            <i class="fa-solid fa-info-circle" style="color:var(--gold-dark);"></i> किसी भी नगर/ग्राम के दानदाता देखने हेतु संबंधित पंक्ति के बटन पर क्लिक करें
+        <div class="b-row">
+          <span class="b-lbl">बैंक का नाम:</span>
+          <span class="b-val">मध्य भारत ग्रामीण बैंक</span>
+        </div>
+        <div class="b-row">
+          <span class="b-lbl">शाखा:</span>
+          <span class="b-val">निसरपुर / कुक्षी</span>
+        </div>
+        <div class="b-row">
+          <span class="b-lbl">खाता क्रमांक:</span>
+          <span class="b-val num">
+            0021-0010-XXXX 
+            <button class="btn-copy-chip" onclick="copyToClipboard('002100100000', this)">कॉपी</button>
+          </span>
+        </div>
+        <div class="b-row">
+          <span class="b-lbl">IFSC कोड:</span>
+          <span class="b-val num">
+            MBGB0000000
+            <button class="btn-copy-chip" onclick="copyToClipboard('MBGB0000000', this)">कॉपी</button>
           </span>
         </div>
       </div>
 
-      <div class="table-responsive">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th style="width:50px;">क्र.</th>
-              <th>स्थान / नगर</th>
-              <th>घोषित जनसहयोग संकल्प</th>
-              <th>सहभागी परिवार</th>
-              <th>अभियान की मुख्य विशेषताएं व इतिहास</th>
-              <th style="text-align:center;">दानदाता सूची</th>
-            </tr>
-          </thead>
-          <tbody id="villageTableBody">
-            <!-- Dynamically populated from computeVillageTable() -->
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- ==================== 4. COMPLETE DONORS DIRECTORY ==================== -->
-    <section id="donors" class="directory-section">
-      <div class="section-header-block">
-        <div>
-          <span class="sec-badge"><i class="fa-solid fa-users"></i> पावन दानदाता नामावली</span>
-          <h2 class="section-title"><i class="fa-solid fa-scroll" style="color:var(--gold-dark);"></i> माँ नर्मदा जनसहयोग निर्देशिका</h2>
-          <div class="section-subtitle">
-            माँ नर्मदा के चरणों में समर्पित सभी दानदाताओं, संस्थाओं और परिवारों का प्रामाणिक संकलन
-          </div>
-        </div>
-        <div style="font-size:13px;color:var(--text-muted);">
-          कुल प्रविष्टियाँ: <strong id="donorCountBadge" style="color:var(--teal);">18</strong>
-        </div>
-      </div>
-
-      <div class="directory-toolbar">
-        <div class="search-box-wrap">
-          <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="text" id="donorSearchInput" class="search-input" placeholder="दानदाता का नाम, पद, या स्थान खोजें..." oninput="handleDonorFilter()" />
-        </div>
-
-        <div class="filter-pills" id="villageFilterPills">
-          <button class="pill-btn active" onclick="setVillageFilter('all', this)">सभी क्षेत्र</button>
-          <button class="pill-btn" onclick="setVillageFilter('कुक्षी', this)">कुक्षी</button>
-          <button class="pill-btn" onclick="setVillageFilter('निसरपुर', this)">निसरपुर</button>
-          <button class="pill-btn" onclick="setVillageFilter('नानपुर', this)">नानपुर</button>
-          <button class="pill-btn" onclick="setVillageFilter('कोठड़ा', this)">कोठड़ा</button>
-          <button class="pill-btn" onclick="setVillageFilter('सुसारी', this)">सुसारी</button>
-        </div>
-      </div>
-
-      <div class="table-responsive">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th style="width:50px;">क्र.</th>
-              <th>दानदाता का शुभ नाम एवं पद</th>
-              <th>स्थान / क्षेत्र</th>
-              <th>घोषित सहयोग संकल्प</th>
-              <th>संदर्भ / अभियान दिवस</th>
-              <th style="text-align:center;">सम्मान पत्र व साझा</th>
-            </tr>
-          </thead>
-          <tbody id="donorTableBody">
-            <!-- Populated dynamically -->
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- ==================== 5. PHASE-1 PLANNED WORKS ==================== -->
-    <section class="village-table-section">
-      <div class="section-header-block">
-        <div>
-          <span class="sec-badge"><i class="fa-solid fa-trowel-bricks"></i> निर्माण योजना</span>
-          <h2 class="section-title"><i class="fa-solid fa-compass-drafting" style="color:var(--teal);"></i> प्रथम चरण निर्माण कार्य एवं बजट आवंटन</h2>
-          <div class="section-subtitle">
-            स्वीकृत ₹25 लाख के बजट के अंतर्गत किए जाने वाले कार्यों का पारदर्शी ब्यौरा
-          </div>
-        </div>
-      </div>
-
-      <div class="table-responsive">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th style="width:50px;">क्र.</th>
-              <th>प्रस्तावित निर्माण घटक</th>
-              <th>अनुमानित बजट</th>
-              <th>वर्तमान स्थिति</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td><strong>तट संरक्षण, गहरी नींव एवं रिटेनिंग वॉल निर्माण</strong><br><small style="color:var(--text-muted);">नर्मदा के तेज बहाव से घाट को सुरक्षित रखने हेतु भारी पाषाण संरचना</small></td>
-              <td><strong class="amount" style="color:var(--teal);">₹8,50,000</strong></td>
-              <td><span style="background:var(--sage-light);color:var(--sage);padding:3px 8px;border-radius:4px;font-size:12px;font-weight:600;">तकनीकी सर्वे व सीमांकन पूर्ण</span></td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td><strong>नक्काशीदार पाषाण, चौड़ी सीढ़ियाँ एवं स्नान प्लेटफॉर्म</strong><br><small style="color:var(--text-muted);">श्रद्धालुओं के सुरक्षित स्नान हेतु गैर-फिसलन वाले नक्काशीदार पत्थर</small></td>
-              <td><strong class="amount" style="color:var(--teal);">₹6,50,000</strong></td>
-              <td><span style="background:var(--sandstone-light);color:var(--text-secondary);padding:3px 8px;border-radius:4px;font-size:12px;">पत्थर चयन व आपूर्ति स्तर</span></td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td><strong>परिक्रमावासी एवं श्रद्धालु विश्राम शेड/हॉल</strong><br><small style="color:var(--text-muted);">धूप व वर्षा से बचाव हेतु परिक्रमा पथ पर सुसज्जित आश्रय</small></td>
-              <td><strong class="amount" style="color:var(--teal);">₹4,00,000</strong></td>
-              <td><span style="background:var(--sandstone-light);color:var(--text-secondary);padding:3px 8px;border-radius:4px;font-size:12px;">स्थल चिन्हांकित</span></td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td><strong>सुरक्षा रेलिंग, पीतल/स्टील जंजीरें व चेंजिंग रूम</strong><br><small style="color:var(--text-muted);">माताओं-बहनों की गरिमा व गहरे जल में स्नान की पुख्ता सुरक्षा</small></td>
-              <td><strong class="amount" style="color:var(--teal);">₹3,00,000</strong></td>
-              <td><span style="background:var(--sandstone-light);color:var(--text-secondary);padding:3px 8px;border-radius:4px;font-size:12px;">डिजाइन अनुमोदित</span></td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td><strong>घाट प्रकाश व्यवस्था, सोलर लाइट व हाईमास्ट पोल</strong><br><small style="color:var(--text-muted);">संध्या आरती एवं रात्रि में परिक्रमा पथ का प्रदीप्त वातावरण</small></td>
-              <td><strong class="amount" style="color:var(--teal);">₹1,50,000</strong></td>
-              <td><span style="background:var(--sandstone-light);color:var(--text-secondary);padding:3px 8px;border-radius:4px;font-size:12px;">स्वीकृत</span></td>
-            </tr>
-            <tr>
-              <td>6</td>
-              <td><strong>55-दिवसीय जनसंपर्क, प्रचार-प्रसार व प्रशासनिक कार्य</strong><br><small style="color:var(--text-muted);">रसीद बुक, बैनर, पत्राचार, पंजीयन व जन-आंदोलन सामग्री</small></td>
-              <td><strong class="amount" style="color:var(--teal);">₹1,50,000</strong></td>
-              <td><span style="background:var(--sage-light);color:var(--sage);padding:3px 8px;border-radius:4px;font-size:12px;font-weight:600;">प्रगति पर</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- ==================== 6. BANK & CONTACT SECTION ==================== -->
-    <section id="bank" class="bank-section">
-      <div class="bank-grid">
-        <div>
-          <span style="color:var(--gold-light);font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:700;"><i class="fa-solid fa-building-columns"></i> अधिकृत बैंक खाता</span>
-          <h2 style="font-size:24px;font-weight:700;margin:6px 0 12px;color:#fff;">सीधे संस्थान के खाते में सहयोग प्रेषित करें</h2>
-          <p style="font-size:14px;color:#E2ECE9;line-height:1.7;margin:0 0 16px;">
-            माँ नर्मदा घाट निर्माण सेवा महाअभियान पूर्णतः पारदर्शी जनसहयोग पर आधारित है। श्रद्धालु भक्तजन सीधे समिति के अधिकृत बैंक खाते में NEFT / RTGS / IMPS अथवा UPI द्वारा अपनी श्रद्धा-आहुति समर्पित कर सकते हैं।
-          </p>
-          <div style="font-size:13px;color:var(--gold-light);">
-            <i class="fa-solid fa-phone"></i> संपर्क सूत्र: <strong>श्री मोहन भाई पाटीदार (भंवरिया)</strong> एवं समिति पदाधिकारी
-          </div>
-        </div>
-
-        <div class="bank-info-box">
-          <div class="bank-info-row">
-            <span class="bank-info-label">खाता धारक:</span>
-            <span class="bank-info-val">कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान</span>
-          </div>
-          <div class="bank-info-row">
-            <span class="bank-info-label">बैंक का नाम:</span>
-            <span class="bank-info-val">मध्य भारत ग्रामीण बैंक (शाखा निसरपुर / कुक्षी)</span>
-          </div>
-          <div class="bank-info-row">
-            <span class="bank-info-label">खाता क्रमांक:</span>
-            <span class="bank-info-val num" style="letter-spacing:1px;">0021-0010-XXXX</span>
-          </div>
-          <div class="bank-info-row">
-            <span class="bank-info-label">IFSC कोड:</span>
-            <span class="bank-info-val num">MBGB0000000</span>
-          </div>
-          <div class="bank-info-row">
-            <span class="bank-info-label">तीर्थ स्थल:</span>
-            <span class="bank-info-val">कोटेश्वर धाम, कोठड़ा, जिला धार (म.प्र.)</span>
-          </div>
-        </div>
+      <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--gold-light);">
+        <i class="fa-solid fa-phone"></i> मुख्य प्रेरणास्रोत: <strong>श्री मोहन भाई पाटीदार (भंवरिया)</strong>
       </div>
     </section>
 
   </main>
 
+  <!-- ==================== STICKY MOBILE QUICK-NAV BOTTOM BAR ==================== -->
+  <aside class="sticky-bottom-bar">
+    <a href="#stories" class="b-nav-item highlight-nav">
+      <i class="fa-solid fa-star"></i>
+      <span>प्रसंग</span>
+    </a>
+    <a href="#villages" class="b-nav-item">
+      <i class="fa-solid fa-city"></i>
+      <span>नगर/ग्राम</span>
+    </a>
+    <a href="#donors" class="b-nav-item">
+      <i class="fa-solid fa-users"></i>
+      <span>दानदाता</span>
+    </a>
+    <a href="#bank" class="b-nav-item">
+      <i class="fa-solid fa-building-columns"></i>
+      <span>बैंक खाता</span>
+    </a>
+    <a href="https://api.whatsapp.com/send?text=%F0%9F%9A%A9%20*%E0%A4%AE%E0%A4%BE%E0%A4%81%20%E0%A4%A8%E0%A4%B0%E0%A5%8D%E0%A4%AE%E0%A4%A6%E0%A4%BE%20%E0%A4%98%E0%A4%BE%E0%A4%9F%20%E0%A4%A8%E0%A4%BF%E0%A4%B0%E0%A5%8D%E0%A4%AE%E0%A4%BE%E0%A4%A3%20%E0%A4%B8%E0%A5%87%E0%A4%B5%E0%A4%BE%20%E0%A4%AE%E0%A4%B9%E0%A4%BE%E0%A4%85%E0%A4%AD%E0%A4%BF%E0%A4%AF%E0%A4%BE%E0%A4%A8*%20%F0%9F%9A%A9%0A%E0%A4%95%E0%A5%8B%E0%A4%9F%E0%A5%87%E0%A4%B6%E0%A5%8D%E0%A4%B5%E0%A4%B0%20%E0%A4%A4%E0%A5%80%E0%A4%B0%E0%A5%8D%E0%A4%A5%20(%E0%A4%95%E0%A5%8B%E0%A4%A0%E0%A4%A1%E0%A4%BC%E0%A4%BE)%20%E0%A4%95%E0%A5%87%20%E0%A4%AA%E0%A4%BE%E0%A4%B5%E0%A4%A8%20%E0%A4%A4%E0%A4%9F%20%E0%A4%AA%E0%A4%B0%20%E0%A4%AD%E0%A4%B5%E0%A5%8D%E0%A4%AF%20%E0%A4%98%E0%A4%BE%E0%A4%9F%20%E0%A4%A8%E0%A4%BF%E0%A4%B0%E0%A5%8D%E0%A4%AE%E0%A4%BE%E0%A4%A3%20%E0%A4%B8%E0%A5%87%E0%A4%B5%E0%A4%BE%20%E0%A4%AE%E0%A4%B9%E0%A4%BE%E0%A4%85%E0%A4%AD%E0%A4%BF%E0%A4%AF%E0%A4%BE%E0%A4%A8%E0%A5%A4%0A%E0%A4%95%E0%A5%81%E0%A4%B2%20%E0%A4%98%E0%A5%8B%E0%A4%B7%E0%A4%BF%E0%A4%A4%20%E0%A4%9C%E0%A4%A8%E0%A4%B8%E0%A4%B9%E0%A4%AF%E0%A5%8B%E0%A4%97:%20%E2%82%B919,48,429%2B%0A%E0%A4%B8%E0%A4%82%E0%A4%AA%E0%A5%82%E0%A4%B0%E0%A5%8D%E0%A4%A3%20%E0%A4%B5%E0%A4%BF%E0%A4%B5%E0%A4%B0%E0%A4%A3%20%E0%A4%B5%20%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A5%87%E0%A4%B0%E0%A4%A3%E0%A4%BE%E0%A4%A6%E0%A4%BE%E0%A4%AF%E0%A5%80%20%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%B8%E0%A4%82%E0%A4%97%20%E0%A4%A6%E0%A5%87%E0%A4%96%E0%A5%87%E0%A4%82:%0Ahttps://yash-patidar-nitor.github.io/koteshwar-ghat-nirman/%0A%E0%A4%AE%E0%A4%BE%E0%A4%81%20%E0%A4%A8%E0%A4%B0%E0%A5%8D%E0%A4%AE%E0%A4%A6%E0%A5%87%20%E0%A4%B9%E0%A4%B0!%20%F0%9F%99%8F" target="_blank" rel="noopener noreferrer" class="b-nav-item" style="color:var(--whatsapp);">
+      <i class="fa-brands fa-whatsapp" style="color:var(--whatsapp);"></i>
+      <span>शेयर करें</span>
+    </a>
+  </aside>
+
   <!-- ==================== MODAL: HONOR CERTIFICATE ==================== -->
   <div class="modal-backdrop" id="certModalBackdrop" onclick="closeCertModal(event)">
-    <div class="modal-panel" onclick="event.stopPropagation()">
-      <div class="modal-header">
-        <h3 class="modal-title"><i class="fa-solid fa-award" style="color:var(--gold);"></i> माँ नर्मदा सेवा सम्मान पत्र</h3>
-        <button class="modal-close" onclick="closeCertModal()">&times;</button>
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <div class="modal-head">
+        <h4><i class="fa-solid fa-award" style="color:var(--gold);"></i> माँ नर्मदा सेवा सम्मान पत्र</h4>
+        <button class="btn-close-modal" onclick="closeCertModal()">&times;</button>
       </div>
-      <div class="modal-body">
-        <div class="cert-box">
-          <div style="font-size:13px;color:var(--teal);font-weight:700;margin-bottom:4px;">॥ नर्मदे हर ॥</div>
-          <div style="font-size:15px;font-weight:700;color:var(--gold-dark);">माँ नर्मदा घाट निर्माण सेवा महाअभियान</div>
-          <div style="font-size:11.5px;color:var(--text-muted);margin-bottom:14px;">कोटेश्वर तीर्थ, कोठड़ा • कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान</div>
+      <div class="modal-content-area">
+        <div class="cert-scrollable-box">
+          <div style="font-size:12px;color:var(--teal);font-weight:700;margin-bottom:2px;">॥ नर्मदे हर ॥</div>
+          <div style="font-size:14px;font-weight:700;color:var(--gold-dark);">माँ नर्मदा घाट निर्माण सेवा महाअभियान</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:12px;">कोटेश्वर तीर्थ, कोठड़ा • कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान</div>
 
-          <div style="font-size:12px;color:var(--text-muted);">आदरणीय दानदाता:</div>
-          <div style="font-size:20px;font-weight:700;color:var(--teal);margin:4px 0;" id="certDonorName">दानदाता का नाम</div>
-          <div style="font-size:13px;color:var(--text-secondary);" id="certDonorRole">पद / विवरण</div>
-          <div style="font-size:12.5px;color:var(--text-muted);margin-top:2px;" id="certVillage">स्थान / क्षेत्र</div>
+          <div style="font-size:11.5px;color:var(--text-muted);">आदरणीय दानदाता:</div>
+          <div style="font-size:18px;font-weight:800;color:var(--teal);margin:2px 0;" id="certDonorName">दानदाता का नाम</div>
+          <div style="font-size:12px;color:var(--text-secondary);" id="certDonorRole">पद / विवरण</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:2px;" id="certVillage">स्थान / क्षेत्र</div>
 
-          <div class="amount" style="font-size:28px;font-weight:700;color:var(--gold-dark);margin:12px 0 6px;" id="certAmount">₹0</div>
-          <div style="font-size:12.5px;color:var(--sage);font-weight:600;"><i class="fa-solid fa-circle-check"></i> पावन घोषित जनसहयोग संकल्प</div>
+          <div class="amount" style="font-size:24px;font-weight:800;color:var(--gold-dark);margin:10px 0 4px;" id="certAmount">₹0</div>
+          <div style="font-size:11.5px;color:var(--sage);font-weight:600;"><i class="fa-solid fa-circle-check"></i> पावन घोषित जनसहयोग संकल्प</div>
 
-          <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.6;margin:14px 0 0;">
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.5;margin:10px 0 0;">
             माँ नर्मदा के पावन तट पर घाट निर्माण के पुनीत कार्य में आपका यह समर्पण सदैव वंदनीय एवं अविस्मरणीय रहेगा।
           </p>
         </div>
       </div>
-      <div class="modal-footer" style="justify-content:center;">
-        <button class="btn btn-gold btn-sm" id="btnShareWhatsApp"><i class="fa-brands fa-whatsapp"></i> WhatsApp पर साझा करें</button>
-        <button class="btn btn-white btn-sm" onclick="window.print()"><i class="fa-solid fa-print"></i> प्रिंट करें</button>
-        <button class="btn btn-white btn-sm" onclick="closeCertModal()">बंद करें</button>
+      <div class="modal-actions-bar">
+        <button class="btn-story-share" id="btnShareWhatsAppCert" style="font-size:13px;padding:8px 16px;">
+          <i class="fa-brands fa-whatsapp"></i> WhatsApp पर भेजें
+        </button>
+        <button onclick="closeCertModal()" style="background:#fff;border:1px solid var(--sandstone);padding:8px 14px;border-radius:var(--radius-pill);font-size:13px;font-weight:600;cursor:pointer;">
+          बंद करें
+        </button>
       </div>
     </div>
   </div>
-
-  <!-- ==================== FOOTER ==================== -->
-  <footer class="page-footer">
-    <div class="footer-inner">
-      <div class="footer-shloka">
-        ॥ त्वदीय पादपंकजं नमामि देवि नर्मदे ॥
-      </div>
-      <p style="margin:0 0 10px;font-size:14.5px;">
-        <strong>श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान</strong><br>
-        कोटेश्वर तीर्थ, ग्राम कोठड़ा, तहसील कुक्षी, जिला धार (मध्य प्रदेश)
-      </p>
-      <div style="font-size:12px;color:#A9BEB9;">
-        माँ नर्मदा घाट निर्माण सेवा महाअभियान • सर्वसमाज जनसहयोग एवं धार्मिक पारदर्शिता को समर्पित
-      </div>
-    </div>
-  </footer>
 
   <!-- ==================== JAVASCRIPT ==================== -->
   <script>
@@ -1315,28 +1364,28 @@
        MASTER AUTHENTIC DATASETS
        ============================================================ */
     const DEFAULT_DECLARATIONS = [
-      { id: 1, date: "2026-10-08", village: "निसरपुर", name: "निसरपुर समाजजन एवं व्यापारी बंधु", role: "प्रथम चरण संपर्क दिवस", amount: 161331, status: "घोषित" },
-      { id: 2, date: "2026-10-11", village: "निसरपुर", name: "निसरपुर श्रद्धालु नागरिक", role: "द्वितीय संपर्क दिवस", amount: 78888, status: "घोषित" },
-      { id: 3, date: "2026-10-12", village: "कोठड़ा", name: "कोठड़ा तीर्थ ग्रामवासी एवं भक्त", role: "मातृभूमि समर्पण दिवस", amount: 285108, status: "घोषित" },
-      { id: 4, date: "2026-10-14", village: "निसरपुर एवं कोठड़ा", name: "संयुक्त क्षेत्र समाजजन", role: "संयुक्त संपर्क दिवस", amount: 157109, status: "घोषित" },
-      { id: 5, date: "2026-10-16", village: "निसरपुर", name: "निसरपुर ग्रामीण एवं नगर बंधु", role: "चतुर्थ संपर्क दिवस", amount: 165554, status: "घोषित" },
-      { id: 6, date: "2026-10-31", village: "कुक्षी", name: "कुक्षी नगर व्यापारी एवं भक्तजन (4 दानदाता ₹1L+)", role: "कुक्षी जनसंपर्क दिवस", amount: 441777, status: "घोषित" },
-      { id: 7, date: "2026-11-01", village: "नानपुर", name: "नानपुर समाजजन (3 समूहों द्वारा ₹1.11L+)", role: "नानपुर महाअभियान दिवस", amount: 420665, status: "घोषित" },
-      { id: 8, date: "2026-11-04", village: "कुक्षी", name: "श्री प्रवीण जी गंगाराम जी पाटीदार (अंजड़ वाले)", role: "तहसीलदार महोदय", amount: 51111, status: "घोषित" },
-      { id: 9, date: "2026-11-04", village: "कुक्षी", name: "श्री विक्रमसिंह जी रिछुसिंह जी कनेश", role: "समाजसेवी व भक्त", amount: 25555, status: "घोषित" },
-      { id: 10, date: "2026-11-04", village: "कुक्षी", name: "श्री संजय जी किशोर जी बघेल", role: "श्रद्धालु समाजजन", amount: 21111, status: "घोषित" },
-      { id: 11, date: "2026-11-04", village: "कुक्षी", name: "श्री महेश चंद्र जी रमेश चंद्र जी गुप्ता", role: "व्यापारी बंधु", amount: 15111, status: "घोषित" },
-      { id: 12, date: "2026-11-04", village: "कुक्षी", name: "श्री सुनील जी रमेश जी जिराती", role: "श्रद्धालु समाजजन", amount: 11111, status: "घोषित" },
-      { id: 13, date: "2026-11-04", village: "कुक्षी", name: "श्री निवेदन जी महेंद्र कुमार जी यादव", role: "श्रद्धालु समाजजन", amount: 11111, status: "घोषित" },
-      { id: 14, date: "2026-11-04", village: "कुक्षी", name: "श्री महेंद्र कुमार जी कांतिलाल जी गुप्ता", role: "व्यापारी बंधु", amount: 11111, status: "घोषित" },
-      { id: 15, date: "2026-11-04", village: "सुसारी", name: "श्री घनश्याम जी हीरालाल जी पायग्या", role: "ग्रामवासी, भक्त", amount: 25555, status: "घोषित" },
-      { id: 16, date: "2026-11-04", village: "सुसारी", name: "श्री अंकित जी दिनेश जी अमलाल्या", role: "युवा समाजजन", amount: 25555, status: "घोषित" },
-      { id: 17, date: "2026-11-04", village: "सुसारी", name: "श्री रविंद्र कृष्णा जी पाटीदार", role: "श्रद्धालु समाजजन", amount: 25555, status: "घोषित" },
-      { id: 18, date: "2026-11-04", village: "सुसारी", name: "श्री प्रदीप मनोज अनिल, पिता श्री सीताराम जी सागरीया", role: "सागरीया परिवार", amount: 15111, status: "घोषित" }
+      { id: 1, date: "2026-10-08", village: "निसरपुर", name: "निसरपुर समाजजन एवं व्यापारी बंधु", role: "प्रथम चरण संपर्क दिवस", amount: 161331 },
+      { id: 2, date: "2026-10-11", village: "निसरपुर", name: "निसरपुर श्रद्धालु नागरिक", role: "द्वितीय संपर्क दिवस", amount: 78888 },
+      { id: 3, date: "2026-10-12", village: "कोठड़ा", name: "कोठड़ा तीर्थ ग्रामवासी एवं भक्त", role: "मातृभूमि समर्पण दिवस", amount: 285108 },
+      { id: 4, date: "2026-10-14", village: "निसरपुर एवं कोठड़ा", name: "संयुक्त क्षेत्र समाजजन", role: "संयुक्त संपर्क दिवस", amount: 157109 },
+      { id: 5, date: "2026-10-16", village: "निसरपुर", name: "निसरपुर ग्रामीण एवं नगर बंधु", role: "चतुर्थ संपर्क दिवस", amount: 165554 },
+      { id: 6, date: "2026-10-31", village: "कुक्षी", name: "कुक्षी नगर व्यापारी एवं भक्तजन (4 दानदाता ₹1L+)", role: "कुक्षी जनसंपर्क दिवस", amount: 441777 },
+      { id: 7, date: "2026-11-01", village: "नानपुर", name: "नानपुर समाजजन (3 समूहों द्वारा ₹1.11L+)", role: "नानपुर महाअभियान दिवस", amount: 420665 },
+      { id: 8, date: "2026-11-04", village: "कुक्षी", name: "श्री प्रवीण जी गंगाराम जी पाटीदार (अंजड़ वाले)", role: "तहसीलदार महोदय", amount: 51111 },
+      { id: 9, date: "2026-11-04", village: "कुक्षी", name: "श्री विक्रमसिंह जी रिछुसिंह जी कनेश", role: "समाजसेवी व भक्त", amount: 25555 },
+      { id: 10, date: "2026-11-04", village: "कुक्षी", name: "श्री संजय जी किशोर जी बघेल", role: "श्रद्धालु समाजजन", amount: 21111 },
+      { id: 11, date: "2026-11-04", village: "कुक्षी", name: "श्री महेश चंद्र जी रमेश चंद्र जी गुप्ता", role: "व्यापारी बंधु", amount: 15111 },
+      { id: 12, date: "2026-11-04", village: "कुक्षी", name: "श्री सुनील जी रमेश जी जिराती", role: "श्रद्धालु समाजजन", amount: 11111 },
+      { id: 13, date: "2026-11-04", village: "कुक्षी", name: "श्री निवेदन जी महेंद्र कुमार जी यादव", role: "श्रद्धालु समाजजन", amount: 11111 },
+      { id: 14, date: "2026-11-04", village: "कुक्षी", name: "श्री महेंद्र कुमार जी कांतिलाल जी गुप्ता", role: "व्यापारी बंधु", amount: 11111 },
+      { id: 15, date: "2026-11-04", village: "सुसारी", name: "श्री घनश्याम जी हीरालाल जी पायग्या", role: "ग्रामवासी, भक्त", amount: 25555 },
+      { id: 16, date: "2026-11-04", village: "सुसारी", name: "श्री अंकित जी दिनेश जी अमलाल्या", role: "युवा समाजजन", amount: 25555 },
+      { id: 17, date: "2026-11-04", village: "सुसारी", name: "श्री रविंद्र कृष्णा जी पाटीदार", role: "श्रद्धालु समाजजन", amount: 25555 },
+      { id: 18, date: "2026-11-04", village: "सुसारी", name: "श्री प्रदीप मनोज अनिल, पिता श्री सीताराम जी सागरीया", role: "सागरीया परिवार", amount: 15111 }
     ];
 
     /* ============================================================
-       INSPIRATIONAL STORIES DATA (PRERNA DAI PRASANG)
+       INSPIRATIONAL STORIES DATA (WITH INDIVIDUAL WHATSAPP SHARING)
        ============================================================ */
     const STORIES_DATA = [
       {
@@ -1346,7 +1395,7 @@
         icon: "fa-hand-holding-heart",
         featured: true,
         quote: "‘यह पैसा मेरा नहीं, माँ रेवा की कृपा से मिला है, उन्हीं के चरणों में समर्पित है।’",
-        body: "एक सादे परिवार से आने वाले पप्पू भाई ने जब अपनी मेहनत की कमाई से अपने पोते के जन्मदिन के उपलक्ष्य में ₹11,111 का लिफाफा समिति को सौंपा, तो उनकी आंखों में अश्रु थे। सीमित आजीविका के बावजूद उनके इस भावुक समर्पण ने पूरे अभियान को आस्था का सर्वोच्च आयाम दिया।"
+        body: "एक सादे परिवार से आने वाले पप्पू भाई ने जब अपनी मेहनत की कमाई से अपने पोते के जन्मदिन पर ₹11,111 का लिफाफा समिति को सौंपा, तो उनकी आंखों में अश्रु थे। सीमित आजीविका के बावजूद उनके इस भावुक समर्पण ने पूरे अभियान को आस्था का सर्वोच्च आयाम दिया।"
       },
       {
         id: "kukshi",
@@ -1364,7 +1413,7 @@
         icon: "fa-house-chimney-crack",
         featured: false,
         quote: "‘विस्थापन और सीमाओं के बावजूद हम अपनी कुलदेवी और अपनी माटी का ऋण कभी नहीं भूल सकते।’",
-        body: "कोटेश्वर तीर्थ के मूल ग्राम कोठड़ा के निवासियों ने इस अभियान को अपनी कुलदेवी माँ नर्मदा की सेवा का ईश्वरीय अवसर माना। आर्थिक सीमाओं और विस्थापन के दंश के बावजूद प्रत्येक परिवार ने अपनी सामर्थ्य से बढ़कर योगदान दिया और ₹2,85,108 की पावन आहुति दी।"
+        body: "कोटेश्वर तीर्थ के मूल ग्राम कोठड़ा के निवासियों ने इस अभियान को अपनी कुलदेवी माँ नर्मदा की सेवा का ईश्वरीय अवसर माना। विस्थापन और आर्थिक सीमाओं के बावजूद प्रत्येक परिवार ने अपनी सामर्थ्य से बढ़कर योगदान दिया और ₹2,85,108 की पावन आहुति दी।"
       },
       {
         id: "nanpur",
@@ -1414,21 +1463,21 @@
     ];
 
     /* ============================================================
-       VILLAGE HIGHLIGHTS DATA (FOR THE VILLAGE TABLE)
+       VILLAGE HIGHLIGHTS DATA (FOR THE VILLAGE TABLE & MOBILE CARDS)
        ============================================================ */
     const VILLAGE_METRICS = [
       {
         name: "कुक्षी नगर",
         key: "कुक्षी",
         pledged: 587998,
-        count: "7+ प्रमुख घोषणाएं व नागरिक",
-        highlights: "चार प्रमुख समाजसेवियों द्वारा ₹1 लाख+ की घोषणाएँ; तहसीलदार महोदय द्वारा ₹51,111 का विशेष सहयोग; अभियान का सबसे बड़ा केंद्र।"
+        count: "7+ प्रमुख परिवार व नागरिक",
+        highlights: "चार समाजसेवियों द्वारा ₹1 लाख+ की घोषणाएँ; तहसीलदार महोदय द्वारा ₹51,111 का विशेष सहयोग; अभियान का प्रमुख केंद्र।"
       },
       {
         name: "निसरपुर नगर",
         key: "निसरपुर",
         pledged: 562882,
-        count: "व्यापारी बंधु व समाजजन",
+        count: "समस्त व्यापारी बंधु व समाजजन",
         highlights: "अभियान के प्रथम चरण का शुभारंभ केंद्र; 8, 11 व 16 अक्टूबर को तीन चरणों में व्यापक जनसंपर्क व अभूतपूर्व समर्थन।"
       },
       {
@@ -1454,67 +1503,94 @@
       }
     ];
 
-    // State Variables
     let currentVillageFilter = 'all';
     const fmt = n => "₹" + Math.round(Number(n) || 0).toLocaleString('en-IN');
 
     /* ============================================================
-       INITIALIZATION & RENDERING
+       RENDER FUNCTIONS
        ============================================================ */
     window.addEventListener('DOMContentLoaded', () => {
       renderStories();
-      renderVillageTable();
-      renderDonorTable();
+      renderVillages();
+      renderDonors();
     });
 
-    // 1. Render Stories Showcase
+    // 1. Render Stories with Individual WhatsApp Share
     function renderStories() {
-      const container = document.getElementById('storiesGridContainer');
-      container.innerHTML = STORIES_DATA.map(s => `
-        <div class="story-card ${s.featured ? 'featured-card' : ''}">
-          <div>
-            <div class="story-header">
-              <div class="story-icon-wrap">
+      const container = document.getElementById('storiesFeedContainer');
+      container.innerHTML = STORIES_DATA.map(s => {
+        const shareText = encodeURIComponent(
+          `🚩 *माँ नर्मदा घाट निर्माण सेवा महाअभियान: प्रेरणादायी प्रसंग* 🚩\n\n` +
+          `*${s.title}*\n${s.quote || ''}\n\n` +
+          `${s.body}\n\n` +
+          `*माँ नर्मदे हर!* 🙏\n` +
+          `पूरा विवरण देखें: https://yash-patidar-nitor.github.io/koteshwar-ghat-nirman/`
+        );
+
+        return `
+          <div class="story-card-mobile ${s.featured ? 'featured' : ''}">
+            <div class="story-top-row">
+              <div class="story-icon-box">
                 <i class="fa-solid ${s.icon}"></i>
               </div>
-              <div>
-                <h3 class="story-title">${s.title}</h3>
-                <span class="story-tag">${s.tag}</span>
+              <div class="story-head-text">
+                <h3>${s.title}</h3>
+                <span>${s.tag}</span>
               </div>
             </div>
-            ${s.quote ? `<div class="story-quote">${s.quote}</div>` : ''}
-            <p class="story-body">${s.body}</p>
+
+            ${s.quote ? `<div class="story-quote-box">${s.quote}</div>` : ''}
+            <p class="story-narrative-text">${s.body}</p>
+
+            <div class="story-bottom-action-bar">
+              <span style="font-size:11px;color:var(--text-muted);"><i class="fa-solid fa-om" style="color:var(--gold);"></i> कोटेश्वर तीर्थ प्रसंग</span>
+              <a href="https://api.whatsapp.com/send?text=${shareText}" target="_blank" rel="noopener noreferrer" class="btn-story-share">
+                <i class="fa-brands fa-whatsapp"></i> WhatsApp पर साझा करें
+              </a>
+            </div>
           </div>
-          <div class="story-footer-badge">
-            <span><i class="fa-solid fa-om" style="color:var(--gold);"></i> पावन प्रसंग</span>
-            <span style="color:var(--teal);font-weight:600;">कोटेश्वर महाअभियान</span>
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
-    // 2. Render Village Table (NO SUMMARY CARDS, ONLY CLEAN TABLE)
-    function renderVillageTable() {
-      const tbody = document.getElementById('villageTableBody');
-      tbody.innerHTML = VILLAGE_METRICS.map((v, i) => `
+    // 2. Render Village Table (Desktop) & Village Cards (Mobile)
+    function renderVillages() {
+      // Mobile Cards
+      const mContainer = document.getElementById('villageCardsMobileContainer');
+      mContainer.innerHTML = VILLAGE_METRICS.map(v => `
+        <div class="v-card-item">
+          <div class="v-card-top">
+            <span class="v-card-name"><i class="fa-solid fa-location-dot" style="color:var(--gold-dark);"></i> ${v.name}</span>
+            <span class="v-card-amount">${fmt(v.pledged)}</span>
+          </div>
+          <div class="v-card-participants"><i class="fa-solid fa-users" style="font-size:11px;"></i> ${v.count}</div>
+          <p class="v-card-desc">${v.highlights}</p>
+          <button class="btn-view-village-donors" onclick="filterDonorsByVillage('${v.key}')">
+            <i class="fa-solid fa-users"></i> ${v.name} के दानदाता देखें
+          </button>
+        </div>
+      `).join('');
+
+      // Desktop Table
+      const dBody = document.getElementById('villageTableDesktopBody');
+      dBody.innerHTML = VILLAGE_METRICS.map((v, i) => `
         <tr>
           <td>${i + 1}</td>
-          <td><span class="badge-village"><i class="fa-solid fa-location-dot"></i> ${v.name}</span></td>
-          <td><strong class="amount" style="font-size:15px;color:var(--gold-dark);">${fmt(v.pledged)}</strong></td>
-          <td><span style="font-size:13px;color:var(--teal);font-weight:600;">${v.count}</span></td>
-          <td style="white-space:normal;max-width:440px;font-size:13px;color:var(--text-secondary);">${v.highlights}</td>
+          <td><strong style="color:var(--teal);">${v.name}</strong></td>
+          <td><strong class="amount" style="color:var(--gold-dark);">${fmt(v.pledged)}</strong></td>
+          <td>${v.count}</td>
+          <td style="font-size:12.5px;color:var(--text-secondary);">${v.highlights}</td>
           <td style="text-align:center;">
-            <button class="btn btn-white btn-sm" onclick="filterDonorsByVillage('${v.key}')">
-              <i class="fa-solid fa-users"></i> दानदाता देखें
+            <button onclick="filterDonorsByVillage('${v.key}')" style="background:#fff;border:1px solid var(--sandstone);padding:4px 10px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;">
+              दानदाता देखें
             </button>
           </td>
         </tr>
       `).join('');
     }
 
-    // 3. Render Complete Donors Directory
-    function renderDonorTable() {
-      const tbody = document.getElementById('donorTableBody');
+    // 3. Render Donors (Mobile Cards + Desktop Table)
+    function renderDonors() {
       const search = (document.getElementById('donorSearchInput').value || '').trim().toLowerCase();
 
       const filtered = DEFAULT_DECLARATIONS.filter(d => {
@@ -1526,56 +1602,76 @@
         return matchesVillage && matchesSearch;
       });
 
-      document.getElementById('donorCountBadge').textContent = filtered.length;
-
+      // Mobile Cards
+      const mContainer = document.getElementById('donorCardsMobileContainer');
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--text-muted);">कोई दानदाता प्रविष्टि नहीं मिली।</td></tr>`;
-        return;
+        mContainer.innerHTML = `<div style="text-align:center;padding:24px;color:var(--text-muted);font-size:13px;">कोई प्रविष्टि नहीं मिली।</div>`;
+      } else {
+        mContainer.innerHTML = filtered.map(d => `
+          <div class="d-card-item">
+            <div class="d-card-top-row">
+              <span class="d-card-donor-name">${d.name}</span>
+              <span class="d-card-village-badge">${d.village}</span>
+            </div>
+            ${d.role ? `<div class="d-card-role">${d.role}</div>` : ''}
+            <div class="d-card-bottom-row">
+              <span class="d-card-amount">${fmt(d.amount)}</span>
+              <button class="btn-cert-mini" onclick="openCertModalByName('${d.name.replace(/'/g, "\\'")}', ${d.amount}, '${d.village.replace(/'/g, "\\'")}', '${(d.role || '').replace(/'/g, "\\'")}')">
+                <i class="fa-solid fa-award"></i> सम्मान पत्र
+              </button>
+            </div>
+          </div>
+        `).join('');
       }
 
-      tbody.innerHTML = filtered.map((d, i) => `
-        <tr>
-          <td>${i + 1}</td>
-          <td>
-            <strong style="color:var(--teal);font-size:14px;">${d.name}</strong>
-            ${d.role ? `<div style="font-size:12px;color:var(--text-muted);">${d.role}</div>` : ''}
-          </td>
-          <td><span class="badge-village">${d.village}</span></td>
-          <td><strong class="amount" style="color:var(--gold-dark);font-size:15px;">${fmt(d.amount)}</strong></td>
-          <td style="font-size:12.5px;color:var(--text-secondary);">${d.role || d.date}</td>
-          <td style="text-align:center;">
-            <button class="btn btn-white btn-sm" onclick="openCertModalByName('${d.name.replace(/'/g, "\\'")}', ${d.amount}, '${d.village.replace(/'/g, "\\'")}', '${(d.role || '').replace(/'/g, "\\'")}')">
-              <i class="fa-solid fa-award" style="color:var(--gold-dark);"></i> सम्मान पत्र
-            </button>
-          </td>
-        </tr>
-      `).join('');
+      // Desktop Table
+      const dBody = document.getElementById('donorTableDesktopBody');
+      if (filtered.length === 0) {
+        dBody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-muted);">कोई प्रविष्टि नहीं मिली।</td></tr>`;
+      } else {
+        dBody.innerHTML = filtered.map((d, i) => `
+          <tr>
+            <td>${i + 1}</td>
+            <td>
+              <strong style="color:var(--teal);">${d.name}</strong>
+              ${d.role ? `<div style="font-size:11.5px;color:var(--text-muted);">${d.role}</div>` : ''}
+            </td>
+            <td><span class="d-card-village-badge">${d.village}</span></td>
+            <td><strong class="amount" style="color:var(--gold-dark);">${fmt(d.amount)}</strong></td>
+            <td style="font-size:12px;color:var(--text-secondary);">${d.role || d.date}</td>
+            <td style="text-align:center;">
+              <button class="btn-cert-mini" onclick="openCertModalByName('${d.name.replace(/'/g, "\\'")}', ${d.amount}, '${d.village.replace(/'/g, "\\'")}', '${(d.role || '').replace(/'/g, "\\'")}')">
+                <i class="fa-solid fa-award"></i> सम्मान पत्र
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      }
     }
 
-    // Filter Donors from Village Table click
+    // Filter helpers
+    function setVillageFilter(villageKey, btn) {
+      currentVillageFilter = villageKey;
+      document.querySelectorAll('#villageFilterPills .donor-pill-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderDonors();
+    }
+
     function filterDonorsByVillage(villageKey) {
       currentVillageFilter = villageKey;
-      document.querySelectorAll('#villageFilterPills .pill-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.textContent.trim().includes(villageKey));
+      document.querySelectorAll('#villageFilterPills .donor-pill-btn').forEach(b => {
+        b.classList.toggle('active', b.textContent.trim().includes(villageKey));
       });
-      renderDonorTable();
+      renderDonors();
       document.getElementById('donors').scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Filter Donors by pill buttons
-    function setVillageFilter(v, btn) {
-      currentVillageFilter = v;
-      document.querySelectorAll('#villageFilterPills .pill-btn').forEach(b => b.classList.remove('active'));
-      if (btn) btn.classList.add('active');
-      renderDonorTable();
-    }
-
-    function handleDonorFilter() {
-      renderDonorTable();
+    function handleDonorSearch() {
+      renderDonors();
     }
 
     /* ============================================================
-       HONOR CERTIFICATE MODAL
+       HONOR CERTIFICATE MODAL & WHATSAPP
        ============================================================ */
     function openCertModalByName(name, amount, village, role) {
       document.getElementById('certDonorName').textContent = name;
@@ -1588,9 +1684,10 @@
         `दानदाता: *${name}*\n` +
         `स्थान: *${village}*\n` +
         `घोषित जनसहयोग संकल्प: *${fmt(amount)}*\n\n` +
-        `माँ नर्मदा के चरणों में आपका यह समर्पण सदैव वंदनीय रहेगा।\n*माँ नर्मदे हर!* 🙏`;
+        `माँ नर्मदा के चरणों में आपका यह समर्पण सदैव वंदनीय रहेगा।\n*माँ नर्मदे हर!* 🙏\n` +
+        `https://yash-patidar-nitor.github.io/koteshwar-ghat-nirman/`;
 
-      document.getElementById('btnShareWhatsApp').onclick = function() {
+      document.getElementById('btnShareWhatsAppCert').onclick = function() {
         window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
       };
 
@@ -1598,8 +1695,23 @@
     }
 
     function closeCertModal(e) {
-      if (e && e.target !== e.currentTarget && !e.target.closest('.modal-close')) return;
+      if (e && e.target !== e.currentTarget && !e.target.closest('.btn-close-modal')) return;
       document.getElementById('certModalBackdrop').classList.remove('open');
+    }
+
+    // 1-Click Clipboard Copy on Mobile
+    function copyToClipboard(text, btn) {
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = "✓ कॉपी";
+        btn.style.background = "var(--gold)";
+        btn.style.color = "#000";
+        setTimeout(() => {
+          btn.textContent = orig;
+          btn.style.background = "";
+          btn.style.color = "";
+        }, 2000);
+      });
     }
   </script>
 </body>
