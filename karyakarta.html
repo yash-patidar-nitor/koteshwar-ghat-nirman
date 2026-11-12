@@ -857,27 +857,10 @@
 
             <div class="form-group">
               <label>ग्राम / नगर <span class="req">*</span></label>
-              <select id="declVillageSelect" class="form-select" onchange="toggleCustomVillageInput(this, 'declCustomVillageWrap')" required>
+              <input type="text" id="declVillageQuickSearch" class="form-input" placeholder="🔍 त्वरित ग्राम खोज (उदा. निसरपुर, कुक्षी, कोठड़ा...)" oninput="filterVillageOptions(this.value, 'declVillageSelect')" style="margin-bottom:6px;font-size:12px;padding:6px 10px;" />
+              <select id="declVillageSelect" class="form-select" required>
                 <option value="">-- ग्राम चुनें --</option>
-                <option value="कोठड़ा">कोठड़ा</option>
-                <option value="कवठी">कवठी</option>
-                <option value="मण्‍डलेश्‍वर">मण्‍डलेश्‍वर</option>
-                <option value="महेश्वर">महेश्वर</option>
-                <option value="इंदौर">इंदौर</option>
-                <option value="धामनोद">धामनोद</option>
-                <option value="बड़वाह">बड़वाह</option>
-                <option value="बड़वानी">बड़वानी</option>
-                <option value="खरगोन">खरगोन</option>
-                <option value="सनावद">सनावद</option>
-                <option value="धरमपुरी">धरमपुरी</option>
-                <option value="कुक्षी">कुक्षी</option>
-                <option value="धार">धार</option>
-                <option value="नानपुर">नानपुर</option>
-                <option value="other">अन्य नगर / ग्राम दर्ज करें...</option>
               </select>
-              <div id="declCustomVillageWrap" style="display:none;margin-top:6px;">
-                <input type="text" id="declCustomVillage" class="form-input" placeholder="ग्राम / शहर का नाम लिखें" />
-              </div>
             </div>
 
             <div class="form-group">
@@ -960,7 +943,9 @@
             </div>
             <div class="form-group">
               <label>ग्राम / नगर <span class="req">*</span></label>
-              <input type="text" id="directDonorCity" class="form-input" placeholder="उदा. कोठड़ा" />
+              <select id="directDonorCity" class="form-select">
+                <option value="">-- ग्राम चुनें --</option>
+              </select>
             </div>
             <div class="form-group">
               <label>मोबाइल नंबर</label>
@@ -1063,19 +1048,27 @@
           <select id="filterDeclVillage" class="form-select" style="max-width:140px;" onchange="filterDeclarationsTable()">
             <option value="all">सभी ग्राम</option>
           </select>
+          <select id="sortDeclOrder" class="form-select" style="max-width:180px;" onchange="filterDeclarationsTable()">
+            <option value="latest_date" selected>📅 नवीनतम दिनांक पहले</option>
+            <option value="sno_desc">🔢 नवीनतम क्रम (#586...)</option>
+            <option value="sno_asc">🔢 प्रारंभिक क्रम (#1...)</option>
+            <option value="amount_desc">💰 संकल्प राशि (अधिकतम)</option>
+            <option value="name_asc">👤 नाम (अ से ज्ञ)</option>
+          </select>
         </div>
 
         <div class="table-container">
           <table class="data-table" id="declarationsTable">
             <thead>
               <tr>
-                <th style="width:40px;">क्र.</th>
-                <th>दानदाता</th>
-                <th>ग्राम</th>
+                <th style="width:45px;">क्र.</th>
+                <th style="width:95px;">दिनांक</th>
+                <th>दानदाता का नाम</th>
+                <th>ग्राम / नगर</th>
                 <th style="text-align:right;">संकल्प (₹)</th>
                 <th style="text-align:right;">जमा (₹)</th>
                 <th style="text-align:right;">शेष (₹)</th>
-                <th style="text-align:center;">कार्यवाही</th>
+                <th style="text-align:center;width:115px;">कार्यवाही</th>
               </tr>
             </thead>
             <tbody id="declTableBody">
@@ -1353,8 +1346,8 @@
           </div>
           <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
             <div class="form-group">
-              <label>ग्राम / नगर</label>
-              <input type="text" id="editDeclCity" class="form-input" required />
+              <label>ग्राम / नगर <span style="color:var(--saffron);">*</span></label>
+              <select id="editDeclCity" class="form-select" required></select>
             </div>
             <div class="form-group">
               <label>संकल्प राशि (₹) <span style="color:var(--saffron);">*</span></label>
@@ -1417,7 +1410,7 @@
             </div>
             <div class="form-group">
               <label>ग्राम / नगर</label>
-              <input type="text" id="editCollCity" class="form-input" />
+              <select id="editCollCity" class="form-select"></select>
             </div>
           </div>
           <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
@@ -1734,10 +1727,21 @@
       }
 
       if (fetchedColls.length > 0) {
+        const deletedColls = new Set((JSON.parse(localStorage.getItem('koteshwar_deleted_collections') || '[]')).map(String));
+        const editedColls = JSON.parse(localStorage.getItem('koteshwar_edited_collections') || '{}');
+
+        // Apply edits & filter deleted
+        fetchedColls = fetchedColls.filter(c => !deletedColls.has(String(c.receiptNo)));
+        fetchedColls.forEach(c => {
+          if (editedColls[String(c.receiptNo)]) {
+            Object.assign(c, editedColls[String(c.receiptNo)]);
+          }
+        });
+
         // Merge sheet collections with local collections (avoiding duplicate receipt numbers)
         const existingRcpts = new Set(fetchedColls.map(c => c.receiptNo));
         collectionsList.forEach(localItem => {
-          if (!existingRcpts.has(localItem.receiptNo)) {
+          if (!deletedColls.has(String(localItem.receiptNo)) && !existingRcpts.has(localItem.receiptNo)) {
             fetchedColls.push(localItem);
           }
         });
@@ -1869,10 +1873,19 @@
         console.warn("Live Declaration sheet fetch error:", err);
       }
 
-      // Merge custom local declarations & auto-sync any missing to sheet
+      // Merge custom & edited local declarations & filter deleted
       try {
         const deletedDecls = new Set((JSON.parse(localStorage.getItem('koteshwar_deleted_declarations') || '[]')).map(String));
+        const editedDecls = JSON.parse(localStorage.getItem('koteshwar_edited_declarations') || '{}');
         const custom = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
+
+        // Apply local edits over fetched rows
+        declarationsList.forEach(d => {
+          if (editedDecls[String(d.sno)]) {
+            Object.assign(d, editedDecls[String(d.sno)]);
+          }
+        });
+
         if (Array.isArray(custom)) {
           custom.forEach(item => {
             if (deletedDecls.has(String(item.sno))) return;
@@ -1984,12 +1997,148 @@
       if (lbl) lbl.textContent = maxSno + 1;
     }
 
+    const CANONICAL_VILLAGES = [
+      "अंजड़", "अजन्दा", "अमलाल", "अम्बाड़ा", "आलिराजपुर", "आली", "इन्दौर", "उज्जैन", "एकलदुना",
+      "कडमाल / खापरखेड़ा", "करोली", "कापसी", "कुक्षी", "कोटेश्वर / कोठड़ा", "कोठड़ा", "कोलगांव",
+      "खण्डवा", "खराजना", "गंधवानी", "गणपुर", "घुलासा", "चिखल्da", "चिखल्दा", "जांगरवा", "जामली", "जोतपुर",
+      "जोबट", "झाबुआ", "डेहर", "डेहरी", "डोंगरगांव", "ढुकणी", "तेजगदिया पुरा", "देवगढ़", "देवला",
+      "देशवाल्या", "धार", "नगुर", "ननोदा", "नर्मदानगर", "नवादपुरा", "नानपुर", "निम्बोल", "निसरपुर",
+      "पंचखेड़ा", "पिपल्या", "फुलगांव", "बड़दा", "बड़वानी", "बड़वान्या", "बड़ा बड़दा", "बाजरी खेड़ा",
+      "बाठी", "बेड़वाल्या", "बोधवाड़ा", "भवरियां", "मध्यप्रदेश", "मनावर", "महाराष्ट्र", "मांडवी",
+      "मोदनी", "रतलाम", "रसवा", "रिंगनोद", "रेपकुआ", "लिंगवा", "लोणी", "लोहारा", "लोहारी",
+      "साततलाई", "सिरसाला", "सिलकुआ", "सुसारी", "सेंधवा", "सेमल्या", "अन्य"
+    ];
+
+    function parseDateToTime(dStr, fallbackSno, timestamp) {
+      if (timestamp) {
+        const t = new Date(timestamp).getTime();
+        if (!isNaN(t) && t > 0) return t;
+      }
+      if (!dStr) return (Number(fallbackSno) || 0) * 1000;
+      const str = String(dStr).trim();
+
+      const dateMatch = str.match(/Date\((\d+),\s*(\d+),\s*(\d+)/i);
+      if (dateMatch) {
+        const y = parseInt(dateMatch[1], 10);
+        const m = parseInt(dateMatch[2], 10);
+        const d = parseInt(dateMatch[3], 10);
+        return new Date(y, m, d).getTime();
+      }
+
+      if (/^\d{4}-\d{1,2}-\d{1,2}/.test(str)) {
+        const parts = str.split('-');
+        return new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10)).getTime();
+      }
+
+      if (/^\d{1,2}\.\d{1,2}\.\d{2,4}$/.test(str)) {
+        const parts = str.split('.');
+        let day = parseInt(parts[0], 10);
+        let month = parseInt(parts[1], 10) - 1;
+        let year = parseInt(parts[2], 10);
+        if (year < 100) year += 2000;
+        return new Date(year, month, day).getTime();
+      }
+
+      if (/^\d{1,2}\/\d{1,2}\/\d{2,4}$/.test(str)) {
+        const parts = str.split('/');
+        let day = parseInt(parts[0], 10);
+        let month = parseInt(parts[1], 10) - 1;
+        let year = parseInt(parts[2], 10);
+        if (year < 100) year += 2000;
+        return new Date(year, month, day).getTime();
+      }
+
+      const parsed = new Date(str).getTime();
+      if (!isNaN(parsed) && parsed > 0) return parsed;
+      return (Number(fallbackSno) || 0) * 1000;
+    }
+
+    function formatDisplayDate(dateStr) {
+      if (!dateStr || dateStr === '-') return '-';
+      const str = String(dateStr).trim();
+      const dateMatch = str.match(/Date\((\d+),\s*(\d+),\s*(\d+)/i);
+      if (dateMatch) {
+        const y = parseInt(dateMatch[1], 10);
+        const m = String(parseInt(dateMatch[2], 10) + 1).padStart(2, '0');
+        const d = String(parseInt(dateMatch[3], 10)).padStart(2, '0');
+        return `${d}/${m}/${y}`;
+      }
+      if (/^\d{4}-\d{1,2}-\d{1,2}/.test(str)) {
+        const parts = str.split('-');
+        return `${parts[2].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[0]}`;
+      }
+      return str;
+    }
+
+    function filterVillageOptions(searchQuery, selectId) {
+      const q = (searchQuery || '').trim().toLowerCase();
+      const select = document.getElementById(selectId);
+      if (!select) return;
+
+      const villageSet = new Set(CANONICAL_VILLAGES);
+      declarationsList.forEach(d => {
+        if (d.city && d.city.trim() && d.city !== 'undefined' && d.city !== 'null') {
+          villageSet.add(d.city.trim());
+        }
+      });
+      const all = Array.from(villageSet).sort((a, b) => a.localeCompare(b, 'hi'));
+
+      const filtered = q ? all.filter(v => v.toLowerCase().includes(q)) : all;
+      select.innerHTML = `<option value="">-- ग्राम चुनें (${filtered.length}) --</option>` +
+        filtered.map(v => `<option value="${v}">${v}</option>`).join('');
+      if (filtered.length === 1) {
+        select.value = filtered[0];
+      }
+    }
+
     function populateVillageDropdowns() {
-      const villages = Array.from(new Set(declarationsList.map(d => d.city).filter(Boolean))).sort();
-      const select = document.getElementById('filterDeclVillage');
-      if (select) {
-        select.innerHTML = '<option value="all">सभी ग्राम</option>' +
-          villages.map(v => `<option value="${v}">${v}</option>`).join('');
+      const villageSet = new Set(CANONICAL_VILLAGES);
+      declarationsList.forEach(d => {
+        if (d.city && d.city.trim() && d.city !== 'undefined' && d.city !== 'null') {
+          villageSet.add(d.city.trim());
+        }
+      });
+      const sortedVillages = Array.from(villageSet).sort((a, b) => a.localeCompare(b, 'hi'));
+      const optionsHtml = sortedVillages.map(v => `<option value="${v}">${v}</option>`).join('');
+
+      // 1. Add Declaration select
+      const declSelect = document.getElementById('declVillageSelect');
+      if (declSelect) {
+        const cur = declSelect.value;
+        declSelect.innerHTML = `<option value="">-- ग्राम चुनें (${sortedVillages.length} ग्राम सूची) --</option>` + optionsHtml;
+        if (cur && villageSet.has(cur)) declSelect.value = cur;
+      }
+
+      // 2. Direct Collection select
+      const dirSelect = document.getElementById('directDonorCity');
+      if (dirSelect) {
+        const cur = dirSelect.value;
+        dirSelect.innerHTML = `<option value="">-- ग्राम चुनें --</option>` + optionsHtml;
+        if (cur && villageSet.has(cur)) dirSelect.value = cur;
+      }
+
+      // 3. Edit Declaration select
+      const editDeclSelect = document.getElementById('editDeclCity');
+      if (editDeclSelect) {
+        const cur = editDeclSelect.value;
+        editDeclSelect.innerHTML = `<option value="">-- ग्राम चुनें --</option>` + optionsHtml;
+        if (cur && villageSet.has(cur)) editDeclSelect.value = cur;
+      }
+
+      // 4. Edit Collection select
+      const editCollSelect = document.getElementById('editCollCity');
+      if (editCollSelect) {
+        const cur = editCollSelect.value;
+        editCollSelect.innerHTML = `<option value="">-- ग्राम चुनें --</option>` + optionsHtml;
+        if (cur && villageSet.has(cur)) editCollSelect.value = cur;
+      }
+
+      // 5. Filter in declarations table
+      const filterSelect = document.getElementById('filterDeclVillage');
+      if (filterSelect) {
+        const cur = filterSelect.value;
+        filterSelect.innerHTML = '<option value="all">सभी ग्राम</option>' + optionsHtml;
+        if (cur) filterSelect.value = cur;
       }
     }
 
@@ -2060,9 +2209,11 @@
       const nextSno = maxSno + 1;
 
       const name = document.getElementById('declName').value.trim();
-      let city = document.getElementById('declVillageSelect').value;
-      if (city === 'other') {
-        city = document.getElementById('declCustomVillage').value.trim() || 'अन्य';
+      const city = (document.getElementById('declVillageSelect').value || '').trim();
+      if (!city) {
+        alert("कृपया ग्राम / नगर का चयन करें!");
+        document.getElementById('declVillageSelect').focus();
+        return;
       }
       const amount = parseFloat(document.getElementById('declAmount').value) || 0;
       const mobile = document.getElementById('declMobile').value.trim();
@@ -2385,6 +2536,7 @@
     function renderDeclarationsTable() {
       const q = (document.getElementById('searchDeclTable')?.value || '').toLowerCase();
       const village = document.getElementById('filterDeclVillage')?.value || 'all';
+      const sortOrder = document.getElementById('sortDeclOrder')?.value || 'latest_date';
 
       const filtered = declarationsList.filter(d => {
         const matchesQ = !q || String(d.name).toLowerCase().includes(q) || String(d.city).toLowerCase().includes(q) || String(d.sno) === q;
@@ -2392,18 +2544,40 @@
         return matchesQ && matchesV;
       });
 
+      // Sort by chosen criteria (Default: Latest Date First)
+      filtered.sort((a, b) => {
+        if (sortOrder === 'latest_date') {
+          const tA = parseDateToTime(a.date, a.sno, a.recordedAt || a.timestamp);
+          const tB = parseDateToTime(b.date, b.sno, b.recordedAt || b.timestamp);
+          return (tB - tA) || (Number(b.sno) - Number(a.sno));
+        } else if (sortOrder === 'sno_desc') {
+          return Number(b.sno) - Number(a.sno);
+        } else if (sortOrder === 'sno_asc') {
+          return Number(a.sno) - Number(b.sno);
+        } else if (sortOrder === 'amount_desc') {
+          return (Number(b.amount) - Number(a.amount)) || (Number(b.sno) - Number(a.sno));
+        } else if (sortOrder === 'name_asc') {
+          return String(a.name).localeCompare(String(b.name), 'hi');
+        }
+        return 0;
+      });
+
       const tbody = document.getElementById('declTableBody');
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--text-muted);">कोई दानदाता नहीं मिला।</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--text-muted);">कोई दानदाता नहीं मिला।</td></tr>`;
         return;
       }
 
-      tbody.innerHTML = filtered.slice(0, 100).map(d => `
+      tbody.innerHTML = filtered.slice(0, 150).map(d => `
         <tr>
           <td style="font-weight:700;color:var(--text-muted);">#${d.sno}</td>
+          <td style="white-space:nowrap;font-size:11.5px;color:var(--text-muted);">
+            <i class="fa-regular fa-calendar" style="margin-right:3px;font-size:10px;"></i>${formatDisplayDate(d.date)}
+          </td>
           <td>
             <strong>${d.name}</strong>
             ${d.notes ? `<div style="font-size:10.5px;color:var(--text-muted);">${d.notes}</div>` : ''}
+            ${d.collectorUsername ? `<div style="font-size:9.5px;color:var(--teal);margin-top:2px;"><i class="fa-solid fa-user-check"></i> ${d.collector || d.collectorUsername}</div>` : ''}
           </td>
           <td>${d.city}</td>
           <td style="text-align:right;font-weight:700;color:var(--teal);">${fmt(d.amount)}</td>
@@ -2417,7 +2591,7 @@
               <button class="btn-outline-action" onclick="openEditDeclarationModal(${d.sno})" title="संपादित करें" style="padding:3px 6px;font-size:11px;color:var(--teal);">
                 <i class="fa-solid fa-pen-to-square"></i>
               </button>
-              <button class="btn-outline-action" onclick="confirmDeleteDeclaration(${d.sno})" title="हटाएं" style="padding:3px 6px;font-size:11px;color:#C0392B;">
+              <button class="btn-outline-action" onclick="confirmDeleteDeclaration(${d.sno})" title="हटाएं (Soft Delete)" style="padding:3px 6px;font-size:11px;color:#C0392B;">
                 <i class="fa-solid fa-trash"></i>
               </button>
             </div>
@@ -2447,6 +2621,9 @@
         const matchesU = userFilter === 'all' || (c.collectorUsername && c.collectorUsername === userFilter) || (c.collector && c.collector.includes(userFilter));
         return matchesQ && matchesU;
       });
+
+      // Sort collections latest date / timestamp first
+      filtered.sort((a, b) => (parseDateToTime(b.date, 0, b.timestamp) - parseDateToTime(a.date, 0, a.timestamp)) || String(b.receiptNo).localeCompare(String(a.receiptNo)));
 
       const tbody = document.getElementById('collTableBody');
       if (filtered.length === 0) {
@@ -2570,10 +2747,24 @@
       document.getElementById('editDeclSno').value = donor.sno;
       document.getElementById('editDeclModalTitle').textContent = `संकल्प विवरण संपादित करें (#${donor.sno} - ${donor.name})`;
       document.getElementById('editDeclName').value = donor.name || '';
-      document.getElementById('editDeclCity').value = donor.city || '';
+      
+      const citySelect = document.getElementById('editDeclCity');
+      if (citySelect) {
+        citySelect.value = donor.city || '';
+      }
+
       document.getElementById('editDeclAmount').value = donor.amount || '';
       document.getElementById('editDeclMobile').value = donor.mobile || '';
-      document.getElementById('editDeclDate').value = donor.date || '';
+
+      // Normalize date for HTML date input
+      let dVal = donor.date || '';
+      if (/^\d{1,2}\.\d{1,2}\.\d{2,4}$/.test(dVal)) {
+        const p = dVal.split('.');
+        let y = parseInt(p[2], 10);
+        if (y < 100) y += 2000;
+        dVal = `${y}-${p[1].padStart(2, '0')}-${p[0].padStart(2, '0')}`;
+      }
+      document.getElementById('editDeclDate').value = dVal;
       document.getElementById('editDeclNotes').value = donor.notes || '';
       document.getElementById('editDeclReceipt').value = donor.receipt || '-';
 
@@ -2608,7 +2799,12 @@
       donor.receipt = newReceipt;
       donor.balance = Math.max(0, donor.amount - (donor.deposited || 0));
 
-      // Update in local custom declarations if present
+      // Audit fields
+      donor.modified_by = currentUser ? currentUser.username : "karyakarta";
+      donor.modified_by_name = currentUser ? currentUser.displayName : "अधिकृत कार्यकर्ता";
+      donor.modified_at = new Date().toISOString();
+
+      // Update in local custom and edited declarations
       try {
         let custom = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
         const cIdx = custom.findIndex(c => String(c.sno) === String(sno));
@@ -2618,6 +2814,11 @@
           custom.push(donor);
         }
         localStorage.setItem('koteshwar_custom_declarations', JSON.stringify(custom));
+
+        let edited = JSON.parse(localStorage.getItem('koteshwar_edited_declarations') || '{}');
+        edited[String(sno)] = Object.assign({}, donor);
+        localStorage.setItem('koteshwar_edited_declarations', JSON.stringify(edited));
+
         localStorage.setItem('koteshwar_declarations_cache', JSON.stringify(declarationsList));
       } catch (err) {}
 
@@ -2629,12 +2830,16 @@
       alert(`✅ दानदाता #${sno} (${newName}) का संकल्प विवरण सफलतापूर्वक अपडेट हो गया!`);
     }
 
-    // 2. Delete Declaration
+    // 2. Soft Delete Declaration
     function confirmDeleteDeclaration(sno) {
       const donor = declarationsList.find(d => String(d.sno) === String(sno));
       if (!donor) return;
 
-      const msg = `क्या आप निश्चित रूप से दानदाता "${donor.name}" (क्रम #${donor.sno}, संकल्प ₹${donor.amount.toLocaleString('en-IN')}) का रिकॉर्ड हटाना चाहते हैं?`;
+      const userDisplayName = currentUser ? currentUser.displayName : "कार्यकर्ता";
+      const userUsername = currentUser ? currentUser.username : "karyakarta";
+      const nowIso = new Date().toISOString();
+
+      const msg = `क्या आप निश्चित रूप से दानदाता "${donor.name}" (क्रम #${donor.sno}, संकल्प ₹${donor.amount.toLocaleString('en-IN')}) का रिकॉर्ड हटाना चाहते हैं?\n\n(यह रिकॉर्ड Google Sheet में 'हटाए गए रिकॉर्ड (Deleted Archive)' में आपके नाम @${userUsername} व समय के साथ सुरक्षित दर्ज हो जाएगा)`;
       if (!confirm(msg)) return;
 
       // Remove from memory
@@ -2646,6 +2851,10 @@
         custom = custom.filter(c => String(c.sno) !== String(sno));
         localStorage.setItem('koteshwar_custom_declarations', JSON.stringify(custom));
 
+        let edited = JSON.parse(localStorage.getItem('koteshwar_edited_declarations') || '{}');
+        delete edited[String(sno)];
+        localStorage.setItem('koteshwar_edited_declarations', JSON.stringify(edited));
+
         let deleted = JSON.parse(localStorage.getItem('koteshwar_deleted_declarations') || '[]');
         if (!deleted.includes(String(sno))) deleted.push(String(sno));
         localStorage.setItem('koteshwar_deleted_declarations', JSON.stringify(deleted));
@@ -2653,11 +2862,19 @@
         localStorage.setItem('koteshwar_declarations_cache', JSON.stringify(declarationsList));
       } catch (err) {}
 
-      // Send webhook delete request
-      postWebhookData('deleteDeclaration', { sno: sno, name: donor.name });
+      // Send webhook soft-delete request with audit fields
+      postWebhookData('deleteDeclaration', {
+        sno: sno,
+        name: donor.name,
+        city: donor.city,
+        amount: donor.amount,
+        deleted_by: userUsername,
+        deleted_by_name: userDisplayName,
+        deleted_at: nowIso
+      });
 
       renderAllPortals();
-      alert(`🗑️ संकल्प #${sno} सफलतापूर्वक हटा दिया गया।`);
+      alert(`🗑️ संकल्प #${sno} सफलतापूर्वक हटा दिया गया (सॉफ्ट डिलीट पुरालेख 'Deleted Archive' में सुरक्षित दर्ज)।`);
     }
 
     // 3. Edit Collection
@@ -2670,7 +2887,10 @@
       document.getElementById('editCollReceiptNo').value = coll.receiptNo || '';
       document.getElementById('editCollDate').value = coll.date || '';
       document.getElementById('editCollDonorName').value = coll.donorName || '';
-      document.getElementById('editCollCity').value = coll.city || '';
+      
+      const citySelect = document.getElementById('editCollCity');
+      if (citySelect) citySelect.value = coll.city || '';
+
       document.getElementById('editCollAmount').value = coll.amount || '';
       document.getElementById('editCollPaymentMode').value = coll.paymentMode || 'नकद';
       document.getElementById('editCollRefNo').value = coll.refNo || '';
@@ -2708,6 +2928,16 @@
       coll.refNo = newRef;
       coll.remarks = newRemarks;
 
+      coll.modified_by = currentUser ? currentUser.username : "karyakarta";
+      coll.modified_by_name = currentUser ? currentUser.displayName : "अधिकृत कार्यकर्ता";
+      coll.modified_at = new Date().toISOString();
+
+      try {
+        let editedColls = JSON.parse(localStorage.getItem('koteshwar_edited_collections') || '{}');
+        editedColls[newReceiptNo] = Object.assign({}, coll);
+        localStorage.setItem('koteshwar_edited_collections', JSON.stringify(editedColls));
+      } catch (err) {}
+
       saveCollectionsToStorage();
       reconcileCollectionsWithDeclarations();
 
@@ -2719,12 +2949,16 @@
       alert(`✅ रसीद क्रमांक ${newReceiptNo} का विवरण सफलतापूर्वक अपडेट हो गया!`);
     }
 
-    // 4. Delete Collection
+    // 4. Soft Delete Collection
     function confirmDeleteCollection(receiptNo) {
       const coll = collectionsList.find(c => String(c.receiptNo) === String(receiptNo));
       if (!coll) return;
 
-      const msg = `क्या आप निश्चित रूप से रसीद क्रमांक "${coll.receiptNo}" (दानदाता: ${coll.donorName}, राशि: ${fmt(coll.amount)}) को हटाना चाहते हैं?`;
+      const userDisplayName = currentUser ? currentUser.displayName : "कार्यकर्ता";
+      const userUsername = currentUser ? currentUser.username : "karyakarta";
+      const nowIso = new Date().toISOString();
+
+      const msg = `क्या आप निश्चित रूप से रसीद क्रमांक "${coll.receiptNo}" (दानदाता: ${coll.donorName}, राशि: ${fmt(coll.amount)}) को हटाना चाहते हैं?\n\n(यह रिकॉर्ड Google Sheet में 'हटाए गए रिकॉर्ड (Deleted Archive)' में आपके नाम @${userUsername} व समय के साथ सुरक्षित दर्ज हो जाएगा)`;
       if (!confirm(msg)) return;
 
       // Remove from memory
@@ -2736,15 +2970,28 @@
         let deleted = JSON.parse(localStorage.getItem('koteshwar_deleted_collections') || '[]');
         if (!deleted.includes(String(receiptNo))) deleted.push(String(receiptNo));
         localStorage.setItem('koteshwar_deleted_collections', JSON.stringify(deleted));
+
+        let editedColls = JSON.parse(localStorage.getItem('koteshwar_edited_collections') || '{}');
+        delete editedColls[receiptNo];
+        localStorage.setItem('koteshwar_edited_collections', JSON.stringify(editedColls));
       } catch (err) {}
 
       reconcileCollectionsWithDeclarations();
 
-      // Send webhook delete request
-      postWebhookData('deleteCollection', { receiptNo: receiptNo, donorSno: coll.donorSno });
+      // Send webhook delete request with audit fields
+      postWebhookData('deleteCollection', {
+        receiptNo: receiptNo,
+        donorName: coll.donorName,
+        city: coll.city,
+        amount: coll.amount,
+        donorSno: coll.donorSno,
+        deleted_by: userUsername,
+        deleted_by_name: userDisplayName,
+        deleted_at: nowIso
+      });
 
       renderAllPortals();
-      alert(`🗑️ रसीद क्रमांक ${receiptNo} सफलतापूर्वक हटा दी गई।`);
+      alert(`🗑️ रसीद क्रमांक ${receiptNo} सफलतापूर्वक हटा दी गई (सॉफ्ट डिलीट पुरालेख 'Deleted Archive' में सुरक्षित दर्ज)।`);
     }
 
     /* ============================================================

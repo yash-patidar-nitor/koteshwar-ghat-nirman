@@ -3,7 +3,7 @@
  * माँ नर्मदा घाट निर्माण सेवा महाअभियान | कोटेश्वर तीर्थ (कोठड़ा)
  * श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान
  * 
- * GOOGLE APPS SCRIPT WEBHOOK (Live Declaration & Live Collection Sync)
+ * GOOGLE APPS SCRIPT WEBHOOK (Live Declaration, Live Collection, Audit and Soft-Delete Sync)
  * ==============================================================================
  * 
  * निर्देश (SETUP INSTRUCTIONS):
@@ -13,7 +13,7 @@
  * 3. पुराना कोड हटाकर इस पूरी फ़ाइल का कोड पेस्ट करें।
  * 4. ऊपर "Deploy" (तैनात करें) बटन पर क्लिक करें > "Manage deployments" या "New deployment" चुनें:
  *    - Type: Web app
- *    - Description: Koteshwar Live Sync Webhook
+ *    - Description: Koteshwar Live Sync Webhook v2
  *    - Execute as: Me (आपका Google खाता)
  *    - Who has access: Anyone (कोई भी)
  * 5. "Deploy" पर क्लिक करें और जनरेट हुआ "Web app URL" कॉपी करें।
@@ -24,7 +24,7 @@
 function doGet(e) {
   return ContentService.createTextOutput(JSON.stringify({
     status: "ok",
-    message: "कोटेश्वर नर्मदा सेवा महाअभियान (Live Declaration & Live Collection) वेबहुक सक्रिय है।"
+    message: "कोटेश्वर नर्मदा सेवा महाअभियान (Live Declaration, Live Collection, Audit and Soft-Delete) वेबहुक सक्रिय है।"
   })).setMimeType(ContentService.MimeType.JSON);
 }
 
@@ -36,38 +36,28 @@ function doPost(e) {
 
     var rawData = e.postData.contents;
     var payload = JSON.parse(rawData);
-    var action = payload.action; // 'addDeclaration' या 'addCollection'
-    var item = payload.data;
+    var action = payload.action; 
+    var item = payload.data || {};
 
     var ss = SpreadsheetApp.getActiveSpreadsheet();
 
     if (action === "addDeclaration") {
       // 1. LIVE DECLARATION TAB (नया लाइव घोषणा सिंक)
-      var liveDeclSheet = ss.getSheetByName("Live Declaration");
-      if (!liveDeclSheet) {
-        liveDeclSheet = ss.insertSheet("Live Declaration");
-      }
-
-      // यदि शीट बिल्कुल खाली है तो हेडर बनाएं
-      if (liveDeclSheet.getLastRow() === 0) {
-        liveDeclSheet.appendRow([
-          "क्र.",
-          "दानदाता का शुभ नाम",
-          "स्थान / ग्राम",
-          "स्मरण / पारिवारिक विवरण",
-          "मोबाइल नंबर",
-          "घोषित संकल्प राशि",
-          "रसीद क्रमांक",
-          "घोषणा दिनांक",
-          "अधिकृत कार्यकर्ता",
-          "यूजरनेम",
-          "प्रविष्टि समय"
-        ]);
-        liveDeclSheet.getRange(1, 1, 1, 11).setFontWeight("bold").setBackground("#123F42").setFontColor("#FFFFFF");
-      }
+      var liveDeclSheet = getOrCreateSheet(ss, "Live Declaration", [
+        "क्र.",
+        "दानदाता का शुभ नाम",
+        "स्थान / ग्राम",
+        "स्मरण / पारिवारिक विवरण",
+        "मोबाइल नंबर",
+        "घोषित संकल्प राशि",
+        "रसीद क्रमांक",
+        "घोषणा दिनांक",
+        "अधिकृत कार्यकर्ता",
+        "यूजरनेम",
+        "प्रविष्टि समय"
+      ], "#123F42");
 
       var lastRow = liveDeclSheet.getLastRow();
-      // क्रम संख्या: हेडर के बाद (584 + new row)
       var nextSno = item.sno || (584 + lastRow);
 
       liveDeclSheet.appendRow([
@@ -78,7 +68,7 @@ function doPost(e) {
         item.mobile || "",
         item.amount || 0,
         item.receipt || "-",
-        item.date || Utilities.formatDate(new Date(), "Asia/Kolkata", "dd/MM/yyyy"),
+        item.date || Utilities.formatDate(new Date(), "Asia/Kolkata", "yyyy-MM-dd"),
         item.collector || "",
         item.collectorUsername || "",
         new Date().toISOString()
@@ -92,30 +82,21 @@ function doPost(e) {
 
     } else if (action === "addCollection") {
       // 2. LIVE COLLECTION TAB (नया लाइव संग्रह सिंक)
-      var liveCollSheet = ss.getSheetByName("Live Collection");
-      if (!liveCollSheet) {
-        liveCollSheet = ss.insertSheet("Live Collection");
-      }
-
-      // यदि शीट बिल्कुल खाली है तो हेडर बनाएं
-      if (liveCollSheet.getLastRow() === 0) {
-        liveCollSheet.appendRow([
-          "क्र.",
-          "हस्तलिखित रसीद बुक क्रमांक",
-          "दानदाता क्र.",
-          "दानदाता का शुभ नाम",
-          "स्थान / नगर",
-          "प्राप्त सहयोग राशि",
-          "भुगतान माध्यम",
-          "प्राप्ति दिनांक",
-          "चेक / UTR संदर्भ",
-          "संग्रहकर्ता कार्यकर्ता",
-          "यूजरनेम",
-          "पावती विवरण",
-          "प्रविष्टि समय"
-        ]);
-        liveCollSheet.getRange(1, 1, 1, 13).setFontWeight("bold").setBackground("#123F42").setFontColor("#FFFFFF");
-      }
+      var liveCollSheet = getOrCreateSheet(ss, "Live Collection", [
+        "क्र.",
+        "हस्तलिखित रसीद बुक क्रमांक",
+        "दानदाता क्र.",
+        "दानदाता का शुभ नाम",
+        "स्थान / नगर",
+        "प्राप्त सहयोग राशि",
+        "भुगतान माध्यम",
+        "प्राप्ति दिनांक",
+        "चेक / UTR संदर्भ",
+        "संग्रहकर्ता कार्यकर्ता",
+        "यूजरनेम",
+        "पावती विवरण",
+        "प्रविष्टि समय"
+      ], "#123F42");
 
       var collLastRow = liveCollSheet.getLastRow();
       var collSno = collLastRow; // हेडर के बाद का क्रमांक
@@ -131,15 +112,13 @@ function doPost(e) {
         item.city || "",
         item.amount || 0,
         item.paymentMode || "नकद",
-        item.paymentDate || item.date || Utilities.formatDate(new Date(), "Asia/Kolkata", "dd/MM/yyyy"),
+        item.paymentDate || item.date || Utilities.formatDate(new Date(), "Asia/Kolkata", "yyyy-MM-dd"),
         item.transactionRef || item.refNo || "",
         collectorName,
         collectorUser,
         item.remarks || "",
         new Date().toISOString()
       ]);
-
-
 
       return ContentService.createTextOutput(JSON.stringify({
         status: "success",
@@ -148,9 +127,11 @@ function doPost(e) {
       })).setMimeType(ContentService.MimeType.JSON);
 
     } else if (action === "editDeclaration") {
-      // 3. EDIT DECLARATION IN LIVE DECLARATION TAB
+      // 3. EDIT DECLARATION (CHECKS 'Live Declaration' FIRST, THEN 'Declarations')
       var liveDeclSheet = ss.getSheetByName("Live Declaration");
       var updated = false;
+      var targetSheetName = "";
+
       if (liveDeclSheet) {
         var data = liveDeclSheet.getDataRange().getValues();
         for (var i = 1; i < data.length; i++) {
@@ -163,38 +144,124 @@ function doPost(e) {
             if (item.receipt !== undefined) liveDeclSheet.getRange(i + 1, 7).setValue(item.receipt);
             if (item.date) liveDeclSheet.getRange(i + 1, 8).setValue(item.date);
             updated = true;
+            targetSheetName = "Live Declaration";
             break;
           }
         }
       }
+
+      if (!updated) {
+        var declSheet = ss.getSheetByName("Declarations");
+        if (declSheet) {
+          var dData = declSheet.getDataRange().getValues();
+          for (var j = 1; j < dData.length; j++) {
+            if (String(dData[j][0]).trim() === String(item.sno).trim()) {
+              if (item.name) declSheet.getRange(j + 1, 2).setValue(item.name);
+              if (item.city) declSheet.getRange(j + 1, 3).setValue(item.city);
+              if (item.notes !== undefined) declSheet.getRange(j + 1, 4).setValue(item.notes);
+              if (item.mobile !== undefined) declSheet.getRange(j + 1, 5).setValue(item.mobile);
+              if (item.amount !== undefined) {
+                var newAmt = Number(item.amount) || 0;
+                declSheet.getRange(j + 1, 6).setValue(newAmt);
+                var depAmt = parseFloat(String(dData[j][8]).replace(/[^0-9.]/g, '') || 0);
+                declSheet.getRange(j + 1, 12).setValue(Math.max(0, newAmt - depAmt));
+              }
+              if (item.receipt !== undefined) declSheet.getRange(j + 1, 7).setValue(item.receipt);
+              if (item.date) declSheet.getRange(j + 1, 8).setValue(item.date);
+              updated = true;
+              targetSheetName = "Declarations";
+              break;
+            }
+          }
+        }
+      }
+
+      if (updated) {
+        // Record in Audit Log
+        recordAuditLog(
+          ss,
+          "घोषणा संशोधन",
+          item.sno,
+          item.name || "",
+          item.city || "",
+          item.amount || 0,
+          item.modified_by || "karyakarta",
+          item.modified_by_name || "",
+          item.modified_at || new Date().toISOString(),
+          targetSheetName + " में विवरण अपडेट किया गया।"
+        );
+      }
+
       return ContentService.createTextOutput(JSON.stringify({
         status: updated ? "success" : "not_found",
         message: updated ? "घोषणा प्रविष्टि सफलतापूर्वक अपडेट हो गई।" : "घोषणा रिकॉर्ड नहीं मिला।"
       })).setMimeType(ContentService.MimeType.JSON);
 
     } else if (action === "deleteDeclaration") {
-      // 4. DELETE DECLARATION FROM LIVE DECLARATION TAB
+      // 4. SOFT DELETE DECLARATION (LOGS TO 'Deleted Archive' AND CLEANS ACTIVE LIST)
       var liveDeclSheet = ss.getSheetByName("Live Declaration");
       var deleted = false;
+      var archivedName = item.name || "";
+      var archivedCity = item.city || "";
+      var archivedAmt = item.amount || 0;
+
       if (liveDeclSheet) {
         var data = liveDeclSheet.getDataRange().getValues();
         for (var i = 1; i < data.length; i++) {
           if (String(data[i][0]).trim() === String(item.sno).trim()) {
+            archivedName = data[i][1] || archivedName;
+            archivedCity = data[i][2] || archivedCity;
+            archivedAmt = data[i][5] || archivedAmt;
             liveDeclSheet.deleteRow(i + 1);
             deleted = true;
             break;
           }
         }
       }
+
+      if (!deleted) {
+        var declSheet = ss.getSheetByName("Declarations");
+        if (declSheet) {
+          var dData = declSheet.getDataRange().getValues();
+          for (var j = 1; j < dData.length; j++) {
+            if (String(dData[j][0]).trim() === String(item.sno).trim()) {
+              archivedName = dData[j][1] || archivedName;
+              archivedCity = dData[j][2] || archivedCity;
+              archivedAmt = dData[j][5] || archivedAmt;
+              declSheet.deleteRow(j + 1);
+              deleted = true;
+              break;
+            }
+          }
+        }
+      }
+
+      // Record Soft Delete in 'Deleted Archive' with deleted_by and deleted_at timestamps
+      recordDeletedArchive(
+        ss,
+        "घोषणा संकल्प",
+        item.sno,
+        archivedName,
+        archivedCity,
+        archivedAmt,
+        item.deleted_by || "karyakarta",
+        item.deleted_by_name || "",
+        item.deleted_at || new Date().toISOString(),
+        item
+      );
+
       return ContentService.createTextOutput(JSON.stringify({
-        status: deleted ? "success" : "not_found",
-        message: deleted ? "घोषणा प्रविष्टि सफलतापूर्वक हटा दी गई।" : "घोषणा रिकॉर्ड नहीं मिला।"
+        status: "success",
+        message: "घोषणा प्रविष्टि सफलतापूर्वक हटा दी गई (सॉफ्ट डिलीट पुरालेख 'Deleted Archive' में सुरक्षित दर्ज)।",
+        sno: item.sno
       })).setMimeType(ContentService.MimeType.JSON);
 
     } else if (action === "editCollection") {
-      // 5. EDIT COLLECTION IN LIVE COLLECTION TAB
+      // 5. EDIT COLLECTION (CHECKS 'Live Collection' FIRST, THEN 'Collections')
       var liveCollSheet = ss.getSheetByName("Live Collection");
       var updated = false;
+      var targetSheetName = "";
+
       if (liveCollSheet) {
         var data = liveCollSheet.getDataRange().getValues();
         for (var i = 1; i < data.length; i++) {
@@ -207,32 +274,109 @@ function doPost(e) {
             if (item.refNo !== undefined) liveCollSheet.getRange(i + 1, 9).setValue(item.refNo);
             if (item.remarks !== undefined) liveCollSheet.getRange(i + 1, 12).setValue(item.remarks);
             updated = true;
+            targetSheetName = "Live Collection";
             break;
           }
         }
       }
+
+      if (!updated) {
+        var collSheet = ss.getSheetByName("Collections");
+        if (collSheet) {
+          var cData = collSheet.getDataRange().getValues();
+          for (var j = 1; j < cData.length; j++) {
+            if (String(cData[j][1]).trim() === String(item.receiptNo).trim()) {
+              if (item.donorName) collSheet.getRange(j + 1, 4).setValue(item.donorName);
+              if (item.city) collSheet.getRange(j + 1, 5).setValue(item.city);
+              if (item.amount !== undefined) collSheet.getRange(j + 1, 6).setValue(Number(item.amount) || 0);
+              if (item.paymentMode) collSheet.getRange(j + 1, 7).setValue(item.paymentMode);
+              if (item.date) collSheet.getRange(j + 1, 8).setValue(item.date);
+              if (item.refNo !== undefined) collSheet.getRange(j + 1, 9).setValue(item.refNo);
+              if (item.remarks !== undefined) collSheet.getRange(j + 1, 12).setValue(item.remarks);
+              updated = true;
+              targetSheetName = "Collections";
+              break;
+            }
+          }
+        }
+      }
+
+      if (updated) {
+        recordAuditLog(
+          ss,
+          "रसीद संशोधन",
+          item.receiptNo,
+          item.donorName || "",
+          item.city || "",
+          item.amount || 0,
+          item.modified_by || "karyakarta",
+          item.modified_by_name || "",
+          item.modified_at || new Date().toISOString(),
+          targetSheetName + " में रसीद विवरण अपडेट किया गया।"
+        );
+      }
+
       return ContentService.createTextOutput(JSON.stringify({
         status: updated ? "success" : "not_found",
         message: updated ? "रसीद प्रविष्टि सफलतापूर्वक अपडेट हो गई।" : "रसीद रिकॉर्ड नहीं मिला।"
       })).setMimeType(ContentService.MimeType.JSON);
 
     } else if (action === "deleteCollection") {
-      // 6. DELETE COLLECTION FROM LIVE COLLECTION TAB
+      // 6. SOFT DELETE COLLECTION (LOGS TO 'Deleted Archive' AND CLEANS ACTIVE LIST)
       var liveCollSheet = ss.getSheetByName("Live Collection");
       var deleted = false;
+      var archivedName = item.donorName || "";
+      var archivedCity = item.city || "";
+      var archivedAmt = item.amount || 0;
+
       if (liveCollSheet) {
         var data = liveCollSheet.getDataRange().getValues();
         for (var i = 1; i < data.length; i++) {
           if (String(data[i][1]).trim() === String(item.receiptNo).trim()) {
+            archivedName = data[i][3] || archivedName;
+            archivedCity = data[i][4] || archivedCity;
+            archivedAmt = data[i][5] || archivedAmt;
             liveCollSheet.deleteRow(i + 1);
             deleted = true;
             break;
           }
         }
       }
+
+      if (!deleted) {
+        var collSheet = ss.getSheetByName("Collections");
+        if (collSheet) {
+          var cData = collSheet.getDataRange().getValues();
+          for (var j = 1; j < cData.length; j++) {
+            if (String(cData[j][1]).trim() === String(item.receiptNo).trim()) {
+              archivedName = cData[j][3] || archivedName;
+              archivedCity = cData[j][4] || archivedCity;
+              archivedAmt = cData[j][5] || archivedAmt;
+              collSheet.deleteRow(j + 1);
+              deleted = true;
+              break;
+            }
+          }
+        }
+      }
+
+      recordDeletedArchive(
+        ss,
+        "संग्रह रसीद",
+        item.receiptNo,
+        archivedName,
+        archivedCity,
+        archivedAmt,
+        item.deleted_by || "karyakarta",
+        item.deleted_by_name || "",
+        item.deleted_at || new Date().toISOString(),
+        item
+      );
+
       return ContentService.createTextOutput(JSON.stringify({
-        status: deleted ? "success" : "not_found",
-        message: deleted ? "रसीद प्रविष्टि सफलतापूर्वक हटा दी गई।" : "रसीद रिकॉर्ड नहीं मिला।"
+        status: "success",
+        message: "रसीद प्रविष्टि सफलतापूर्वक हटा दी गई (सॉफ्ट डिलीट पुरालेख 'Deleted Archive' में सुरक्षित दर्ज)।",
+        receiptNo: item.receiptNo
       })).setMimeType(ContentService.MimeType.JSON);
 
     } else {
@@ -250,5 +394,91 @@ function doPost(e) {
 
   } finally {
     lock.releaseLock();
+  }
+}
+
+/**
+ * Helper to get an existing sheet or create it with styled headers
+ */
+function getOrCreateSheet(ss, name, headers, headerColor) {
+  var sheet = ss.getSheetByName(name);
+  if (!sheet) {
+    sheet = ss.insertSheet(name);
+  }
+  if (sheet.getLastRow() === 0 && headers && headers.length > 0) {
+    sheet.appendRow(headers);
+    sheet.getRange(1, 1, 1, headers.length)
+      .setFontWeight("bold")
+      .setBackground(headerColor || "#123F42")
+      .setFontColor("#FFFFFF");
+  }
+  return sheet;
+}
+
+/**
+ * Record soft-deleted item in 'Deleted Archive' sheet with full audit fields
+ */
+function recordDeletedArchive(ss, type, id, name, city, amount, deletedBy, deletedByName, deletedAt, rawItem) {
+  try {
+    var archiveSheet = getOrCreateSheet(ss, "Deleted Archive", [
+      "हटाने का समय (Deleted At)",
+      "प्रकार (Type)",
+      "क्रम / रसीद नं.",
+      "दानदाता का नाम",
+      "स्थान / ग्राम",
+      "राशि (₹)",
+      "हटाया गया यूजरनेम (Deleted By)",
+      "कार्यकर्ता नाम",
+      "विवरण",
+      "मूल डेटा (JSON)"
+    ], "#8E1E1D");
+
+    archiveSheet.appendRow([
+      deletedAt || new Date().toISOString(),
+      type || "सामान्य",
+      id || "-",
+      name || "",
+      city || "",
+      amount || 0,
+      deletedBy || "karyakarta",
+      deletedByName || "",
+      "UI कार्यकर्ता पोर्टल से हटाया गया (Soft Deleted)",
+      JSON.stringify(rawItem || {})
+    ]);
+  } catch (err) {
+    Logger.log("Soft delete archive log failed: " + err.toString());
+  }
+}
+
+/**
+ * Record edits in 'Audit Log' sheet for full accountability
+ */
+function recordAuditLog(ss, type, id, name, city, amount, modifiedBy, modifiedByName, modifiedAt, details) {
+  try {
+    var auditSheet = getOrCreateSheet(ss, "Audit Log", [
+      "संशोधन समय (Modified At)",
+      "प्रकार (Type)",
+      "क्रम / रसीद नं.",
+      "दानदाता का नाम",
+      "स्थान / ग्राम",
+      "राशि (₹)",
+      "संशोधनकर्ता यूजरनेम (Modified By)",
+      "कार्यकर्ता नाम",
+      "परिवर्तन विवरण"
+    ], "#2E4057");
+
+    auditSheet.appendRow([
+      modifiedAt || new Date().toISOString(),
+      type || "संशोधन",
+      id || "-",
+      name || "",
+      city || "",
+      amount || 0,
+      modifiedBy || "karyakarta",
+      modifiedByName || "",
+      details || "संशोधित किया गया"
+    ]);
+  } catch (err) {
+    Logger.log("Audit log failed: " + err.toString());
   }
 }

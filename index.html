@@ -1728,7 +1728,23 @@
         // 5. UNION WITH LOCAL STORAGE DECLARATIONS & COLLECTIONS (Instant reflection of Karyakarta entries)
         try {
           const deletedDecls = new Set((JSON.parse(localStorage.getItem('koteshwar_deleted_declarations') || '[]')).map(String));
+          const editedDecls = JSON.parse(localStorage.getItem('koteshwar_edited_declarations') || '{}');
           const customDecls = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
+
+          // Apply edits to fetched donors
+          fetchedDonors.forEach(d => {
+            if (editedDecls[String(d.sno)]) {
+              const ed = editedDecls[String(d.sno)];
+              d.name = ed.name || d.name;
+              d.city = ed.city || d.city;
+              d.notes = ed.notes !== undefined ? ed.notes : d.notes;
+              d.amount = Number(ed.amount) || d.amount;
+              d.receipt = ed.receipt || d.receipt;
+              d.date = ed.date || d.date;
+              d.balance = Math.max(0, d.amount - (d.deposited || 0));
+            }
+          });
+
           if (Array.isArray(customDecls)) {
             customDecls.forEach(cd => {
               if (deletedDecls.has(String(cd.sno))) return;
@@ -1749,20 +1765,24 @@
                 fetchedDonors[idx].city = entry.city;
                 fetchedDonors[idx].notes = entry.notes;
                 fetchedDonors[idx].amount = entry.amount;
+                fetchedDonors[idx].receipt = entry.receipt;
                 fetchedDonors[idx].date = entry.date;
+                fetchedDonors[idx].balance = Math.max(0, entry.amount - (fetchedDonors[idx].deposited || 0));
               } else {
                 fetchedDonors.push(entry);
               }
             });
           }
 
-          // Apply local collections
+          // Apply local collections & edits
           const deletedColls = new Set((JSON.parse(localStorage.getItem('koteshwar_deleted_collections') || '[]')).map(String));
+          const editedColls = JSON.parse(localStorage.getItem('koteshwar_edited_collections') || '{}');
           const localColls = JSON.parse(localStorage.getItem('koteshwar_collections_ledger') || '[]');
           if (Array.isArray(localColls)) {
             localColls.forEach(lc => {
               if (deletedColls.has(String(lc.receiptNo))) return;
-              applyCollectionRow(lc.receiptNo, lc.donorSno, lc.donorName, lc.city, Number(lc.amount) || 0, lc.date);
+              const cItem = editedColls[String(lc.receiptNo)] ? Object.assign({}, lc, editedColls[String(lc.receiptNo)]) : lc;
+              applyCollectionRow(cItem.receiptNo, cItem.donorSno, cItem.donorName, cItem.city, Number(cItem.amount) || 0, cItem.date);
             });
           }
 
