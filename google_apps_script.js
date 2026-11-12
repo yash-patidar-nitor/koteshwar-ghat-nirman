@@ -139,27 +139,7 @@ function doPost(e) {
         new Date().toISOString()
       ]);
 
-      // 3. यदि दानदाता का संदर्भ है, तो Declarations शीट में जमा राशि एवं शेष अपडेट करें
-      if (item.donorSno) {
-        var declSheet = ss.getSheetByName("Declarations");
-        if (declSheet) {
-          var data = declSheet.getDataRange().getValues();
-          for (var i = 1; i < data.length; i++) {
-            if (String(data[i][0]).trim() === String(item.donorSno).trim() || 
-                String(data[i][1]).trim() === String(item.donorName).trim()) {
-              var currDep = parseFloat(String(data[i][8]).replace(/[^0-9.]/g, '') || 0);
-              var addDep = parseFloat(item.amount) || 0;
-              var newDep = currDep + addDep;
-              var pledged = parseFloat(String(data[i][5]).replace(/[^0-9.]/g, '') || 0);
-              var newBal = Math.max(0, pledged - newDep);
 
-              declSheet.getRange(i + 1, 9).setValue(newDep); // Col I (Deposited)
-              declSheet.getRange(i + 1, 12).setValue(newBal); // Col L (Balance)
-              break;
-            }
-          }
-        }
-      }
 
       return ContentService.createTextOutput(JSON.stringify({
         status: "success",

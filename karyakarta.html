@@ -1345,6 +1345,7 @@
     const SHEET_ID = '1Gw-tjQuVRzp6jO57jdH7OzvfEx4Brw_DV6uRb1cUDt8';
     const GVIZ_BULK_DECL_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Declarations&tq=${encodeURIComponent('SELECT A, B, C, D, F, G, H, I, L')}`;
     const GVIZ_LIVE_DECL_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent('Live Declaration')}`;
+    const GVIZ_BULK_COLL_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Collections`;
     const GVIZ_LIVE_COLL_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent('Live Collection')}`;
 
     const AUTHORIZED_USERS = {
@@ -1545,68 +1546,86 @@
         collectionsList = [];
       }
 
-      // 2. Fetch live collections from 'Live Collection' sheet
+      const fetchedColls = [];
+      const parseCollRows = (rows, prefix) => {
+        for (let i = 0; i < rows.length; i++) {
+          const c = rows[i].c;
+          if (!c || c.length < 6) continue;
+          const rcptNo = c[1] && c[1].v !== null ? String(c[1].v).trim() : `${prefix}-${i+1}`;
+          const donorSno = c[2] && c[2].v !== null ? c[2].v : "";
+          const donorName = c[3] && c[3].v !== null ? String(c[3].v).trim() : "";
+          const city = c[4] && c[4].v !== null ? String(c[4].v).trim() : "";
+          const rawAmt = c[5] && c[5].v !== null ? String(c[5].v) : "0";
+          const amt = parseFloat(String(rawAmt).replace(/[^0-9.]/g, '')) || 0;
+          const mode = c[6] && c[6].v !== null ? String(c[6].v).trim() : "नकद";
+          const dateVal = c[7] ? (c[7].f || c[7].v || "") : "";
+          const refNo = c[8] && c[8].v !== null ? String(c[8].v).trim() : "";
+          const collector = c[9] && c[9].v !== null ? String(c[9].v).trim() : "";
+          const collectorUser = c[10] && c[10].v !== null ? String(c[10].v).trim() : "";
+          const remarks = c[11] && c[11].v !== null ? String(c[11].v).trim() : "";
+
+          if (donorName || amt > 0 || rcptNo) {
+            fetchedColls.push({
+              id: `${prefix}_${i}`,
+              receiptNo: rcptNo,
+              donorSno: donorSno,
+              donorName: donorName,
+              city: city,
+              amount: amt,
+              paymentMode: mode,
+              refNo: refNo,
+              date: String(dateVal).trim(),
+              collector: collector,
+              collectorUsername: collectorUser,
+              remarks: remarks,
+              timestamp: new Date().toISOString()
+            });
+          }
+        }
+      };
+
+      // 2. Fetch bulk collections from 'Collections' sheet (if populated)
       try {
-        const res = await fetch(GVIZ_LIVE_COLL_URL);
-        if (res.ok) {
-          const raw = await res.text();
+        const resBulk = await fetch(GVIZ_BULK_COLL_URL);
+        if (resBulk.ok) {
+          const raw = await resBulk.text();
           const match = raw.match(/setResponse\(([\s\S]*)\);?/);
           if (match) {
             const data = JSON.parse(match[1]);
             const rows = data.table && data.table.rows ? data.table.rows : [];
-            const fetchedColls = [];
+            parseCollRows(rows, "BR");
+          }
+        }
+      } catch (err) {
+        console.warn("Bulk Collections fetch notice:", err);
+      }
 
-            for (let i = 0; i < rows.length; i++) {
-              const c = rows[i].c;
-              if (!c || c.length < 6) continue;
-              // Col 0: Sno, Col 1: Manual Receipt No, Col 2: Donor Sno, Col 3: Donor Name, Col 4: City, Col 5: Amount, Col 6: Payment Mode, Col 7: Date, Col 8: Ref, Col 9: Collector, Col 10: CollectorUsername, Col 11: Remarks
-              const rcptNo = c[1] && c[1].v !== null ? String(c[1].v).trim() : `R-${i+1}`;
-              const donorSno = c[2] && c[2].v !== null ? c[2].v : "";
-              const donorName = c[3] && c[3].v !== null ? String(c[3].v).trim() : "";
-              const city = c[4] && c[4].v !== null ? String(c[4].v).trim() : "";
-              const rawAmt = c[5] && c[5].v !== null ? String(c[5].v) : "0";
-              const amt = parseFloat(String(rawAmt).replace(/[^0-9.]/g, '')) || 0;
-              const mode = c[6] && c[6].v !== null ? String(c[6].v).trim() : "नकद";
-              const dateVal = c[7] ? (c[7].f || c[7].v || "") : "";
-              const refNo = c[8] && c[8].v !== null ? String(c[8].v).trim() : "";
-              const collector = c[9] && c[9].v !== null ? String(c[9].v).trim() : "";
-              const collectorUser = c[10] && c[10].v !== null ? String(c[10].v).trim() : "";
-              const remarks = c[11] && c[11].v !== null ? String(c[11].v).trim() : "";
-
-              if (donorName || amt > 0 || rcptNo) {
-                fetchedColls.push({
-                  id: `sheet_coll_${i}`,
-                  receiptNo: rcptNo,
-                  donorSno: donorSno,
-                  donorName: donorName,
-                  city: city,
-                  amount: amt,
-                  paymentMode: mode,
-                  refNo: refNo,
-                  date: String(dateVal).trim(),
-                  collector: collector,
-                  collectorUsername: collectorUser,
-                  remarks: remarks,
-                  timestamp: new Date().toISOString()
-                });
-              }
-            }
-
-            if (fetchedColls.length > 0) {
-              // Merge sheet collections with local collections (avoiding duplicate receipt numbers)
-              const existingRcpts = new Set(fetchedColls.map(c => c.receiptNo));
-              collectionsList.forEach(localItem => {
-                if (!existingRcpts.has(localItem.receiptNo)) {
-                  fetchedColls.push(localItem);
-                }
-              });
-              collectionsList = fetchedColls;
-              saveCollectionsToStorage();
-            }
+      // 3. Fetch live collections from 'Live Collection' sheet
+      try {
+        const resLive = await fetch(GVIZ_LIVE_COLL_URL);
+        if (resLive.ok) {
+          const raw = await resLive.text();
+          const match = raw.match(/setResponse\(([\s\S]*)\);?/);
+          if (match) {
+            const data = JSON.parse(match[1]);
+            const rows = data.table && data.table.rows ? data.table.rows : [];
+            parseCollRows(rows, "LR");
           }
         }
       } catch (err) {
         console.warn("Live Collection sheet fetch error:", err);
+      }
+
+      if (fetchedColls.length > 0) {
+        // Merge sheet collections with local collections (avoiding duplicate receipt numbers)
+        const existingRcpts = new Set(fetchedColls.map(c => c.receiptNo));
+        collectionsList.forEach(localItem => {
+          if (!existingRcpts.has(localItem.receiptNo)) {
+            fetchedColls.push(localItem);
+          }
+        });
+        collectionsList = fetchedColls;
+        saveCollectionsToStorage();
       }
     }
 
@@ -1660,6 +1679,7 @@
                   city: city || "अन्य",
                   notes: notes,
                   amount: amt,
+                  initialDeposited: dep,
                   deposited: dep,
                   balance: bal,
                   receipt: receipt || "-",
@@ -1711,6 +1731,7 @@
                   notes: notes,
                   mobile: mobile,
                   amount: amt,
+                  initialDeposited: 0,
                   deposited: 0,
                   balance: amt,
                   receipt: receipt,
@@ -1752,19 +1773,51 @@
     }
 
     function reconcileCollectionsWithDeclarations() {
-      const collMap = {};
+      const collMapSno = {};
+      const collMapName = {};
+
       collectionsList.forEach(c => {
+        const amt = Number(c.amount) || 0;
         if (c.donorSno) {
-          collMap[c.donorSno] = (collMap[c.donorSno] || 0) + (Number(c.amount) || 0);
+          const sKey = String(c.donorSno).trim();
+          collMapSno[sKey] = (collMapSno[sKey] || 0) + amt;
+        } else if (c.donorName) {
+          const nKey = c.donorName.trim().toLowerCase();
+          collMapName[nKey] = (collMapName[nKey] || 0) + amt;
         }
       });
 
       declarationsList.forEach(d => {
-        const localColl = collMap[d.sno] || 0;
-        if (localColl > 0 && d.deposited < localColl) {
-          d.deposited = localColl;
+        const sKey = String(d.sno).trim();
+        const nKey = String(d.name || '').trim().toLowerCase();
+        const liveColl = (collMapSno[sKey] || 0) + (collMapName[nKey] || 0);
+        const baselineDep = Number(d.initialDeposited !== undefined ? d.initialDeposited : d.deposited) || 0;
+        d.deposited = baselineDep + liveColl;
+        d.balance = Math.max(0, (Number(d.amount) || 0) - d.deposited);
+      });
+
+      // Also ensure walk-in donors from collections exist in declarationsList
+      collectionsList.forEach(c => {
+        const sKey = String(c.donorSno || '').trim();
+        const nKey = String(c.donorName || '').trim().toLowerCase();
+        const match = declarationsList.find(d => (sKey && String(d.sno).trim() === sKey) || (nKey && String(d.name || '').trim().toLowerCase() === nKey));
+        if (!match && c.donorName) {
+          declarationsList.push({
+            sno: c.donorSno || `COL-${c.receiptNo || 'DIR'}`,
+            name: c.donorName,
+            city: c.city || 'अन्य',
+            notes: 'सीधा सहयोग (Direct Collection)',
+            mobile: c.mobile || '',
+            amount: Number(c.amount) || 0,
+            initialDeposited: Number(c.amount) || 0,
+            deposited: Number(c.amount) || 0,
+            balance: 0,
+            receipt: c.receiptNo || '-',
+            date: c.date || '',
+            collector: c.collector || '',
+            collectorUsername: c.collectorUsername || ''
+          });
         }
-        d.balance = Math.max(0, (Number(d.amount) || 0) - (Number(d.deposited) || 0));
       });
     }
 

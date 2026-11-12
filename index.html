@@ -1570,7 +1570,7 @@
             });
           }
         }
-        // Also fetch Live Declaration tab if rows exist
+        // 2. UNION WITH LIVE DECLARATIONS (Live Declaration tab)
         try {
           const liveDeclRes = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent('Live Declaration')}`);
           if (liveDeclRes.ok) {
@@ -1590,7 +1590,8 @@
                 const lrcpt = lc[6] && lc[6].v !== null ? String(lc[6].v).trim() : "-";
                 const ldate = lc[7] ? (lc[7].f || lc[7].v || "") : "";
                 if (lname || lamt > 0) {
-                  fetchedDonors.push({
+                  const existingIdx = fetchedDonors.findIndex(d => String(d.sno) === String(lsno));
+                  const newEntry = {
                     sno: lsno,
                     name: lname,
                     city: lcity,
@@ -1600,7 +1601,12 @@
                     balance: lamt,
                     receipt: lrcpt,
                     date: String(ldate).trim()
-                  });
+                  };
+                  if (existingIdx >= 0) {
+                    fetchedDonors[existingIdx] = newEntry;
+                  } else {
+                    fetchedDonors.push(newEntry);
+                  }
                 }
               }
             }
@@ -1609,7 +1615,63 @@
           console.warn("Live Declaration fetch notice:", e);
         }
 
-        // Also fetch Live Collection tab if rows exist
+        // Helper to reconcile collection rows (from either bulk Collections or Live Collection)
+        const applyCollectionRow = (rcptNo, dsno, dname, dcity, camt, dateStr) => {
+          if (camt <= 0) return;
+          let target = null;
+          if (dsno) {
+            target = fetchedDonors.find(d => String(d.sno) === String(dsno));
+          }
+          if (!target && dname) {
+            const cleanDName = dname.trim().toLowerCase();
+            target = fetchedDonors.find(d => d.name.trim().toLowerCase() === cleanDName);
+          }
+          if (target) {
+            target.deposited += camt;
+            target.balance = Math.max(0, target.amount - target.deposited);
+          } else if (dname) {
+            // Direct collection without prior pledge
+            fetchedDonors.push({
+              sno: dsno || `COL-${fetchedDonors.length + 1}`,
+              name: dname,
+              city: dcity || "अन्य",
+              notes: "सीधा सहयोग (Direct Collection)",
+              amount: camt,
+              deposited: camt,
+              balance: 0,
+              receipt: rcptNo || "-",
+              date: dateStr || ""
+            });
+          }
+        };
+
+        // 3. UNION WITH BULK COLLECTIONS (Collections tab, if populated)
+        try {
+          const bulkCollRes = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Collections`);
+          if (bulkCollRes.ok) {
+            const rawBulkColl = await bulkCollRes.text();
+            const matchBulkColl = rawBulkColl.match(/setResponse\(([\s\S]*)\);?/);
+            if (matchBulkColl) {
+              const bcollData = JSON.parse(matchBulkColl[1]);
+              const bcollRows = bcollData.table && bcollData.table.rows ? bcollData.table.rows : [];
+              for (let i = 0; i < bcollRows.length; i++) {
+                const bc = bcollRows[i].c;
+                if (!bc || bc.length < 6) continue;
+                const brcpt = bc[1] && bc[1].v !== null ? String(bc[1].v).trim() : `BR-${i+1}`;
+                const bdsno = bc[2] && bc[2].v !== null ? bc[2].v : "";
+                const bdname = bc[3] && bc[3].v !== null ? String(bc[3].v).trim() : "";
+                const bdcity = bc[4] && bc[4].v !== null ? String(bc[4].v).trim() : "अन्य";
+                const bamt = parseFloat(String(bc[5] && bc[5].v !== null ? bc[5].v : "0").replace(/[^0-9.]/g, '')) || 0;
+                const bdate = bc[7] ? (bc[7].f || bc[7].v || "") : "";
+                applyCollectionRow(brcpt, bdsno, bdname, bdcity, bamt, bdate);
+              }
+            }
+          }
+        } catch (e) {
+          console.warn("Bulk Collections fetch notice:", e);
+        }
+
+        // 4. UNION WITH LIVE COLLECTIONS (Live Collection tab)
         try {
           const liveCollRes = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent('Live Collection')}`);
           if (liveCollRes.ok) {
@@ -1621,15 +1683,13 @@
               for (let i = 0; i < collRows.length; i++) {
                 const cc = collRows[i].c;
                 if (!cc || cc.length < 6) continue;
+                const lrcpt = cc[1] && cc[1].v !== null ? String(cc[1].v).trim() : `LR-${i+1}`;
                 const dsno = cc[2] && cc[2].v !== null ? cc[2].v : "";
+                const dname = cc[3] && cc[3].v !== null ? String(cc[3].v).trim() : "";
+                const dcity = cc[4] && cc[4].v !== null ? String(cc[4].v).trim() : "अन्य";
                 const camt = parseFloat(String(cc[5] && cc[5].v !== null ? cc[5].v : "0").replace(/[^0-9.]/g, '')) || 0;
-                if (dsno && camt > 0) {
-                  const target = fetchedDonors.find(d => String(d.sno) === String(dsno));
-                  if (target) {
-                    target.deposited += camt;
-                    target.balance = Math.max(0, target.amount - target.deposited);
-                  }
-                }
+                const ldate = cc[7] ? (cc[7].f || cc[7].v || "") : "";
+                applyCollectionRow(lrcpt, dsno, dname, dcity, camt, ldate);
               }
             }
           }
