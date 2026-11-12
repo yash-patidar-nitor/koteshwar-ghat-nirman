@@ -1539,6 +1539,7 @@
        CONSTANTS & USERS
        ============================================================ */
     const SHEET_ID = '1Gw-tjQuVRzp6jO57jdH7OzvfEx4Brw_DV6uRb1cUDt8';
+    const CSV_DECL_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
     const GVIZ_BULK_DECL_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Declarations&tq=${encodeURIComponent('SELECT A, B, C, D, E, F, G, H, I, L')}`;
     const GVIZ_LIVE_DECL_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent('Live Declaration')}`;
     const GVIZ_BULK_COLL_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Collections`;
@@ -1571,6 +1572,45 @@
       if (str.length === 12 && str.startsWith('91')) str = str.substring(2);
       else if (str.length === 11 && str.startsWith('0')) str = str.substring(1);
       return str;
+    }
+
+    function parseCSV(text) {
+      const lines = [];
+      let row = [];
+      let inQuotes = false;
+      let curVal = '';
+
+      for (let i = 0; i < text.length; i++) {
+        const c = text[i];
+        const next = text[i + 1];
+
+        if (c === '"') {
+          if (inQuotes && next === '"') {
+            curVal += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+        } else if (c === ',' && !inQuotes) {
+          row.push(curVal.trim());
+          curVal = '';
+        } else if ((c === '\r' || c === '\n') && !inQuotes) {
+          if (c === '\r' && next === '\n') i++;
+          row.push(curVal.trim());
+          if (row.length > 1 || (row.length === 1 && row[0] !== '')) {
+            lines.push(row);
+          }
+          row = [];
+          curVal = '';
+        } else {
+          curVal += c;
+        }
+      }
+      if (curVal || row.length > 0) {
+        row.push(curVal.trim());
+        lines.push(row);
+      }
+      return lines;
     }
 
     /* ============================================================
@@ -1861,59 +1901,103 @@
         } catch (e) {}
       }
 
-      // 1. Fetch Bulk Declarations from baseline sheet
+      // 1. Fetch Bulk Declarations from baseline sheet (CSV stream first - 100% immune to UI filters)
+      let fetchedBulk = [];
       try {
-        const res = await fetch(GVIZ_BULK_DECL_URL);
-        if (res.ok) {
-          const raw = await res.text();
-          const match = raw.match(/setResponse\(([\s\S]*)\);?/);
-          if (match) {
-            const data = JSON.parse(match[1]);
-            const rows = data.table && data.table.rows ? data.table.rows : [];
-            const fetched = [];
+        const csvRes = await fetch(CSV_DECL_URL);
+        if (csvRes.ok) {
+          const csvText = await csvRes.text();
+          const parsed = parseCSV(csvText);
+          for (let i = 1; i < parsed.length; i++) {
+            const r = parsed[i];
+            if (!r || r.length < 5) continue;
+            const sno = parseInt(r[0], 10);
+            if (isNaN(sno)) continue;
 
-            for (let i = 0; i < rows.length; i++) {
-              const c = rows[i].c;
-              if (!c || c.length < 5) continue;
-              const sno = c[0] && c[0].v !== null ? c[0].v : (i + 1);
-              const name = c[1] && c[1].v !== null ? String(c[1].v).trim() : "";
-              const city = c[2] && c[2].v !== null ? String(c[2].v).trim() : "अन्य";
-              const notes = c[3] && c[3].v !== null ? String(c[3].v).trim() : "";
-              const mobile = c[4] ? cleanMobileNumber(c[4].f || c[4].v || "") : "";
-              const rawAmt = c[5] && c[5].v !== null ? String(c[5].v) : "0";
-              const receipt = c[6] && c[6].v !== null ? String(c[6].v).trim() : "-";
-              const dateVal = c[7] ? (c[7].f || c[7].v || "") : "";
-              const rawDep = c[8] && c[8].v !== null ? String(c[8].v) : "0";
-              const rawBal = c[9] && c[9].v !== null ? String(c[9].v) : "0";
+            const name = r[1] ? r[1].trim() : "";
+            const city = r[2] ? r[2].trim() : "अन्य";
+            const notes = r[3] ? r[3].trim() : "";
+            const mobile = cleanMobileNumber(r[4] || "");
+            const amt = parseFloat(String(r[5] || '0').replace(/[^0-9.]/g, '')) || 0;
+            const rcpt = r[6] ? r[6].trim() : "-";
+            const date = r[7] ? r[7].trim() : "";
+            const dep = parseFloat(String(r[8] || '0').replace(/[^0-9.]/g, '')) || 0;
+            const bal = parseFloat(String(r[11] || '0').replace(/[^0-9.]/g, '')) || Math.max(0, amt - dep);
 
-              if (!name && !rawAmt) continue;
-              const amt = parseFloat(String(rawAmt).replace(/[^0-9.]/g, '')) || 0;
-              const dep = parseFloat(String(rawDep).replace(/[^0-9.]/g, '')) || 0;
-              const bal = parseFloat(String(rawBal).replace(/[^0-9.]/g, '')) || 0;
-
-              if (name || amt > 0) {
-                fetched.push({
-                  sno: sno,
-                  name: name,
-                  city: city || "अन्य",
-                  notes: notes,
-                  mobile: mobile,
-                  amount: amt,
-                  initialDeposited: dep,
-                  deposited: dep,
-                  balance: bal,
-                  receipt: receipt || "-",
-                  date: String(dateVal).trim()
-                });
-              }
+            if (name || amt > 0) {
+              fetchedBulk.push({
+                sno: sno,
+                name: name,
+                city: city,
+                notes: notes,
+                mobile: mobile,
+                amount: amt,
+                initialDeposited: dep,
+                deposited: dep,
+                balance: bal,
+                receipt: rcpt,
+                date: String(date).trim()
+              });
             }
-
-            if (fetched.length > 0) declarationsList = fetched;
           }
         }
-      } catch (err) {
-        console.warn("Bulk Declarations fetch failed, using cached declarations", err);
+      } catch (csvErr) {
+        console.warn("CSV bulk stream notice, falling back to GViz:", csvErr);
       }
+
+      // Fallback to GViz if CSV stream returned nothing
+      if (fetchedBulk.length === 0) {
+        try {
+          const res = await fetch(GVIZ_BULK_DECL_URL);
+          if (res.ok) {
+            const raw = await res.text();
+            const match = raw.match(/setResponse\(([\s\S]*)\);?/);
+            if (match) {
+              const data = JSON.parse(match[1]);
+              const rows = data.table && data.table.rows ? data.table.rows : [];
+              for (let i = 0; i < rows.length; i++) {
+                const c = rows[i].c;
+                if (!c || c.length < 5) continue;
+                const sno = c[0] && c[0].v !== null ? c[0].v : (i + 1);
+                const name = c[1] && c[1].v !== null ? String(c[1].v).trim() : "";
+                const city = c[2] && c[2].v !== null ? String(c[2].v).trim() : "अन्य";
+                const notes = c[3] && c[3].v !== null ? String(c[3].v).trim() : "";
+                const mobile = c[4] ? cleanMobileNumber(c[4].f || c[4].v || "") : "";
+                const rawAmt = c[5] && c[5].v !== null ? String(c[5].v) : "0";
+                const receipt = c[6] && c[6].v !== null ? String(c[6].v).trim() : "-";
+                const dateVal = c[7] ? (c[7].f || c[7].v || "") : "";
+                const rawDep = c[8] && c[8].v !== null ? String(c[8].v) : "0";
+                const rawBal = c[9] && c[9].v !== null ? String(c[9].v) : "0";
+
+                if (!name && !rawAmt) continue;
+                const amt = parseFloat(String(rawAmt).replace(/[^0-9.]/g, '')) || 0;
+                const dep = parseFloat(String(rawDep).replace(/[^0-9.]/g, '')) || 0;
+                const bal = parseFloat(String(rawBal).replace(/[^0-9.]/g, '')) || 0;
+
+                if (name || amt > 0) {
+                  fetchedBulk.push({
+                    sno: sno,
+                    name: name,
+                    city: city || "अन्य",
+                    notes: notes,
+                    mobile: mobile,
+                    amount: amt,
+                    initialDeposited: dep,
+                    deposited: dep,
+                    balance: bal,
+                    receipt: receipt || "-",
+                    date: String(dateVal).trim()
+                  });
+                }
+              }
+            }
+          }
+        } catch (err) {
+          console.warn("Bulk Declarations GViz fetch failed, using cached declarations", err);
+        }
+      }
+
+      if (fetchedBulk.length > 0) declarationsList = fetchedBulk;
 
       // 2. ALSO Fetch new Live Declarations from 'Live Declaration' sheet
       try {
