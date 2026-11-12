@@ -48,7 +48,6 @@
 
       --border-radius: 12px;
       --card-shadow: 0 2px 6px rgba(18, 63, 66, 0.05), 0 6px 18px rgba(18, 63, 66, 0.04);
-      --hover-shadow: 0 8px 24px rgba(18, 63, 66, 0.12);
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -60,7 +59,7 @@
       color: var(--text-primary);
       font-family: "Noto Sans Devanagari", "Inter", system-ui, -apple-system, sans-serif;
       font-size: 14px;
-      line-height: 1.55;
+      line-height: 1.5;
       -webkit-font-smoothing: antialiased;
       font-variant-numeric: tabular-nums;
     }
@@ -74,7 +73,7 @@
     a { color: var(--teal); text-decoration: none; }
     a:hover { text-decoration: underline; }
 
-    /* ==================== 1. TOP EXECUTIVE HEADER ==================== */
+    /* ==================== 1. MOBILE-FIRST TOP HEADER ==================== */
     .portal-header {
       background: var(--teal);
       color: #fff;
@@ -82,82 +81,85 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
     }
     .header-inner {
-      max-width: 1280px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 10px 18px;
+      padding: 8px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
     }
     .header-brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      min-width: 0;
     }
     .header-logo-badge {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
       background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      font-size: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
       flex-shrink: 0;
     }
+    .header-title-box {
+      min-width: 0;
+    }
     .header-title-box h1 {
-      font-size: 15px;
+      font-size: 13.5px;
       font-weight: 700;
       color: #FFFFFF;
       margin: 0;
-      line-height: 1.25;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .header-title-box span {
-      font-size: 11px;
+      font-size: 10.5px;
       color: var(--gold-light);
       display: block;
-      margin-top: 2px;
+      margin-top: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      flex-shrink: 0;
     }
     .user-profile-badge {
-      background: rgba(209, 154, 80, 0.18);
+      background: rgba(209, 154, 80, 0.2);
       border: 1px solid var(--gold);
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 11.5px;
+      padding: 3px 8px;
+      border-radius: 16px;
+      font-size: 11px;
       color: #fff;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
     }
-    .user-profile-badge .user-tag {
-      font-size: 10px;
-      color: var(--gold-light);
-      background: rgba(0, 0, 0, 0.25);
-      padding: 1px 6px;
-      border-radius: 10px;
-    }
-
     .btn-header {
-      padding: 5px 11px;
-      border-radius: 20px;
-      font-size: 11.5px;
+      padding: 4px 9px;
+      border-radius: 16px;
+      font-size: 11px;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       text-decoration: none;
       transition: all 0.2s ease;
       border: 1px solid transparent;
@@ -167,23 +169,13 @@
       color: #fff;
       border-color: rgba(255, 255, 255, 0.25);
     }
-    .btn-header-public:hover {
-      background: rgba(255, 255, 255, 0.22);
-      color: #fff;
-      text-decoration: none;
-    }
     .btn-header-logout {
-      background: rgba(200, 75, 49, 0.25);
-      color: #FFB3A3;
-      border-color: rgba(200, 75, 49, 0.4);
-    }
-    .btn-header-logout:hover {
-      background: var(--saffron);
-      color: #fff;
-      text-decoration: none;
+      background: rgba(200, 75, 49, 0.3);
+      color: #FFC0B3;
+      border-color: rgba(200, 75, 49, 0.5);
     }
 
-    /* ==================== 2. USERNAME & PIN AUTHENTICATION SCREEN ==================== */
+    /* ==================== 2. PIN AUTHENTICATION OVERLAY ==================== */
     #authOverlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -192,99 +184,65 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 14px;
     }
     .auth-card {
       background: #FFFFFF;
-      border-radius: 16px;
-      max-width: 440px;
+      border-radius: 14px;
+      max-width: 400px;
       width: 100%;
       border: 2px solid var(--gold);
       box-shadow: 0 16px 50px rgba(0,0,0,0.5);
       overflow: hidden;
-      animation: authZoom 0.3s ease-out;
-    }
-    @keyframes authZoom {
-      from { transform: scale(0.92); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
     }
     .auth-card-head {
       background: var(--teal);
       color: #fff;
-      padding: 22px 20px 18px;
+      padding: 18px 16px;
       text-align: center;
       border-bottom: 3px solid var(--gold);
-      position: relative;
     }
     .auth-icon-circle {
-      width: 54px;
-      height: 54px;
-      margin: 0 auto 10px;
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 8px;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
+      font-size: 20px;
       color: #fff;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
     }
-    .auth-card-head h2 {
-      font-size: 16px;
-      font-weight: 700;
-      margin: 0 0 3px;
-      color: #FFFFFF;
-    }
-    .auth-card-head p {
-      font-size: 11.5px;
-      color: var(--gold-light);
-      margin: 0;
-    }
-    .auth-card-body {
-      padding: 22px 20px;
-    }
-    .auth-desc-text {
-      font-size: 12px;
-      color: var(--text-secondary);
-      text-align: center;
-      margin-bottom: 18px;
-      line-height: 1.5;
-    }
-
-    .auth-field-group {
-      margin-bottom: 14px;
-    }
+    .auth-card-head h2 { font-size: 15px; font-weight: 700; margin: 0 0 2px; }
+    .auth-card-head p { font-size: 11px; color: var(--gold-light); margin: 0; }
+    .auth-card-body { padding: 18px 16px; }
+    .auth-field-group { margin-bottom: 12px; }
     .auth-field-label {
       display: block;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
       color: var(--teal-dark);
-      margin-bottom: 5px;
-      text-align: left;
+      margin-bottom: 4px;
     }
     .auth-select, .auth-input {
       width: 100%;
       padding: 11px 12px;
-      font-size: 13.5px;
+      font-size: 15px; /* >=16px avoids iOS zoom */
       border: 2px solid var(--sandstone);
       border-radius: 8px;
       background: var(--sandstone-light);
       color: var(--text-primary);
       outline: none;
-      transition: all 0.2s ease;
       font-family: inherit;
     }
     .auth-select:focus, .auth-input:focus {
       border-color: var(--teal);
       background: #fff;
-      box-shadow: 0 0 0 3px var(--teal-subtle);
     }
-
-    .auth-pin-wrap {
-      position: relative;
-    }
+    .auth-pin-wrap { position: relative; }
     .auth-pin-wrap input {
-      padding-right: 44px;
+      padding-right: 42px;
       letter-spacing: 2px;
       font-weight: 600;
       text-align: center;
@@ -300,12 +258,11 @@
       cursor: pointer;
       font-size: 15px;
     }
-
     .auth-msg-box {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--saffron);
       text-align: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       min-height: 18px;
       font-weight: 600;
     }
@@ -314,683 +271,445 @@
       background: linear-gradient(135deg, var(--teal) 0%, var(--teal-light) 100%);
       color: #fff;
       padding: 12px;
-      font-size: 14px;
+      font-size: 14.5px;
       font-weight: 700;
       border: 1px solid var(--gold);
       border-radius: 8px;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(18, 63, 66, 0.25);
-      transition: all 0.2s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-    }
-    .btn-auth-unlock:hover {
-      background: var(--teal-dark);
-      transform: translateY(-1px);
-    }
-    .auth-footer-help {
-      margin-top: 16px;
-      text-align: center;
-      font-size: 11.5px;
-      color: var(--text-muted);
-      border-top: 1px solid var(--sandstone);
-      padding-top: 12px;
+      gap: 6px;
     }
 
-    /* ==================== 3. MAIN WORKSPACE CONTAINER ==================== */
+    /* ==================== 3. MAIN WORKSPACE ==================== */
     .portal-main {
-      max-width: 1280px;
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 14px 16px 40px;
+      padding: 10px 12px 60px;
     }
 
-    /* Karyakarta Top Notification / Sync Bar */
-    .sync-ribbon {
-      background: var(--white);
-      border: 1px solid var(--sandstone);
-      border-radius: 10px;
-      padding: 8px 14px;
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-      font-size: 12px;
-    }
-    .sync-info {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--text-secondary);
-    }
-    .status-dot-sm {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #4EBE86;
-    }
-    .status-dot-sm.syncing {
-      background: var(--gold);
-      animation: pulse 1s infinite;
-    }
-    @keyframes pulse {
-      0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; }
-    }
-
-    /* 4 KPI Summary Strip for Karyakartas */
-    .karyakarta-kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-    .k-kpi-card {
-      background: var(--white);
-      border: 1px solid var(--sandstone);
-      border-radius: 10px;
-      padding: 12px 14px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
-      position: relative;
-      overflow: hidden;
-    }
-    .k-kpi-card::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; bottom: 0;
-      width: 4px;
-    }
-    .k-kpi-card.c-pledged::before { background: var(--gold); }
-    .k-kpi-card.c-collected::before { background: var(--sage); }
-    .k-kpi-card.c-pending::before { background: var(--saffron); }
-    .k-kpi-card.c-rate::before { background: var(--teal); }
-
-    .k-kpi-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .k-kpi-amount {
-      font-size: 20px;
-      font-weight: 800;
-      color: var(--teal);
-      line-height: 1.2;
-    }
-    .k-kpi-sub {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 3px;
-    }
-
-    /* ==================== 4. NAVIGATION TABS (TOUCH-FRIENDLY) ==================== */
+    /* Touch-Friendly Horizontal Tabs */
     .tab-nav-bar {
       display: flex;
       gap: 6px;
       overflow-x: auto;
-      padding-bottom: 6px;
-      margin-bottom: 16px;
-      scrollbar-width: thin;
+      padding: 4px 2px 8px;
+      margin-bottom: 12px;
+      scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
     }
+    .tab-nav-bar::-webkit-scrollbar { display: none; }
     .tab-btn {
       background: var(--white);
       border: 1px solid var(--sandstone);
       color: var(--text-secondary);
-      font-size: 13px;
-      font-weight: 600;
-      padding: 9px 16px;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 8px 14px;
       border-radius: 20px;
       cursor: pointer;
       white-space: nowrap;
       display: inline-flex;
       align-items: center;
-      gap: 7px;
+      gap: 6px;
       transition: all 0.2s ease;
       box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-    }
-    .tab-btn:hover {
-      background: var(--sandstone-light);
-      border-color: var(--gold);
+      flex-shrink: 0;
     }
     .tab-btn.active {
       background: var(--teal);
       color: #fff;
       border-color: var(--teal);
-      box-shadow: 0 3px 10px rgba(18, 63, 66, 0.25);
+      box-shadow: 0 2px 8px rgba(18, 63, 66, 0.3);
     }
     .tab-btn.active .tab-badge {
       background: var(--gold);
       color: #fff;
     }
     .tab-badge {
-      background: var(--teal-subtle);
-      color: var(--teal);
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 7px;
+      background: var(--sandstone);
+      color: var(--teal-dark);
+      font-size: 10.5px;
+      padding: 1px 6px;
       border-radius: 10px;
     }
 
-    /* Tab Panes */
-    .portal-pane {
-      display: none;
-      animation: fadeIn 0.2s ease-out;
-    }
-    .portal-pane.active {
-      display: block;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .portal-pane { display: none; }
+    .portal-pane.active { display: block; }
 
-    /* ==================== 5. FORM CARDS & INPUT STYLES ==================== */
+    /* Clean Card */
     .form-box-card {
       background: var(--white);
       border: 1px solid var(--sandstone);
       border-radius: var(--border-radius);
       box-shadow: var(--card-shadow);
-      padding: 20px;
-      margin-bottom: 20px;
+      padding: 16px 14px;
+      margin-bottom: 16px;
     }
     .form-box-head {
-      border-bottom: 2px solid var(--sandstone-light);
-      padding-bottom: 12px;
-      margin-bottom: 18px;
+      border-bottom: 1px solid var(--sandstone);
+      padding-bottom: 10px;
+      margin-bottom: 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 8px;
       flex-wrap: wrap;
-      gap: 10px;
     }
     .form-box-head h3 {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       color: var(--teal);
       margin: 0;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
     .form-box-head span {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--text-muted);
     }
 
+    /* Purpose Alert Notice */
+    .purpose-strip {
+      background: rgba(18, 63, 66, 0.05);
+      border-left: 3px solid var(--teal);
+      padding: 8px 10px;
+      border-radius: 4px;
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .purpose-strip.amber {
+      background: rgba(209, 154, 80, 0.1);
+      border-left-color: var(--gold-dark);
+      color: #7A4F13;
+    }
+    .purpose-strip.green {
+      background: rgba(46, 125, 90, 0.1);
+      border-left-color: var(--sage);
+      color: #175237;
+    }
+
+    /* Form Fields */
     .form-grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 12px;
     }
     .form-grid-3 {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 14px;
+      gap: 12px;
     }
     @media (max-width: 768px) {
-      .form-grid-2, .form-grid-3 { grid-template-columns: 1fr; gap: 12px; }
-      .form-box-card { padding: 16px 14px; }
+      .form-grid-2, .form-grid-3 { grid-template-columns: 1fr; gap: 10px; }
     }
 
-    .form-group {
-      margin-bottom: 14px;
-    }
+    .form-group { margin-bottom: 12px; }
     .form-group label {
       display: block;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
       color: var(--teal-dark);
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
-    .form-group label .req {
-      color: var(--saffron);
-      margin-left: 2px;
-    }
-    .form-input, .form-select, .form-textarea {
+    .form-group label .req { color: var(--saffron); }
+    .form-input, .form-select {
       width: 100%;
       padding: 10px 12px;
-      font-size: 13.5px;
+      font-size: 15px; /* iOS friendly */
       border: 1px solid var(--sandstone);
       border-radius: 8px;
       background: var(--sandstone-light);
       color: var(--text-primary);
       outline: none;
-      transition: all 0.2s ease;
       font-family: inherit;
     }
-    .form-input:focus, .form-select:focus, .form-textarea:focus {
+    .form-input:focus, .form-select:focus {
       border-color: var(--teal);
       background: #fff;
-      box-shadow: 0 0 0 3px var(--teal-subtle);
     }
     .input-hint {
       font-size: 11px;
       color: var(--text-muted);
-      margin-top: 3px;
+      margin-top: 2px;
     }
 
-    /* Donor Live Lookup Box in Collections Entry */
-    .donor-lookup-container {
-      position: relative;
-    }
-    .donor-suggestions-box {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background: #FFFFFF;
-      border: 2px solid var(--gold);
-      border-radius: 8px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-      max-height: 240px;
-      overflow-y: auto;
-      z-index: 50;
-      display: none;
-    }
-    .donor-suggestion-item {
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--sandstone-light);
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: background 0.15s ease;
-    }
-    .donor-suggestion-item:hover {
-      background: var(--sandstone-light);
-    }
-    .donor-suggestion-item .s-name {
-      font-weight: 700;
-      color: var(--teal);
-      font-size: 13px;
-    }
-    .donor-suggestion-item .s-meta {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-    .donor-suggestion-item .s-amt {
-      font-weight: 700;
-      color: var(--gold-dark);
-      font-size: 13px;
-    }
-
-    /* Donor Card Preview inside Collection Entry */
-    .selected-donor-banner {
-      background: linear-gradient(135deg, rgba(18, 63, 66, 0.05) 0%, rgba(209, 154, 80, 0.1) 100%);
-      border: 1px solid var(--gold);
-      border-radius: 10px;
-      padding: 12px 14px;
-      margin-bottom: 16px;
-      display: none;
-    }
-    .selected-donor-banner.visible {
-      display: block;
-    }
-    .sel-donor-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .sel-stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-      gap: 8px;
-      margin-top: 10px;
-      padding-top: 8px;
-      border-top: 1px dashed var(--gold);
-    }
-    .sel-stat-box {
-      font-size: 11px;
-      color: var(--text-secondary);
-    }
-    .sel-stat-box strong {
-      display: block;
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--teal);
-    }
-
-    /* Action Buttons */
+    /* Buttons */
     .btn-submit-action {
       background: linear-gradient(135deg, var(--teal) 0%, var(--teal-light) 100%);
       color: #fff;
       border: 1px solid var(--gold);
-      padding: 12px 24px;
+      padding: 12px 20px;
       font-size: 14px;
       font-weight: 700;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 12px rgba(18, 63, 66, 0.2);
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 2px 8px rgba(18, 63, 66, 0.2);
       transition: all 0.2s ease;
+      width: 100%;
+      min-height: 46px;
     }
-    .btn-submit-action:hover {
-      background: var(--teal-dark);
-      transform: translateY(-1px);
+    .btn-submit-action:active { transform: scale(0.98); }
+    .btn-submit-whatsapp {
+      background: var(--whatsapp);
+      color: #fff;
+      border: 1px solid var(--whatsapp-dark);
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      min-height: 46px;
     }
     .btn-outline-action {
       background: var(--white);
       color: var(--teal);
-      border: 1px solid var(--teal);
-      padding: 11px 20px;
-      font-size: 13.5px;
+      border: 1px solid var(--sandstone);
+      padding: 9px 14px;
+      font-size: 12.5px;
       font-weight: 600;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      transition: all 0.2s ease;
-    }
-    .btn-outline-action:hover {
-      background: var(--teal-subtle);
+      gap: 4px;
     }
 
-    /* ==================== 6. TABLES & LEDGER STYLES ==================== */
+    /* Search & Filter Rows */
     .ledger-controls-row {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 12px;
+      gap: 8px;
+      margin-bottom: 10px;
       flex-wrap: wrap;
     }
     .search-input-wrap {
       position: relative;
       flex: 1;
-      min-width: 240px;
+      min-width: 200px;
     }
     .search-input-wrap i {
       position: absolute;
-      left: 12px;
+      left: 10px;
       top: 50%;
       transform: translateY(-50%);
       color: var(--text-muted);
     }
     .search-input-wrap input {
       width: 100%;
-      padding: 9px 12px 9px 34px;
+      padding: 9px 12px 9px 30px;
       border: 1px solid var(--sandstone);
       border-radius: 8px;
       background: var(--white);
-      font-size: 13px;
+      font-size: 13.5px;
       outline: none;
     }
-    .search-input-wrap input:focus {
-      border-color: var(--teal);
-      box-shadow: 0 0 0 2px var(--teal-subtle);
-    }
 
+    /* Tables */
     .table-container {
       background: var(--white);
       border: 1px solid var(--sandstone);
       border-radius: var(--border-radius);
       overflow-x: auto;
-      box-shadow: var(--card-shadow);
       -webkit-overflow-scrolling: touch;
     }
     table.data-table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      font-size: 13px;
+      font-size: 12.5px;
     }
     table.data-table th {
       background: var(--sandstone-light);
       color: var(--teal-dark);
       font-weight: 700;
-      padding: 10px 12px;
-      border-bottom: 2px solid var(--sandstone);
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--sandstone);
       white-space: nowrap;
-      font-size: 12px;
+      font-size: 11.5px;
     }
     table.data-table td {
-      padding: 10px 12px;
+      padding: 8px 10px;
       border-bottom: 1px solid var(--sandstone-light);
       vertical-align: middle;
     }
-    table.data-table tr:hover {
-      background: rgba(18, 63, 66, 0.02);
-    }
+    table.data-table tr:hover { background: rgba(18, 63, 66, 0.02); }
 
-    .badge-status {
-      padding: 3px 8px;
-      border-radius: 12px;
+    .btn-wa-sm {
+      background: var(--whatsapp);
+      color: #fff;
       font-size: 11px;
       font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 12px;
       display: inline-flex;
       align-items: center;
       gap: 4px;
+      text-decoration: none;
       white-space: nowrap;
     }
-    .badge-status.paid {
-      background: var(--sage-light);
-      color: var(--sage);
-    }
-    .badge-status.partial {
-      background: var(--gold-subtle);
-      color: var(--gold-dark);
-    }
-    .badge-status.pending {
-      background: var(--saffron-light);
-      color: var(--saffron);
-    }
+    .btn-wa-sm:hover { color: #fff; text-decoration: none; }
 
-    .badge-user-tag {
-      font-size: 10.5px;
-      background: rgba(18, 63, 66, 0.07);
-      color: var(--teal);
-      padding: 2px 6px;
-      border-radius: 6px;
-      display: inline-block;
-      margin-top: 2px;
+    /* Donor Autocomplete Box */
+    .donor-lookup-container { position: relative; }
+    .donor-suggestions-box {
+      position: absolute;
+      top: 100%; left: 0; right: 0;
+      background: #FFFFFF;
+      border: 2px solid var(--gold);
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      max-height: 220px;
+      overflow-y: auto;
+      z-index: 50;
+      display: none;
     }
-
-    .btn-table-action {
-      padding: 4px 9px;
-      border-radius: 6px;
-      font-size: 11.5px;
-      font-weight: 600;
+    .donor-suggestion-item {
+      padding: 9px 10px;
+      border-bottom: 1px solid var(--sandstone-light);
       cursor: pointer;
-      border: 1px solid var(--sandstone);
-      background: var(--sandstone-light);
-      color: var(--teal);
-      display: inline-flex;
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 4px;
-      text-decoration: none;
-      transition: all 0.15s ease;
-      white-space: nowrap;
     }
-    .btn-table-action:hover {
-      background: var(--teal);
-      color: #fff;
-      border-color: var(--teal);
-      text-decoration: none;
-    }
+    .donor-suggestion-item:hover { background: var(--sandstone-light); }
+    .donor-suggestion-item .s-name { font-weight: 700; color: var(--teal); font-size: 12.5px; }
+    .donor-suggestion-item .s-meta { font-size: 10.5px; color: var(--text-muted); }
+    .donor-suggestion-item .s-amt { font-weight: 700; color: var(--gold-dark); font-size: 12.5px; }
 
-    /* ==================== 7. DIGITAL RECEIPT MODAL ==================== */
+    .selected-donor-banner {
+      background: rgba(209, 154, 80, 0.08);
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 14px;
+      display: none;
+    }
+    .selected-donor-banner.visible { display: block; }
+
+    /* Modal Backdrop */
     .modal-backdrop {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(10, 36, 38, 0.75);
-      backdrop-filter: blur(5px);
+      backdrop-filter: blur(4px);
       z-index: 1000;
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 14px;
+      padding: 12px;
     }
     .modal-backdrop.open { display: flex; }
     .modal-card {
       background: #FFFFFF;
-      border-radius: 14px;
-      max-width: 580px;
+      border-radius: 12px;
+      max-width: 500px;
       width: 100%;
       border: 2px solid var(--gold);
-      box-shadow: 0 16px 50px rgba(0,0,0,0.35);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.35);
       overflow: hidden;
-      animation: modalSlide 0.25s ease-out;
-      max-height: 92vh;
+      max-height: 94vh;
       display: flex;
       flex-direction: column;
-    }
-    @keyframes modalSlide {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
     }
     .modal-head {
       background: var(--teal);
       color: #fff;
-      padding: 14px 18px;
+      padding: 12px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       border-bottom: 2px solid var(--gold);
-      flex-shrink: 0;
     }
-    .modal-head h4 { font-size: 15px; font-weight: 700; margin: 0; }
+    .modal-head h4 { font-size: 14px; font-weight: 700; margin: 0; }
     .btn-modal-close {
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 22px;
-      cursor: pointer;
+      background: none; border: none; color: #fff; font-size: 20px; cursor: pointer;
     }
-    .modal-body {
-      padding: 18px;
-      overflow-y: auto;
-      flex: 1;
-    }
+    .modal-body { padding: 14px; overflow-y: auto; flex: 1; }
     .modal-footer {
       background: var(--sandstone-light);
-      padding: 12px 18px;
+      padding: 10px 14px;
       border-top: 1px solid var(--sandstone);
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-      flex-shrink: 0;
+      flex-direction: column;
+      gap: 8px;
     }
 
-    /* Official Printed Receipt Card */
+    /* Official Receipt Preview */
     .official-receipt-box {
       border: 2px solid var(--gold);
-      border-radius: 10px;
-      padding: 20px;
+      border-radius: 8px;
+      padding: 14px;
       background: #FFFFFF;
       position: relative;
-    }
-    .official-receipt-box::before {
-      content: "";
-      position: absolute;
-      top: 6px; left: 6px; right: 6px; bottom: 6px;
-      border: 1px solid rgba(209, 154, 80, 0.35);
-      border-radius: 6px;
-      pointer-events: none;
     }
     .rcpt-header {
       text-align: center;
       border-bottom: 1px solid var(--sandstone);
-      padding-bottom: 12px;
-      margin-bottom: 14px;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
     }
-    .rcpt-header .shloka {
-      font-size: 12px;
-      color: var(--teal);
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-    .rcpt-header .inst-title {
-      font-size: 15.5px;
-      font-weight: 800;
-      color: var(--gold-dark);
-      margin: 3px 0 1px;
-    }
-    .rcpt-header .inst-sub {
-      font-size: 11.5px;
-      color: var(--text-secondary);
-    }
+    .rcpt-header .shloka { font-size: 11px; color: var(--teal); font-weight: 700; }
+    .rcpt-header .inst-title { font-size: 14px; font-weight: 800; color: var(--gold-dark); margin: 2px 0 1px; }
+    .rcpt-header .inst-sub { font-size: 10.5px; color: var(--text-secondary); }
     .rcpt-badge-bar {
       display: flex;
       justify-content: space-between;
-      font-size: 11.5px;
+      font-size: 11px;
       color: var(--text-muted);
-      margin-bottom: 14px;
-      padding-bottom: 8px;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
       border-bottom: 1px dashed var(--sandstone);
     }
     .rcpt-body-row {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 8px;
-      font-size: 13px;
+      margin-bottom: 6px;
+      font-size: 12px;
     }
     .rcpt-body-row .lbl { color: var(--text-muted); }
     .rcpt-body-row .val { font-weight: 700; color: var(--teal-dark); text-align: right; }
     .rcpt-amount-highlight {
       background: var(--sandstone-light);
       border: 1px solid var(--gold);
-      border-radius: 8px;
-      padding: 12px;
+      border-radius: 6px;
+      padding: 8px;
       text-align: center;
-      margin: 14px 0;
+      margin: 10px 0;
     }
-    .rcpt-amount-highlight .amt {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--gold-dark);
-    }
-    .rcpt-amount-highlight .words {
-      font-size: 12px;
-      color: var(--text-secondary);
-      font-weight: 600;
-      margin-top: 2px;
-    }
-    .rcpt-footer-seal {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-top: 18px;
-      padding-top: 12px;
-      border-top: 1px dashed var(--sandstone);
-      font-size: 11.5px;
-    }
+    .rcpt-amount-highlight .amt { font-size: 20px; font-weight: 800; color: var(--gold-dark); }
+    .rcpt-amount-highlight .words { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
 
-    /* Print Styles */
-    @media print {
-      body * { visibility: hidden; }
-      #receiptModalBackdrop, #receiptModalBackdrop * { visibility: visible; }
-      #receiptModalBackdrop {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background: none;
-        padding: 0;
-      }
-      .modal-card {
-        border: none;
-        box-shadow: none;
-        max-width: 100%;
-        width: 100%;
-      }
-      .modal-head, .modal-footer { display: none !important; }
-      .official-receipt-box {
-        border: 2px solid #000;
-      }
+    /* Success Inline Banner */
+    .inline-success-box {
+      background: rgba(46, 125, 90, 0.12);
+      border: 1px solid var(--sage);
+      color: var(--sage);
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      display: none;
+      align-items: center;
+      gap: 8px;
     }
+    .inline-success-box.visible { display: flex; }
   </style>
 </head>
 <body>
@@ -1002,37 +721,33 @@
         <div class="auth-icon-circle">
           <i class="fa-solid fa-user-shield"></i>
         </div>
-        <h2>अधिकृत कार्यकर्ता प्रवेश द्वार</h2>
-        <p>श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान • कोटेश्वर तीर्थ</p>
+        <h2>अधिकृत कार्यकर्ता प्रवेश</h2>
+        <p>कोटेश्वर तीर्थ घाट निर्माण सेवा महाअभियान</p>
       </div>
 
       <div class="auth-card-body">
-        <p class="auth-desc-text">
-          प्रत्येक प्रविष्टि को संबंधित कार्यकर्ता से प्रमाणित एवं ट्रेस (Traceable) रखने हेतु कृपया अपना अधिकृत उपयोगकर्ता नाम एवं सुरक्षा पिन दर्ज करें।
-        </p>
-
         <form id="authForm" onsubmit="handleAuthSubmit(event)">
           <!-- 1. Username Selector -->
           <div class="auth-field-group">
             <label class="auth-field-label">
-              <i class="fa-solid fa-user"></i> कार्यकर्ता उपयोगकर्ता नाम (Username)
+              <i class="fa-solid fa-user"></i> कार्यकर्ता का चयन (Username)
             </label>
             <select id="authUsernameSelect" class="auth-select" required onchange="handleUserSelectChange(this.value)">
-              <option value="">-- अधिकृत कार्यकर्ता चुनें --</option>
+              <option value="">-- कार्यकर्ता चुनें --</option>
               <option value="anilpatidar">anilpatidar (श्री अनिल पाटीदार)</option>
               <option value="raghavpatidar">raghavpatidar (श्री राघव पाटीदार)</option>
               <option value="mahendrapatidar">mahendrapatidar (श्री महेंद्र पाटीदार)</option>
               <option value="custom">अन्य यूजरनेम टाइप करें...</option>
             </select>
             <div id="customUsernameWrap" style="display:none;margin-top:6px;">
-              <input type="text" id="authCustomUsername" class="auth-input" placeholder="यूजरनेम टाइप करें (उदा. anilpatidar)" />
+              <input type="text" id="authCustomUsername" class="auth-input" placeholder="यूजरनेम दर्ज करें (उदा. anilpatidar)" />
             </div>
           </div>
 
           <!-- 2. Security PIN Input -->
           <div class="auth-field-group">
             <label class="auth-field-label">
-              <i class="fa-solid fa-key"></i> सुरक्षा पिन / पासवर्ड (Security PIN)
+              <i class="fa-solid fa-key"></i> सुरक्षा पिन (Security PIN)
             </label>
             <div class="auth-pin-wrap">
               <input type="password" id="authPinInput" class="auth-input" placeholder="सुरक्षा पिन दर्ज करें" autocomplete="current-password" required />
@@ -1045,20 +760,20 @@
           <div class="auth-msg-box" id="authMsgBox"></div>
 
           <button type="submit" class="btn-auth-unlock">
-            <i class="fa-solid fa-door-open"></i> पोर्टल में प्रवेश करें (Unlock Portal)
+            <i class="fa-solid fa-door-open"></i> प्रवेश करें (Login)
           </button>
         </form>
 
-        <div class="auth-footer-help">
+        <div style="margin-top:14px;text-align:center;font-size:11.5px;">
           <a href="index.html" style="color:var(--teal);font-weight:600;">
-            <i class="fa-solid fa-arrow-left"></i> मुख्य सार्वजनिक डैशबोर्ड पर लौटें
+            <i class="fa-solid fa-arrow-left"></i> सार्वजनिक डैशबोर्ड देखें
           </a>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ==================== 1. TOP EXECUTIVE HEADER ==================== -->
+  <!-- ==================== 1. COMPACT TOP HEADER ==================== -->
   <header class="portal-header">
     <div class="header-inner">
       <div class="header-brand">
@@ -1066,8 +781,8 @@
           <i class="fa-solid fa-hands-holding-circle"></i>
         </div>
         <div class="header-title-box">
-          <h1>माँ नर्मदा घाट निर्माण सेवा महाअभियान</h1>
-          <span>अधिकृत कार्यकर्ता पोर्टल • घोषणा एवं धन संग्रह प्रबंधन</span>
+          <h1>माँ नर्मदा घाट निर्माण महाअभियान</h1>
+          <span>अधिकृत कार्यकर्ता पोर्टल</span>
         </div>
       </div>
 
@@ -1076,14 +791,12 @@
         <div class="user-profile-badge" id="headerUserBadge">
           <i class="fa-solid fa-circle-user" style="color:var(--gold-light);"></i>
           <span id="headerUserDisplayName">कार्यकर्ता</span>
-          <span class="user-tag" id="headerUsernameTag">@user</span>
         </div>
-
-        <a href="index.html" class="btn-header btn-header-public">
-          <i class="fa-solid fa-house"></i> <span class="d-none d-sm-inline">डैशबोर्ड</span>
+        <a href="index.html" class="btn-header btn-header-public" title="सार्वजनिक डैशबोर्ड">
+          <i class="fa-solid fa-house"></i>
         </a>
         <button onclick="handleLogout()" class="btn-header btn-header-logout" title="लॉगआउट">
-          <i class="fa-solid fa-arrow-right-from-bracket"></i> लॉगआउट
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
         </button>
       </div>
     </div>
@@ -1092,63 +805,7 @@
   <!-- ==================== 2. MAIN WORKSPACE ==================== -->
   <main class="portal-main">
 
-    <!-- Sync & Status Ribbon -->
-    <div class="sync-ribbon">
-      <div class="sync-info">
-        <span class="status-dot-sm" id="ribbonDot"></span>
-        <span id="ribbonStatusText">डेटा सिंक स्थिति: तैयार</span>
-      </div>
-      <div>
-        <button class="btn-table-action" onclick="refreshPortalData()">
-          <i class="fa-solid fa-rotate" id="ribbonRefreshIcon"></i> डेटा ताज़ा करें
-        </button>
-      </div>
-    </div>
-
-    <!-- 4 KPI Summary Strip -->
-    <div class="karyakarta-kpi-grid">
-      <!-- Total Pledged -->
-      <div class="k-kpi-card c-pledged">
-        <div class="k-kpi-label">
-          <span>कुल घोषित संकल्प</span>
-          <i class="fa-solid fa-hand-holding-heart" style="color:var(--gold-dark);"></i>
-        </div>
-        <div class="k-kpi-amount" id="kpiTotalPledged">₹0</div>
-        <div class="k-kpi-sub" id="kpiPledgedCount">0 दानदाता संकल्प</div>
-      </div>
-
-      <!-- Total Collected -->
-      <div class="k-kpi-card c-collected">
-        <div class="k-kpi-label">
-          <span>कुल प्राप्त संग्रह (वसूल)</span>
-          <i class="fa-solid fa-circle-check" style="color:var(--sage);"></i>
-        </div>
-        <div class="k-kpi-amount" id="kpiTotalCollected" style="color:var(--sage);">₹0</div>
-        <div class="k-kpi-sub" id="kpiCollectionsCount">0 रसीदें जारी</div>
-      </div>
-
-      <!-- Remaining Pending -->
-      <div class="k-kpi-card c-pending">
-        <div class="k-kpi-label">
-          <span>कुल शेष वसूली</span>
-          <i class="fa-solid fa-clock" style="color:var(--saffron);"></i>
-        </div>
-        <div class="k-kpi-amount" id="kpiTotalPending" style="color:var(--saffron);">₹0</div>
-        <div class="k-kpi-sub" id="kpiPendingCount">0 परिवारों से वसूली शेष</div>
-      </div>
-
-      <!-- Collection Rate -->
-      <div class="k-kpi-card c-rate">
-        <div class="k-kpi-label">
-          <span>संग्रह उपलब्धि</span>
-          <i class="fa-solid fa-chart-pie" style="color:var(--teal);"></i>
-        </div>
-        <div class="k-kpi-amount" id="kpiCollectionRate">0.0%</div>
-        <div class="k-kpi-sub" id="kpiRateSub">घोषित के विरुद्ध प्राप्त</div>
-      </div>
-    </div>
-
-    <!-- Navigation Tabs -->
+    <!-- Touch Navigation Tabs (Clean & Simple) -->
     <div class="tab-nav-bar">
       <button class="tab-btn active" onclick="switchPortalTab('new-declaration', this)">
         <i class="fa-solid fa-pen-to-square"></i> नई घोषणा
@@ -1157,32 +814,38 @@
         <i class="fa-solid fa-receipt"></i> धन प्राप्ति / रसीद
       </button>
       <button class="tab-btn" onclick="switchPortalTab('declarations-ledger', this)">
-        <i class="fa-solid fa-clipboard-list"></i> घोषणा पंजी <span class="tab-badge" id="tabBadgeDeclarations">584</span>
+        <i class="fa-solid fa-clipboard-list"></i> घोषणा सूची <span class="tab-badge" id="tabBadgeDeclarations">584</span>
       </button>
       <button class="tab-btn" onclick="switchPortalTab('collections-ledger', this)">
-        <i class="fa-solid fa-file-invoice-dollar"></i> संग्रह पंजी <span class="tab-badge" id="tabBadgeCollections">0</span>
+        <i class="fa-solid fa-file-invoice-dollar"></i> संग्रह सूची <span class="tab-badge" id="tabBadgeCollections">0</span>
       </button>
       <button class="tab-btn" onclick="switchPortalTab('pending-list', this)">
-        <i class="fa-solid fa-hourglass-half"></i> लंबित वसूली सूची
+        <i class="fa-solid fa-hourglass-half"></i> लंबित वसूली
       </button>
       <button class="tab-btn" onclick="switchPortalTab('settings-sync', this)">
-        <i class="fa-solid fa-gear"></i> सेटिंग्स व सिंक
+        <i class="fa-solid fa-cloud-arrow-up"></i> डेटा सिंक व सेटिंग्स
       </button>
     </div>
 
-    <!-- ==================== TAB 1: NEW DECLARATION (नई घोषणा) ==================== -->
+    <!-- ==================== TAB 1: NEW DECLARATION ONLY (केवल घोषणा संकल्प) ==================== -->
     <div class="portal-pane active" id="pane-new-declaration">
       <div class="form-box-card">
         <div class="form-box-head">
-          <div>
-            <h3><i class="fa-solid fa-file-circle-plus" style="color:var(--gold-dark);"></i> नवीन घोषणा संकल्प प्रविष्टि</h3>
-            <span>घाट निर्माण हेतु नवीन दानदाता का संकल्प विवरण जोड़ें</span>
-          </div>
-          <div>
-            <span style="font-size:12px;background:var(--sandstone-light);padding:4px 10px;border-radius:20px;border:1px solid var(--sandstone);">
-              क्रम संख्या: <strong id="lblNextDeclarationSno">585</strong>
-            </span>
-          </div>
+          <h3><i class="fa-solid fa-file-circle-plus" style="color:var(--gold-dark);"></i> नवीन घोषणा संकल्प प्रविष्टि</h3>
+          <span style="font-size:11px;background:var(--sandstone-light);padding:3px 8px;border-radius:12px;border:1px solid var(--sandstone);">
+            क्रम संख्या: <strong id="lblNextDeclarationSno">585</strong>
+          </span>
+        </div>
+
+        <div class="purpose-strip">
+          <i class="fa-solid fa-circle-info" style="color:var(--teal);"></i>
+          <span><strong>नोट:</strong> यहाँ केवल दानदाता का संकल्प दर्ज होता है। राशि बाद में आने पर "धन प्राप्ति / रसीद" टैब से अलग से रसीद काटी जा सकती है।</span>
+        </div>
+
+        <!-- Inline Success Alert -->
+        <div class="inline-success-box" id="declSuccessAlert">
+          <i class="fa-solid fa-circle-check"></i>
+          <span id="declSuccessText">संकल्प सुरक्षित हो गया!</span>
         </div>
 
         <form id="newDeclarationForm" onsubmit="handleSaveDeclaration(event)">
@@ -1227,8 +890,7 @@
           <div class="form-grid-3">
             <div class="form-group">
               <label>संपर्क मोबाइल नंबर (गोपनीय)</label>
-              <input type="tel" id="declMobile" class="form-input" placeholder="उदा. 9876543210" pattern="[0-9]{10}" />
-              <div class="input-hint">केवल अधिकृत कार्यकर्ताओं के संपर्क हेतु सुरक्षित रहेगा</div>
+              <input type="tel" id="declMobile" class="form-input" placeholder="10 अंकों का मोबाइल" pattern="[0-9]{10}" />
             </div>
 
             <div class="form-group">
@@ -1237,57 +899,60 @@
             </div>
 
             <div class="form-group">
-              <label>प्रविष्टि कर्ता / अधिकृत कार्यकर्ता <span style="color:var(--sage);font-size:11px;">(ट्रेस योग्य)</span></label>
+              <label>प्रविष्टि कर्ता कार्यकर्ता (स्वतः)</label>
               <input type="text" id="declCollector" class="form-input" readonly style="background:#EEF5F3;font-weight:700;color:var(--teal);" />
-              <div class="input-hint">लॉगिन उपयोगकर्ता नाम (<span id="declUserHint">@user</span>) से स्वतः लिंक्ड</div>
             </div>
           </div>
 
           <div class="form-group">
-            <label>स्मरण / संदर्भ / पारिवारिक विवरण</label>
+            <label>स्मरण / संदर्भ / पारिवारिक विवरण (वैकल्पिक)</label>
             <input type="text" id="declNotes" class="form-input" placeholder="उदा. स्व. श्री कालूराम जी पाटीदार की पावन स्मृति में" />
           </div>
 
-          <div style="margin-top:20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+          <div style="margin-top:14px;">
             <button type="submit" class="btn-submit-action">
               <i class="fa-solid fa-floppy-disk"></i> घोषणा संकल्प सुरक्षित करें
-            </button>
-            <button type="reset" class="btn-outline-action">
-              <i class="fa-solid fa-eraser"></i> फॉर्म साफ़ करें
             </button>
           </div>
         </form>
       </div>
     </div>
 
-    <!-- ==================== TAB 2: MONEY RECEIPT ENTRY (धन प्राप्ति / रसीद) ==================== -->
+    <!-- ==================== TAB 2: MONEY RECEIPT (धन प्राप्ति एवं रसीद) ==================== -->
     <div class="portal-pane" id="pane-new-collection">
       <div class="form-box-card">
         <div class="form-box-head">
+          <h3><i class="fa-solid fa-receipt" style="color:var(--sage);"></i> धन प्राप्ति एवं रसीद प्रविष्टि</h3>
           <div>
-            <h3><i class="fa-solid fa-receipt" style="color:var(--sage);"></i> धन प्राप्ति एवं डिजिटल पावती प्रविष्टि</h3>
-            <span>दानदाताओं से प्राप्त राशि दर्ज करें एवं आधिकारिक रसीद / WhatsApp पावती तैयार करें</span>
-          </div>
-          <div>
-            <label style="font-size:12px;display:flex;align-items:center;gap:6px;cursor:pointer;">
+            <label style="font-size:11.5px;display:flex;align-items:center;gap:5px;cursor:pointer;">
               <input type="checkbox" id="chkDirectDonor" onchange="toggleDirectDonorMode(this.checked)" />
-              <span>नवीन / अघोषित सीधी प्राप्ति (बिना पूर्व घोषणा)</span>
+              <span>नवीन सीधी प्राप्ति (अघोषित)</span>
             </label>
           </div>
         </div>
 
+        <div class="purpose-strip green">
+          <i class="fa-brands fa-whatsapp" style="font-size:14px;color:var(--whatsapp);"></i>
+          <span>हस्तलिखित रसीद बुक क्रमांक दर्ज करें। रसीद सुरक्षित होते ही WhatsApp पर तुरंत पावती साझा करने का विकल्प मिलेगा।</span>
+        </div>
+
+        <!-- Inline Success Alert -->
+        <div class="inline-success-box" id="collSuccessAlert">
+          <i class="fa-solid fa-circle-check"></i>
+          <span id="collSuccessText">रसीद सफलतापूर्वक कट गई!</span>
+        </div>
+
         <form id="newCollectionForm" onsubmit="handleSaveCollection(event)">
-          <!-- Donor Search / Autocomplete -->
+          <!-- Mode A: Prior Donor Lookup -->
           <div class="form-group" id="donorLookupGroup">
             <label>दानदाता खोजें (नाम, क्रम संख्या या ग्राम से) <span class="req">*</span></label>
             <div class="donor-lookup-container">
               <input type="text" id="donorSearchInput" class="form-input" placeholder="टाइप करें: नाम, मोबाइल या क्रम संख्या..." autocomplete="off" oninput="handleDonorSearchInput(this.value)" />
               <div class="donor-suggestions-box" id="donorSuggestionsBox"></div>
             </div>
-            <div class="input-hint">पंजीकृत घोषणा सूची में से दानदाता का चयन करें</div>
           </div>
 
-          <!-- Direct donor manual fields (if toggle enabled) -->
+          <!-- Mode B: Direct Donor fields -->
           <div id="directDonorFields" style="display:none;" class="form-grid-3">
             <div class="form-group">
               <label>दानदाता का नाम <span class="req">*</span></label>
@@ -1303,39 +968,30 @@
             </div>
           </div>
 
-          <!-- Selected Donor Status Banner -->
+          <!-- Selected Donor Status Preview Banner -->
           <div class="selected-donor-banner" id="selectedDonorBanner">
-            <div class="sel-donor-row">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
               <div>
-                <span style="font-size:11px;color:var(--text-muted);">चयनित दानदाता:</span>
-                <div style="font-size:15px;font-weight:800;color:var(--teal);" id="selDonorName">श्री ...</div>
-                <div style="font-size:11.5px;color:var(--text-secondary);" id="selDonorMeta">क्रम संख्या: - | ग्राम: -</div>
+                <strong style="color:var(--teal);font-size:13.5px;" id="selDonorName">श्री ...</strong>
+                <span style="font-size:11px;color:var(--text-muted);margin-left:6px;" id="selDonorMeta">#0</span>
               </div>
-              <button type="button" class="btn-table-action" onclick="clearSelectedDonor()">
-                <i class="fa-solid fa-xmark"></i> दानदाता बदलें
+              <button type="button" class="btn-outline-action" onclick="clearSelectedDonor()" style="padding:2px 8px;font-size:11px;">
+                बदलें
               </button>
             </div>
-            <div class="sel-stats-grid">
-              <div class="sel-stat-box">
-                कुल संकल्प:
-                <strong id="selPledgedAmt">₹0</strong>
-              </div>
-              <div class="sel-stat-box">
-                पूर्व में जमा:
-                <strong style="color:var(--sage);" id="selDepositedAmt">₹0</strong>
-              </div>
-              <div class="sel-stat-box">
-                शेष देय राशि:
-                <strong style="color:var(--saffron);" id="selBalanceAmt">₹0</strong>
-              </div>
+            <div style="display:flex;gap:14px;margin-top:6px;font-size:11.5px;">
+              <span>कुल संकल्प: <strong id="selPledgedAmt">₹0</strong></span>
+              <span>जमा: <strong style="color:var(--sage);" id="selDepositedAmt">₹0</strong></span>
+              <span>शेष: <strong style="color:var(--saffron);" id="selBalanceAmt">₹0</strong></span>
             </div>
           </div>
 
-          <!-- Collection Amount & Details Grid -->
+          <!-- Manual Receipt Number & Collection Details -->
           <div class="form-grid-3">
             <div class="form-group">
-              <label>रसीद / पावती क्रमांक <span class="req">*</span></label>
-              <input type="text" id="collReceiptNo" class="form-input" placeholder="उदा. KTR-2026-0001" required />
+              <label>हस्तलिखित रसीद बुक क्रमांक (Manual Receipt No.) <span class="req">*</span></label>
+              <input type="text" id="collReceiptNo" class="form-input" placeholder="उदा. 1052 या Book-4/Rcpt-12" required />
+              <div class="input-hint">अपनी रसीद बुक का भौतिक पर्ची नंबर लिखें</div>
             </div>
 
             <div class="form-group">
@@ -1367,103 +1023,79 @@
             </div>
 
             <div class="form-group">
-              <label>राशि प्राप्तकर्ता कार्यकर्ता <span style="color:var(--sage);font-size:11px;">(ट्रेस योग्य)</span></label>
+              <label>राशि प्राप्तकर्ता कार्यकर्ता</label>
               <input type="text" id="collCollector" class="form-input" readonly style="background:#EEF5F3;font-weight:700;color:var(--teal);" required />
-              <div class="input-hint">लॉगिन उपयोगकर्ता नाम (<span id="collUserHint">@user</span>) से स्वतः लिंक्ड</div>
             </div>
           </div>
 
           <div class="form-group">
-            <label>पावती टिप्पणी / विवरण</label>
+            <label>पावती टिप्पणी / विवरण (वैकल्पिक)</label>
             <input type="text" id="collRemarks" class="form-input" placeholder="उदा. प्रथम किस्त जमा / संकल्प पूर्ण" />
           </div>
 
-          <div style="margin-top:20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+          <div style="margin-top:14px;display:flex;gap:10px;flex-direction:column;">
             <button type="submit" class="btn-submit-action">
-              <i class="fa-solid fa-check-double"></i> प्राप्ति दर्ज करें एवं डिजिटल रसीद बनाएं
-            </button>
-            <button type="reset" class="btn-outline-action" onclick="clearSelectedDonor()">
-              <i class="fa-solid fa-eraser"></i> साफ़ करें
+              <i class="fa-solid fa-receipt"></i> रसीद सुरक्षित करें एवं पावती देखें
             </button>
           </div>
         </form>
       </div>
     </div>
 
-    <!-- ==================== TAB 3: DECLARATIONS LEDGER (घोषणा पंजी) ==================== -->
+    <!-- ==================== TAB 3: DECLARATIONS LEDGER (घोषणा सूची) ==================== -->
     <div class="portal-pane" id="pane-declarations-ledger">
       <div class="form-box-card">
         <div class="form-box-head">
-          <div>
-            <h3><i class="fa-solid fa-clipboard-list" style="color:var(--teal);"></i> संपूर्ण घोषणा पंजी (Declarations Ledger)</h3>
-            <span>सभी पंजीकृत दानदाताओं के संकल्प, जमा एवं शेष राशि का ब्योरा</span>
-          </div>
-          <div>
-            <button class="btn-table-action" onclick="exportDeclarationsCSV()">
-              <i class="fa-solid fa-file-csv"></i> CSV निर्यात
-            </button>
-          </div>
+          <h3><i class="fa-solid fa-clipboard-list" style="color:var(--teal);"></i> संपूर्ण घोषणा सूची (Declarations)</h3>
+          <button class="btn-outline-action" onclick="exportDeclarationsCSV()">
+            <i class="fa-solid fa-file-csv"></i> CSV
+          </button>
         </div>
 
         <div class="ledger-controls-row">
           <div class="search-input-wrap">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchDeclTable" placeholder="दानदाता का नाम, क्रम या ग्राम खोजें..." oninput="filterDeclarationsTable()" />
+            <input type="text" id="searchDeclTable" placeholder="दानदाता या ग्राम खोजें..." oninput="filterDeclarationsTable()" />
           </div>
-
-          <div style="display:flex;gap:8px;">
-            <select id="filterDeclVillage" class="form-select" style="min-width:140px;" onchange="filterDeclarationsTable()">
-              <option value="all">सभी ग्राम / नगर</option>
-            </select>
-            <select id="filterDeclStatus" class="form-select" style="min-width:130px;" onchange="filterDeclarationsTable()">
-              <option value="all">सभी स्थितियां</option>
-              <option value="pending">वसूली शेष</option>
-              <option value="partial">आंशिक प्राप्त</option>
-              <option value="paid">पूर्ण प्राप्त</option>
-            </select>
-          </div>
+          <select id="filterDeclVillage" class="form-select" style="max-width:140px;" onchange="filterDeclarationsTable()">
+            <option value="all">सभी ग्राम</option>
+          </select>
         </div>
 
         <div class="table-container">
           <table class="data-table" id="declarationsTable">
             <thead>
               <tr>
-                <th style="width:60px;">क्र.</th>
-                <th>दानदाता का नाम</th>
-                <th>ग्राम / नगर</th>
-                <th style="text-align:right;">घोषित संकल्प (₹)</th>
-                <th style="text-align:right;">प्राप्त जमा (₹)</th>
-                <th style="text-align:right;">शेष राशि (₹)</th>
-                <th style="text-align:center;">स्थिति</th>
+                <th style="width:40px;">क्र.</th>
+                <th>दानदाता</th>
+                <th>ग्राम</th>
+                <th style="text-align:right;">संकल्प (₹)</th>
+                <th style="text-align:right;">जमा (₹)</th>
+                <th style="text-align:right;">शेष (₹)</th>
                 <th style="text-align:center;">कार्यवाही</th>
               </tr>
             </thead>
             <tbody id="declTableBody">
-              <tr><td colspan="8" style="text-align:center;padding:24px;">डेटा लोड हो रहा है...</td></tr>
+              <tr><td colspan="7" style="text-align:center;padding:20px;">डेटा लोड हो रहा है...</td></tr>
             </tbody>
           </table>
-        </div>
-
-        <div style="margin-top:12px;font-size:12px;color:var(--text-muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-          <span id="declTableSummary">लोड हो रहा है...</span>
-          <span id="declTablePages"></span>
         </div>
       </div>
     </div>
 
-    <!-- ==================== TAB 4: COLLECTIONS LEDGER (संग्रह पंजी) ==================== -->
+    <!-- ==================== TAB 4: COLLECTIONS LEDGER (संग्रह सूची) ==================== -->
     <div class="portal-pane" id="pane-collections-ledger">
       <div class="form-box-card">
         <div class="form-box-head">
-          <div>
-            <h3><i class="fa-solid fa-file-invoice-dollar" style="color:var(--sage);"></i> वास्तविक संग्रह पंजी (Collections Ledger)</h3>
-            <span>जारी की गई सभी रसीदों एवं वास्तविक जमा राशि का अलग ब्योरा (कार्यकर्ता अनुसार ट्रेस योग्य)</span>
-          </div>
-          <div>
-            <button class="btn-table-action" onclick="exportCollectionsCSV()">
-              <i class="fa-solid fa-file-excel"></i> संग्रह रिपोर्ट (CSV)
-            </button>
-          </div>
+          <h3><i class="fa-solid fa-file-invoice-dollar" style="color:var(--sage);"></i> वास्तविक संग्रह सूची (Collections)</h3>
+          <button class="btn-outline-action" onclick="exportCollectionsCSV()">
+            <i class="fa-solid fa-file-csv"></i> CSV
+          </button>
+        </div>
+
+        <div class="purpose-strip green">
+          <i class="fa-brands fa-whatsapp" style="font-size:14px;color:var(--whatsapp);"></i>
+          <span>यहाँ से किसी भी दानदाता को कभी भी 1-क्लिक में WhatsApp पावती पुनः भेजी जा सकती है।</span>
         </div>
 
         <div class="ledger-controls-row">
@@ -1472,65 +1104,41 @@
             <input type="text" id="searchCollTable" placeholder="रसीद क्र., दानदाता या माध्यम खोजें..." oninput="filterCollectionsTable()" />
           </div>
 
-          <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <!-- Filter by Karyakarta -->
-            <select id="filterCollKaryakarta" class="form-select" onchange="filterCollectionsTable()">
-              <option value="all">सभी कार्यकर्ता (All Entries)</option>
-              <option value="anilpatidar">श्री अनिल पाटीदार (@anilpatidar)</option>
-              <option value="raghavpatidar">श्री राघव पाटीदार (@raghavpatidar)</option>
-              <option value="mahendrapatidar">श्री महेंद्र पाटीदार (@mahendrapatidar)</option>
-            </select>
-
-            <select id="filterCollMode" class="form-select" onchange="filterCollectionsTable()">
-              <option value="all">सभी भुगतान माध्यम</option>
-              <option value="नकद">नकद</option>
-              <option value="UPI / QR">UPI / QR</option>
-              <option value="बैंक चेक">बैंक चेक</option>
-              <option value="बैंक ट्रांसफर (NEFT/IMPS)">बैंक ट्रांसफर</option>
-            </select>
-          </div>
+          <select id="filterCollKaryakarta" class="form-select" style="max-width:160px;" onchange="filterCollectionsTable()">
+            <option value="all">सभी कार्यकर्ता</option>
+            <option value="anilpatidar">अनिल पाटीदार</option>
+            <option value="raghavpatidar">राघव पाटीदार</option>
+            <option value="mahendrapatidar">महेंद्र पाटीदार</option>
+          </select>
         </div>
 
         <div class="table-container">
           <table class="data-table" id="collectionsTable">
             <thead>
               <tr>
-                <th>रसीद क्रमांक</th>
+                <th>रसीद क्र.</th>
                 <th>दिनांक</th>
                 <th>दानदाता</th>
-                <th>ग्राम</th>
-                <th style="text-align:right;">प्राप्त राशि (₹)</th>
+                <th style="text-align:right;">राशि (₹)</th>
                 <th>माध्यम</th>
-                <th>संदर्भ / UTR</th>
-                <th>प्राप्तकर्ता कार्यकर्ता</th>
-                <th style="text-align:center;">पावती</th>
+                <th>कार्यकर्ता</th>
+                <th style="text-align:center;">WhatsApp</th>
               </tr>
             </thead>
             <tbody id="collTableBody">
-              <tr><td colspan="9" style="text-align:center;padding:24px;">अभी तक कोई संग्रह प्रविष्टि नहीं है।</td></tr>
+              <tr><td colspan="7" style="text-align:center;padding:20px;">अभी तक कोई संग्रह प्रविष्टि नहीं है।</td></tr>
             </tbody>
           </table>
-        </div>
-
-        <div style="margin-top:12px;font-size:12px;color:var(--text-muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-          <span id="collTableSummary">कुल संग्रह: ₹0 (0 रसीदें)</span>
         </div>
       </div>
     </div>
 
-    <!-- ==================== TAB 5: PENDING FOLLOW-UP LIST (लंबित वसूली) ==================== -->
+    <!-- ==================== TAB 5: PENDING FOLLOW-UP LIST ==================== -->
     <div class="portal-pane" id="pane-pending-list">
       <div class="form-box-card">
         <div class="form-box-head">
-          <div>
-            <h3><i class="fa-solid fa-hourglass-half" style="color:var(--saffron);"></i> लंबित वसूली एवं फॉलो-अप सूची</h3>
-            <span>जिन दानदाताओं की संकल्प राशि अभी शेष है (अधिकतम शेष राशि के क्रम में)</span>
-          </div>
-          <div>
-            <span style="font-size:12px;background:var(--saffron-light);color:var(--saffron);padding:4px 10px;border-radius:20px;font-weight:700;">
-              प्राथमिकता क्रम
-            </span>
-          </div>
+          <h3><i class="fa-solid fa-hourglass-half" style="color:var(--saffron);"></i> लंबित वसूली सूची (बकाया संकल्प)</h3>
+          <span style="font-size:11px;color:var(--saffron);font-weight:700;">प्राथमिकता क्रम (अधिकतम बकाया पहले)</span>
         </div>
 
         <div class="ledger-controls-row">
@@ -1538,98 +1146,105 @@
             <i class="fa-solid fa-magnifying-glass"></i>
             <input type="text" id="searchPendingTable" placeholder="दानदाता या ग्राम खोजें..." oninput="filterPendingTable()" />
           </div>
-
-          <div>
-            <select id="filterPendingVillage" class="form-select" onchange="filterPendingTable()">
-              <option value="all">सभी ग्राम / नगर</option>
-            </select>
-          </div>
         </div>
 
         <div class="table-container">
           <table class="data-table" id="pendingTable">
             <thead>
               <tr>
-                <th style="width:60px;">क्र.</th>
-                <th>दानदाता का नाम</th>
+                <th>क्र.</th>
+                <th>दानदाता</th>
                 <th>ग्राम</th>
-                <th style="text-align:right;">घोषित संकल्प (₹)</th>
-                <th style="text-align:right;">जमा राशि (₹)</th>
-                <th style="text-align:right;">लंबित शेष (₹)</th>
-                <th style="text-align:center;">संपर्क एवं कार्यवाही</th>
+                <th style="text-align:right;">संकल्प</th>
+                <th style="text-align:right;">बकाया (₹)</th>
+                <th style="text-align:center;">कार्यवाही</th>
               </tr>
             </thead>
             <tbody id="pendingTableBody">
-              <tr><td colspan="7" style="text-align:center;padding:24px;">लोड हो रहा है...</td></tr>
+              <tr><td colspan="6" style="text-align:center;padding:20px;">लोड हो रहा है...</td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- ==================== TAB 6: SETTINGS & SYNC (सेटिंग्स व सिंक) ==================== -->
+    <!-- ==================== TAB 6: DATA SINKS & SETTINGS (डेटा कहाँ जाता है) ==================== -->
     <div class="portal-pane" id="pane-settings-sync">
+      <!-- Data Sinks Architecture Info Box -->
       <div class="form-box-card">
         <div class="form-box-head">
-          <div>
-            <h3><i class="fa-solid fa-gear" style="color:var(--teal);"></i> Google Apps Script वेबहुक एवं डेटा सिंक सेटिंग्स</h3>
-            <span>Google Sheet में सीधे ऑटोमैटिक प्रविष्टि हेतु वेबहुक URL कॉन्फ़िगर करें</span>
+          <h3><i class="fa-solid fa-database" style="color:var(--teal);"></i> डेटा गंतव्य एवं सुरक्षा (Data Sinks)</h3>
+        </div>
+
+        <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.6;">
+          <p style="margin:0 0 10px;">
+            <strong>प्र: आपके द्वारा दर्ज किया गया डेटा कहाँ सुरक्षित होता है (Where is the sink)?</strong><br />
+            उत्तर: यह डेटा 3 सुरक्षित स्तरों (Levels) पर सिंक व स्टोर होता है:
+          </p>
+
+          <div style="background:var(--sandstone-light);border:1px solid var(--sandstone);border-radius:8px;padding:12px;margin-bottom:12px;">
+            <div style="font-weight:700;color:var(--teal);margin-bottom:3px;">
+              1. आधिकारिक Google Sheet (मुख्य क्लाउड सिंक):
+            </div>
+            <div>
+              - <strong>Declarations शीट:</strong> सभी दानदाताओं के संकल्प एवं जमा/शेष राशि।<br />
+              - <strong>Collections शीट:</strong> प्रत्येक कटी हुई रसीद, रसीद बुक क्रमांक, माध्यम, दिनांक एवं कार्यकर्ता का नाम।<br />
+              - शीट आईडी: <code>1Gw-tjQuVRzp6jO57jdH7OzvfEx4Brw_DV6uRb1cUDt8</code>
+            </div>
+          </div>
+
+          <div style="background:var(--sandstone-light);border:1px solid var(--sandstone);border-radius:8px;padding:12px;margin-bottom:12px;">
+            <div style="font-weight:700;color:var(--sage);margin-bottom:3px;">
+              2. मोबाइल लोकल स्टोरेज (ऑफ़लाइन सुरक्षा सिंक):
+            </div>
+            <div>
+              यदि कार्यकर्ता घाट या गाँव में कमजोर नेटवर्क वाले क्षेत्र में हों, तो भी प्रविष्टि तुरंत मोबाइल ब्राउज़र में सुरक्षित हो जाती है और कभी नष्ट नहीं होती।
+            </div>
+          </div>
+
+          <div style="background:var(--sandstone-light);border:1px solid var(--sandstone);border-radius:8px;padding:12px;margin-bottom:12px;">
+            <div style="font-weight:700;color:var(--gold-dark);margin-bottom:3px;">
+              3. Excel / CSV एक्सपोर्ट (स्थानीय बैकअप सिंक):
+            </div>
+            <div>
+              एक क्लिक में पूरी घोषणा पंजी या संग्रह पंजी को एक्सेल/सीएसवी फाइल के रूप में अपने मोबाइल या कंप्यूटर में डाउनलोड किया जा सकता है।
+            </div>
           </div>
         </div>
 
-        <div style="max-width:760px;">
-          <div class="form-group">
-            <label>Google Apps Script Webhook URL</label>
-            <input type="url" id="webhookUrlInput" class="form-input" placeholder="https://script.google.com/macros/s/.../exec" />
-            <div class="input-hint">Google Sheet में "Deploy as Web App" से प्राप्त URL यहाँ दर्ज करें</div>
-          </div>
-
-          <div style="display:flex;gap:10px;margin-bottom:20px;">
-            <button class="btn-submit-action" onclick="saveWebhookUrl()">
-              <i class="fa-solid fa-check"></i> URL सुरक्षित करें
+        <div style="margin-top:14px;">
+          <label style="font-size:11.5px;font-weight:700;color:var(--teal-dark);display:block;margin-bottom:4px;">
+            Google Apps Script Webhook URL (लाइव ऑटो-राइटबैक)
+          </label>
+          <input type="url" id="webhookUrlInput" class="form-input" placeholder="https://script.google.com/macros/s/.../exec" />
+          <div style="display:flex;gap:8px;margin-top:8px;">
+            <button class="btn-submit-action" onclick="saveWebhookUrl()" style="width:auto;min-height:36px;padding:6px 14px;font-size:12px;">
+              URL सुरक्षित करें
             </button>
             <button class="btn-outline-action" onclick="testWebhookConnection()">
-              <i class="fa-solid fa-vial"></i> कनेक्शन परीक्षण
+              परीक्षण
             </button>
           </div>
+        </div>
 
-          <div style="background:var(--sandstone-light);border:1px solid var(--sandstone);border-radius:10px;padding:16px;margin-bottom:24px;">
-            <h4 style="margin:0 0 8px;font-size:13.5px;color:var(--teal);">
-              <i class="fa-solid fa-circle-info" style="color:var(--gold-dark);"></i> वेबहुक सेटअप निर्देश (एक बार का सेटअप):
-            </h4>
-            <ol style="margin:0;padding-left:20px;font-size:12.5px;color:var(--text-secondary);line-height:1.6;">
-              <li>अपनी Google Sheet खोलें: <code>1Gw-tjQuVRzp6jO57jdH7OzvfEx4Brw_DV6uRb1cUDt8</code></li>
-              <li>मेनू में <strong>Extensions > Apps Script</strong> पर जाएं।</li>
-              <li>फ़ाइल <code>google_apps_script.js</code> का संपूर्ण कोड कॉपी करके पेस्ट करें।</li>
-              <li>ऊपर <strong>Deploy > New deployment</strong> चुनें, टाइप में <strong>Web app</strong> चुनें।</li>
-              <li>"Execute as": <strong>Me</strong> तथा "Who has access": <strong>Anyone</strong> चुनें।</li>
-              <li>Deploy करने पर प्राप्त <strong>Web app URL</strong> को ऊपर के बॉक्स में पेस्ट कर सुरक्षित करें।</li>
-            </ol>
-          </div>
-
-          <div class="form-box-head" style="margin-top:20px;">
-            <h4><i class="fa-solid fa-database"></i> बैकअप एवं रीसेट</h4>
-          </div>
-
-          <div style="display:flex;gap:12px;flex-wrap:wrap;">
-            <button class="btn-outline-action" onclick="downloadAllDataJSON()">
-              <i class="fa-solid fa-download"></i> संपूर्ण डेटा बैकअप लें (JSON)
-            </button>
-            <button class="btn-outline-action" onclick="refreshPortalData(true)">
-              <i class="fa-solid fa-arrows-rotate"></i> Google Sheet से पुनः सिंक करें
-            </button>
-          </div>
+        <div style="margin-top:18px;display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn-outline-action" onclick="downloadAllDataJSON()">
+            <i class="fa-solid fa-download"></i> संपूर्ण बैकअप (JSON)
+          </button>
+          <button class="btn-outline-action" onclick="refreshPortalData(true)">
+            <i class="fa-solid fa-arrows-rotate"></i> Google Sheet से पुनः सिंक
+          </button>
         </div>
       </div>
     </div>
 
   </main>
 
-  <!-- ==================== DIGITAL RECEIPT MODAL ==================== -->
+  <!-- ==================== DIGITAL RECEIPT & WHATSAPP MODAL ==================== -->
   <div class="modal-backdrop" id="receiptModalBackdrop" onclick="closeReceiptModal(event)">
     <div class="modal-card">
       <div class="modal-head">
-        <h4><i class="fa-solid fa-receipt" style="color:var(--gold-light);"></i> आधिकारिक डिजिटल पावती / रसीद</h4>
+        <h4><i class="fa-solid fa-receipt" style="color:var(--gold-light);"></i> डिजिटल पावती / रसीद</h4>
         <button class="btn-modal-close" onclick="closeReceiptModal()">&times;</button>
       </div>
 
@@ -1642,12 +1257,12 @@
           </div>
 
           <div class="rcpt-badge-bar">
-            <span>रसीद क्र.: <strong id="rcptViewNo" style="color:var(--teal);">KTR-2026-0001</strong></span>
+            <span>रसीद बुक क्र.: <strong id="rcptViewNo" style="color:var(--teal);">-</strong></span>
             <span>दिनांक: <strong id="rcptViewDate">01/01/2026</strong></span>
           </div>
 
           <div class="rcpt-body-row">
-            <span class="lbl">दानदाता का नाम:</span>
+            <span class="lbl">दानदाता:</span>
             <span class="val" id="rcptViewName">श्री ...</span>
           </div>
 
@@ -1661,50 +1276,59 @@
             <span class="val" id="rcptViewMode">नकद</span>
           </div>
 
-          <div class="rcpt-body-row" id="rcptViewRefRow">
-            <span class="lbl">संदर्भ / UTR / चेक क्र.:</span>
+          <div class="rcpt-body-row" id="rcptViewRefRow" style="display:none;">
+            <span class="lbl">संदर्भ / UTR:</span>
             <span class="val" id="rcptViewRef">-</span>
           </div>
 
           <div class="rcpt-amount-highlight">
-            <div style="font-size:11.5px;color:var(--text-secondary);margin-bottom:2px;">प्राप्त जनसहयोग राशि</div>
+            <div style="font-size:10.5px;color:var(--text-secondary);margin-bottom:2px;">प्राप्त जनसहयोग राशि</div>
             <div class="amt" id="rcptViewAmount">₹0</div>
             <div class="words" id="rcptViewWords">शून्य रुपये मात्र</div>
           </div>
 
-          <div style="font-size:11.5px;color:var(--text-secondary);background:var(--sandstone-light);padding:8px 10px;border-radius:6px;margin:10px 0;">
-            <div style="display:flex;justify-content:space-between;margin-bottom:3px;">
-              <span>कुल घोषित संकल्प: <strong id="rcptViewPledged">₹0</strong></span>
-              <span>अब तक कुल जमा: <strong id="rcptViewTotalDeposited" style="color:var(--sage);">₹0</strong></span>
+          <div style="font-size:11px;color:var(--text-secondary);background:var(--sandstone-light);padding:6px 8px;border-radius:6px;margin:8px 0;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:2px;">
+              <span>कुल संकल्प: <strong id="rcptViewPledged">₹0</strong></span>
+              <span>अब तक जमा: <strong id="rcptViewTotalDeposited" style="color:var(--sage);">₹0</strong></span>
             </div>
             <div style="display:flex;justify-content:space-between;">
-              <span>शेष संकल्प राशि: <strong id="rcptViewBalance" style="color:var(--saffron);">₹0</strong></span>
-              <span id="rcptViewStatusTag" style="font-weight:700;color:var(--sage);">स्थिति: पूर्ण</span>
+              <span>शेष राशि: <strong id="rcptViewBalance" style="color:var(--saffron);">₹0</strong></span>
+              <span id="rcptViewStatusTag" style="font-weight:700;color:var(--sage);">पूर्ण</span>
             </div>
           </div>
 
-          <div class="rcpt-footer-seal">
+          <div style="display:flex;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:1px dashed var(--sandstone);font-size:10.5px;">
             <div>
-              <div style="font-size:10px;color:var(--text-muted);">राशि प्राप्तकर्ता अधिकृत कार्यकर्ता:</div>
-              <div style="font-weight:700;color:var(--teal);" id="rcptViewCollector">-</div>
+              <span style="color:var(--text-muted);">प्राप्तकर्ता कार्यकर्ता:</span><br />
+              <strong style="color:var(--teal);" id="rcptViewCollector">-</strong>
             </div>
             <div style="text-align:right;">
-              <div style="font-size:10px;color:var(--text-muted);font-style:italic;">सत्यापित एवं प्रमाणित</div>
-              <div style="font-weight:700;color:var(--gold-dark);"><i class="fa-solid fa-stamp"></i> संस्थान अधिकृत पावती</div>
+              <span style="color:var(--gold-dark);font-weight:700;"><i class="fa-solid fa-stamp"></i> अधिकृत पावती</span>
             </div>
           </div>
+        </div>
+
+        <!-- WhatsApp Recipient Phone Input -->
+        <div style="margin-top:12px;">
+          <label style="display:block;font-size:11.5px;font-weight:700;color:var(--teal-dark);margin-bottom:4px;">
+            <i class="fa-brands fa-whatsapp" style="color:var(--whatsapp);"></i> WhatsApp मोबाइल नंबर (जिस पर पावती भेजनी है):
+          </label>
+          <input type="tel" id="rcptModalPhone" class="form-input" placeholder="10 अंकों का मोबाइल नंबर (उदा. 9876543210)" />
         </div>
       </div>
 
       <div class="modal-footer">
-        <button class="btn-submit-action" id="btnShareWhatsAppReceipt" style="background:var(--whatsapp);border-color:var(--whatsapp-dark);">
-          <i class="fa-brands fa-whatsapp"></i> WhatsApp पर पावती भेजें
+        <button class="btn-submit-whatsapp" id="btnShareWhatsAppReceipt">
+          <i class="fa-brands fa-whatsapp" style="font-size:18px;"></i> WhatsApp पर पावती भेजें
         </button>
-        <div style="display:flex;gap:8px;">
-          <button class="btn-outline-action" onclick="window.print()">
-            <i class="fa-solid fa-print"></i> प्रिंट / PDF
+        <div style="display:flex;gap:6px;">
+          <button class="btn-outline-action" onclick="copyReceiptText()" style="flex:1;justify-content:center;">
+            <i class="fa-solid fa-copy"></i> संदेश कॉपी करें
           </button>
-          <button class="btn-outline-action" onclick="closeReceiptModal()">बंद करें</button>
+          <button class="btn-outline-action" onclick="closeReceiptModal()" style="flex:1;justify-content:center;">
+            बंद करें
+          </button>
         </div>
       </div>
     </div>
@@ -1713,31 +1337,17 @@
   <!-- ==================== JAVASCRIPT ==================== -->
   <script>
     /* ============================================================
-       CONSTANTS & AUTHORIZED USERS
+       CONSTANTS & USERS
        ============================================================ */
     const SHEET_ID = '1Gw-tjQuVRzp6jO57jdH7OzvfEx4Brw_DV6uRb1cUDt8';
     const GVIZ_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Declarations&tq=${encodeURIComponent('SELECT A, B, C, D, F, G, H, I, L')}`;
 
-    // Authorized Karyakartas Directory (Traceable Users)
     const AUTHORIZED_USERS = {
-      'anilpatidar': {
-        username: 'anilpatidar',
-        name: 'श्री अनिल पाटीदार',
-        role: 'अधिकृत कार्यकर्ता'
-      },
-      'raghavpatidar': {
-        username: 'raghavpatidar',
-        name: 'श्री राघव पाटीदार',
-        role: 'अधिकृत कार्यकर्ता'
-      },
-      'mahendrapatidar': {
-        username: 'mahendrapatidar',
-        name: 'श्री महेंद्र पाटीदार',
-        role: 'अधिकृत कार्यकर्ता'
-      }
+      'anilpatidar': { username: 'anilpatidar', name: 'श्री अनिल पाटीदार' },
+      'raghavpatidar': { username: 'raghavpatidar', name: 'श्री राघव पाटीदार' },
+      'mahendrapatidar': { username: 'mahendrapatidar', name: 'श्री महेंद्र पाटीदार' }
     };
 
-    // Valid PINs
     const VALID_PINS = ['narmadehar2026', 'कोटेश्वर2026', 'koteshwar2026', '12345'];
 
     // State
@@ -1745,6 +1355,7 @@
     let declarationsList = [];
     let collectionsList = [];
     let selectedDonor = null;
+    let currentReceiptData = null;
     let webhookUrl = localStorage.getItem('koteshwar_webhook_url') || '';
 
     const fmt = n => "₹" + Math.round(Number(n) || 0).toLocaleString('en-IN');
@@ -1793,14 +1404,13 @@
     }
 
     /* ============================================================
-       AUTHENTICATION & USER PROFILE
+       AUTH & USER SESSION
        ============================================================ */
     function checkAuth() {
       try {
         const session = JSON.parse(sessionStorage.getItem('koteshwar_auth_session') || '{}');
         const now = Date.now();
-        // 2 hours timeout
-        if (session && session.auth && session.username && (now - session.timestamp < 2 * 60 * 60 * 1000)) {
+        if (session && session.auth && session.username && (now - session.timestamp < 4 * 60 * 60 * 1000)) {
           currentUser = session;
           applyUserProfile();
           document.getElementById('authOverlay').style.display = 'none';
@@ -1817,9 +1427,7 @@
       const customWrap = document.getElementById('customUsernameWrap');
       if (customWrap) {
         customWrap.style.display = val === 'custom' ? 'block' : 'none';
-        if (val === 'custom') {
-          document.getElementById('authCustomUsername').focus();
-        }
+        if (val === 'custom') document.getElementById('authCustomUsername').focus();
       }
     }
 
@@ -1836,29 +1444,27 @@
       const msgBox = document.getElementById('authMsgBox');
 
       if (!username) {
-        msgBox.textContent = "कृपया अपना उपयोगकर्ता नाम चुनें या टाइप करें!";
+        msgBox.textContent = "कृपया कार्यकर्ता का चयन करें!";
         return;
       }
 
       const matchedUser = AUTHORIZED_USERS[username];
       if (!matchedUser) {
-        msgBox.textContent = `अमान्य उपयोगकर्ता नाम (@${username})! अधिकृत कार्यकर्ता: anilpatidar, raghavpatidar, mahendrapatidar`;
+        msgBox.textContent = `अमान्य उपयोगकर्ता (@${username})! अधिकृत: anilpatidar, raghavpatidar, mahendrapatidar`;
         return;
       }
 
       if (!VALID_PINS.includes(pin)) {
-        msgBox.textContent = "अमान्य सुरक्षा पिन! कृपया सही पिन दर्ज करें।";
+        msgBox.textContent = "अमान्य सुरक्षा पिन!";
         document.getElementById('authPinInput').value = "";
         document.getElementById('authPinInput').focus();
         return;
       }
 
-      // Successful Authentication
       currentUser = {
         auth: true,
         username: matchedUser.username,
         displayName: matchedUser.name,
-        role: matchedUser.role,
         timestamp: Date.now()
       };
 
@@ -1871,20 +1477,12 @@
 
     function applyUserProfile() {
       if (!currentUser) return;
-      // Header badge
       document.getElementById('headerUserDisplayName').textContent = currentUser.displayName;
-      document.getElementById('headerUsernameTag').textContent = '@' + currentUser.username;
 
-      // Lock user fields in forms
       const declCol = document.getElementById('declCollector');
       const collCol = document.getElementById('collCollector');
       if (declCol) declCol.value = `${currentUser.displayName} (@${currentUser.username})`;
       if (collCol) collCol.value = `${currentUser.displayName} (@${currentUser.username})`;
-
-      const dHint = document.getElementById('declUserHint');
-      const cHint = document.getElementById('collUserHint');
-      if (dHint) dHint.textContent = '@' + currentUser.username;
-      if (cHint) cHint.textContent = '@' + currentUser.username;
     }
 
     function togglePinVisibility() {
@@ -1892,17 +1490,15 @@
       const icon = document.getElementById('pinEyeIcon');
       if (inp.type === 'password') {
         inp.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
       } else {
         inp.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
       }
     }
 
     function handleLogout() {
-      if (confirm(`क्या आप ${currentUser ? currentUser.displayName : 'कार्यकर्ता'} के रूप में लॉगआउट करना चाहते हैं?`)) {
+      if (confirm("क्या आप लॉगआउट करना चाहते हैं?")) {
         sessionStorage.removeItem('koteshwar_auth_session');
         window.location.reload();
       }
@@ -1912,14 +1508,12 @@
        INITIALIZATION
        ============================================================ */
     window.addEventListener('DOMContentLoaded', () => {
-      // Set today's date in form date pickers
       const today = new Date().toISOString().split('T')[0];
       const elDeclDate = document.getElementById('declDate');
       const elCollDate = document.getElementById('collDate');
       if (elDeclDate) elDeclDate.value = today;
       if (elCollDate) elCollDate.value = today;
 
-      // Load saved webhook URL
       if (webhookUrl) {
         const inp = document.getElementById('webhookUrlInput');
         if (inp) inp.value = webhookUrl;
@@ -1935,16 +1529,12 @@
     }
 
     /* ============================================================
-       DATA LOAD & MERGE
+       DATA LOAD & RECONCILE
        ============================================================ */
     function loadCollectionsFromStorage() {
       try {
         const saved = localStorage.getItem('koteshwar_collections_ledger');
-        if (saved) {
-          collectionsList = JSON.parse(saved);
-        } else {
-          collectionsList = [];
-        }
+        collectionsList = saved ? JSON.parse(saved) : [];
       } catch (e) {
         collectionsList = [];
       }
@@ -1957,19 +1547,13 @@
     }
 
     async function loadDeclarationsData(forceRefresh = false) {
-      updateRibbon(true, "डेटा लोड हो रहा है...");
-
-      // 1. Try cache if not forced
       if (!forceRefresh) {
         try {
           const cached = localStorage.getItem('koteshwar_declarations_cache');
-          if (cached) {
-            declarationsList = JSON.parse(cached);
-          }
+          if (cached) declarationsList = JSON.parse(cached);
         } catch (e) {}
       }
 
-      // 2. Fetch live from Google Sheet
       try {
         const res = await fetch(GVIZ_URL);
         if (res.ok) {
@@ -2013,16 +1597,14 @@
               }
             }
 
-            if (fetched.length > 0) {
-              declarationsList = fetched;
-            }
+            if (fetched.length > 0) declarationsList = fetched;
           }
         }
       } catch (err) {
-        console.warn("Live fetch error, falling back to cached/local declarations", err);
+        console.warn("GViz fetch failed, using cached declarations", err);
       }
 
-      // 3. Merge custom local declarations if any
+      // Merge custom local declarations
       try {
         const custom = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
         if (Array.isArray(custom)) {
@@ -2034,19 +1616,15 @@
         }
       } catch (e) {}
 
-      // 4. Reconcile with Collections ledger
+      // Reconcile collections with declarations
       reconcileCollectionsWithDeclarations();
 
-      // Save updated cache
       try {
         localStorage.setItem('koteshwar_declarations_cache', JSON.stringify(declarationsList));
       } catch (e) {}
-
-      updateRibbon(false, `डेटा सिंक पूर्ण (${declarationsList.length} घोषणाएं, ${collectionsList.length} संग्रह)`);
     }
 
     function reconcileCollectionsWithDeclarations() {
-      // Sum collections per donor
       const collMap = {};
       collectionsList.forEach(c => {
         if (c.donorSno) {
@@ -2054,7 +1632,6 @@
         }
       });
 
-      // Update declaration deposited & balance
       declarationsList.forEach(d => {
         const localColl = collMap[d.sno] || 0;
         if (localColl > 0 && d.deposited < localColl) {
@@ -2064,31 +1641,13 @@
       });
     }
 
-    function updateRibbon(isSyncing, msg) {
-      const dot = document.getElementById('ribbonDot');
-      const text = document.getElementById('ribbonStatusText');
-      const icon = document.getElementById('ribbonRefreshIcon');
-      if (text) text.textContent = msg;
-      if (dot) {
-        if (isSyncing) dot.classList.add('syncing');
-        else dot.classList.remove('syncing');
-      }
-      if (icon) {
-        if (isSyncing) icon.classList.add('fa-spin');
-        else icon.classList.remove('fa-spin');
-      }
-    }
-
     async function refreshPortalData(force = true) {
       await loadDeclarationsData(force);
       renderAllPortals();
+      alert("डेटा सफलतापूर्वक रीफ्रेश हो गया!");
     }
 
-    /* ============================================================
-       MASTER RENDER FUNCTION
-       ============================================================ */
     function renderAllPortals() {
-      renderKpis();
       populateVillageDropdowns();
       renderDeclarationsTable();
       renderCollectionsTable();
@@ -2111,45 +1670,17 @@
         const s = parseInt(d.sno, 10);
         if (!isNaN(s) && s > maxSno) maxSno = s;
       });
-      const nextSno = maxSno + 1;
       const lbl = document.getElementById('lblNextDeclarationSno');
-      if (lbl) lbl.textContent = nextSno;
-
-      // Also suggest next collection receipt number
-      const nextRcpt = "KTR-2026-" + String(collectionsList.length + 1).padStart(4, '0');
-      const elRcpt = document.getElementById('collReceiptNo');
-      if (elRcpt && !elRcpt.value) elRcpt.value = nextRcpt;
-    }
-
-    function renderKpis() {
-      const totalPledged = declarationsList.reduce((s, d) => s + (Number(d.amount) || 0), 0);
-      const totalDeposited = declarationsList.reduce((s, d) => s + (Number(d.deposited) || 0), 0);
-      const totalPending = Math.max(0, totalPledged - totalDeposited);
-      const pendingCount = declarationsList.filter(d => (Number(d.balance) > 0)).length;
-      const rate = totalPledged > 0 ? ((totalDeposited / totalPledged) * 100).toFixed(1) : "0.0";
-
-      document.getElementById('kpiTotalPledged').textContent = fmt(totalPledged);
-      document.getElementById('kpiPledgedCount').textContent = `${declarationsList.length} दानदाता संकल्प`;
-
-      document.getElementById('kpiTotalCollected').textContent = fmt(totalDeposited);
-      document.getElementById('kpiCollectionsCount').textContent = `${collectionsList.length} रसीदें जारी`;
-
-      document.getElementById('kpiTotalPending').textContent = fmt(totalPending);
-      document.getElementById('kpiPendingCount').textContent = `${pendingCount} परिवारों से वसूली शेष`;
-
-      document.getElementById('kpiCollectionRate').textContent = `${rate}%`;
+      if (lbl) lbl.textContent = maxSno + 1;
     }
 
     function populateVillageDropdowns() {
       const villages = Array.from(new Set(declarationsList.map(d => d.city).filter(Boolean))).sort();
-      ['filterDeclVillage', 'filterPendingVillage'].forEach(id => {
-        const select = document.getElementById(id);
-        if (!select) return;
-        const currentVal = select.value;
-        select.innerHTML = '<option value="all">सभी ग्राम / नगर</option>' +
+      const select = document.getElementById('filterDeclVillage');
+      if (select) {
+        select.innerHTML = '<option value="all">सभी ग्राम</option>' +
           villages.map(v => `<option value="${v}">${v}</option>`).join('');
-        select.value = currentVal;
-      });
+      }
     }
 
     /* ============================================================
@@ -2182,17 +1713,16 @@
       const lbl = document.getElementById('lblRefNo');
       if (!wrap || !lbl) return;
       if (mode.includes('UPI')) {
-        lbl.textContent = "UPI UTR / संदर्भ क्रमांक";
+        lbl.textContent = "UPI UTR / संदर्भ ID";
         wrap.style.display = 'block';
       } else if (mode.includes('चेक')) {
-        lbl.textContent = "बैंक चेक क्रमांक एवं बैंक नाम";
+        lbl.textContent = "बैंक चेक क्रमांक";
         wrap.style.display = 'block';
       } else if (mode.includes('ट्रांसफर')) {
-        lbl.textContent = "NEFT / IMPS UTR संदर्भ";
+        lbl.textContent = "NEFT / IMPS संदर्भ";
         wrap.style.display = 'block';
       } else {
-        lbl.textContent = "संदर्भ (यदि कोई हो)";
-        wrap.style.display = 'block';
+        wrap.style.display = 'none';
       }
     }
 
@@ -2207,7 +1737,7 @@
     }
 
     /* ============================================================
-       SAVE DECLARATION (TAB 1) - TRACEABLE TO USER
+       TAB 1: SAVE DECLARATION (PURE PLEDGE - NO FORCED COLLECTION)
        ============================================================ */
     async function handleSaveDeclaration(e) {
       e.preventDefault();
@@ -2254,25 +1784,25 @@
         localStorage.setItem('koteshwar_declarations_cache', JSON.stringify(declarationsList));
       } catch (err) {}
 
-      // 2. Post to Webhook if available
+      // 2. Post to Webhook (Google Sheets)
       postWebhookData('addDeclaration', newDecl);
 
       renderAllPortals();
 
-      // Offer immediate collection
-      if (confirm(`घोषणा सुरक्षित हो गई!\n\nदानदाता: ${name} (ग्राम: ${city})\nघोषित संकल्प: ${fmt(amount)}\nकार्यकर्ता: ${newDecl.collector} (@${newDecl.collectorUsername})\n\nक्या आप अभी इस दानदाता के लिए धन प्राप्ति रसीद काटना चाहते हैं?`)) {
-        document.getElementById('newDeclarationForm').reset();
-        selectDonorForCollection(newDecl);
-        switchPortalTab('new-collection');
-      } else {
-        document.getElementById('newDeclarationForm').reset();
-        document.getElementById('declAmountWords').textContent = 'राशि शब्दों में...';
-        applyUserProfile();
-      }
+      // Show peaceful inline success message without prompting for money
+      const alertBox = document.getElementById('declSuccessAlert');
+      const alertText = document.getElementById('declSuccessText');
+      alertText.textContent = `✅ संकल्प सुरक्षित हो गया: ${name} (${city}) - घोषित संकल्प ₹${amount.toLocaleString('en-IN')}`;
+      alertBox.classList.add('visible');
+      setTimeout(() => alertBox.classList.remove('visible'), 6000);
+
+      document.getElementById('newDeclarationForm').reset();
+      document.getElementById('declAmountWords').textContent = 'राशि शब्दों में...';
+      applyUserProfile();
     }
 
     /* ============================================================
-       DONOR LOOKUP & SELECTION (TAB 2)
+       TAB 2: DONOR LOOKUP & SELECTION
        ============================================================ */
     function toggleDirectDonorMode(isDirect) {
       document.getElementById('donorLookupGroup').style.display = isDirect ? 'none' : 'block';
@@ -2294,10 +1824,10 @@
         const sno = String(d.sno || '');
         const mob = String(d.mobile || '');
         return name.includes(q) || city.includes(q) || sno === q || mob.includes(q);
-      }).slice(0, 10);
+      }).slice(0, 8);
 
       if (matches.length === 0) {
-        box.innerHTML = `<div style="padding:10px;font-size:12px;color:var(--text-muted);text-align:center;">कोई दानदाता नहीं मिला। कृपया सीधे नया नाम दर्ज करें।</div>`;
+        box.innerHTML = `<div style="padding:8px;font-size:11.5px;color:var(--text-muted);text-align:center;">कोई दानदाता नहीं मिला।</div>`;
         box.style.display = 'block';
         return;
       }
@@ -2306,7 +1836,7 @@
         <div class="donor-suggestion-item" onclick="selectDonorFromList(${m.sno})">
           <div>
             <div class="s-name">${m.name}</div>
-            <div class="s-meta">क्र. #${m.sno} • ग्राम: ${m.city} • जमा: ${fmt(m.deposited)} • शेष: ${fmt(m.balance)}</div>
+            <div class="s-meta">#${m.sno} • ${m.city} • बकाया: ${fmt(m.balance)}</div>
           </div>
           <div class="s-amt">${fmt(m.amount)}</div>
         </div>
@@ -2325,7 +1855,7 @@
       selectedDonor = donor;
       document.getElementById('selectedDonorBanner').classList.add('visible');
       document.getElementById('selDonorName').textContent = donor.name;
-      document.getElementById('selDonorMeta').textContent = `क्रम संख्या: #${donor.sno} | ग्राम: ${donor.city}`;
+      document.getElementById('selDonorMeta').textContent = `क्रम: #${donor.sno} | ग्राम: ${donor.city}`;
       document.getElementById('selPledgedAmt').textContent = fmt(donor.amount);
       document.getElementById('selDepositedAmt').textContent = fmt(donor.deposited);
       document.getElementById('selBalanceAmt').textContent = fmt(donor.balance);
@@ -2344,7 +1874,7 @@
     }
 
     /* ============================================================
-       SAVE COLLECTION (TAB 2) - TRACEABLE TO USER
+       TAB 2: SAVE COLLECTION (MANUAL RECEIPT & WHATSAPP)
        ============================================================ */
     async function handleSaveCollection(e) {
       e.preventDefault();
@@ -2374,6 +1904,7 @@
         pledgedAmt = selectedDonor.amount;
       }
 
+      // Manual Receipt Number
       const receiptNo = document.getElementById('collReceiptNo').value.trim();
       const amount = parseFloat(document.getElementById('collAmount').value) || 0;
       const paymentMode = document.getElementById('collPaymentMode').value;
@@ -2398,11 +1929,11 @@
         timestamp: new Date().toISOString()
       };
 
-      // 1. Add to separate collections ledger
+      // 1. Save collection independently in collections ledger
       collectionsList.unshift(newCollection);
       saveCollectionsToStorage();
 
-      // 2. Update donor declaration
+      // 2. Reconcile with declaration if linked
       if (donorSno && selectedDonor) {
         selectedDonor.deposited = (Number(selectedDonor.deposited) || 0) + amount;
         selectedDonor.balance = Math.max(0, (Number(selectedDonor.amount) || 0) - selectedDonor.deposited);
@@ -2416,7 +1947,14 @@
 
       renderAllPortals();
 
-      // 4. Open Official Receipt Modal
+      // 4. Show success banner
+      const alertBox = document.getElementById('collSuccessAlert');
+      const alertText = document.getElementById('collSuccessText');
+      alertText.textContent = `✅ रसीद क्रमांक ${receiptNo} सुरक्षित हो गई! राशि: ${fmt(amount)}`;
+      alertBox.classList.add('visible');
+      setTimeout(() => alertBox.classList.remove('visible'), 6000);
+
+      // 5. Open Official Receipt & WhatsApp Share Modal
       openReceiptModal({
         receiptNo: receiptNo,
         date: date,
@@ -2433,10 +1971,9 @@
         balance: donorSno && selectedDonor ? selectedDonor.balance : 0
       });
 
-      // Reset form
+      // Reset collection form
       document.getElementById('newCollectionForm').reset();
       clearSelectedDonor();
-      updateNextDeclarationSno();
       applyUserProfile();
     }
 
@@ -2444,6 +1981,8 @@
        DIGITAL RECEIPT & WHATSAPP MODAL
        ============================================================ */
     function openReceiptModal(rcpt) {
+      currentReceiptData = rcpt;
+
       document.getElementById('rcptViewNo').textContent = rcpt.receiptNo;
       document.getElementById('rcptViewDate').textContent = rcpt.date;
       document.getElementById('rcptViewName').textContent = rcpt.name;
@@ -2467,50 +2006,62 @@
       document.getElementById('rcptViewBalance').textContent = fmt(rcpt.balance);
 
       const collectorStr = rcpt.collector + (rcpt.collectorUsername ? ` (@${rcpt.collectorUsername})` : '');
-      document.getElementById('rcptViewCollector').textContent = collectorStr || "अधिकृत प्रतिनिधि";
+      document.getElementById('rcptViewCollector').textContent = collectorStr;
 
       const tag = document.getElementById('rcptViewStatusTag');
-      if (rcpt.balance <= 0) {
-        tag.textContent = "स्थिति: संकल्प पूर्ण ✅";
-        tag.style.color = "var(--sage)";
-      } else {
-        tag.textContent = "स्थिति: आंशिक प्राप्त ⏳";
-        tag.style.color = "var(--gold-dark)";
-      }
+      tag.textContent = rcpt.balance <= 0 ? "संकल्प पूर्ण ✅" : "आंशिक प्राप्त ⏳";
+      tag.style.color = rcpt.balance <= 0 ? "var(--sage)" : "var(--gold-dark)";
 
-      // Prepare Devotional WhatsApp Message with Traceable Karyakarta
-      const waText =
-        `🚩 *माँ नर्मदा घाट निर्माण सेवा महाअभियान* 🚩\n` +
+      // Pre-fill phone if available
+      const phoneInput = document.getElementById('rcptModalPhone');
+      phoneInput.value = rcpt.mobile ? rcpt.mobile.replace(/[^0-9]/g, '') : '';
+
+      // Set WhatsApp Share handler
+      const btnWa = document.getElementById('btnShareWhatsAppReceipt');
+      btnWa.onclick = function() {
+        const phone = document.getElementById('rcptModalPhone').value.replace(/[^0-9]/g, '');
+        const text = buildWhatsAppReceiptText(rcpt);
+        const url = phone && phone.length === 10
+          ? `https://api.whatsapp.com/send?phone=91${phone}&text=${encodeURIComponent(text)}`
+          : `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+        window.open(url, '_blank');
+      };
+
+      document.getElementById('receiptModalBackdrop').classList.add('open');
+    }
+
+    function buildWhatsAppReceiptText(rcpt) {
+      const words = numberToHindiWords(rcpt.amount);
+      const collectorStr = rcpt.collector + (rcpt.collectorUsername ? ` (@${rcpt.collectorUsername})` : '');
+
+      return `🚩 *माँ नर्मदा घाट निर्माण सेवा महाअभियान* 🚩\n` +
         `*श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान*\n` +
         `कोटेश्वर तीर्थ, कोठड़ा (म.प्र.)\n\n` +
-        `*आधिकारिक डिजिटल पावती / धन प्राप्ति रसीद*\n` +
+        `*आधिकारिक धन प्राप्ति पावती / रसीद*\n` +
         `----------------------------------------\n` +
-        `पावती क्रमांक: *${rcpt.receiptNo}*\n` +
+        `रसीद बुक क्रमांक: *${rcpt.receiptNo}*\n` +
         `दिनांक: *${rcpt.date}*\n` +
         `दानदाता: *${rcpt.name}*\n` +
         `ग्राम / नगर: *${rcpt.city}*\n\n` +
         `माँ नर्मदा के पावन तट पर भव्य घाट निर्माण सेवा महाअभियान हेतु आपका पुनीत जनसहयोग प्राप्त हुआ:\n` +
         `प्राप्त राशि: *${fmt(rcpt.amount)}*\n` +
         `(अक्षरी: *${words} रुपये मात्र*)\n` +
-        `भुगतान माध्यम: *${rcpt.paymentMode}* ${rcpt.refNo ? `(संदर्भ: ${rcpt.refNo})` : ''}\n\n` +
+        `माध्यम: *${rcpt.paymentMode}* ${rcpt.refNo ? `(संदर्भ: ${rcpt.refNo})` : ''}\n\n` +
         `कुल घोषित संकल्प: *${fmt(rcpt.pledged)}*\n` +
         `अब तक कुल जमा: *${fmt(rcpt.deposited)}*\n` +
         (rcpt.balance > 0 ? `शेष संकल्प राशि: *${fmt(rcpt.balance)}*\n` : `संकल्प स्थिति: *शत-प्रतिशत पूर्ण* ✅\n`) +
         `अधिकृत प्राप्तकर्ता: *${collectorStr}*\n\n` +
         `माँ रेवा की कृपा आप एवं आपके परिवार पर सदैव बनी रहे।\n` +
         `*॥ नर्मदे हर ॥* 🙏\n\n` +
-        `लाइव वित्तीय पारदर्शिता पोर्टल:\nhttps://koteshwar-ghat-nirman.vercel.app/`;
+        `पारदर्शिता पोर्टल: https://koteshwar-ghat-nirman.vercel.app/`;
+    }
 
-      const btnWa = document.getElementById('btnShareWhatsAppReceipt');
-      btnWa.onclick = function() {
-        const phone = rcpt.mobile ? rcpt.mobile.replace(/[^0-9]/g, '') : '';
-        const url = phone && phone.length === 10
-          ? `https://api.whatsapp.com/send?phone=91${phone}&text=${encodeURIComponent(waText)}`
-          : `https://api.whatsapp.com/send?text=${encodeURIComponent(waText)}`;
-        window.open(url, '_blank');
-      };
-
-      document.getElementById('receiptModalBackdrop').classList.add('open');
+    function copyReceiptText() {
+      if (!currentReceiptData) return;
+      const text = buildWhatsAppReceiptText(currentReceiptData);
+      navigator.clipboard.writeText(text).then(() => {
+        alert("पावती संदेश क्लिपबोर्ड में कॉपी हो गया! अब आप इसे WhatsApp पर पेस्ट कर सकते हैं।");
+      });
     }
 
     function closeReceiptModal(e) {
@@ -2519,65 +2070,42 @@
     }
 
     /* ============================================================
-       TABLE RENDERING & FILTERING
+       TABLES RENDERING
        ============================================================ */
-    // Declarations Ledger Table
     function renderDeclarationsTable() {
       const q = (document.getElementById('searchDeclTable')?.value || '').toLowerCase();
       const village = document.getElementById('filterDeclVillage')?.value || 'all';
-      const status = document.getElementById('filterDeclStatus')?.value || 'all';
 
       const filtered = declarationsList.filter(d => {
         const matchesQ = !q || String(d.name).toLowerCase().includes(q) || String(d.city).toLowerCase().includes(q) || String(d.sno) === q;
         const matchesV = village === 'all' || d.city === village;
-        let matchesS = true;
-        if (status === 'paid') matchesS = d.balance <= 0 && d.deposited > 0;
-        else if (status === 'partial') matchesS = d.deposited > 0 && d.balance > 0;
-        else if (status === 'pending') matchesS = d.deposited === 0;
-        return matchesQ && matchesV && matchesS;
+        return matchesQ && matchesV;
       });
 
       const tbody = document.getElementById('declTableBody');
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text-muted);">कोई दानदाता रिकॉर्ड नहीं मिला।</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--text-muted);">कोई दानदाता नहीं मिला।</td></tr>`;
         return;
       }
 
-      // Display first 100 for speed
-      const displayList = filtered.slice(0, 100);
-      tbody.innerHTML = displayList.map(d => {
-        let statusBadge = '<span class="badge-status pending"><i class="fa-solid fa-clock"></i> शेष</span>';
-        if (d.balance <= 0 && d.deposited > 0) {
-          statusBadge = '<span class="badge-status paid"><i class="fa-solid fa-check"></i> पूर्ण</span>';
-        } else if (d.deposited > 0 && d.balance > 0) {
-          statusBadge = '<span class="badge-status partial"><i class="fa-solid fa-hourglass-half"></i> आंशिक</span>';
-        }
-
-        const karyakartaBadge = d.collectorUsername ? `<div class="badge-user-tag"><i class="fa-solid fa-user-check"></i> @${d.collectorUsername}</div>` : '';
-
-        return `
-          <tr>
-            <td style="font-weight:700;color:var(--text-muted);">#${d.sno}</td>
-            <td>
-              <strong>${d.name}</strong>
-              ${d.notes ? `<div style="font-size:11px;color:var(--text-muted);">${d.notes}</div>` : ''}
-              ${karyakartaBadge}
-            </td>
-            <td>${d.city}</td>
-            <td style="text-align:right;font-weight:700;color:var(--teal);">${fmt(d.amount)}</td>
-            <td style="text-align:right;font-weight:700;color:var(--sage);">${fmt(d.deposited)}</td>
-            <td style="text-align:right;font-weight:700;color:var(--saffron);">${fmt(d.balance)}</td>
-            <td style="text-align:center;">${statusBadge}</td>
-            <td style="text-align:center;">
-              <button class="btn-table-action" onclick="jumpToCollection(${d.sno})">
-                <i class="fa-solid fa-plus"></i> जमा लें
-              </button>
-            </td>
-          </tr>
-        `;
-      }).join('');
-
-      document.getElementById('declTableSummary').textContent = `दिखाए जा रहे हैं: ${displayList.length} / कुल ${filtered.length} दानदाता`;
+      tbody.innerHTML = filtered.slice(0, 100).map(d => `
+        <tr>
+          <td style="font-weight:700;color:var(--text-muted);">#${d.sno}</td>
+          <td>
+            <strong>${d.name}</strong>
+            ${d.notes ? `<div style="font-size:10.5px;color:var(--text-muted);">${d.notes}</div>` : ''}
+          </td>
+          <td>${d.city}</td>
+          <td style="text-align:right;font-weight:700;color:var(--teal);">${fmt(d.amount)}</td>
+          <td style="text-align:right;font-weight:700;color:var(--sage);">${fmt(d.deposited)}</td>
+          <td style="text-align:right;font-weight:700;color:var(--saffron);">${fmt(d.balance)}</td>
+          <td style="text-align:center;">
+            <button class="btn-outline-action" onclick="jumpToCollection(${d.sno})" style="padding:3px 7px;font-size:11px;">
+              <i class="fa-solid fa-plus"></i> रसीद
+            </button>
+          </td>
+        </tr>
+      `).join('');
     }
 
     function filterDeclarationsTable() {
@@ -2592,103 +2120,89 @@
       }
     }
 
-    // Collections Ledger Table (Traceable to Karyakarta)
     function renderCollectionsTable() {
       const q = (document.getElementById('searchCollTable')?.value || '').toLowerCase();
-      const mode = document.getElementById('filterCollMode')?.value || 'all';
       const userFilter = document.getElementById('filterCollKaryakarta')?.value || 'all';
 
       const filtered = collectionsList.filter(c => {
         const matchesQ = !q || String(c.receiptNo).toLowerCase().includes(q) || String(c.donorName).toLowerCase().includes(q) || String(c.city).toLowerCase().includes(q);
-        const matchesM = mode === 'all' || c.paymentMode.includes(mode);
         const matchesU = userFilter === 'all' || (c.collectorUsername && c.collectorUsername === userFilter) || (c.collector && c.collector.includes(userFilter));
-        return matchesQ && matchesM && matchesU;
+        return matchesQ && matchesU;
       });
 
       const tbody = document.getElementById('collTableBody');
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--text-muted);">कोई संग्रह रिकॉर्ड नहीं है।</td></tr>`;
-        document.getElementById('collTableSummary').textContent = `कुल संग्रह: ₹0 (0 रसीदें)`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--text-muted);">कोई संग्रह रिकॉर्ड नहीं है।</td></tr>`;
         return;
       }
 
-      const totalColl = filtered.reduce((s, c) => s + (Number(c.amount) || 0), 0);
-      tbody.innerHTML = filtered.map(c => `
-        <tr>
-          <td style="font-weight:800;color:var(--teal);">${c.receiptNo}</td>
-          <td>${c.date}</td>
-          <td><strong>${c.donorName}</strong></td>
-          <td>${c.city}</td>
-          <td style="text-align:right;font-weight:800;color:var(--sage);">${fmt(c.amount)}</td>
-          <td><span style="font-size:11.5px;background:var(--sandstone-light);padding:2px 8px;border-radius:10px;">${c.paymentMode}</span></td>
-          <td><span style="font-size:11px;color:var(--text-muted);">${c.refNo || '-'}</span></td>
-          <td>
-            <div style="font-weight:700;color:var(--teal);font-size:12px;">${c.collector || 'कोटेश्वर संस्थान'}</div>
-            ${c.collectorUsername ? `<div class="badge-user-tag">@${c.collectorUsername}</div>` : ''}
-          </td>
-          <td style="text-align:center;">
-            <button class="btn-table-action" onclick="reprintCollectionReceipt('${c.receiptNo}')">
-              <i class="fa-solid fa-receipt"></i> पावती
-            </button>
-          </td>
-        </tr>
-      `).join('');
+      tbody.innerHTML = filtered.map(c => {
+        const donor = declarationsList.find(d => String(d.sno) === String(c.donorSno));
+        const rcptObj = {
+          receiptNo: c.receiptNo,
+          date: c.date,
+          name: c.donorName,
+          city: c.city,
+          mobile: c.mobile || '',
+          amount: c.amount,
+          paymentMode: c.paymentMode,
+          refNo: c.refNo,
+          collector: c.collector,
+          collectorUsername: c.collectorUsername,
+          pledged: donor ? donor.amount : c.amount,
+          deposited: donor ? donor.deposited : c.amount,
+          balance: donor ? donor.balance : 0
+        };
+        const waMsg = encodeURIComponent(buildWhatsAppReceiptText(rcptObj));
+        const phone = c.mobile ? c.mobile.replace(/[^0-9]/g, '') : '';
+        const waUrl = phone && phone.length === 10
+          ? `https://api.whatsapp.com/send?phone=91${phone}&text=${waMsg}`
+          : `https://api.whatsapp.com/send?text=${waMsg}`;
 
-      document.getElementById('collTableSummary').textContent = `दिखाए जा रहे संग्रह: ${filtered.length} रसीदें • कुल योग: ${fmt(totalColl)}`;
+        return `
+          <tr>
+            <td style="font-weight:800;color:var(--teal);">${c.receiptNo}</td>
+            <td>${c.date}</td>
+            <td><strong>${c.donorName}</strong> (${c.city})</td>
+            <td style="text-align:right;font-weight:800;color:var(--sage);">${fmt(c.amount)}</td>
+            <td><span style="font-size:11px;background:var(--sandstone-light);padding:2px 6px;border-radius:6px;">${c.paymentMode}</span></td>
+            <td><span style="font-size:11px;">${c.collector || '-'}</span></td>
+            <td style="text-align:center;">
+              <a href="${waUrl}" target="_blank" class="btn-wa-sm">
+                <i class="fa-brands fa-whatsapp"></i> शेयर
+              </a>
+            </td>
+          </tr>
+        `;
+      }).join('');
     }
 
     function filterCollectionsTable() {
       renderCollectionsTable();
     }
 
-    function reprintCollectionReceipt(rcptNo) {
-      const coll = collectionsList.find(c => c.receiptNo === rcptNo);
-      if (!coll) return;
-      const donor = declarationsList.find(d => String(d.sno) === String(coll.donorSno));
-      openReceiptModal({
-        receiptNo: coll.receiptNo,
-        date: coll.date,
-        name: coll.donorName,
-        city: coll.city,
-        mobile: coll.mobile || '',
-        amount: coll.amount,
-        paymentMode: coll.paymentMode,
-        refNo: coll.refNo,
-        collector: coll.collector,
-        collectorUsername: coll.collectorUsername,
-        pledged: donor ? donor.amount : coll.amount,
-        deposited: donor ? donor.deposited : coll.amount,
-        balance: donor ? donor.balance : 0
-      });
-    }
-
-    // Pending Follow-Up Table
     function renderPendingTable() {
       const q = (document.getElementById('searchPendingTable')?.value || '').toLowerCase();
-      const village = document.getElementById('filterPendingVillage')?.value || 'all';
-
       const pendingDonors = declarationsList.filter(d => (Number(d.balance) > 0)).sort((a, b) => (b.balance - a.balance));
 
       const filtered = pendingDonors.filter(d => {
-        const matchesQ = !q || String(d.name).toLowerCase().includes(q) || String(d.city).toLowerCase().includes(q) || String(d.sno) === q;
-        const matchesV = village === 'all' || d.city === village;
-        return matchesQ && matchesV;
+        return !q || String(d.name).toLowerCase().includes(q) || String(d.city).toLowerCase().includes(q) || String(d.sno) === q;
       });
 
       const tbody = document.getElementById('pendingTableBody');
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--sage);font-weight:700;"><i class="fa-solid fa-circle-check"></i> सभी दानदाताओं की राशि पूर्ण प्राप्त हो चुकी है!</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--sage);font-weight:700;">सभी संकल्प पूर्ण प्राप्त हैं!</td></tr>`;
         return;
       }
 
       tbody.innerHTML = filtered.slice(0, 100).map(d => {
-        const waFollowup = encodeURIComponent(
+        const waRemind = encodeURIComponent(
           `🚩 *माँ नर्मदा घाट निर्माण सेवा महाअभियान: पावन स्मरण* 🚩\n\n` +
           `सादर प्रणाम ${d.name} जी,\n` +
-          `श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान, कोटेश्वर तीर्थ (कोठड़ा) घाट निर्माण कार्य में आपके द्वारा माँ नर्मदा के पावन चरणों में *${fmt(d.amount)}* का जनसहयोग संकल्प लिया गया था।\n\n` +
-          `अब तक जमा राशि: *${fmt(d.deposited)}*\n` +
+          `कोटेश्वर तीर्थ (कोठड़ा) घाट निर्माण कार्य में आपके द्वारा माँ नर्मदा के पावन चरणों में *${fmt(d.amount)}* का जनसहयोग संकल्प लिया गया था।\n\n` +
+          `जमा राशि: *${fmt(d.deposited)}*\n` +
           `शेष संकल्प राशि: *${fmt(d.balance)}*\n\n` +
-          `घाट निर्माण कार्य तीव्र गति से प्रगति पर है। आपसे सादर विनम्र निवेदन है कि अपनी पावन संकल्प राशि संस्थान के अधिकृत कार्यकर्ताओं अथवा बैंक खाते में समर्पित कर पुण्य के भागी बनें।\n\n` +
+          `घाट निर्माण कार्य तीव्र गति से प्रगति पर है। आपसे सादर विनम्र निवेदन है कि अपनी पावन संकल्प राशि संस्थान के कार्यकर्ताओं अथवा बैंक खाते में समर्पित कर पुण्य के भागी बनें।\n\n` +
           `*॥ नर्मदे हर ॥* 🙏\n` +
           `https://koteshwar-ghat-nirman.vercel.app/`
         );
@@ -2696,18 +2210,17 @@
         return `
           <tr>
             <td style="font-weight:700;color:var(--text-muted);">#${d.sno}</td>
-            <td><strong>${d.name}</strong>${d.notes ? `<div style="font-size:11px;color:var(--text-muted);">${d.notes}</div>` : ''}</td>
+            <td><strong>${d.name}</strong></td>
             <td>${d.city}</td>
-            <td style="text-align:right;font-weight:700;">${fmt(d.amount)}</td>
-            <td style="text-align:right;font-weight:700;color:var(--sage);">${fmt(d.deposited)}</td>
+            <td style="text-align:right;">${fmt(d.amount)}</td>
             <td style="text-align:right;font-weight:800;color:var(--saffron);">${fmt(d.balance)}</td>
             <td style="text-align:center;">
               <div style="display:inline-flex;gap:4px;">
-                <button class="btn-table-action" onclick="jumpToCollection(${d.sno})" style="background:var(--sage-light);color:var(--sage);border-color:var(--sage);">
-                  <i class="fa-solid fa-plus"></i> जमा लें
+                <button class="btn-outline-action" onclick="jumpToCollection(${d.sno})" style="padding:3px 7px;font-size:11px;">
+                  रसीद
                 </button>
-                <a href="https://api.whatsapp.com/send?text=${waFollowup}" target="_blank" class="btn-table-action" style="color:var(--whatsapp);border-color:var(--whatsapp);" title="WhatsApp स्मरण भेजें">
-                  <i class="fa-brands fa-whatsapp"></i> स्मरण
+                <a href="https://api.whatsapp.com/send?text=${waRemind}" target="_blank" class="btn-wa-sm">
+                  स्मरण
                 </a>
               </div>
             </td>
@@ -2721,13 +2234,13 @@
     }
 
     /* ============================================================
-       WEBHOOK POST & SETTINGS
+       WEBHOOK SYNC & STORAGE (DATA SINKS)
        ============================================================ */
     function saveWebhookUrl() {
       const url = document.getElementById('webhookUrlInput').value.trim();
       localStorage.setItem('koteshwar_webhook_url', url);
       webhookUrl = url;
-      alert("वेबहुक URL सफलतापूर्वक सुरक्षित कर दिया गया है!");
+      alert("Google Apps Script Webhook URL सुरक्षित कर दिया गया है!");
     }
 
     async function testWebhookConnection() {
@@ -2737,51 +2250,45 @@
         return;
       }
       try {
-        updateRibbon(true, "वेबहुक कनेक्शन जांचा जा रहा है...");
         const res = await fetch(url);
         const data = await res.json();
-        alert("सफल! Google Apps Script से संपर्क स्थापित हो गया है: " + (data.message || "OK"));
-        updateRibbon(false, "वेबहुक सक्रिय एवं प्रमाणित");
+        alert("सफल! Google Apps Script से संपर्क स्थापित: " + (data.message || "OK"));
       } catch (err) {
-        alert("वेबहुक से सीधा परीक्षण CORS के कारण ब्राउज़र में ब्लॉक हो सकता है, लेकिन डेटा पोस्टिंग पृष्ठभूमि में कार्य करेगी।");
-        updateRibbon(false, "वेबहुक कॉन्फ़िगर है");
+        alert("वेबहुक URL कॉन्फ़िगर हो गया है। डेटा Google Sheet में सीधे पोस्ट होगा।");
       }
     }
 
     async function postWebhookData(action, data) {
       if (!webhookUrl) return;
       try {
-        updateRibbon(true, "Google Sheet में सुरक्षित हो रहा है...");
         await fetch(webhookUrl, {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: action, data: data })
         });
-        updateRibbon(false, "Google Sheet में डेटा सफलतापूर्वक सुरक्षित किया गया");
       } catch (e) {
-        console.warn("Webhook post background sync notice:", e);
-        updateRibbon(false, "स्थानीय रूप से सुरक्षित (ऑफ़लाइन कैश)");
+        console.warn("Webhook background sync notice:", e);
       }
     }
 
     /* ============================================================
-       EXPORT & BACKUP UTILITIES
+       EXPORTS (CSV & JSON)
        ============================================================ */
     function exportDeclarationsCSV() {
       let csv = "क्रमांक,दानदाता का नाम,ग्राम/नगर,संदर्भ,घोषित संकल्प (रु),जमा राशि (रु),शेष राशि (रु),रसीद क्र.,दिनांक,कार्यकर्ता,यूजरनेम\n";
       declarationsList.forEach(d => {
         csv += `"${d.sno}","${d.name}","${d.city}","${d.notes || ''}","${d.amount}","${d.deposited}","${d.balance}","${d.receipt}","${d.date}","${d.collector || ''}","${d.collectorUsername || ''}"\n`;
       });
-      downloadBlob(csv, "koteshwar_declarations_ledger.csv", "text/csv;charset=utf-8;");
+      downloadBlob(csv, "koteshwar_declarations.csv", "text/csv;charset=utf-8;");
     }
 
     function exportCollectionsCSV() {
-      let csv = "रसीद क्रमांक,दिनांक,दानदाता क्रमांक,दानदाता का नाम,ग्राम/नगर,प्राप्त राशि (रु),भुगतान माध्यम,संदर्भ ID,प्राप्तकर्ता कार्यकर्ता,यूजरनेम,टिप्पणी\n";
+      let csv = "रसीद बुक क्रमांक,दिनांक,दानदाता क्रमांक,दानदाता का नाम,ग्राम/नगर,प्राप्त राशि (रु),भुगतान माध्यम,संदर्भ ID,प्राप्तकर्ता कार्यकर्ता,यूजरनेम,टिप्पणी\n";
       collectionsList.forEach(c => {
         csv += `"${c.receiptNo}","${c.date}","${c.donorSno || ''}","${c.donorName}","${c.city}","${c.amount}","${c.paymentMode}","${c.refNo || ''}","${c.collector || ''}","${c.collectorUsername || ''}","${c.remarks || ''}"\n`;
       });
-      downloadBlob(csv, "koteshwar_collections_ledger.csv", "text/csv;charset=utf-8;");
+      downloadBlob(csv, "koteshwar_collections_receipts.csv", "text/csv;charset=utf-8;");
     }
 
     function downloadAllDataJSON() {
@@ -2791,7 +2298,7 @@
         collections: collectionsList,
         exportDate: new Date().toISOString()
       };
-      downloadBlob(JSON.stringify(backup, null, 2), "koteshwar_ghat_nirman_backup.json", "application/json;charset=utf-8;");
+      downloadBlob(JSON.stringify(backup, null, 2), "koteshwar_backup.json", "application/json;charset=utf-8;");
     }
 
     function downloadBlob(content, filename, type) {
