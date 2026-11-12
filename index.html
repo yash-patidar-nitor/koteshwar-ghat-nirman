@@ -87,12 +87,11 @@
     .header-inner {
       max-width: 1340px;
       margin: 0 auto;
-      padding: 12px 20px;
+      padding: 10px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      flex-wrap: wrap;
     }
     .header-brand {
       display: flex;
@@ -100,20 +99,20 @@
       gap: 12px;
     }
     .header-logo-icon {
-      width: 42px;
-      height: 42px;
+      width: 40px;
+      height: 40px;
       border-radius: 10px;
       background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 19px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.25);
       flex-shrink: 0;
     }
     .header-title-box h1 {
-      font-size: 16.5px;
+      font-size: 16px;
       font-weight: 700;
       color: #FFFFFF;
       margin: 0;
@@ -121,7 +120,7 @@
       letter-spacing: 0.2px;
     }
     .header-title-box span {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--gold-light);
       display: block;
       margin-top: 2px;
@@ -187,33 +186,42 @@
       color: #fff;
     }
     .btn-outline:hover { background: rgba(255,255,255,0.16); color: #fff; text-decoration: none; }
+    .btn-outline-teal {
+      background: transparent;
+      border: 1px solid var(--teal);
+      color: var(--teal);
+    }
+    .btn-outline-teal:hover {
+      background: var(--teal-subtle);
+      text-decoration: none;
+    }
     .btn-white {
       background: #fff;
       border-color: var(--sandstone);
       color: var(--teal);
     }
     .btn-white:hover { background: var(--sandstone-light); text-decoration: none; }
-    .btn-sm { padding: 4px 10px; font-size: 11.5px; }
+    .btn-sm { padding: 5px 11px; font-size: 11.5px; }
 
     /* ==================== 2. MAIN EXECUTIVE CANVAS ==================== */
     .dashboard-wrap {
       max-width: 1340px;
       margin: 0 auto;
-      padding: 24px 20px 80px;
+      padding: 20px 20px 60px;
     }
 
-    /* Spiritual Shloka Banner */
+    /* Spiritual Shloka Banner (Clean without surrounding symbols) */
     .shloka-strip {
       background: linear-gradient(90deg, var(--teal-dark) 0%, var(--teal) 50%, var(--teal-dark) 100%);
       color: var(--gold-light);
-      padding: 9px 16px;
-      border-radius: 10px;
+      padding: 8px 16px;
+      border-radius: 9px;
       text-align: center;
       font-size: 13.5px;
       font-weight: 600;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       border: 1px solid rgba(209, 154, 80, 0.35);
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
     }
 
     /* ---------- 5 EXECUTIVE KPI TILES ---------- */
@@ -669,6 +677,77 @@
       text-decoration: none;
     }
 
+    /* ==================== TRANSPARENCY & DATA SOURCE FOOTER SECTION ==================== */
+    .transparency-footer-card {
+      background: var(--white);
+      border: 1px solid var(--sandstone);
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      padding: 20px 22px;
+      margin-top: 26px;
+    }
+    .footer-card-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--sandstone-light);
+    }
+    .footer-brand-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      min-width: 270px;
+    }
+    .footer-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: var(--teal-subtle);
+      color: var(--teal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .footer-brand-meta h3 {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--teal);
+      margin: 0 0 2px;
+    }
+    .footer-brand-meta p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.5;
+    }
+    .footer-actions-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .footer-status-pill {
+      background: var(--sandstone-light);
+      border: 1px solid var(--sandstone);
+      color: var(--text-primary);
+    }
+    .footer-sub-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
     /* ==================== MODAL STYLES ==================== */
     .modal-backdrop {
       position: fixed;
@@ -756,20 +835,42 @@
       gap: 6px;
     }
 
+    /* ==================== MOBILE ADAPTATIONS (<768px) ==================== */
     @media (max-width: 768px) {
-      .header-inner { flex-direction: column; align-items: flex-start; gap: 10px; }
-      .header-actions { width: 100%; justify-content: space-between; }
+      .desktop-only { display: none !important; }
+      .header-inner {
+        padding: 8px 14px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+      }
+      .header-brand { gap: 10px; }
+      .header-logo-icon { width: 34px; height: 34px; font-size: 16px; border-radius: 8px; }
+      .header-title-box h1 { font-size: 14px; line-height: 1.2; }
+      .header-title-box span { font-size: 10.5px; margin-top: 1px; }
+
+      .shloka-strip {
+        font-size: 11.5px;
+        padding: 6px 10px;
+        line-height: 1.45;
+        margin-bottom: 14px;
+      }
+
       .kpi-strip { grid-template-columns: 1fr 1fr; gap: 10px; }
       .kpi-card.hero-card { grid-column: span 2; }
       .kpi-card { padding: 13px; }
       .kpi-amount { font-size: 20px; }
-      .dashboard-wrap { padding: 16px 12px 60px; }
+      .dashboard-wrap { padding: 14px 10px 50px; }
+
+      .footer-card-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .footer-actions-row { width: 100%; justify-content: flex-start; }
+      .footer-sub-bar { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ==================== TOP EXECUTIVE HEADER ==================== -->
+  <!-- ==================== TOP EXECUTIVE HEADER (COMPACT ON MOBILE) ==================== -->
   <header class="top-header">
     <div class="header-inner">
       <div class="header-brand">
@@ -782,13 +883,14 @@
         </div>
       </div>
 
-      <div class="header-actions">
-        <span class="status-pill" id="syncStatusPill">
-          <span class="status-dot syncing" id="syncStatusDot"></span>
-          <span id="syncStatusText">Google Sheet से लोड हो रहा है...</span>
+      <!-- Desktop-only Header Actions: completely hidden on mobile to maximize viewport -->
+      <div class="header-actions desktop-only">
+        <span class="status-pill" id="syncStatusPillHeader">
+          <span class="status-dot syncing" id="syncStatusDotHeader"></span>
+          <span id="syncStatusTextHeader">Google Sheet से लोड हो रहा है...</span>
         </span>
         <button class="btn btn-outline btn-sm" onclick="fetchGoogleSheetData(true)">
-          <i class="fa-solid fa-rotate" id="refreshIcon"></i> रीफ्रेश
+          <i class="fa-solid fa-rotate" id="refreshIconHeader"></i> रीफ्रेश
         </button>
         <a href="https://docs.google.com/spreadsheets/d/1Gw-tjQuVRzp6jO57jdH7OzvfEx4Brw_DV6uRb1cUDt8/edit#gid=0" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm">
           <i class="fa-solid fa-table"></i> Google Sheet
@@ -800,9 +902,9 @@
   <!-- ==================== MAIN DASHBOARD CANVAS ==================== -->
   <main class="dashboard-wrap">
 
-    <!-- Spiritual Shloka Banner -->
+    <!-- Spiritual Shloka Banner (Clean without surrounding ॐ) -->
     <div class="shloka-strip">
-      <i class="fa-solid fa-om"></i> ॐ नर्मदे हर • त्वदीय पादपंकजं नमामि देवि नर्मदे! • कोटेश्वर तीर्थ घाट निर्माण महाअभियान <i class="fa-solid fa-om"></i>
+      ॐ नर्मदे हर • त्वदीय पादपंकजं नमामि देवि नर्मदे! • कोटेश्वर तीर्थ घाट निर्माण महाअभियान
     </div>
 
     <!-- 1. EXECUTIVE KPI TILES -->
@@ -909,7 +1011,7 @@
       </div>
     </section>
 
-    <!-- 3. PRESTIGIOUS SEGMENTED NAVIGATION CONTROLS (REORDERED: 1. VILLAGES, 2. DONORS, 3. STORIES) -->
+    <!-- 3. PRESTIGIOUS SEGMENTED NAVIGATION CONTROLS (1. VILLAGES, 2. DONORS, 3. STORIES) -->
     <nav class="segmented-tabs-wrapper">
       <div class="segmented-tabs">
         <!-- 1st Tab: Nagar/Gramwar Sahbhagita (Active by default) -->
@@ -1168,6 +1270,39 @@
       </div>
     </div>
 
+    <!-- ==================== 4. TRANSPARENCY & DATA SOURCE FOOTER (RELOCATED FOR MOBILE OPTIMIZATION) ==================== -->
+    <footer class="transparency-footer-card">
+      <div class="footer-card-inner">
+        <div class="footer-brand-meta">
+          <div class="footer-icon">
+            <i class="fa-solid fa-table-list"></i>
+          </div>
+          <div>
+            <h3>आधिकारिक Google Sheet लाइव डेटा एवं वित्तीय पारदर्शिता</h3>
+            <p>यह पोर्टल श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान की आधिकारिक Google Sheet (Declarations) से लाइव जुड़ा हुआ है। प्रत्येक दानदाता का विवरण एवं सहयोग राशि पूर्ण पारदर्शिता के साथ सुरक्षित है।</p>
+          </div>
+        </div>
+
+        <div class="footer-actions-row">
+          <span class="status-pill footer-status-pill" id="syncStatusPill">
+            <span class="status-dot syncing" id="syncStatusDot"></span>
+            <span id="syncStatusText">Google Sheet से लोड हो रहा है...</span>
+          </span>
+          <button class="btn btn-outline-teal btn-sm" onclick="fetchGoogleSheetData(true)">
+            <i class="fa-solid fa-rotate" id="refreshIcon"></i> डेटा रीफ्रेश करें
+          </button>
+          <a href="https://docs.google.com/spreadsheets/d/1Gw-tjQuVRzp6jO57jdH7OzvfEx4Brw_DV6uRb1cUDt8/edit#gid=0" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Google Sheet खोलें
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-sub-bar">
+        <span>॥ नर्मदे हर ॥ श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान • कोटेश्वर तीर्थ, कोठड़ा (म.प्र.)</span>
+        <span>सर्वाधिकार सुरक्षित • पावन घाट निर्माण सेवा महाअभियान</span>
+      </div>
+    </footer>
+
   </main>
 
   <!-- ==================== HONOR CERTIFICATE MODAL ==================== -->
@@ -1318,7 +1453,7 @@
             // Sort in decreasing order of amount
             declarations.sort((a, b) => (b.amount - a.amount) || (a.sno - b.sno));
             renderDashboardFromData();
-            document.getElementById('syncStatusText').textContent = `कैश से सक्रिय (${declarations.length} दानदाता)`;
+            updateSyncUI(false, `कैश से सक्रिय (${declarations.length} दानदाता)`, true);
           }
         }
       } catch (e) {
@@ -1330,16 +1465,40 @@
     });
 
     /* ============================================================
+       HELPER TO UPDATE STATUS BOTH IN DESKTOP HEADER & FOOTER
+       ============================================================ */
+    function updateSyncUI(isSyncing, message, isSuccess) {
+      ['syncStatusDot', 'syncStatusDotHeader'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (isSyncing) {
+          el.classList.add('syncing');
+          el.style.background = 'var(--gold)';
+        } else {
+          el.classList.remove('syncing');
+          el.style.background = isSuccess ? '#4EBE86' : '#D19A50';
+        }
+      });
+
+      ['syncStatusText', 'syncStatusTextHeader'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = message;
+      });
+
+      ['refreshIcon', 'refreshIconHeader'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          if (isSyncing) el.classList.add('fa-spin');
+          else el.classList.remove('fa-spin');
+        }
+      });
+    }
+
+    /* ============================================================
        100% DYNAMIC GVIZ FETCH (FETCHES ONLY NECESSARY COLUMNS)
        ============================================================ */
     async function fetchGoogleSheetData(isManual = false) {
-      const dot = document.getElementById('syncStatusDot');
-      const text = document.getElementById('syncStatusText');
-      const icon = document.getElementById('refreshIcon');
-
-      if (icon) icon.classList.add('fa-spin');
-      if (dot) dot.classList.add('syncing');
-      if (text) text.textContent = "Google Sheet से लाइव डेटा लोड हो रहा है...";
+      updateSyncUI(true, "Google Sheet से लाइव डेटा लोड हो रहा है...", false);
 
       try {
         const response = await fetch(GVIZ_QUERY_URL);
@@ -1411,8 +1570,7 @@
             localStorage.setItem('koteshwar_declarations_cache', JSON.stringify(declarations));
           } catch (e) {}
 
-          if (text) text.textContent = `Google Sheet Live (${declarations.length} दानदाता)`;
-          if (dot) { dot.classList.remove('syncing'); dot.style.background = "#4EBE86"; }
+          updateSyncUI(false, `Google Sheet Live (${declarations.length} दानदाता)`, true);
         } else {
           throw new Error("No valid donor rows received from sheet");
         }
@@ -1420,13 +1578,10 @@
       } catch (err) {
         console.error("GViz Live Fetch Error:", err);
         if (declarations.length > 0) {
-          if (text) text.textContent = `ऑफ़लाइन कैश सक्रिय (${declarations.length} दानदाता)`;
+          updateSyncUI(false, `ऑफ़लाइन कैश सक्रिय (${declarations.length} दानदाता)`, false);
         } else {
-          if (text) text.textContent = `शीट लोड त्रुटि (कृपया रीफ्रेश करें)`;
+          updateSyncUI(false, `शीट लोड त्रुटि (कृपया रीफ्रेश करें)`, false);
         }
-        if (dot) { dot.classList.remove('syncing'); dot.style.background = "#D19A50"; }
-      } finally {
-        if (icon) icon.classList.remove('fa-spin');
       }
     }
 
