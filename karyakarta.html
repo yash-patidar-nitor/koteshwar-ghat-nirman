@@ -130,6 +130,25 @@
       align-items: center;
       gap: 8px;
     }
+    .user-profile-badge {
+      background: rgba(209, 154, 80, 0.18);
+      border: 1px solid var(--gold);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .user-profile-badge .user-tag {
+      font-size: 10px;
+      color: var(--gold-light);
+      background: rgba(0, 0, 0, 0.25);
+      padding: 1px 6px;
+      border-radius: 10px;
+    }
+
     .btn-header {
       padding: 5px 11px;
       border-radius: 20px;
@@ -164,7 +183,7 @@
       text-decoration: none;
     }
 
-    /* ==================== 2. PIN AUTHENTICATION SCREEN ==================== */
+    /* ==================== 2. USERNAME & PIN AUTHENTICATION SCREEN ==================== */
     #authOverlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -173,7 +192,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 16px;
     }
     .auth-card {
       background: #FFFFFF;
@@ -192,84 +211,101 @@
     .auth-card-head {
       background: var(--teal);
       color: #fff;
-      padding: 24px 20px 20px;
+      padding: 22px 20px 18px;
       text-align: center;
       border-bottom: 3px solid var(--gold);
       position: relative;
     }
     .auth-icon-circle {
-      width: 58px;
-      height: 58px;
-      margin: 0 auto 12px;
+      width: 54px;
+      height: 54px;
+      margin: 0 auto 10px;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      font-size: 22px;
       color: #fff;
       box-shadow: 0 4px 14px rgba(0,0,0,0.3);
     }
     .auth-card-head h2 {
-      font-size: 16.5px;
+      font-size: 16px;
       font-weight: 700;
-      margin: 0 0 4px;
+      margin: 0 0 3px;
       color: #FFFFFF;
     }
     .auth-card-head p {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--gold-light);
       margin: 0;
     }
     .auth-card-body {
-      padding: 24px 22px;
+      padding: 22px 20px;
     }
     .auth-desc-text {
-      font-size: 12.5px;
+      font-size: 12px;
       color: var(--text-secondary);
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       line-height: 1.5;
     }
-    .auth-pin-group {
-      position: relative;
-      margin-bottom: 18px;
+
+    .auth-field-group {
+      margin-bottom: 14px;
     }
-    .auth-pin-input {
+    .auth-field-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--teal-dark);
+      margin-bottom: 5px;
+      text-align: left;
+    }
+    .auth-select, .auth-input {
       width: 100%;
-      padding: 14px 44px 14px 16px;
-      font-size: 16px;
+      padding: 11px 12px;
+      font-size: 13.5px;
       border: 2px solid var(--sandstone);
-      border-radius: 10px;
+      border-radius: 8px;
       background: var(--sandstone-light);
       color: var(--text-primary);
       outline: none;
       transition: all 0.2s ease;
-      letter-spacing: 2px;
-      font-weight: 600;
-      text-align: center;
+      font-family: inherit;
     }
-    .auth-pin-input:focus {
+    .auth-select:focus, .auth-input:focus {
       border-color: var(--teal);
       background: #fff;
       box-shadow: 0 0 0 3px var(--teal-subtle);
     }
+
+    .auth-pin-wrap {
+      position: relative;
+    }
+    .auth-pin-wrap input {
+      padding-right: 44px;
+      letter-spacing: 2px;
+      font-weight: 600;
+      text-align: center;
+    }
     .btn-toggle-pin {
       position: absolute;
-      right: 14px;
+      right: 12px;
       top: 50%;
       transform: translateY(-50%);
       background: none;
       border: none;
       color: var(--text-muted);
       cursor: pointer;
-      font-size: 16px;
+      font-size: 15px;
     }
+
     .auth-msg-box {
       font-size: 12px;
       color: var(--saffron);
       text-align: center;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       min-height: 18px;
       font-weight: 600;
     }
@@ -277,11 +313,11 @@
       width: 100%;
       background: linear-gradient(135deg, var(--teal) 0%, var(--teal-light) 100%);
       color: #fff;
-      padding: 13px;
-      font-size: 14.5px;
+      padding: 12px;
+      font-size: 14px;
       font-weight: 700;
       border: 1px solid var(--gold);
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(18, 63, 66, 0.25);
       transition: all 0.2s ease;
@@ -295,12 +331,12 @@
       transform: translateY(-1px);
     }
     .auth-footer-help {
-      margin-top: 18px;
+      margin-top: 16px;
       text-align: center;
       font-size: 11.5px;
       color: var(--text-muted);
       border-top: 1px solid var(--sandstone);
-      padding-top: 14px;
+      padding-top: 12px;
     }
 
     /* ==================== 3. MAIN WORKSPACE CONTAINER ==================== */
@@ -752,6 +788,16 @@
       color: var(--saffron);
     }
 
+    .badge-user-tag {
+      font-size: 10.5px;
+      background: rgba(18, 63, 66, 0.07);
+      color: var(--teal);
+      padding: 2px 6px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-top: 2px;
+    }
+
     .btn-table-action {
       padding: 4px 9px;
       border-radius: 6px;
@@ -949,34 +995,57 @@
 </head>
 <body>
 
-  <!-- ==================== PIN AUTHENTICATION OVERLAY ==================== -->
+  <!-- ==================== USERNAME & PIN AUTHENTICATION OVERLAY ==================== -->
   <div id="authOverlay">
     <div class="auth-card">
       <div class="auth-card-head">
         <div class="auth-icon-circle">
-          <i class="fa-solid fa-lock"></i>
+          <i class="fa-solid fa-user-shield"></i>
         </div>
-        <h2>अधिकृत कार्यकर्ता पोर्टल</h2>
+        <h2>अधिकृत कार्यकर्ता प्रवेश द्वार</h2>
         <p>श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान • कोटेश्वर तीर्थ</p>
       </div>
 
       <div class="auth-card-body">
         <p class="auth-desc-text">
-          माँ नर्मदा घाट निर्माण सेवा महाअभियान के अंतर्गत नवीन घोषणाओं एवं धन प्राप्ति रसीद प्रविष्टि हेतु अधिकृत पिन दर्ज करें।
+          प्रत्येक प्रविष्टि को संबंधित कार्यकर्ता से प्रमाणित एवं ट्रेस (Traceable) रखने हेतु कृपया अपना अधिकृत उपयोगकर्ता नाम एवं सुरक्षा पिन दर्ज करें।
         </p>
 
         <form id="authForm" onsubmit="handleAuthSubmit(event)">
-          <div class="auth-pin-group">
-            <input type="password" id="authPinInput" class="auth-pin-input" placeholder="सुरक्षा पिन / पासवर्ड दर्ज करें" autocomplete="current-password" autofocus required />
-            <button type="button" class="btn-toggle-pin" onclick="togglePinVisibility()">
-              <i class="fa-solid fa-eye" id="pinEyeIcon"></i>
-            </button>
+          <!-- 1. Username Selector -->
+          <div class="auth-field-group">
+            <label class="auth-field-label">
+              <i class="fa-solid fa-user"></i> कार्यकर्ता उपयोगकर्ता नाम (Username)
+            </label>
+            <select id="authUsernameSelect" class="auth-select" required onchange="handleUserSelectChange(this.value)">
+              <option value="">-- अधिकृत कार्यकर्ता चुनें --</option>
+              <option value="anilpatidar">anilpatidar (श्री अनिल पाटीदार)</option>
+              <option value="raghavpatidar">raghavpatidar (श्री राघव पाटीदार)</option>
+              <option value="mahendrapatidar">mahendrapatidar (श्री महेंद्र पाटीदार)</option>
+              <option value="custom">अन्य यूजरनेम टाइप करें...</option>
+            </select>
+            <div id="customUsernameWrap" style="display:none;margin-top:6px;">
+              <input type="text" id="authCustomUsername" class="auth-input" placeholder="यूजरनेम टाइप करें (उदा. anilpatidar)" />
+            </div>
+          </div>
+
+          <!-- 2. Security PIN Input -->
+          <div class="auth-field-group">
+            <label class="auth-field-label">
+              <i class="fa-solid fa-key"></i> सुरक्षा पिन / पासवर्ड (Security PIN)
+            </label>
+            <div class="auth-pin-wrap">
+              <input type="password" id="authPinInput" class="auth-input" placeholder="सुरक्षा पिन दर्ज करें" autocomplete="current-password" required />
+              <button type="button" class="btn-toggle-pin" onclick="togglePinVisibility()">
+                <i class="fa-solid fa-eye" id="pinEyeIcon"></i>
+              </button>
+            </div>
           </div>
 
           <div class="auth-msg-box" id="authMsgBox"></div>
 
           <button type="submit" class="btn-auth-unlock">
-            <i class="fa-solid fa-key"></i> प्रवेश करें (Unlock Portal)
+            <i class="fa-solid fa-door-open"></i> पोर्टल में प्रवेश करें (Unlock Portal)
           </button>
         </form>
 
@@ -1003,8 +1072,15 @@
       </div>
 
       <div class="header-actions">
+        <!-- Logged in User Profile Pill -->
+        <div class="user-profile-badge" id="headerUserBadge">
+          <i class="fa-solid fa-circle-user" style="color:var(--gold-light);"></i>
+          <span id="headerUserDisplayName">कार्यकर्ता</span>
+          <span class="user-tag" id="headerUsernameTag">@user</span>
+        </div>
+
         <a href="index.html" class="btn-header btn-header-public">
-          <i class="fa-solid fa-house"></i> <span class="d-none d-sm-inline">सार्वजनिक डैशबोर्ड</span>
+          <i class="fa-solid fa-house"></i> <span class="d-none d-sm-inline">डैशबोर्ड</span>
         </a>
         <button onclick="handleLogout()" class="btn-header btn-header-logout" title="लॉगआउट">
           <i class="fa-solid fa-arrow-right-from-bracket"></i> लॉगआउट
@@ -1133,7 +1209,7 @@
                 <option value="धरमपुरी">धरमपुरी</option>
                 <option value="कुक्षी">कुक्षी</option>
                 <option value="धार">धार</option>
-                <option value="nanpur">नानपुर</option>
+                <option value="नानपुर">नानपुर</option>
                 <option value="other">अन्य नगर / ग्राम दर्ज करें...</option>
               </select>
               <div id="declCustomVillageWrap" style="display:none;margin-top:6px;">
@@ -1161,8 +1237,9 @@
             </div>
 
             <div class="form-group">
-              <label>संकल्प प्रेरक / अधिकृत कार्यकर्ता</label>
-              <input type="text" id="declCollector" class="form-input" placeholder="कार्यकर्ता का नाम" />
+              <label>प्रविष्टि कर्ता / अधिकृत कार्यकर्ता <span style="color:var(--sage);font-size:11px;">(ट्रेस योग्य)</span></label>
+              <input type="text" id="declCollector" class="form-input" readonly style="background:#EEF5F3;font-weight:700;color:var(--teal);" />
+              <div class="input-hint">लॉगिन उपयोगकर्ता नाम (<span id="declUserHint">@user</span>) से स्वतः लिंक्ड</div>
             </div>
           </div>
 
@@ -1290,8 +1367,9 @@
             </div>
 
             <div class="form-group">
-              <label>राशि प्राप्तकर्ता कार्यकर्ता <span class="req">*</span></label>
-              <input type="text" id="collCollector" class="form-input" placeholder="कार्यकर्ता का नाम" required />
+              <label>राशि प्राप्तकर्ता कार्यकर्ता <span style="color:var(--sage);font-size:11px;">(ट्रेस योग्य)</span></label>
+              <input type="text" id="collCollector" class="form-input" readonly style="background:#EEF5F3;font-weight:700;color:var(--teal);" required />
+              <div class="input-hint">लॉगिन उपयोगकर्ता नाम (<span id="collUserHint">@user</span>) से स्वतः लिंक्ड</div>
             </div>
           </div>
 
@@ -1379,7 +1457,7 @@
         <div class="form-box-head">
           <div>
             <h3><i class="fa-solid fa-file-invoice-dollar" style="color:var(--sage);"></i> वास्तविक संग्रह पंजी (Collections Ledger)</h3>
-            <span>जारी की गई सभी रसीदों एवं वास्तविक जमा राशि का अलग ब्योरा</span>
+            <span>जारी की गई सभी रसीदों एवं वास्तविक जमा राशि का अलग ब्योरा (कार्यकर्ता अनुसार ट्रेस योग्य)</span>
           </div>
           <div>
             <button class="btn-table-action" onclick="exportCollectionsCSV()">
@@ -1394,7 +1472,15 @@
             <input type="text" id="searchCollTable" placeholder="रसीद क्र., दानदाता या माध्यम खोजें..." oninput="filterCollectionsTable()" />
           </div>
 
-          <div style="display:flex;gap:8px;">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <!-- Filter by Karyakarta -->
+            <select id="filterCollKaryakarta" class="form-select" onchange="filterCollectionsTable()">
+              <option value="all">सभी कार्यकर्ता (All Entries)</option>
+              <option value="anilpatidar">श्री अनिल पाटीदार (@anilpatidar)</option>
+              <option value="raghavpatidar">श्री राघव पाटीदार (@raghavpatidar)</option>
+              <option value="mahendrapatidar">श्री महेंद्र पाटीदार (@mahendrapatidar)</option>
+            </select>
+
             <select id="filterCollMode" class="form-select" onchange="filterCollectionsTable()">
               <option value="all">सभी भुगतान माध्यम</option>
               <option value="नकद">नकद</option>
@@ -1416,7 +1502,7 @@
                 <th style="text-align:right;">प्राप्त राशि (₹)</th>
                 <th>माध्यम</th>
                 <th>संदर्भ / UTR</th>
-                <th>प्राप्तकर्ता</th>
+                <th>प्राप्तकर्ता कार्यकर्ता</th>
                 <th style="text-align:center;">पावती</th>
               </tr>
             </thead>
@@ -1627,15 +1713,35 @@
   <!-- ==================== JAVASCRIPT ==================== -->
   <script>
     /* ============================================================
-       CONSTANTS & STATE
+       CONSTANTS & AUTHORIZED USERS
        ============================================================ */
     const SHEET_ID = '1Gw-tjQuVRzp6jO57jdH7OzvfEx4Brw_DV6uRb1cUDt8';
     const GVIZ_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Declarations&tq=${encodeURIComponent('SELECT A, B, C, D, F, G, H, I, L')}`;
 
-    // Valid Authorized Karyakarta PINs / Passcodes
+    // Authorized Karyakartas Directory (Traceable Users)
+    const AUTHORIZED_USERS = {
+      'anilpatidar': {
+        username: 'anilpatidar',
+        name: 'श्री अनिल पाटीदार',
+        role: 'अधिकृत कार्यकर्ता'
+      },
+      'raghavpatidar': {
+        username: 'raghavpatidar',
+        name: 'श्री राघव पाटीदार',
+        role: 'अधिकृत कार्यकर्ता'
+      },
+      'mahendrapatidar': {
+        username: 'mahendrapatidar',
+        name: 'श्री महेंद्र पाटीदार',
+        role: 'अधिकृत कार्यकर्ता'
+      }
+    };
+
+    // Valid PINs
     const VALID_PINS = ['narmadehar2026', 'कोटेश्वर2026', 'koteshwar2026', '12345'];
 
     // State
+    let currentUser = null;
     let declarationsList = [];
     let collectionsList = [];
     let selectedDonor = null;
@@ -1687,14 +1793,16 @@
     }
 
     /* ============================================================
-       AUTHENTICATION & SECURITY
+       AUTHENTICATION & USER PROFILE
        ============================================================ */
     function checkAuth() {
       try {
         const session = JSON.parse(sessionStorage.getItem('koteshwar_auth_session') || '{}');
         const now = Date.now();
         // 2 hours timeout
-        if (session && session.auth && (now - session.timestamp < 2 * 60 * 60 * 1000)) {
+        if (session && session.auth && session.username && (now - session.timestamp < 2 * 60 * 60 * 1000)) {
+          currentUser = session;
+          applyUserProfile();
           document.getElementById('authOverlay').style.display = 'none';
           initPortal();
           return true;
@@ -1705,24 +1813,78 @@
       return false;
     }
 
+    function handleUserSelectChange(val) {
+      const customWrap = document.getElementById('customUsernameWrap');
+      if (customWrap) {
+        customWrap.style.display = val === 'custom' ? 'block' : 'none';
+        if (val === 'custom') {
+          document.getElementById('authCustomUsername').focus();
+        }
+      }
+    }
+
     function handleAuthSubmit(e) {
       e.preventDefault();
+      const selectVal = document.getElementById('authUsernameSelect').value;
+      let rawUsername = selectVal;
+      if (selectVal === 'custom') {
+        rawUsername = document.getElementById('authCustomUsername').value.trim();
+      }
+
+      const username = (rawUsername || '').toLowerCase().trim();
       const pin = document.getElementById('authPinInput').value.trim();
       const msgBox = document.getElementById('authMsgBox');
 
-      if (VALID_PINS.includes(pin)) {
-        sessionStorage.setItem('koteshwar_auth_session', JSON.stringify({
-          auth: true,
-          timestamp: Date.now()
-        }));
-        msgBox.textContent = "";
-        document.getElementById('authOverlay').style.display = 'none';
-        initPortal();
-      } else {
-        msgBox.textContent = "अमान्य पिन! कृपया सही कार्यकर्ता पिन दर्ज करें।";
+      if (!username) {
+        msgBox.textContent = "कृपया अपना उपयोगकर्ता नाम चुनें या टाइप करें!";
+        return;
+      }
+
+      const matchedUser = AUTHORIZED_USERS[username];
+      if (!matchedUser) {
+        msgBox.textContent = `अमान्य उपयोगकर्ता नाम (@${username})! अधिकृत कार्यकर्ता: anilpatidar, raghavpatidar, mahendrapatidar`;
+        return;
+      }
+
+      if (!VALID_PINS.includes(pin)) {
+        msgBox.textContent = "अमान्य सुरक्षा पिन! कृपया सही पिन दर्ज करें।";
         document.getElementById('authPinInput').value = "";
         document.getElementById('authPinInput').focus();
+        return;
       }
+
+      // Successful Authentication
+      currentUser = {
+        auth: true,
+        username: matchedUser.username,
+        displayName: matchedUser.name,
+        role: matchedUser.role,
+        timestamp: Date.now()
+      };
+
+      sessionStorage.setItem('koteshwar_auth_session', JSON.stringify(currentUser));
+      msgBox.textContent = "";
+      applyUserProfile();
+      document.getElementById('authOverlay').style.display = 'none';
+      initPortal();
+    }
+
+    function applyUserProfile() {
+      if (!currentUser) return;
+      // Header badge
+      document.getElementById('headerUserDisplayName').textContent = currentUser.displayName;
+      document.getElementById('headerUsernameTag').textContent = '@' + currentUser.username;
+
+      // Lock user fields in forms
+      const declCol = document.getElementById('declCollector');
+      const collCol = document.getElementById('collCollector');
+      if (declCol) declCol.value = `${currentUser.displayName} (@${currentUser.username})`;
+      if (collCol) collCol.value = `${currentUser.displayName} (@${currentUser.username})`;
+
+      const dHint = document.getElementById('declUserHint');
+      const cHint = document.getElementById('collUserHint');
+      if (dHint) dHint.textContent = '@' + currentUser.username;
+      if (cHint) cHint.textContent = '@' + currentUser.username;
     }
 
     function togglePinVisibility() {
@@ -1740,7 +1902,7 @@
     }
 
     function handleLogout() {
-      if (confirm("क्या आप कार्यकर्ता पोर्टल से बाहर निकलना (लॉगआउट) चाहते हैं?")) {
+      if (confirm(`क्या आप ${currentUser ? currentUser.displayName : 'कार्यकर्ता'} के रूप में लॉगआउट करना चाहते हैं?`)) {
         sessionStorage.removeItem('koteshwar_auth_session');
         window.location.reload();
       }
@@ -1895,7 +2057,6 @@
       // Update declaration deposited & balance
       declarationsList.forEach(d => {
         const localColl = collMap[d.sno] || 0;
-        // Don't double count if sheet already includes deposited, but ensure at least local collections are reflected
         if (localColl > 0 && d.deposited < localColl) {
           d.deposited = localColl;
         }
@@ -1934,6 +2095,7 @@
       renderPendingTable();
       updateNextDeclarationSno();
       updateBadges();
+      applyUserProfile();
     }
 
     function updateBadges() {
@@ -2045,7 +2207,7 @@
     }
 
     /* ============================================================
-       SAVE DECLARATION (TAB 1)
+       SAVE DECLARATION (TAB 1) - TRACEABLE TO USER
        ============================================================ */
     async function handleSaveDeclaration(e) {
       e.preventDefault();
@@ -2065,7 +2227,6 @@
       const amount = parseFloat(document.getElementById('declAmount').value) || 0;
       const mobile = document.getElementById('declMobile').value.trim();
       const date = document.getElementById('declDate').value;
-      const collector = document.getElementById('declCollector').value.trim();
       const notes = document.getElementById('declNotes').value.trim();
 
       const newDecl = {
@@ -2079,7 +2240,9 @@
         balance: amount,
         receipt: "-",
         date: date,
-        collector: collector
+        collector: currentUser ? currentUser.displayName : "अधिकृत कार्यकर्ता",
+        collectorUsername: currentUser ? currentUser.username : "",
+        recordedAt: new Date().toISOString()
       };
 
       // 1. Save locally
@@ -2097,13 +2260,14 @@
       renderAllPortals();
 
       // Offer immediate collection
-      if (confirm(`घोषणा सुरक्षित हो गई!\n\nदानदाता: ${name} (ग्राम: ${city})\nघोषित संकल्प: ${fmt(amount)}\n\nक्या आप अभी इस दानदाता के लिए धन प्राप्ति रसीद काटना चाहते हैं?`)) {
+      if (confirm(`घोषणा सुरक्षित हो गई!\n\nदानदाता: ${name} (ग्राम: ${city})\nघोषित संकल्प: ${fmt(amount)}\nकार्यकर्ता: ${newDecl.collector} (@${newDecl.collectorUsername})\n\nक्या आप अभी इस दानदाता के लिए धन प्राप्ति रसीद काटना चाहते हैं?`)) {
         document.getElementById('newDeclarationForm').reset();
         selectDonorForCollection(newDecl);
         switchPortalTab('new-collection');
       } else {
         document.getElementById('newDeclarationForm').reset();
         document.getElementById('declAmountWords').textContent = 'राशि शब्दों में...';
+        applyUserProfile();
       }
     }
 
@@ -2180,7 +2344,7 @@
     }
 
     /* ============================================================
-       SAVE COLLECTION (TAB 2)
+       SAVE COLLECTION (TAB 2) - TRACEABLE TO USER
        ============================================================ */
     async function handleSaveCollection(e) {
       e.preventDefault();
@@ -2215,7 +2379,6 @@
       const paymentMode = document.getElementById('collPaymentMode').value;
       const refNo = document.getElementById('collRefNo').value.trim();
       const date = document.getElementById('collDate').value;
-      const collector = document.getElementById('collCollector').value.trim();
       const remarks = document.getElementById('collRemarks').value.trim();
 
       const newCollection = {
@@ -2229,7 +2392,8 @@
         paymentMode: paymentMode,
         refNo: refNo,
         date: date,
-        collector: collector,
+        collector: currentUser ? currentUser.displayName : "अधिकृत कार्यकर्ता",
+        collectorUsername: currentUser ? currentUser.username : "",
         remarks: remarks,
         timestamp: new Date().toISOString()
       };
@@ -2262,7 +2426,8 @@
         amount: amount,
         paymentMode: paymentMode,
         refNo: refNo,
-        collector: collector,
+        collector: newCollection.collector,
+        collectorUsername: newCollection.collectorUsername,
         pledged: pledgedAmt || amount,
         deposited: donorSno && selectedDonor ? selectedDonor.deposited : amount,
         balance: donorSno && selectedDonor ? selectedDonor.balance : 0
@@ -2272,6 +2437,7 @@
       document.getElementById('newCollectionForm').reset();
       clearSelectedDonor();
       updateNextDeclarationSno();
+      applyUserProfile();
     }
 
     /* ============================================================
@@ -2299,7 +2465,9 @@
       document.getElementById('rcptViewPledged').textContent = fmt(rcpt.pledged);
       document.getElementById('rcptViewTotalDeposited').textContent = fmt(rcpt.deposited);
       document.getElementById('rcptViewBalance').textContent = fmt(rcpt.balance);
-      document.getElementById('rcptViewCollector').textContent = rcpt.collector || "अधिकृत प्रतिनिधि";
+
+      const collectorStr = rcpt.collector + (rcpt.collectorUsername ? ` (@${rcpt.collectorUsername})` : '');
+      document.getElementById('rcptViewCollector').textContent = collectorStr || "अधिकृत प्रतिनिधि";
 
       const tag = document.getElementById('rcptViewStatusTag');
       if (rcpt.balance <= 0) {
@@ -2310,7 +2478,7 @@
         tag.style.color = "var(--gold-dark)";
       }
 
-      // Prepare Devotional WhatsApp Message
+      // Prepare Devotional WhatsApp Message with Traceable Karyakarta
       const waText =
         `🚩 *माँ नर्मदा घाट निर्माण सेवा महाअभियान* 🚩\n` +
         `*श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान*\n` +
@@ -2328,7 +2496,7 @@
         `कुल घोषित संकल्प: *${fmt(rcpt.pledged)}*\n` +
         `अब तक कुल जमा: *${fmt(rcpt.deposited)}*\n` +
         (rcpt.balance > 0 ? `शेष संकल्प राशि: *${fmt(rcpt.balance)}*\n` : `संकल्प स्थिति: *शत-प्रतिशत पूर्ण* ✅\n`) +
-        `अधिकृत प्राप्तकर्ता: *${rcpt.collector || 'कोटेश्वर संस्थान'}*\n\n` +
+        `अधिकृत प्राप्तकर्ता: *${collectorStr}*\n\n` +
         `माँ रेवा की कृपा आप एवं आपके परिवार पर सदैव बनी रहे।\n` +
         `*॥ नर्मदे हर ॥* 🙏\n\n` +
         `लाइव वित्तीय पारदर्शिता पोर्टल:\nhttps://koteshwar-ghat-nirman.vercel.app/`;
@@ -2385,10 +2553,16 @@
           statusBadge = '<span class="badge-status partial"><i class="fa-solid fa-hourglass-half"></i> आंशिक</span>';
         }
 
+        const karyakartaBadge = d.collectorUsername ? `<div class="badge-user-tag"><i class="fa-solid fa-user-check"></i> @${d.collectorUsername}</div>` : '';
+
         return `
           <tr>
             <td style="font-weight:700;color:var(--text-muted);">#${d.sno}</td>
-            <td><strong>${d.name}</strong>${d.notes ? `<div style="font-size:11px;color:var(--text-muted);">${d.notes}</div>` : ''}</td>
+            <td>
+              <strong>${d.name}</strong>
+              ${d.notes ? `<div style="font-size:11px;color:var(--text-muted);">${d.notes}</div>` : ''}
+              ${karyakartaBadge}
+            </td>
             <td>${d.city}</td>
             <td style="text-align:right;font-weight:700;color:var(--teal);">${fmt(d.amount)}</td>
             <td style="text-align:right;font-weight:700;color:var(--sage);">${fmt(d.deposited)}</td>
@@ -2418,15 +2592,17 @@
       }
     }
 
-    // Collections Ledger Table
+    // Collections Ledger Table (Traceable to Karyakarta)
     function renderCollectionsTable() {
       const q = (document.getElementById('searchCollTable')?.value || '').toLowerCase();
       const mode = document.getElementById('filterCollMode')?.value || 'all';
+      const userFilter = document.getElementById('filterCollKaryakarta')?.value || 'all';
 
       const filtered = collectionsList.filter(c => {
         const matchesQ = !q || String(c.receiptNo).toLowerCase().includes(q) || String(c.donorName).toLowerCase().includes(q) || String(c.city).toLowerCase().includes(q);
         const matchesM = mode === 'all' || c.paymentMode.includes(mode);
-        return matchesQ && matchesM;
+        const matchesU = userFilter === 'all' || (c.collectorUsername && c.collectorUsername === userFilter) || (c.collector && c.collector.includes(userFilter));
+        return matchesQ && matchesM && matchesU;
       });
 
       const tbody = document.getElementById('collTableBody');
@@ -2446,7 +2622,10 @@
           <td style="text-align:right;font-weight:800;color:var(--sage);">${fmt(c.amount)}</td>
           <td><span style="font-size:11.5px;background:var(--sandstone-light);padding:2px 8px;border-radius:10px;">${c.paymentMode}</span></td>
           <td><span style="font-size:11px;color:var(--text-muted);">${c.refNo || '-'}</span></td>
-          <td><span style="font-size:11.5px;">${c.collector || '-'}</span></td>
+          <td>
+            <div style="font-weight:700;color:var(--teal);font-size:12px;">${c.collector || 'कोटेश्वर संस्थान'}</div>
+            ${c.collectorUsername ? `<div class="badge-user-tag">@${c.collectorUsername}</div>` : ''}
+          </td>
           <td style="text-align:center;">
             <button class="btn-table-action" onclick="reprintCollectionReceipt('${c.receiptNo}')">
               <i class="fa-solid fa-receipt"></i> पावती
@@ -2476,6 +2655,7 @@
         paymentMode: coll.paymentMode,
         refNo: coll.refNo,
         collector: coll.collector,
+        collectorUsername: coll.collectorUsername,
         pledged: donor ? donor.amount : coll.amount,
         deposited: donor ? donor.deposited : coll.amount,
         balance: donor ? donor.balance : 0
@@ -2589,23 +2769,24 @@
        EXPORT & BACKUP UTILITIES
        ============================================================ */
     function exportDeclarationsCSV() {
-      let csv = "क्रमांक,दानदाता का नाम,ग्राम/नगर,संदर्भ,घोषित संकल्प (रु),जमा राशि (रु),शेष राशि (रु),रसीद क्र.,दिनांक\n";
+      let csv = "क्रमांक,दानदाता का नाम,ग्राम/नगर,संदर्भ,घोषित संकल्प (रु),जमा राशि (रु),शेष राशि (रु),रसीद क्र.,दिनांक,कार्यकर्ता,यूजरनेम\n";
       declarationsList.forEach(d => {
-        csv += `"${d.sno}","${d.name}","${d.city}","${d.notes || ''}","${d.amount}","${d.deposited}","${d.balance}","${d.receipt}","${d.date}"\n`;
+        csv += `"${d.sno}","${d.name}","${d.city}","${d.notes || ''}","${d.amount}","${d.deposited}","${d.balance}","${d.receipt}","${d.date}","${d.collector || ''}","${d.collectorUsername || ''}"\n`;
       });
       downloadBlob(csv, "koteshwar_declarations_ledger.csv", "text/csv;charset=utf-8;");
     }
 
     function exportCollectionsCSV() {
-      let csv = "रसीद क्रमांक,दिनांक,दानदाता क्रमांक,दानदाता का नाम,ग्राम/नगर,प्राप्त राशि (रु),भुगतान माध्यम,संदर्भ ID,प्राप्तकर्ता,टिप्पणी\n";
+      let csv = "रसीद क्रमांक,दिनांक,दानदाता क्रमांक,दानदाता का नाम,ग्राम/नगर,प्राप्त राशि (रु),भुगतान माध्यम,संदर्भ ID,प्राप्तकर्ता कार्यकर्ता,यूजरनेम,टिप्पणी\n";
       collectionsList.forEach(c => {
-        csv += `"${c.receiptNo}","${c.date}","${c.donorSno || ''}","${c.donorName}","${c.city}","${c.amount}","${c.paymentMode}","${c.refNo || ''}","${c.collector || ''}","${c.remarks || ''}"\n`;
+        csv += `"${c.receiptNo}","${c.date}","${c.donorSno || ''}","${c.donorName}","${c.city}","${c.amount}","${c.paymentMode}","${c.refNo || ''}","${c.collector || ''}","${c.collectorUsername || ''}","${c.remarks || ''}"\n`;
       });
       downloadBlob(csv, "koteshwar_collections_ledger.csv", "text/csv;charset=utf-8;");
     }
 
     function downloadAllDataJSON() {
       const backup = {
+        currentUser: currentUser,
         declarations: declarationsList,
         collections: collectionsList,
         exportDate: new Date().toISOString()

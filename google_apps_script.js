@@ -46,12 +46,18 @@ function doPost(e) {
       var lastRow = declSheet.getLastRow();
       var nextSno = lastRow; // हेडर के बाद का क्रम
 
+      var notesWithCollector = item.notes || "";
+      if (item.collector) {
+        var userTag = item.collectorUsername ? " (@" + item.collectorUsername + ")" : "";
+        notesWithCollector = (notesWithCollector ? notesWithCollector + " | " : "") + "कार्यकर्ता: " + item.collector + userTag;
+      }
+
       // Col A: S.No., Col B: Name, Col C: City, Col D: Notes, Col E: Mobile, Col F: Pledged, Col G: Receipt, Col H: Date, Col I: Deposited, Col L: Balance
       declSheet.appendRow([
         item.sno || nextSno,
         item.name || "",
         item.city || "अन्य",
-        item.notes || "",
+        notesWithCollector,
         item.mobile || "",
         item.amount || 0,
         item.receipt || "-",
@@ -92,6 +98,11 @@ function doPost(e) {
       var collLastRow = collSheet.getLastRow();
       var collSno = collLastRow; // हेडर के बाद का क्रमांक
 
+      var collectorString = item.karyakartaName || item.collector || "";
+      if (item.collectorUsername && !collectorString.includes(item.collectorUsername)) {
+        collectorString += (collectorString ? " (@" + item.collectorUsername + ")" : "@" + item.collectorUsername);
+      }
+
       collSheet.appendRow([
         collSno,
         item.receiptNo || ("R-" + collSno),
@@ -102,7 +113,7 @@ function doPost(e) {
         item.paymentMode || "नकद",
         item.paymentDate || Utilities.formatDate(new Date(), "Asia/Kolkata", "dd/MM/yyyy"),
         item.transactionRef || "",
-        item.karyakartaName || "",
+        collectorString,
         new Date().toISOString()
       ]);
 
