@@ -1776,8 +1776,16 @@
     });
 
     async function initPortal() {
-      await loadCollectionsFromStorage();
-      await loadDeclarationsData();
+      try {
+        await loadCollectionsFromStorage();
+      } catch (err) {
+        console.error("Collections load notice:", err);
+      }
+      try {
+        await loadDeclarationsData();
+      } catch (err) {
+        console.error("Declarations load notice:", err);
+      }
       renderAllPortals();
     }
 
@@ -1793,7 +1801,7 @@
         collectionsList = [];
       }
 
-      const fetchedColls = [];
+      let fetchedColls = [];
       const parseCollRows = (rows, prefix) => {
         for (let i = 0; i < rows.length; i++) {
           const c = rows[i].c;
@@ -1863,10 +1871,10 @@
         console.warn("Live Collection sheet fetch error:", err);
       }
 
-      if (fetchedColls.length > 0) {
-        const deletedColls = new Set((JSON.parse(localStorage.getItem('koteshwar_deleted_collections') || '[]')).map(String));
-        const editedColls = JSON.parse(localStorage.getItem('koteshwar_edited_collections') || '{}');
+      const deletedColls = new Set((JSON.parse(localStorage.getItem('koteshwar_deleted_collections') || '[]')).map(String));
+      const editedColls = JSON.parse(localStorage.getItem('koteshwar_edited_collections') || '{}');
 
+      if (fetchedColls.length > 0) {
         // Apply edits & filter deleted
         fetchedColls = fetchedColls.filter(c => !deletedColls.has(String(c.receiptNo)));
         fetchedColls.forEach(c => {
@@ -1876,14 +1884,23 @@
         });
 
         // Merge sheet collections with local collections (avoiding duplicate receipt numbers)
-        const existingRcpts = new Set(fetchedColls.map(c => c.receiptNo));
+        const existingRcpts = new Set(fetchedColls.map(c => String(c.receiptNo).trim()));
         collectionsList.forEach(localItem => {
-          if (!deletedColls.has(String(localItem.receiptNo)) && !existingRcpts.has(localItem.receiptNo)) {
+          const rKey = String(localItem.receiptNo).trim();
+          if (!deletedColls.has(rKey) && !existingRcpts.has(rKey)) {
             fetchedColls.push(localItem);
+            existingRcpts.add(rKey);
           }
         });
         collectionsList = fetchedColls;
         saveCollectionsToStorage();
+      } else {
+        collectionsList = collectionsList.filter(c => !deletedColls.has(String(c.receiptNo)));
+        collectionsList.forEach(c => {
+          if (editedColls[String(c.receiptNo)]) {
+            Object.assign(c, editedColls[String(c.receiptNo)]);
+          }
+        });
       }
     }
 
@@ -2154,13 +2171,13 @@
     }
 
     function renderAllPortals() {
-      populateVillageDropdowns();
-      renderDeclarationsTable();
-      renderCollectionsTable();
-      renderPendingTable();
-      updateNextDeclarationSno();
-      updateBadges();
-      applyUserProfile();
+      try { populateVillageDropdowns(); } catch (e) { console.error("Error in populateVillageDropdowns:", e); }
+      try { renderDeclarationsTable(); } catch (e) { console.error("Error in renderDeclarationsTable:", e); }
+      try { renderCollectionsTable(); } catch (e) { console.error("Error in renderCollectionsTable:", e); }
+      try { renderPendingTable(); } catch (e) { console.error("Error in renderPendingTable:", e); }
+      try { updateNextDeclarationSno(); } catch (e) { console.error("Error in updateNextDeclarationSno:", e); }
+      try { updateBadges(); } catch (e) { console.error("Error in updateBadges:", e); }
+      try { applyUserProfile(); } catch (e) { console.error("Error in applyUserProfile:", e); }
     }
 
     function updateBadges() {
@@ -2822,14 +2839,11 @@
       collectionsList.unshift(newCollection);
       saveCollectionsToStorage();
 
-      // 2. Reconcile with declaration if linked
-      if (donorSno && selectedDonor) {
-        selectedDonor.deposited = (Number(selectedDonor.deposited) || 0) + amount;
-        selectedDonor.balance = Math.max(0, (Number(selectedDonor.amount) || 0) - selectedDonor.deposited);
-        try {
-          localStorage.setItem('koteshwar_declarations_cache', JSON.stringify(declarationsList));
-        } catch (err) {}
-      }
+      // 2. Reconcile with declarations (updates deposited, balance, and direct donors)
+      reconcileCollectionsWithDeclarations();
+      try {
+        localStorage.setItem('koteshwar_declarations_cache', JSON.stringify(declarationsList));
+      } catch (err) {}
 
       // 3. Post to Google Sheet webhook
       postWebhookData('addCollection', newCollection);
@@ -3051,7 +3065,12 @@
       const userFilter = document.getElementById('filterCollKaryakarta')?.value || 'all';
 
       const filtered = collectionsList.filter(c => {
-        const matchesQ = !q || String(c.receiptNo).toLowerCase().includes(q) || String(c.donorName).toLowerCase().includes(q) || String(c.city).toLowerCase().includes(q);
+        const matchesQ = !q ||
+          String(c.receiptNo).toLowerCase().includes(q) ||
+          String(c.donorName).toLowerCase().includes(q) ||
+          String(c.city).toLowerCase().includes(q) ||
+          String(c.paymentMode || '').toLowerCase().includes(q) ||
+          String(c.refNo || '').toLowerCase().includes(q);
         const matchesU = userFilter === 'all' || (c.collectorUsername && c.collectorUsername === userFilter) || (c.collector && c.collector.includes(userFilter));
         return matchesQ && matchesU;
       });
@@ -3066,51 +3085,66 @@
       }
 
       tbody.innerHTML = filtered.map(c => {
-        const donor = declarationsList.find(d => String(d.sno) === String(c.donorSno));
-        const rcptObj = {
-          receiptNo: c.receiptNo,
-          date: c.date,
-          name: c.donorName,
-          city: c.city,
-          mobile: c.mobile || '',
-          amount: c.amount,
-          paymentMode: c.paymentMode,
-          refNo: c.refNo,
-          collector: c.collector,
-          collectorUsername: c.collectorUsername,
-          pledged: donor ? donor.amount : c.amount,
-          deposited: donor ? donor.deposited : c.amount,
-          balance: donor ? donor.balance : 0
-        };
-        const waMsg = encodeURIComponent(buildWhatsAppReceiptText(rcptObj));
-        const phone = c.mobile ? c.mobile.replace(/[^0-9]/g, '') : '';
-        const waUrl = phone && phone.length === 10
-          ? `https://api.whatsapp.com/send?phone=91${phone}&text=${waMsg}`
-          : `https://api.whatsapp.com/send?text=${waMsg}`;
+        try {
+          const donor = declarationsList.find(d => String(d.sno) === String(c.donorSno));
+          const rcptObj = {
+            receiptNo: c.receiptNo,
+            date: formatDisplayDate(c.date),
+            name: c.donorName,
+            city: c.city,
+            mobile: c.mobile || '',
+            amount: c.amount,
+            paymentMode: c.paymentMode,
+            refNo: c.refNo,
+            collector: c.collector,
+            collectorUsername: c.collectorUsername,
+            pledged: donor ? donor.amount : c.amount,
+            deposited: donor ? donor.deposited : c.amount,
+            balance: donor ? donor.balance : 0
+          };
+          const waMsg = encodeURIComponent(buildWhatsAppReceiptText(rcptObj));
+          const phone = c.mobile ? c.mobile.replace(/[^0-9]/g, '') : '';
+          const waUrl = phone && phone.length === 10
+            ? `https://api.whatsapp.com/send?phone=91${phone}&text=${waMsg}`
+            : `https://api.whatsapp.com/send?text=${waMsg}`;
 
-        return `
-          <tr>
-            <td style="font-weight:800;color:var(--teal);">${c.receiptNo}</td>
-            <td>${c.date}</td>
-            <td><strong>${c.donorName}</strong> (${c.city})</td>
-            <td style="text-align:right;font-weight:800;color:var(--sage);">${fmt(c.amount)}</td>
-            <td><span style="font-size:11px;background:var(--sandstone-light);padding:2px 6px;border-radius:6px;">${c.paymentMode}</span></td>
-            <td><span style="font-size:11px;">${c.collector || '-'}</span></td>
-            <td style="text-align:center;">
-              <div style="display:inline-flex;gap:4px;align-items:center;">
-                <a href="${waUrl}" target="_blank" class="btn-wa-sm" title="WhatsApp पर शेयर करें">
-                  <i class="fa-brands fa-whatsapp"></i> शेयर
-                </a>
-                <button class="btn-outline-action" onclick="openEditCollectionModal('${c.receiptNo}')" title="संपादित करें" style="padding:3px 6px;font-size:11px;color:var(--teal);">
-                  <i class="fa-solid fa-pen-to-square"></i>
-                </button>
-                <button class="btn-outline-action" onclick="confirmDeleteCollection('${c.receiptNo}')" title="हटाएं" style="padding:3px 6px;font-size:11px;color:#C0392B;">
-                  <i class="fa-solid fa-trash"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
-        `;
+          return `
+            <tr>
+              <td style="font-weight:800;color:var(--teal);">${c.receiptNo}</td>
+              <td style="white-space:nowrap;font-size:12px;">${formatDisplayDate(c.date)}</td>
+              <td><strong>${c.donorName}</strong> (${c.city})</td>
+              <td style="text-align:right;font-weight:800;color:var(--sage);">${fmt(c.amount)}</td>
+              <td><span style="font-size:11px;background:var(--sandstone-light);padding:2px 6px;border-radius:6px;">${c.paymentMode}</span></td>
+              <td><span style="font-size:11px;">${c.collector || '-'}</span></td>
+              <td style="text-align:center;">
+                <div style="display:inline-flex;gap:4px;align-items:center;">
+                  <a href="${waUrl}" target="_blank" class="btn-wa-sm" title="WhatsApp पर शेयर करें">
+                    <i class="fa-brands fa-whatsapp"></i> शेयर
+                  </a>
+                  <button class="btn-outline-action" onclick="openEditCollectionModal('${c.receiptNo}')" title="संपादित करें" style="padding:3px 6px;font-size:11px;color:var(--teal);">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                  </button>
+                  <button class="btn-outline-action" onclick="confirmDeleteCollection('${c.receiptNo}')" title="हटाएं" style="padding:3px 6px;font-size:11px;color:#C0392B;">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        } catch (err) {
+          console.error("Row render error for collection:", c, err);
+          return `
+            <tr>
+              <td style="font-weight:800;color:var(--teal);">${c.receiptNo}</td>
+              <td>${formatDisplayDate(c.date)}</td>
+              <td><strong>${c.donorName}</strong> (${c.city})</td>
+              <td style="text-align:right;font-weight:800;color:var(--sage);">${fmt(c.amount)}</td>
+              <td>${c.paymentMode || '-'}</td>
+              <td>${c.collector || '-'}</td>
+              <td style="text-align:center;">-</td>
+            </tr>
+          `;
+        }
       }).join('');
     }
 

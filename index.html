@@ -1729,9 +1729,14 @@
           console.warn("Live Declaration fetch notice:", e);
         }
 
-        // Helper to reconcile collection rows (from either bulk Collections or Live Collection)
+        const appliedCollectionReceipts = new Set();
+        // Helper to reconcile collection rows (from either bulk Collections, Live Collection, or LocalStorage)
         const applyCollectionRow = (rcptNo, dsno, dname, dcity, camt, dateStr) => {
           if (camt <= 0) return;
+          const rKey = rcptNo ? String(rcptNo).trim() : '';
+          if (rKey && appliedCollectionReceipts.has(rKey)) return;
+          if (rKey) appliedCollectionReceipts.add(rKey);
+
           let target = null;
           if (dsno) {
             target = fetchedDonors.find(d => String(d.sno) === String(dsno));
