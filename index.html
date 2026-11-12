@@ -1078,7 +1078,7 @@
       <div class="section-card">
         <div class="section-header-box">
           <div>
-            <h2><i class="fa-solid fa-address-book" style="color:var(--gold);"></i> दानदाता निर्देशिका (Dandata Nirdeshika)</h2>
+            <h2><i class="fa-solid fa-address-book" style="color:var(--gold);"></i> दानदाता निर्देशिका</h2>
             <p>माँ नर्मदा के चरणों में पावन आहुति देने वाले सभी पुण्यश्लोक दानदाताओं की प्रामाणिक सूची</p>
           </div>
           <span style="font-size:12px;color:var(--teal);font-weight:600;">
@@ -1247,19 +1247,19 @@
             </thead>
             <tbody>
               <tr>
-                <td><strong>प्रथम चरण (Phase 1)</strong></td>
+                <td><strong>प्रथम चरण</strong></td>
                 <td>मुख्य घाट की नींव, तट सुरक्षा दीवार एवं स्नान हेतु पाषाण सीढ़ियों का निर्माण</td>
                 <td><strong class="amount" style="color:var(--gold-dark);">₹25,00,000</strong></td>
                 <td><span style="background:var(--sage-light);color:var(--sage);font-weight:700;padding:3px 8px;border-radius:4px;">पूर्णतः स्वीकृत व बजट सुरक्षित</span></td>
               </tr>
               <tr>
-                <td><strong>द्वितीय चरण (Phase 2)</strong></td>
+                <td><strong>द्वितीय चरण</strong></td>
                 <td>परिक्रमावासी विश्राम गृह, महिला वस्त्र परिवर्तन कक्ष एवं सुरक्षा रेलिंग</td>
                 <td><strong class="amount" style="color:var(--teal);">₹45,00,000</strong></td>
                 <td><span style="background:var(--teal-subtle);color:var(--teal);font-weight:600;padding:3px 8px;border-radius:4px;">स्वीकृत संकल्प के अंतर्गत</span></td>
               </tr>
               <tr>
-                <td><strong>तृतीय चरण (Phase 3)</strong></td>
+                <td><strong>तृतीय चरण</strong></td>
                 <td>भव्य आरती चबूतरा, प्रकाश व्यवस्था, स्वच्छता परिसर एवं वृक्षारोपण</td>
                 <td><strong class="amount" style="color:var(--text-secondary);">₹51,00,000+</strong></td>
                 <td><span style="background:rgba(209,154,80,0.15);color:var(--gold-dark);font-weight:600;padding:3px 8px;border-radius:4px;">संकल्प प्रगति पर</span></td>
@@ -1639,7 +1639,7 @@
       // Update Progress Summary & 2-Segment Bar
       const crPledged = (totalPledged / 10000000).toFixed(2);
       const crReceived = (totalReceived / 10000000).toFixed(2);
-      document.getElementById('progSummaryText').textContent = `घोषित: ${fmt(totalPledged)} (${crPledged} Cr) | प्राप्त: ${fmt(totalReceived)} (${crReceived} Cr • ${pctReceived}%)`;
+      document.getElementById('progSummaryText').textContent = `घोषित: ${fmt(totalPledged)} (${crPledged} करोड़) | प्राप्त: ${fmt(totalReceived)} (${crReceived} करोड़ • ${pctReceived}%)`;
       document.getElementById('progLegReceived').textContent = `${fmt(totalReceived)} (${pctReceived}%)`;
       document.getElementById('progLegPending').textContent = `${fmt(totalPending)} (${pctPending}%)`;
       document.getElementById('progLegPledged').textContent = fmt(totalPledged);
