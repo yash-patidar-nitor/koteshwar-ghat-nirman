@@ -1570,6 +1570,72 @@
             });
           }
         }
+        // Also fetch Live Declaration tab if rows exist
+        try {
+          const liveDeclRes = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent('Live Declaration')}`);
+          if (liveDeclRes.ok) {
+            const rawLive = await liveDeclRes.text();
+            const matchLive = rawLive.match(/setResponse\(([\s\S]*)\);?/);
+            if (matchLive) {
+              const liveData = JSON.parse(matchLive[1]);
+              const liveRows = liveData.table && liveData.table.rows ? liveData.table.rows : [];
+              for (let i = 0; i < liveRows.length; i++) {
+                const lc = liveRows[i].c;
+                if (!lc || lc.length < 6) continue;
+                const lsno = lc[0] && lc[0].v !== null ? lc[0].v : (584 + i + 1);
+                const lname = lc[1] && lc[1].v !== null ? String(lc[1].v).trim() : "";
+                const lcity = lc[2] && lc[2].v !== null ? String(lc[2].v).trim() : "अन्य";
+                const lnotes = lc[3] && lc[3].v !== null ? String(lc[3].v).trim() : "";
+                const lamt = parseFloat(String(lc[5] && lc[5].v !== null ? lc[5].v : "0").replace(/[^0-9.]/g, '')) || 0;
+                const lrcpt = lc[6] && lc[6].v !== null ? String(lc[6].v).trim() : "-";
+                const ldate = lc[7] ? (lc[7].f || lc[7].v || "") : "";
+                if (lname || lamt > 0) {
+                  fetchedDonors.push({
+                    sno: lsno,
+                    name: lname,
+                    city: lcity,
+                    notes: lnotes,
+                    amount: lamt,
+                    deposited: 0,
+                    balance: lamt,
+                    receipt: lrcpt,
+                    date: String(ldate).trim()
+                  });
+                }
+              }
+            }
+          }
+        } catch (e) {
+          console.warn("Live Declaration fetch notice:", e);
+        }
+
+        // Also fetch Live Collection tab if rows exist
+        try {
+          const liveCollRes = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent('Live Collection')}`);
+          if (liveCollRes.ok) {
+            const rawColl = await liveCollRes.text();
+            const matchColl = rawColl.match(/setResponse\(([\s\S]*)\);?/);
+            if (matchColl) {
+              const collData = JSON.parse(matchColl[1]);
+              const collRows = collData.table && collData.table.rows ? collData.table.rows : [];
+              for (let i = 0; i < collRows.length; i++) {
+                const cc = collRows[i].c;
+                if (!cc || cc.length < 6) continue;
+                const dsno = cc[2] && cc[2].v !== null ? cc[2].v : "";
+                const camt = parseFloat(String(cc[5] && cc[5].v !== null ? cc[5].v : "0").replace(/[^0-9.]/g, '')) || 0;
+                if (dsno && camt > 0) {
+                  const target = fetchedDonors.find(d => String(d.sno) === String(dsno));
+                  if (target) {
+                    target.deposited += camt;
+                    target.balance = Math.max(0, target.amount - target.deposited);
+                  }
+                }
+              }
+            }
+          }
+        } catch (e) {
+          console.warn("Live Collection fetch notice:", e);
+        }
 
         if (fetchedDonors.length > 0) {
           // Sort strictly in decreasing order of the amount (highest first)

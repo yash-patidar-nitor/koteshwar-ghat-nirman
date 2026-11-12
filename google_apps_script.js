@@ -3,7 +3,7 @@
  * माँ नर्मदा घाट निर्माण सेवा महाअभियान | कोटेश्वर तीर्थ (कोठड़ा)
  * श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान
  * 
- * GOOGLE APPS SCRIPT WEBHOOK (Declarations & Collections Sync)
+ * GOOGLE APPS SCRIPT WEBHOOK (Live Declaration & Live Collection Sync)
  * ==============================================================================
  * 
  * निर्देश (SETUP INSTRUCTIONS):
@@ -11,20 +11,20 @@
  *    https://docs.google.com/spreadsheets/d/1Gw-tjQuVRzp6jO57jdH7OzvfEx4Brw_DV6uRb1cUDt8/edit
  * 2. मेनू में जाएं: Extensions > Apps Script
  * 3. पुराना कोड हटाकर इस पूरी फ़ाइल का कोड पेस्ट करें।
- * 4. ऊपर "Deploy" (तैनात करें) बटन पर क्लिक करें > "New deployment" चुनें।
- * 5. Gear icon पर क्लिक करके "Web app" चुनें:
- *    - Description: Koteshwar Karyakarta Webhook
+ * 4. ऊपर "Deploy" (तैनात करें) बटन पर क्लिक करें > "Manage deployments" या "New deployment" चुनें:
+ *    - Type: Web app
+ *    - Description: Koteshwar Live Sync Webhook
  *    - Execute as: Me (आपका Google खाता)
  *    - Who has access: Anyone (कोई भी)
- * 6. "Deploy" पर क्लिक करें और जनरेट हुआ "Web app URL" कॉपी करें।
- * 7. इस URL को कार्यकर्ता पोर्टल (karyakarta.html) की सेटिंग्स में पेस्ट कर दें।
+ * 5. "Deploy" पर क्लिक करें और जनरेट हुआ "Web app URL" कॉपी करें।
+ * 6. इस URL को कार्यकर्ता पोर्टल (karyakarta.html) की सेटिंग्स में पेस्ट कर दें।
  * ==============================================================================
  */
 
 function doGet(e) {
   return ContentService.createTextOutput(JSON.stringify({
     status: "ok",
-    message: "कोटेश्वर नर्मदा सेवा महाअभियान वेबहुक सक्रिय है।"
+    message: "कोटेश्वर नर्मदा सेवा महाअभियान (Live Declaration & Live Collection) वेबहुक सक्रिय है।"
   })).setMimeType(ContentService.MimeType.JSON);
 }
 
@@ -42,68 +42,88 @@ function doPost(e) {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
 
     if (action === "addDeclaration") {
-      var declSheet = ss.getSheetByName("Declarations") || ss.getActiveSheet();
-      var lastRow = declSheet.getLastRow();
-      var nextSno = lastRow; // हेडर के बाद का क्रम
-
-      var notesWithCollector = item.notes || "";
-      if (item.collector) {
-        var userTag = item.collectorUsername ? " (@" + item.collectorUsername + ")" : "";
-        notesWithCollector = (notesWithCollector ? notesWithCollector + " | " : "") + "कार्यकर्ता: " + item.collector + userTag;
+      // 1. LIVE DECLARATION TAB (नया लाइव घोषणा सिंक)
+      var liveDeclSheet = ss.getSheetByName("Live Declaration");
+      if (!liveDeclSheet) {
+        liveDeclSheet = ss.insertSheet("Live Declaration");
       }
 
-      // Col A: S.No., Col B: Name, Col C: City, Col D: Notes, Col E: Mobile, Col F: Pledged, Col G: Receipt, Col H: Date, Col I: Deposited, Col L: Balance
-      declSheet.appendRow([
-        item.sno || nextSno,
+      // यदि शीट बिल्कुल खाली है तो हेडर बनाएं
+      if (liveDeclSheet.getLastRow() === 0) {
+        liveDeclSheet.appendRow([
+          "क्र.",
+          "दानदाता का शुभ नाम",
+          "स्थान / ग्राम",
+          "स्मरण / पारिवारिक विवरण",
+          "मोबाइल नंबर",
+          "घोषित संकल्प राशि",
+          "रसीद क्रमांक",
+          "घोषणा दिनांक",
+          "अधिकृत कार्यकर्ता",
+          "यूजरनेम",
+          "प्रविष्टि समय"
+        ]);
+        liveDeclSheet.getRange(1, 1, 1, 11).setFontWeight("bold").setBackground("#123F42").setFontColor("#FFFFFF");
+      }
+
+      var lastRow = liveDeclSheet.getLastRow();
+      // क्रम संख्या: हेडर के बाद (584 + new row)
+      var nextSno = item.sno || (584 + lastRow);
+
+      liveDeclSheet.appendRow([
+        nextSno,
         item.name || "",
         item.city || "अन्य",
-        notesWithCollector,
+        item.notes || "",
         item.mobile || "",
         item.amount || 0,
         item.receipt || "-",
         item.date || Utilities.formatDate(new Date(), "Asia/Kolkata", "dd/MM/yyyy"),
-        item.deposited || 0,
-        "", // Mode
-        "", // Date
-        item.amount || 0 // Initial balance = pledged
+        item.collector || "",
+        item.collectorUsername || "",
+        new Date().toISOString()
       ]);
 
       return ContentService.createTextOutput(JSON.stringify({
         status: "success",
-        message: "घोषणा प्रविष्टि सफलतापूर्वक Google Sheet में जुड़ गई।",
-        sno: item.sno || nextSno
+        message: "घोषणा प्रविष्टि सफलतापूर्वक 'Live Declaration' शीट में जुड़ गई।",
+        sno: nextSno
       })).setMimeType(ContentService.MimeType.JSON);
 
     } else if (action === "addCollection") {
-      var collSheet = ss.getSheetByName("Collections");
-      if (!collSheet) {
-        collSheet = ss.insertSheet("Collections");
-        // हेडर बनाएं
-        collSheet.appendRow([
+      // 2. LIVE COLLECTION TAB (नया लाइव संग्रह सिंक)
+      var liveCollSheet = ss.getSheetByName("Live Collection");
+      if (!liveCollSheet) {
+        liveCollSheet = ss.insertSheet("Live Collection");
+      }
+
+      // यदि शीट बिल्कुल खाली है तो हेडर बनाएं
+      if (liveCollSheet.getLastRow() === 0) {
+        liveCollSheet.appendRow([
           "क्र.",
-          "रसीद क्रमांक",
+          "हस्तलिखित रसीद बुक क्रमांक",
           "दानदाता क्र.",
           "दानदाता का शुभ नाम",
           "स्थान / नगर",
           "प्राप्त सहयोग राशि",
-          "जमा माध्यम",
+          "भुगतान माध्यम",
           "प्राप्ति दिनांक",
-          "विवरण / चेक / UTR",
+          "चेक / UTR संदर्भ",
           "संग्रहकर्ता कार्यकर्ता",
+          "यूजरनेम",
+          "पावती विवरण",
           "प्रविष्टि समय"
         ]);
-        collSheet.getRange(1, 1, 1, 11).setFontWeight("bold").setBackground("#123F42").setFontColor("#FFFFFF");
+        liveCollSheet.getRange(1, 1, 1, 13).setFontWeight("bold").setBackground("#123F42").setFontColor("#FFFFFF");
       }
 
-      var collLastRow = collSheet.getLastRow();
+      var collLastRow = liveCollSheet.getLastRow();
       var collSno = collLastRow; // हेडर के बाद का क्रमांक
 
-      var collectorString = item.karyakartaName || item.collector || "";
-      if (item.collectorUsername && !collectorString.includes(item.collectorUsername)) {
-        collectorString += (collectorString ? " (@" + item.collectorUsername + ")" : "@" + item.collectorUsername);
-      }
+      var collectorName = item.collector || item.karyakartaName || "";
+      var collectorUser = item.collectorUsername || "";
 
-      collSheet.appendRow([
+      liveCollSheet.appendRow([
         collSno,
         item.receiptNo || ("R-" + collSno),
         item.donorSno || "",
@@ -111,13 +131,15 @@ function doPost(e) {
         item.city || "",
         item.amount || 0,
         item.paymentMode || "नकद",
-        item.paymentDate || Utilities.formatDate(new Date(), "Asia/Kolkata", "dd/MM/yyyy"),
-        item.transactionRef || "",
-        collectorString,
+        item.paymentDate || item.date || Utilities.formatDate(new Date(), "Asia/Kolkata", "dd/MM/yyyy"),
+        item.transactionRef || item.refNo || "",
+        collectorName,
+        collectorUser,
+        item.remarks || "",
         new Date().toISOString()
       ]);
 
-      // यदि दानदाता का संदर्भ है, तो Declarations शीट में जमा राशि भी अपडेट करें
+      // 3. यदि दानदाता का संदर्भ है, तो Declarations शीट में जमा राशि एवं शेष अपडेट करें
       if (item.donorSno) {
         var declSheet = ss.getSheetByName("Declarations");
         if (declSheet) {
@@ -141,7 +163,7 @@ function doPost(e) {
 
       return ContentService.createTextOutput(JSON.stringify({
         status: "success",
-        message: "धन प्राप्ति रसीद सफलतापूर्वक Google Sheet में जुड़ गई।",
+        message: "धन प्राप्ति रसीद सफलतापूर्वक 'Live Collection' शीट में जुड़ गई।",
         receiptNo: item.receiptNo || ("R-" + collSno)
       })).setMimeType(ContentService.MimeType.JSON);
 
