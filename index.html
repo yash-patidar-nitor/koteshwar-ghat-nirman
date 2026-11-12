@@ -216,7 +216,7 @@
       letter-spacing: 0.5px;
     }
 
-    /* ---------- 5 EXECUTIVE KPI TILES (PLEDGED, RECEIVED, PENDING, FAMILIES, VILLAGES) ---------- */
+    /* ---------- 5 EXECUTIVE KPI TILES ---------- */
     .kpi-strip {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -462,7 +462,110 @@
       margin: 3px 0 0;
     }
 
-    /* ==================== TAB 1: PRERNA DAI PRASANG (INSPIRATIONAL STORIES) ==================== */
+    /* ==================== TAB: VILLAGE TABLE ==================== */
+    .table-responsive {
+      overflow-x: auto;
+      border: 1px solid var(--sandstone);
+      border-radius: 8px;
+    }
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      text-align: left;
+      white-space: nowrap;
+    }
+    table.data-table th {
+      background: #faf8f5;
+      color: var(--teal);
+      font-weight: 700;
+      padding: 12px 14px;
+      border-bottom: 2px solid var(--sandstone);
+      font-size: 12px;
+      letter-spacing: 0.3px;
+    }
+    table.data-table td {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--sandstone-light);
+    }
+    table.data-table tbody tr:hover td { background: #FAF7F2; }
+
+    /* ==================== TAB: DANDATA NIRDESHIKA ==================== */
+    .directory-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .search-input-wrap {
+      position: relative;
+      flex: 1;
+      max-width: 380px;
+      min-width: 240px;
+    }
+    .search-input-wrap i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .search-field {
+      width: 100%;
+      padding: 8px 12px 8px 34px;
+      border: 1px solid var(--sandstone);
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+      background: var(--sandstone-light);
+      font-family: inherit;
+    }
+    .search-field:focus {
+      background: #fff;
+      border-color: var(--gold);
+    }
+    .sort-indicator-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--teal-subtle);
+      color: var(--teal);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(18, 63, 66, 0.15);
+    }
+    .pills-filter-row {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scrollbar-width: thin;
+      margin-bottom: 14px;
+    }
+    .v-filter-btn {
+      background: var(--sandstone-light);
+      border: 1px solid var(--sandstone);
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .v-filter-btn.active {
+      background: var(--teal);
+      color: #fff;
+      border-color: var(--teal);
+    }
+
+    /* ==================== TAB: PRERNA DAI PRASANG ==================== */
     .stories-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -564,109 +667,6 @@
       background: var(--whatsapp-dark);
       color: #fff;
       text-decoration: none;
-    }
-
-    /* ==================== TAB 2: VILLAGE TABLE ==================== */
-    .table-responsive {
-      overflow-x: auto;
-      border: 1px solid var(--sandstone);
-      border-radius: 8px;
-    }
-    table.data-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13.5px;
-      text-align: left;
-      white-space: nowrap;
-    }
-    table.data-table th {
-      background: #faf8f5;
-      color: var(--teal);
-      font-weight: 700;
-      padding: 12px 14px;
-      border-bottom: 2px solid var(--sandstone);
-      font-size: 12px;
-      letter-spacing: 0.3px;
-    }
-    table.data-table td {
-      padding: 11px 14px;
-      border-bottom: 1px solid var(--sandstone-light);
-    }
-    table.data-table tbody tr:hover td { background: #FAF7F2; }
-
-    /* ==================== TAB 3: DANDATA NIRDESHIKA (SORTED DECREASING) ==================== */
-    .directory-toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-    }
-    .search-input-wrap {
-      position: relative;
-      flex: 1;
-      max-width: 380px;
-      min-width: 240px;
-    }
-    .search-input-wrap i {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-      font-size: 13px;
-    }
-    .search-field {
-      width: 100%;
-      padding: 8px 12px 8px 34px;
-      border: 1px solid var(--sandstone);
-      border-radius: 8px;
-      font-size: 13px;
-      outline: none;
-      background: var(--sandstone-light);
-      font-family: inherit;
-    }
-    .search-field:focus {
-      background: #fff;
-      border-color: var(--gold);
-    }
-    .sort-indicator-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--teal-subtle);
-      color: var(--teal);
-      font-size: 12px;
-      font-weight: 600;
-      padding: 5px 12px;
-      border-radius: 20px;
-      border: 1px solid rgba(18, 63, 66, 0.15);
-    }
-    .pills-filter-row {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding-bottom: 6px;
-      scrollbar-width: thin;
-      margin-bottom: 14px;
-    }
-    .v-filter-btn {
-      background: var(--sandstone-light);
-      border: 1px solid var(--sandstone);
-      color: var(--text-secondary);
-      font-size: 12px;
-      font-weight: 600;
-      padding: 5px 12px;
-      border-radius: 20px;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.2s ease;
-    }
-    .v-filter-btn.active {
-      background: var(--teal);
-      color: #fff;
-      border-color: var(--teal);
     }
 
     /* ==================== MODAL STYLES ==================== */
@@ -805,7 +805,7 @@
       <i class="fa-solid fa-om"></i> ॐ नर्मदे हर • त्वदीय पादपंकजं नमामि देवि नर्मदे! • कोटेश्वर तीर्थ घाट निर्माण महाअभियान <i class="fa-solid fa-om"></i>
     </div>
 
-    <!-- 1. EXECUTIVE KPI STRIP (PLEDGED, RECEIVED, PENDING, FAMILIES, VILLAGES) -->
+    <!-- 1. EXECUTIVE KPI TILES -->
     <section class="kpi-strip">
       <!-- KPI 1: Total Pledged Support -->
       <div class="kpi-card c-pledged hero-card">
@@ -909,49 +909,38 @@
       </div>
     </section>
 
-    <!-- 3. PRESTIGIOUS SEGMENTED NAVIGATION CONTROLS -->
+    <!-- 3. PRESTIGIOUS SEGMENTED NAVIGATION CONTROLS (REORDERED: 1. VILLAGES, 2. DONORS, 3. STORIES) -->
     <nav class="segmented-tabs-wrapper">
       <div class="segmented-tabs">
-        <button class="seg-tab active-gold" onclick="switchTab('stories', this)">
-          <i class="fa-solid fa-star"></i> <span>प्रेरणादायी प्रसंग</span> <span class="seg-badge">8</span>
-        </button>
-        <button class="seg-tab" onclick="switchTab('villages', this)">
+        <!-- 1st Tab: Nagar/Gramwar Sahbhagita (Active by default) -->
+        <button class="seg-tab active" onclick="switchTab('villages', this)">
           <i class="fa-solid fa-city"></i> <span>नगर / ग्रामवार सहभागिता</span> <span class="seg-badge" id="tabVillageBadge">-</span>
         </button>
+        <!-- 2nd Tab: Dandata Nirdeshika (Sorted Decreasing by Amount) -->
         <button class="seg-tab" onclick="switchTab('donors', this)">
           <i class="fa-solid fa-users"></i> <span>दानदाता निर्देशिका</span> <span class="seg-badge" id="tabDonorBadge">-</span>
         </button>
+        <!-- 3rd Tab: Prerna dai Prasang -->
+        <button class="seg-tab" onclick="switchTab('stories', this)">
+          <i class="fa-solid fa-star"></i> <span>प्रेरणादायी प्रसंग</span> <span class="seg-badge">8</span>
+        </button>
+        <!-- 4th Tab: 55-Day Movement -->
         <button class="seg-tab" onclick="switchTab('movement', this)">
           <i class="fa-solid fa-shoe-prints"></i> <span>55-दिवसीय कार्यकर्ता साधना</span>
         </button>
+        <!-- 5th Tab: Ghat Vision -->
         <button class="seg-tab" onclick="switchTab('vision', this)">
           <i class="fa-solid fa-archway"></i> <span>घाट निर्माण परिकल्पना</span>
         </button>
+        <!-- 6th Tab: Works & Budget -->
         <button class="seg-tab" onclick="switchTab('works', this)">
           <i class="fa-solid fa-compass-drafting"></i> <span>निर्माण कार्य व बजट</span>
         </button>
       </div>
     </nav>
 
-    <!-- ==================== TAB 1: PRERNA DAI PRASANG ==================== -->
-    <div id="pane-stories" class="tab-pane active">
-      <div class="section-card">
-        <div class="section-header-box">
-          <div>
-            <h2><i class="fa-solid fa-hands-praying" style="color:var(--gold);"></i> पावन जनसहयोग के प्रेरक प्रसंग</h2>
-            <p>कोटेश्वर तीर्थ घाट निर्माण के दौरान समाज के त्याग, समर्पण व अटूट आस्था की प्रेरक गाथाएं</p>
-          </div>
-          <span style="font-size:12px;color:var(--gold-dark);font-weight:700;"><i class="fa-solid fa-heart"></i> आस्था और समर्पण की पावन गाथा</span>
-        </div>
-
-        <div class="stories-grid" id="storiesGridContainer">
-          <!-- Rendered dynamically -->
-        </div>
-      </div>
-    </div>
-
-    <!-- ==================== TAB 2: VILLAGE TABLE ==================== -->
-    <div id="pane-villages" class="tab-pane">
+    <!-- ==================== TAB 1 (FIRST): VILLAGE TABLE (DEFAULT ACTIVE) ==================== -->
+    <div id="pane-villages" class="tab-pane active">
       <div class="section-card">
         <div class="section-header-box">
           <div>
@@ -982,7 +971,7 @@
       </div>
     </div>
 
-    <!-- ==================== TAB 3: DANDATA NIRDESHIKA (SORTED DECREASING BY AMOUNT) ==================== -->
+    <!-- ==================== TAB 2 (SECOND): DANDATA NIRDESHIKA ==================== -->
     <div id="pane-donors" class="tab-pane">
       <div class="section-card">
         <div class="section-header-box">
@@ -1046,6 +1035,23 @@
               अगला <i class="fa-solid fa-chevron-right"></i>
             </button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 3 (THIRD): PRERNA DAI PRASANG ==================== -->
+    <div id="pane-stories" class="tab-pane">
+      <div class="section-card">
+        <div class="section-header-box">
+          <div>
+            <h2><i class="fa-solid fa-hands-praying" style="color:var(--gold);"></i> पावन जनसहयोग के प्रेरक प्रसंग</h2>
+            <p>कोटेश्वर तीर्थ घाट निर्माण के दौरान समाज के त्याग, समर्पण व अटूट आस्था की प्रेरक गाथाएं</p>
+          </div>
+          <span style="font-size:12px;color:var(--gold-dark);font-weight:700;"><i class="fa-solid fa-heart"></i> आस्था और समर्पण की पावन गाथा</span>
+        </div>
+
+        <div class="stories-grid" id="storiesGridContainer">
+          <!-- Rendered dynamically -->
         </div>
       </div>
     </div>
@@ -1633,7 +1639,7 @@
       currentVillageFilter = villageName;
       currentPage = 1;
       renderDonorTable();
-      switchTab('donors', document.querySelectorAll('.seg-tab')[2]);
+      switchTab('donors');
       document.querySelectorAll('#villageFilterPills .v-filter-btn').forEach(b => {
         b.classList.toggle('active', b.textContent.includes(villageName));
       });
@@ -1686,12 +1692,15 @@
       document.querySelectorAll('.seg-tab').forEach(b => b.classList.remove('active', 'active-gold'));
       document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
 
+      if (!btn) {
+        btn = Array.from(document.querySelectorAll('.seg-tab')).find(b => {
+          const oc = b.getAttribute('onclick') || '';
+          return oc.includes(`'${tabId}'`);
+        });
+      }
+
       if (btn) {
-        if (tabId === 'stories') {
-          btn.classList.add('active-gold');
-        } else {
-          btn.classList.add('active');
-        }
+        btn.classList.add('active');
       }
       const target = document.getElementById('pane-' + tabId);
       if (target) target.classList.add('active');
