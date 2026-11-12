@@ -838,11 +838,12 @@
     /* ==================== MOBILE ADAPTATIONS (<768px) ==================== */
     @media (max-width: 768px) {
       .desktop-only { display: none !important; }
+      .mobile-only-karyakarta { display: inline-flex !important; }
       .header-inner {
         padding: 8px 14px;
         flex-direction: row;
         align-items: center;
-        justify-content: flex-start;
+        justify-content: space-between;
       }
       .header-brand { gap: 10px; }
       .header-logo-icon { width: 34px; height: 34px; font-size: 16px; border-radius: 8px; }
@@ -883,6 +884,11 @@
         </div>
       </div>
 
+      <!-- Mobile Karyakarta Link (Discrete golden pill) -->
+      <a href="karyakarta.html" class="mobile-only-karyakarta" title="अधिकृत कार्यकर्ता पोर्टल" style="color:var(--gold-light);font-size:11.5px;padding:5px 9px;border-radius:18px;background:rgba(255,255,255,0.08);border:1px solid rgba(209,154,80,0.4);text-decoration:none;display:none;align-items:center;gap:5px;white-space:nowrap;font-weight:600;">
+        <i class="fa-solid fa-key" style="color:var(--gold);"></i> <span>कार्यकर्ता</span>
+      </a>
+
       <!-- Desktop-only Header Actions: completely hidden on mobile to maximize viewport -->
       <div class="header-actions desktop-only">
         <span class="status-pill" id="syncStatusPillHeader">
@@ -894,6 +900,9 @@
         </button>
         <a href="https://docs.google.com/spreadsheets/d/1Gw-tjQuVRzp6jO57jdH7OzvfEx4Brw_DV6uRb1cUDt8/edit#gid=0" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm">
           <i class="fa-solid fa-table"></i> Google Sheet
+        </a>
+        <a href="karyakarta.html" class="btn btn-outline btn-sm" style="border-color:rgba(209,154,80,0.6);color:var(--gold-light);">
+          <i class="fa-solid fa-key"></i> अधिकृत कार्यकर्ता
         </a>
       </div>
     </div>
@@ -1293,6 +1302,9 @@
           </button>
           <a href="https://docs.google.com/spreadsheets/d/1Gw-tjQuVRzp6jO57jdH7OzvfEx4Brw_DV6uRb1cUDt8/edit#gid=0" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm">
             <i class="fa-solid fa-arrow-up-right-from-square"></i> Google Sheet खोलें
+          </a>
+          <a href="karyakarta.html" class="btn btn-outline-teal btn-sm" style="border-color:var(--gold-dark);color:var(--gold-dark);font-weight:700;">
+            <i class="fa-solid fa-user-shield"></i> अधिकृत कार्यकर्ता पोर्टल
           </a>
         </div>
       </div>

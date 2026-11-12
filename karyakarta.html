@@ -1,0 +1,2629 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+  <title>अधिकृत कार्यकर्ता पोर्टल | माँ नर्मदा घाट निर्माण सेवा महाअभियान</title>
+  <meta name="description" content="श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान - अधिकृत कार्यकर्ता पोर्टल (घोषणा एवं धन संग्रह प्रबंधन)" />
+  <meta name="theme-color" content="#123F42" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <!-- Fonts: Inter for numbers, Noto Sans Devanagari for crisp Hindi typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --teal: #123F42;
+      --teal-dark: #0A2426;
+      --teal-light: #1C5458;
+      --teal-subtle: rgba(18, 63, 66, 0.08);
+
+      --gold: #D19A50;
+      --gold-dark: #B57F37;
+      --gold-light: #E8BF83;
+      --gold-subtle: rgba(209, 154, 80, 0.12);
+
+      --ivory: #F5F0E6;
+      --ivory-dark: #ECE5D8;
+      --white: #FFFFFF;
+      --sandstone: #E4DDD0;
+      --sandstone-light: #F7F4EE;
+      --sandstone-dark: #CDC4B4;
+
+      --saffron: #C84B31;
+      --saffron-light: rgba(200, 75, 49, 0.12);
+      --sage: #2E7D5A;
+      --sage-light: rgba(46, 125, 90, 0.12);
+      --whatsapp: #25D366;
+      --whatsapp-dark: #1EBE5D;
+
+      --text-primary: #142223;
+      --text-secondary: #4A5C5D;
+      --text-muted: #788C8D;
+
+      --border-radius: 12px;
+      --card-shadow: 0 2px 6px rgba(18, 63, 66, 0.05), 0 6px 18px rgba(18, 63, 66, 0.04);
+      --hover-shadow: 0 8px 24px rgba(18, 63, 66, 0.12);
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--ivory);
+      color: var(--text-primary);
+      font-family: "Noto Sans Devanagari", "Inter", system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .num, .amount {
+      font-family: "Inter", "Noto Sans Devanagari", sans-serif;
+      font-feature-settings: "tnum";
+      font-variant-numeric: tabular-nums;
+    }
+
+    a { color: var(--teal); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ==================== 1. TOP EXECUTIVE HEADER ==================== */
+    .portal-header {
+      background: var(--teal);
+      color: #fff;
+      border-bottom: 3px solid var(--gold);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+    }
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .header-logo-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      flex-shrink: 0;
+    }
+    .header-title-box h1 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin: 0;
+      line-height: 1.25;
+    }
+    .header-title-box span {
+      font-size: 11px;
+      color: var(--gold-light);
+      display: block;
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-header {
+      padding: 5px 11px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    .btn-header-public {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+    .btn-header-public:hover {
+      background: rgba(255, 255, 255, 0.22);
+      color: #fff;
+      text-decoration: none;
+    }
+    .btn-header-logout {
+      background: rgba(200, 75, 49, 0.25);
+      color: #FFB3A3;
+      border-color: rgba(200, 75, 49, 0.4);
+    }
+    .btn-header-logout:hover {
+      background: var(--saffron);
+      color: #fff;
+      text-decoration: none;
+    }
+
+    /* ==================== 2. PIN AUTHENTICATION SCREEN ==================== */
+    #authOverlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at center, #1C5458 0%, #0A2426 100%);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .auth-card {
+      background: #FFFFFF;
+      border-radius: 16px;
+      max-width: 440px;
+      width: 100%;
+      border: 2px solid var(--gold);
+      box-shadow: 0 16px 50px rgba(0,0,0,0.5);
+      overflow: hidden;
+      animation: authZoom 0.3s ease-out;
+    }
+    @keyframes authZoom {
+      from { transform: scale(0.92); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .auth-card-head {
+      background: var(--teal);
+      color: #fff;
+      padding: 24px 20px 20px;
+      text-align: center;
+      border-bottom: 3px solid var(--gold);
+      position: relative;
+    }
+    .auth-icon-circle {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+    }
+    .auth-card-head h2 {
+      font-size: 16.5px;
+      font-weight: 700;
+      margin: 0 0 4px;
+      color: #FFFFFF;
+    }
+    .auth-card-head p {
+      font-size: 12px;
+      color: var(--gold-light);
+      margin: 0;
+    }
+    .auth-card-body {
+      padding: 24px 22px;
+    }
+    .auth-desc-text {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    .auth-pin-group {
+      position: relative;
+      margin-bottom: 18px;
+    }
+    .auth-pin-input {
+      width: 100%;
+      padding: 14px 44px 14px 16px;
+      font-size: 16px;
+      border: 2px solid var(--sandstone);
+      border-radius: 10px;
+      background: var(--sandstone-light);
+      color: var(--text-primary);
+      outline: none;
+      transition: all 0.2s ease;
+      letter-spacing: 2px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .auth-pin-input:focus {
+      border-color: var(--teal);
+      background: #fff;
+      box-shadow: 0 0 0 3px var(--teal-subtle);
+    }
+    .btn-toggle-pin {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .auth-msg-box {
+      font-size: 12px;
+      color: var(--saffron);
+      text-align: center;
+      margin-bottom: 14px;
+      min-height: 18px;
+      font-weight: 600;
+    }
+    .btn-auth-unlock {
+      width: 100%;
+      background: linear-gradient(135deg, var(--teal) 0%, var(--teal-light) 100%);
+      color: #fff;
+      padding: 13px;
+      font-size: 14.5px;
+      font-weight: 700;
+      border: 1px solid var(--gold);
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(18, 63, 66, 0.25);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-auth-unlock:hover {
+      background: var(--teal-dark);
+      transform: translateY(-1px);
+    }
+    .auth-footer-help {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--sandstone);
+      padding-top: 14px;
+    }
+
+    /* ==================== 3. MAIN WORKSPACE CONTAINER ==================== */
+    .portal-main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 14px 16px 40px;
+    }
+
+    /* Karyakarta Top Notification / Sync Bar */
+    .sync-ribbon {
+      background: var(--white);
+      border: 1px solid var(--sandstone);
+      border-radius: 10px;
+      padding: 8px 14px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 12px;
+    }
+    .sync-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+    }
+    .status-dot-sm {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4EBE86;
+    }
+    .status-dot-sm.syncing {
+      background: var(--gold);
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+      0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; }
+    }
+
+    /* 4 KPI Summary Strip for Karyakartas */
+    .karyakarta-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .k-kpi-card {
+      background: var(--white);
+      border: 1px solid var(--sandstone);
+      border-radius: 10px;
+      padding: 12px 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+      position: relative;
+      overflow: hidden;
+    }
+    .k-kpi-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 4px;
+    }
+    .k-kpi-card.c-pledged::before { background: var(--gold); }
+    .k-kpi-card.c-collected::before { background: var(--sage); }
+    .k-kpi-card.c-pending::before { background: var(--saffron); }
+    .k-kpi-card.c-rate::before { background: var(--teal); }
+
+    .k-kpi-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .k-kpi-amount {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--teal);
+      line-height: 1.2;
+    }
+    .k-kpi-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    /* ==================== 4. NAVIGATION TABS (TOUCH-FRIENDLY) ==================== */
+    .tab-nav-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 16px;
+      scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch;
+    }
+    .tab-btn {
+      background: var(--white);
+      border: 1px solid var(--sandstone);
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 9px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .tab-btn:hover {
+      background: var(--sandstone-light);
+      border-color: var(--gold);
+    }
+    .tab-btn.active {
+      background: var(--teal);
+      color: #fff;
+      border-color: var(--teal);
+      box-shadow: 0 3px 10px rgba(18, 63, 66, 0.25);
+    }
+    .tab-btn.active .tab-badge {
+      background: var(--gold);
+      color: #fff;
+    }
+    .tab-badge {
+      background: var(--teal-subtle);
+      color: var(--teal);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+    }
+
+    /* Tab Panes */
+    .portal-pane {
+      display: none;
+      animation: fadeIn 0.2s ease-out;
+    }
+    .portal-pane.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ==================== 5. FORM CARDS & INPUT STYLES ==================== */
+    .form-box-card {
+      background: var(--white);
+      border: 1px solid var(--sandstone);
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .form-box-head {
+      border-bottom: 2px solid var(--sandstone-light);
+      padding-bottom: 12px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .form-box-head h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--teal);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .form-box-head span {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 768px) {
+      .form-grid-2, .form-grid-3 { grid-template-columns: 1fr; gap: 12px; }
+      .form-box-card { padding: 16px 14px; }
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--teal-dark);
+      margin-bottom: 5px;
+    }
+    .form-group label .req {
+      color: var(--saffron);
+      margin-left: 2px;
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 13.5px;
+      border: 1px solid var(--sandstone);
+      border-radius: 8px;
+      background: var(--sandstone-light);
+      color: var(--text-primary);
+      outline: none;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--teal);
+      background: #fff;
+      box-shadow: 0 0 0 3px var(--teal-subtle);
+    }
+    .input-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    /* Donor Live Lookup Box in Collections Entry */
+    .donor-lookup-container {
+      position: relative;
+    }
+    .donor-suggestions-box {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #FFFFFF;
+      border: 2px solid var(--gold);
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      max-height: 240px;
+      overflow-y: auto;
+      z-index: 50;
+      display: none;
+    }
+    .donor-suggestion-item {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--sandstone-light);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.15s ease;
+    }
+    .donor-suggestion-item:hover {
+      background: var(--sandstone-light);
+    }
+    .donor-suggestion-item .s-name {
+      font-weight: 700;
+      color: var(--teal);
+      font-size: 13px;
+    }
+    .donor-suggestion-item .s-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .donor-suggestion-item .s-amt {
+      font-weight: 700;
+      color: var(--gold-dark);
+      font-size: 13px;
+    }
+
+    /* Donor Card Preview inside Collection Entry */
+    .selected-donor-banner {
+      background: linear-gradient(135deg, rgba(18, 63, 66, 0.05) 0%, rgba(209, 154, 80, 0.1) 100%);
+      border: 1px solid var(--gold);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .selected-donor-banner.visible {
+      display: block;
+    }
+    .sel-donor-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .sel-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--gold);
+    }
+    .sel-stat-box {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+    .sel-stat-box strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--teal);
+    }
+
+    /* Action Buttons */
+    .btn-submit-action {
+      background: linear-gradient(135deg, var(--teal) 0%, var(--teal-light) 100%);
+      color: #fff;
+      border: 1px solid var(--gold);
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(18, 63, 66, 0.2);
+      transition: all 0.2s ease;
+    }
+    .btn-submit-action:hover {
+      background: var(--teal-dark);
+      transform: translateY(-1px);
+    }
+    .btn-outline-action {
+      background: var(--white);
+      color: var(--teal);
+      border: 1px solid var(--teal);
+      padding: 11px 20px;
+      font-size: 13.5px;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-outline-action:hover {
+      background: var(--teal-subtle);
+    }
+
+    /* ==================== 6. TABLES & LEDGER STYLES ==================== */
+    .ledger-controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .search-input-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 240px;
+    }
+    .search-input-wrap i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+    .search-input-wrap input {
+      width: 100%;
+      padding: 9px 12px 9px 34px;
+      border: 1px solid var(--sandstone);
+      border-radius: 8px;
+      background: var(--white);
+      font-size: 13px;
+      outline: none;
+    }
+    .search-input-wrap input:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 2px var(--teal-subtle);
+    }
+
+    .table-container {
+      background: var(--white);
+      border: 1px solid var(--sandstone);
+      border-radius: var(--border-radius);
+      overflow-x: auto;
+      box-shadow: var(--card-shadow);
+      -webkit-overflow-scrolling: touch;
+    }
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+    table.data-table th {
+      background: var(--sandstone-light);
+      color: var(--teal-dark);
+      font-weight: 700;
+      padding: 10px 12px;
+      border-bottom: 2px solid var(--sandstone);
+      white-space: nowrap;
+      font-size: 12px;
+    }
+    table.data-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--sandstone-light);
+      vertical-align: middle;
+    }
+    table.data-table tr:hover {
+      background: rgba(18, 63, 66, 0.02);
+    }
+
+    .badge-status {
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+    .badge-status.paid {
+      background: var(--sage-light);
+      color: var(--sage);
+    }
+    .badge-status.partial {
+      background: var(--gold-subtle);
+      color: var(--gold-dark);
+    }
+    .badge-status.pending {
+      background: var(--saffron-light);
+      color: var(--saffron);
+    }
+
+    .btn-table-action {
+      padding: 4px 9px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--sandstone);
+      background: var(--sandstone-light);
+      color: var(--teal);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .btn-table-action:hover {
+      background: var(--teal);
+      color: #fff;
+      border-color: var(--teal);
+      text-decoration: none;
+    }
+
+    /* ==================== 7. DIGITAL RECEIPT MODAL ==================== */
+    .modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10, 36, 38, 0.75);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-card {
+      background: #FFFFFF;
+      border-radius: 14px;
+      max-width: 580px;
+      width: 100%;
+      border: 2px solid var(--gold);
+      box-shadow: 0 16px 50px rgba(0,0,0,0.35);
+      overflow: hidden;
+      animation: modalSlide 0.25s ease-out;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+    }
+    @keyframes modalSlide {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .modal-head {
+      background: var(--teal);
+      color: #fff;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--gold);
+      flex-shrink: 0;
+    }
+    .modal-head h4 { font-size: 15px; font-weight: 700; margin: 0; }
+    .btn-modal-close {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+    }
+    .modal-body {
+      padding: 18px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .modal-footer {
+      background: var(--sandstone-light);
+      padding: 12px 18px;
+      border-top: 1px solid var(--sandstone);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+
+    /* Official Printed Receipt Card */
+    .official-receipt-box {
+      border: 2px solid var(--gold);
+      border-radius: 10px;
+      padding: 20px;
+      background: #FFFFFF;
+      position: relative;
+    }
+    .official-receipt-box::before {
+      content: "";
+      position: absolute;
+      top: 6px; left: 6px; right: 6px; bottom: 6px;
+      border: 1px solid rgba(209, 154, 80, 0.35);
+      border-radius: 6px;
+      pointer-events: none;
+    }
+    .rcpt-header {
+      text-align: center;
+      border-bottom: 1px solid var(--sandstone);
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+    }
+    .rcpt-header .shloka {
+      font-size: 12px;
+      color: var(--teal);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .rcpt-header .inst-title {
+      font-size: 15.5px;
+      font-weight: 800;
+      color: var(--gold-dark);
+      margin: 3px 0 1px;
+    }
+    .rcpt-header .inst-sub {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+    }
+    .rcpt-badge-bar {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed var(--sandstone);
+    }
+    .rcpt-body-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .rcpt-body-row .lbl { color: var(--text-muted); }
+    .rcpt-body-row .val { font-weight: 700; color: var(--teal-dark); text-align: right; }
+    .rcpt-amount-highlight {
+      background: var(--sandstone-light);
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      margin: 14px 0;
+    }
+    .rcpt-amount-highlight .amt {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--gold-dark);
+    }
+    .rcpt-amount-highlight .words {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    .rcpt-footer-seal {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 18px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--sandstone);
+      font-size: 11.5px;
+    }
+
+    /* Print Styles */
+    @media print {
+      body * { visibility: hidden; }
+      #receiptModalBackdrop, #receiptModalBackdrop * { visibility: visible; }
+      #receiptModalBackdrop {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: none;
+        padding: 0;
+      }
+      .modal-card {
+        border: none;
+        box-shadow: none;
+        max-width: 100%;
+        width: 100%;
+      }
+      .modal-head, .modal-footer { display: none !important; }
+      .official-receipt-box {
+        border: 2px solid #000;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== PIN AUTHENTICATION OVERLAY ==================== -->
+  <div id="authOverlay">
+    <div class="auth-card">
+      <div class="auth-card-head">
+        <div class="auth-icon-circle">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <h2>अधिकृत कार्यकर्ता पोर्टल</h2>
+        <p>श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान • कोटेश्वर तीर्थ</p>
+      </div>
+
+      <div class="auth-card-body">
+        <p class="auth-desc-text">
+          माँ नर्मदा घाट निर्माण सेवा महाअभियान के अंतर्गत नवीन घोषणाओं एवं धन प्राप्ति रसीद प्रविष्टि हेतु अधिकृत पिन दर्ज करें।
+        </p>
+
+        <form id="authForm" onsubmit="handleAuthSubmit(event)">
+          <div class="auth-pin-group">
+            <input type="password" id="authPinInput" class="auth-pin-input" placeholder="सुरक्षा पिन / पासवर्ड दर्ज करें" autocomplete="current-password" autofocus required />
+            <button type="button" class="btn-toggle-pin" onclick="togglePinVisibility()">
+              <i class="fa-solid fa-eye" id="pinEyeIcon"></i>
+            </button>
+          </div>
+
+          <div class="auth-msg-box" id="authMsgBox"></div>
+
+          <button type="submit" class="btn-auth-unlock">
+            <i class="fa-solid fa-key"></i> प्रवेश करें (Unlock Portal)
+          </button>
+        </form>
+
+        <div class="auth-footer-help">
+          <a href="index.html" style="color:var(--teal);font-weight:600;">
+            <i class="fa-solid fa-arrow-left"></i> मुख्य सार्वजनिक डैशबोर्ड पर लौटें
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 1. TOP EXECUTIVE HEADER ==================== -->
+  <header class="portal-header">
+    <div class="header-inner">
+      <div class="header-brand">
+        <div class="header-logo-badge">
+          <i class="fa-solid fa-hands-holding-circle"></i>
+        </div>
+        <div class="header-title-box">
+          <h1>माँ नर्मदा घाट निर्माण सेवा महाअभियान</h1>
+          <span>अधिकृत कार्यकर्ता पोर्टल • घोषणा एवं धन संग्रह प्रबंधन</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <a href="index.html" class="btn-header btn-header-public">
+          <i class="fa-solid fa-house"></i> <span class="d-none d-sm-inline">सार्वजनिक डैशबोर्ड</span>
+        </a>
+        <button onclick="handleLogout()" class="btn-header btn-header-logout" title="लॉगआउट">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> लॉगआउट
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== 2. MAIN WORKSPACE ==================== -->
+  <main class="portal-main">
+
+    <!-- Sync & Status Ribbon -->
+    <div class="sync-ribbon">
+      <div class="sync-info">
+        <span class="status-dot-sm" id="ribbonDot"></span>
+        <span id="ribbonStatusText">डेटा सिंक स्थिति: तैयार</span>
+      </div>
+      <div>
+        <button class="btn-table-action" onclick="refreshPortalData()">
+          <i class="fa-solid fa-rotate" id="ribbonRefreshIcon"></i> डेटा ताज़ा करें
+        </button>
+      </div>
+    </div>
+
+    <!-- 4 KPI Summary Strip -->
+    <div class="karyakarta-kpi-grid">
+      <!-- Total Pledged -->
+      <div class="k-kpi-card c-pledged">
+        <div class="k-kpi-label">
+          <span>कुल घोषित संकल्प</span>
+          <i class="fa-solid fa-hand-holding-heart" style="color:var(--gold-dark);"></i>
+        </div>
+        <div class="k-kpi-amount" id="kpiTotalPledged">₹0</div>
+        <div class="k-kpi-sub" id="kpiPledgedCount">0 दानदाता संकल्प</div>
+      </div>
+
+      <!-- Total Collected -->
+      <div class="k-kpi-card c-collected">
+        <div class="k-kpi-label">
+          <span>कुल प्राप्त संग्रह (वसूल)</span>
+          <i class="fa-solid fa-circle-check" style="color:var(--sage);"></i>
+        </div>
+        <div class="k-kpi-amount" id="kpiTotalCollected" style="color:var(--sage);">₹0</div>
+        <div class="k-kpi-sub" id="kpiCollectionsCount">0 रसीदें जारी</div>
+      </div>
+
+      <!-- Remaining Pending -->
+      <div class="k-kpi-card c-pending">
+        <div class="k-kpi-label">
+          <span>कुल शेष वसूली</span>
+          <i class="fa-solid fa-clock" style="color:var(--saffron);"></i>
+        </div>
+        <div class="k-kpi-amount" id="kpiTotalPending" style="color:var(--saffron);">₹0</div>
+        <div class="k-kpi-sub" id="kpiPendingCount">0 परिवारों से वसूली शेष</div>
+      </div>
+
+      <!-- Collection Rate -->
+      <div class="k-kpi-card c-rate">
+        <div class="k-kpi-label">
+          <span>संग्रह उपलब्धि</span>
+          <i class="fa-solid fa-chart-pie" style="color:var(--teal);"></i>
+        </div>
+        <div class="k-kpi-amount" id="kpiCollectionRate">0.0%</div>
+        <div class="k-kpi-sub" id="kpiRateSub">घोषित के विरुद्ध प्राप्त</div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tab-nav-bar">
+      <button class="tab-btn active" onclick="switchPortalTab('new-declaration', this)">
+        <i class="fa-solid fa-pen-to-square"></i> नई घोषणा
+      </button>
+      <button class="tab-btn" onclick="switchPortalTab('new-collection', this)">
+        <i class="fa-solid fa-receipt"></i> धन प्राप्ति / रसीद
+      </button>
+      <button class="tab-btn" onclick="switchPortalTab('declarations-ledger', this)">
+        <i class="fa-solid fa-clipboard-list"></i> घोषणा पंजी <span class="tab-badge" id="tabBadgeDeclarations">584</span>
+      </button>
+      <button class="tab-btn" onclick="switchPortalTab('collections-ledger', this)">
+        <i class="fa-solid fa-file-invoice-dollar"></i> संग्रह पंजी <span class="tab-badge" id="tabBadgeCollections">0</span>
+      </button>
+      <button class="tab-btn" onclick="switchPortalTab('pending-list', this)">
+        <i class="fa-solid fa-hourglass-half"></i> लंबित वसूली सूची
+      </button>
+      <button class="tab-btn" onclick="switchPortalTab('settings-sync', this)">
+        <i class="fa-solid fa-gear"></i> सेटिंग्स व सिंक
+      </button>
+    </div>
+
+    <!-- ==================== TAB 1: NEW DECLARATION (नई घोषणा) ==================== -->
+    <div class="portal-pane active" id="pane-new-declaration">
+      <div class="form-box-card">
+        <div class="form-box-head">
+          <div>
+            <h3><i class="fa-solid fa-file-circle-plus" style="color:var(--gold-dark);"></i> नवीन घोषणा संकल्प प्रविष्टि</h3>
+            <span>घाट निर्माण हेतु नवीन दानदाता का संकल्प विवरण जोड़ें</span>
+          </div>
+          <div>
+            <span style="font-size:12px;background:var(--sandstone-light);padding:4px 10px;border-radius:20px;border:1px solid var(--sandstone);">
+              क्रम संख्या: <strong id="lblNextDeclarationSno">585</strong>
+            </span>
+          </div>
+        </div>
+
+        <form id="newDeclarationForm" onsubmit="handleSaveDeclaration(event)">
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label>दानदाता का शुभ नाम <span class="req">*</span></label>
+              <input type="text" id="declName" class="form-input" placeholder="उदा. श्री रमेशचंद्र जी पाटीदार" required />
+            </div>
+
+            <div class="form-group">
+              <label>ग्राम / नगर <span class="req">*</span></label>
+              <select id="declVillageSelect" class="form-select" onchange="toggleCustomVillageInput(this, 'declCustomVillageWrap')" required>
+                <option value="">-- ग्राम चुनें --</option>
+                <option value="कोठड़ा">कोठड़ा</option>
+                <option value="कवठी">कवठी</option>
+                <option value="मण्‍डलेश्‍वर">मण्‍डलेश्‍वर</option>
+                <option value="महेश्वर">महेश्वर</option>
+                <option value="इंदौर">इंदौर</option>
+                <option value="धामनोद">धामनोद</option>
+                <option value="बड़वाह">बड़वाह</option>
+                <option value="बड़वानी">बड़वानी</option>
+                <option value="खरगोन">खरगोन</option>
+                <option value="सनावद">सनावद</option>
+                <option value="धरमपुरी">धरमपुरी</option>
+                <option value="कुक्षी">कुक्षी</option>
+                <option value="धार">धार</option>
+                <option value="nanpur">नानपुर</option>
+                <option value="other">अन्य नगर / ग्राम दर्ज करें...</option>
+              </select>
+              <div id="declCustomVillageWrap" style="display:none;margin-top:6px;">
+                <input type="text" id="declCustomVillage" class="form-input" placeholder="ग्राम / शहर का नाम लिखें" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>घोषित संकल्प राशि (₹) <span class="req">*</span></label>
+              <input type="number" id="declAmount" class="form-input amount" placeholder="उदा. 21000" min="1" step="1" required />
+              <div class="input-hint" id="declAmountWords">राशि शब्दों में...</div>
+            </div>
+          </div>
+
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label>संपर्क मोबाइल नंबर (गोपनीय)</label>
+              <input type="tel" id="declMobile" class="form-input" placeholder="उदा. 9876543210" pattern="[0-9]{10}" />
+              <div class="input-hint">केवल अधिकृत कार्यकर्ताओं के संपर्क हेतु सुरक्षित रहेगा</div>
+            </div>
+
+            <div class="form-group">
+              <label>घोषणा दिनांक <span class="req">*</span></label>
+              <input type="date" id="declDate" class="form-input" required />
+            </div>
+
+            <div class="form-group">
+              <label>संकल्प प्रेरक / अधिकृत कार्यकर्ता</label>
+              <input type="text" id="declCollector" class="form-input" placeholder="कार्यकर्ता का नाम" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>स्मरण / संदर्भ / पारिवारिक विवरण</label>
+            <input type="text" id="declNotes" class="form-input" placeholder="उदा. स्व. श्री कालूराम जी पाटीदार की पावन स्मृति में" />
+          </div>
+
+          <div style="margin-top:20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+            <button type="submit" class="btn-submit-action">
+              <i class="fa-solid fa-floppy-disk"></i> घोषणा संकल्प सुरक्षित करें
+            </button>
+            <button type="reset" class="btn-outline-action">
+              <i class="fa-solid fa-eraser"></i> फॉर्म साफ़ करें
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 2: MONEY RECEIPT ENTRY (धन प्राप्ति / रसीद) ==================== -->
+    <div class="portal-pane" id="pane-new-collection">
+      <div class="form-box-card">
+        <div class="form-box-head">
+          <div>
+            <h3><i class="fa-solid fa-receipt" style="color:var(--sage);"></i> धन प्राप्ति एवं डिजिटल पावती प्रविष्टि</h3>
+            <span>दानदाताओं से प्राप्त राशि दर्ज करें एवं आधिकारिक रसीद / WhatsApp पावती तैयार करें</span>
+          </div>
+          <div>
+            <label style="font-size:12px;display:flex;align-items:center;gap:6px;cursor:pointer;">
+              <input type="checkbox" id="chkDirectDonor" onchange="toggleDirectDonorMode(this.checked)" />
+              <span>नवीन / अघोषित सीधी प्राप्ति (बिना पूर्व घोषणा)</span>
+            </label>
+          </div>
+        </div>
+
+        <form id="newCollectionForm" onsubmit="handleSaveCollection(event)">
+          <!-- Donor Search / Autocomplete -->
+          <div class="form-group" id="donorLookupGroup">
+            <label>दानदाता खोजें (नाम, क्रम संख्या या ग्राम से) <span class="req">*</span></label>
+            <div class="donor-lookup-container">
+              <input type="text" id="donorSearchInput" class="form-input" placeholder="टाइप करें: नाम, मोबाइल या क्रम संख्या..." autocomplete="off" oninput="handleDonorSearchInput(this.value)" />
+              <div class="donor-suggestions-box" id="donorSuggestionsBox"></div>
+            </div>
+            <div class="input-hint">पंजीकृत घोषणा सूची में से दानदाता का चयन करें</div>
+          </div>
+
+          <!-- Direct donor manual fields (if toggle enabled) -->
+          <div id="directDonorFields" style="display:none;" class="form-grid-3">
+            <div class="form-group">
+              <label>दानदाता का नाम <span class="req">*</span></label>
+              <input type="text" id="directDonorName" class="form-input" placeholder="दानदाता का नाम" />
+            </div>
+            <div class="form-group">
+              <label>ग्राम / नगर <span class="req">*</span></label>
+              <input type="text" id="directDonorCity" class="form-input" placeholder="उदा. कोठड़ा" />
+            </div>
+            <div class="form-group">
+              <label>मोबाइल नंबर</label>
+              <input type="tel" id="directDonorMobile" class="form-input" placeholder="10 अंकों का मोबाइल" />
+            </div>
+          </div>
+
+          <!-- Selected Donor Status Banner -->
+          <div class="selected-donor-banner" id="selectedDonorBanner">
+            <div class="sel-donor-row">
+              <div>
+                <span style="font-size:11px;color:var(--text-muted);">चयनित दानदाता:</span>
+                <div style="font-size:15px;font-weight:800;color:var(--teal);" id="selDonorName">श्री ...</div>
+                <div style="font-size:11.5px;color:var(--text-secondary);" id="selDonorMeta">क्रम संख्या: - | ग्राम: -</div>
+              </div>
+              <button type="button" class="btn-table-action" onclick="clearSelectedDonor()">
+                <i class="fa-solid fa-xmark"></i> दानदाता बदलें
+              </button>
+            </div>
+            <div class="sel-stats-grid">
+              <div class="sel-stat-box">
+                कुल संकल्प:
+                <strong id="selPledgedAmt">₹0</strong>
+              </div>
+              <div class="sel-stat-box">
+                पूर्व में जमा:
+                <strong style="color:var(--sage);" id="selDepositedAmt">₹0</strong>
+              </div>
+              <div class="sel-stat-box">
+                शेष देय राशि:
+                <strong style="color:var(--saffron);" id="selBalanceAmt">₹0</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Collection Amount & Details Grid -->
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label>रसीद / पावती क्रमांक <span class="req">*</span></label>
+              <input type="text" id="collReceiptNo" class="form-input" placeholder="उदा. KTR-2026-0001" required />
+            </div>
+
+            <div class="form-group">
+              <label>प्राप्त राशि (₹) <span class="req">*</span></label>
+              <input type="number" id="collAmount" class="form-input amount" placeholder="उदा. 11000" min="1" step="1" required oninput="updateCollAmountWords(this.value)" />
+              <div class="input-hint" id="collAmountWords">राशि शब्दों में...</div>
+            </div>
+
+            <div class="form-group">
+              <label>भुगतान माध्यम <span class="req">*</span></label>
+              <select id="collPaymentMode" class="form-select" required onchange="toggleRefField(this.value)">
+                <option value="नकद">नकद (Cash)</option>
+                <option value="UPI / QR">UPI / QR कोड (PhonePe, GPay, Paytm)</option>
+                <option value="बैंक चेक">बैंक चेक (Cheque)</option>
+                <option value="बैंक ट्रांसफर (NEFT/IMPS)">बैंक ट्रांसफर (NEFT / IMPS)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-3">
+            <div class="form-group" id="refFieldWrap">
+              <label id="lblRefNo">चेक क्र. / UPI UTR / संदर्भ ID</label>
+              <input type="text" id="collRefNo" class="form-input" placeholder="ट्रांजेक्शन आईडी या चेक नंबर" />
+            </div>
+
+            <div class="form-group">
+              <label>प्राप्ति दिनांक <span class="req">*</span></label>
+              <input type="date" id="collDate" class="form-input" required />
+            </div>
+
+            <div class="form-group">
+              <label>राशि प्राप्तकर्ता कार्यकर्ता <span class="req">*</span></label>
+              <input type="text" id="collCollector" class="form-input" placeholder="कार्यकर्ता का नाम" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>पावती टिप्पणी / विवरण</label>
+            <input type="text" id="collRemarks" class="form-input" placeholder="उदा. प्रथम किस्त जमा / संकल्प पूर्ण" />
+          </div>
+
+          <div style="margin-top:20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+            <button type="submit" class="btn-submit-action">
+              <i class="fa-solid fa-check-double"></i> प्राप्ति दर्ज करें एवं डिजिटल रसीद बनाएं
+            </button>
+            <button type="reset" class="btn-outline-action" onclick="clearSelectedDonor()">
+              <i class="fa-solid fa-eraser"></i> साफ़ करें
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 3: DECLARATIONS LEDGER (घोषणा पंजी) ==================== -->
+    <div class="portal-pane" id="pane-declarations-ledger">
+      <div class="form-box-card">
+        <div class="form-box-head">
+          <div>
+            <h3><i class="fa-solid fa-clipboard-list" style="color:var(--teal);"></i> संपूर्ण घोषणा पंजी (Declarations Ledger)</h3>
+            <span>सभी पंजीकृत दानदाताओं के संकल्प, जमा एवं शेष राशि का ब्योरा</span>
+          </div>
+          <div>
+            <button class="btn-table-action" onclick="exportDeclarationsCSV()">
+              <i class="fa-solid fa-file-csv"></i> CSV निर्यात
+            </button>
+          </div>
+        </div>
+
+        <div class="ledger-controls-row">
+          <div class="search-input-wrap">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchDeclTable" placeholder="दानदाता का नाम, क्रम या ग्राम खोजें..." oninput="filterDeclarationsTable()" />
+          </div>
+
+          <div style="display:flex;gap:8px;">
+            <select id="filterDeclVillage" class="form-select" style="min-width:140px;" onchange="filterDeclarationsTable()">
+              <option value="all">सभी ग्राम / नगर</option>
+            </select>
+            <select id="filterDeclStatus" class="form-select" style="min-width:130px;" onchange="filterDeclarationsTable()">
+              <option value="all">सभी स्थितियां</option>
+              <option value="pending">वसूली शेष</option>
+              <option value="partial">आंशिक प्राप्त</option>
+              <option value="paid">पूर्ण प्राप्त</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="data-table" id="declarationsTable">
+            <thead>
+              <tr>
+                <th style="width:60px;">क्र.</th>
+                <th>दानदाता का नाम</th>
+                <th>ग्राम / नगर</th>
+                <th style="text-align:right;">घोषित संकल्प (₹)</th>
+                <th style="text-align:right;">प्राप्त जमा (₹)</th>
+                <th style="text-align:right;">शेष राशि (₹)</th>
+                <th style="text-align:center;">स्थिति</th>
+                <th style="text-align:center;">कार्यवाही</th>
+              </tr>
+            </thead>
+            <tbody id="declTableBody">
+              <tr><td colspan="8" style="text-align:center;padding:24px;">डेटा लोड हो रहा है...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top:12px;font-size:12px;color:var(--text-muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <span id="declTableSummary">लोड हो रहा है...</span>
+          <span id="declTablePages"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 4: COLLECTIONS LEDGER (संग्रह पंजी) ==================== -->
+    <div class="portal-pane" id="pane-collections-ledger">
+      <div class="form-box-card">
+        <div class="form-box-head">
+          <div>
+            <h3><i class="fa-solid fa-file-invoice-dollar" style="color:var(--sage);"></i> वास्तविक संग्रह पंजी (Collections Ledger)</h3>
+            <span>जारी की गई सभी रसीदों एवं वास्तविक जमा राशि का अलग ब्योरा</span>
+          </div>
+          <div>
+            <button class="btn-table-action" onclick="exportCollectionsCSV()">
+              <i class="fa-solid fa-file-excel"></i> संग्रह रिपोर्ट (CSV)
+            </button>
+          </div>
+        </div>
+
+        <div class="ledger-controls-row">
+          <div class="search-input-wrap">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchCollTable" placeholder="रसीद क्र., दानदाता या माध्यम खोजें..." oninput="filterCollectionsTable()" />
+          </div>
+
+          <div style="display:flex;gap:8px;">
+            <select id="filterCollMode" class="form-select" onchange="filterCollectionsTable()">
+              <option value="all">सभी भुगतान माध्यम</option>
+              <option value="नकद">नकद</option>
+              <option value="UPI / QR">UPI / QR</option>
+              <option value="बैंक चेक">बैंक चेक</option>
+              <option value="बैंक ट्रांसफर (NEFT/IMPS)">बैंक ट्रांसफर</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="data-table" id="collectionsTable">
+            <thead>
+              <tr>
+                <th>रसीद क्रमांक</th>
+                <th>दिनांक</th>
+                <th>दानदाता</th>
+                <th>ग्राम</th>
+                <th style="text-align:right;">प्राप्त राशि (₹)</th>
+                <th>माध्यम</th>
+                <th>संदर्भ / UTR</th>
+                <th>प्राप्तकर्ता</th>
+                <th style="text-align:center;">पावती</th>
+              </tr>
+            </thead>
+            <tbody id="collTableBody">
+              <tr><td colspan="9" style="text-align:center;padding:24px;">अभी तक कोई संग्रह प्रविष्टि नहीं है।</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top:12px;font-size:12px;color:var(--text-muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <span id="collTableSummary">कुल संग्रह: ₹0 (0 रसीदें)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 5: PENDING FOLLOW-UP LIST (लंबित वसूली) ==================== -->
+    <div class="portal-pane" id="pane-pending-list">
+      <div class="form-box-card">
+        <div class="form-box-head">
+          <div>
+            <h3><i class="fa-solid fa-hourglass-half" style="color:var(--saffron);"></i> लंबित वसूली एवं फॉलो-अप सूची</h3>
+            <span>जिन दानदाताओं की संकल्प राशि अभी शेष है (अधिकतम शेष राशि के क्रम में)</span>
+          </div>
+          <div>
+            <span style="font-size:12px;background:var(--saffron-light);color:var(--saffron);padding:4px 10px;border-radius:20px;font-weight:700;">
+              प्राथमिकता क्रम
+            </span>
+          </div>
+        </div>
+
+        <div class="ledger-controls-row">
+          <div class="search-input-wrap">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchPendingTable" placeholder="दानदाता या ग्राम खोजें..." oninput="filterPendingTable()" />
+          </div>
+
+          <div>
+            <select id="filterPendingVillage" class="form-select" onchange="filterPendingTable()">
+              <option value="all">सभी ग्राम / नगर</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="data-table" id="pendingTable">
+            <thead>
+              <tr>
+                <th style="width:60px;">क्र.</th>
+                <th>दानदाता का नाम</th>
+                <th>ग्राम</th>
+                <th style="text-align:right;">घोषित संकल्प (₹)</th>
+                <th style="text-align:right;">जमा राशि (₹)</th>
+                <th style="text-align:right;">लंबित शेष (₹)</th>
+                <th style="text-align:center;">संपर्क एवं कार्यवाही</th>
+              </tr>
+            </thead>
+            <tbody id="pendingTableBody">
+              <tr><td colspan="7" style="text-align:center;padding:24px;">लोड हो रहा है...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 6: SETTINGS & SYNC (सेटिंग्स व सिंक) ==================== -->
+    <div class="portal-pane" id="pane-settings-sync">
+      <div class="form-box-card">
+        <div class="form-box-head">
+          <div>
+            <h3><i class="fa-solid fa-gear" style="color:var(--teal);"></i> Google Apps Script वेबहुक एवं डेटा सिंक सेटिंग्स</h3>
+            <span>Google Sheet में सीधे ऑटोमैटिक प्रविष्टि हेतु वेबहुक URL कॉन्फ़िगर करें</span>
+          </div>
+        </div>
+
+        <div style="max-width:760px;">
+          <div class="form-group">
+            <label>Google Apps Script Webhook URL</label>
+            <input type="url" id="webhookUrlInput" class="form-input" placeholder="https://script.google.com/macros/s/.../exec" />
+            <div class="input-hint">Google Sheet में "Deploy as Web App" से प्राप्त URL यहाँ दर्ज करें</div>
+          </div>
+
+          <div style="display:flex;gap:10px;margin-bottom:20px;">
+            <button class="btn-submit-action" onclick="saveWebhookUrl()">
+              <i class="fa-solid fa-check"></i> URL सुरक्षित करें
+            </button>
+            <button class="btn-outline-action" onclick="testWebhookConnection()">
+              <i class="fa-solid fa-vial"></i> कनेक्शन परीक्षण
+            </button>
+          </div>
+
+          <div style="background:var(--sandstone-light);border:1px solid var(--sandstone);border-radius:10px;padding:16px;margin-bottom:24px;">
+            <h4 style="margin:0 0 8px;font-size:13.5px;color:var(--teal);">
+              <i class="fa-solid fa-circle-info" style="color:var(--gold-dark);"></i> वेबहुक सेटअप निर्देश (एक बार का सेटअप):
+            </h4>
+            <ol style="margin:0;padding-left:20px;font-size:12.5px;color:var(--text-secondary);line-height:1.6;">
+              <li>अपनी Google Sheet खोलें: <code>1Gw-tjQuVRzp6jO57jdH7OzvfEx4Brw_DV6uRb1cUDt8</code></li>
+              <li>मेनू में <strong>Extensions > Apps Script</strong> पर जाएं।</li>
+              <li>फ़ाइल <code>google_apps_script.js</code> का संपूर्ण कोड कॉपी करके पेस्ट करें।</li>
+              <li>ऊपर <strong>Deploy > New deployment</strong> चुनें, टाइप में <strong>Web app</strong> चुनें।</li>
+              <li>"Execute as": <strong>Me</strong> तथा "Who has access": <strong>Anyone</strong> चुनें।</li>
+              <li>Deploy करने पर प्राप्त <strong>Web app URL</strong> को ऊपर के बॉक्स में पेस्ट कर सुरक्षित करें।</li>
+            </ol>
+          </div>
+
+          <div class="form-box-head" style="margin-top:20px;">
+            <h4><i class="fa-solid fa-database"></i> बैकअप एवं रीसेट</h4>
+          </div>
+
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <button class="btn-outline-action" onclick="downloadAllDataJSON()">
+              <i class="fa-solid fa-download"></i> संपूर्ण डेटा बैकअप लें (JSON)
+            </button>
+            <button class="btn-outline-action" onclick="refreshPortalData(true)">
+              <i class="fa-solid fa-arrows-rotate"></i> Google Sheet से पुनः सिंक करें
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ==================== DIGITAL RECEIPT MODAL ==================== -->
+  <div class="modal-backdrop" id="receiptModalBackdrop" onclick="closeReceiptModal(event)">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h4><i class="fa-solid fa-receipt" style="color:var(--gold-light);"></i> आधिकारिक डिजिटल पावती / रसीद</h4>
+        <button class="btn-modal-close" onclick="closeReceiptModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="official-receipt-box" id="officialReceiptPrintBox">
+          <div class="rcpt-header">
+            <div class="shloka">॥ त्वदीय पादपंकजं नमामि देवि नर्मदे! ॥</div>
+            <div class="inst-title">श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान</div>
+            <div class="inst-sub">कोटेश्वर तीर्थ, कोठड़ा • माँ नर्मदा घाट निर्माण सेवा महाअभियान</div>
+          </div>
+
+          <div class="rcpt-badge-bar">
+            <span>रसीद क्र.: <strong id="rcptViewNo" style="color:var(--teal);">KTR-2026-0001</strong></span>
+            <span>दिनांक: <strong id="rcptViewDate">01/01/2026</strong></span>
+          </div>
+
+          <div class="rcpt-body-row">
+            <span class="lbl">दानदाता का नाम:</span>
+            <span class="val" id="rcptViewName">श्री ...</span>
+          </div>
+
+          <div class="rcpt-body-row">
+            <span class="lbl">ग्राम / नगर:</span>
+            <span class="val" id="rcptViewCity">-</span>
+          </div>
+
+          <div class="rcpt-body-row">
+            <span class="lbl">भुगतान माध्यम:</span>
+            <span class="val" id="rcptViewMode">नकद</span>
+          </div>
+
+          <div class="rcpt-body-row" id="rcptViewRefRow">
+            <span class="lbl">संदर्भ / UTR / चेक क्र.:</span>
+            <span class="val" id="rcptViewRef">-</span>
+          </div>
+
+          <div class="rcpt-amount-highlight">
+            <div style="font-size:11.5px;color:var(--text-secondary);margin-bottom:2px;">प्राप्त जनसहयोग राशि</div>
+            <div class="amt" id="rcptViewAmount">₹0</div>
+            <div class="words" id="rcptViewWords">शून्य रुपये मात्र</div>
+          </div>
+
+          <div style="font-size:11.5px;color:var(--text-secondary);background:var(--sandstone-light);padding:8px 10px;border-radius:6px;margin:10px 0;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:3px;">
+              <span>कुल घोषित संकल्प: <strong id="rcptViewPledged">₹0</strong></span>
+              <span>अब तक कुल जमा: <strong id="rcptViewTotalDeposited" style="color:var(--sage);">₹0</strong></span>
+            </div>
+            <div style="display:flex;justify-content:space-between;">
+              <span>शेष संकल्प राशि: <strong id="rcptViewBalance" style="color:var(--saffron);">₹0</strong></span>
+              <span id="rcptViewStatusTag" style="font-weight:700;color:var(--sage);">स्थिति: पूर्ण</span>
+            </div>
+          </div>
+
+          <div class="rcpt-footer-seal">
+            <div>
+              <div style="font-size:10px;color:var(--text-muted);">राशि प्राप्तकर्ता अधिकृत कार्यकर्ता:</div>
+              <div style="font-weight:700;color:var(--teal);" id="rcptViewCollector">-</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:10px;color:var(--text-muted);font-style:italic;">सत्यापित एवं प्रमाणित</div>
+              <div style="font-weight:700;color:var(--gold-dark);"><i class="fa-solid fa-stamp"></i> संस्थान अधिकृत पावती</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-submit-action" id="btnShareWhatsAppReceipt" style="background:var(--whatsapp);border-color:var(--whatsapp-dark);">
+          <i class="fa-brands fa-whatsapp"></i> WhatsApp पर पावती भेजें
+        </button>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-outline-action" onclick="window.print()">
+            <i class="fa-solid fa-print"></i> प्रिंट / PDF
+          </button>
+          <button class="btn-outline-action" onclick="closeReceiptModal()">बंद करें</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    /* ============================================================
+       CONSTANTS & STATE
+       ============================================================ */
+    const SHEET_ID = '1Gw-tjQuVRzp6jO57jdH7OzvfEx4Brw_DV6uRb1cUDt8';
+    const GVIZ_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Declarations&tq=${encodeURIComponent('SELECT A, B, C, D, F, G, H, I, L')}`;
+
+    // Valid Authorized Karyakarta PINs / Passcodes
+    const VALID_PINS = ['narmadehar2026', 'कोटेश्वर2026', 'koteshwar2026', '12345'];
+
+    // State
+    let declarationsList = [];
+    let collectionsList = [];
+    let selectedDonor = null;
+    let webhookUrl = localStorage.getItem('koteshwar_webhook_url') || '';
+
+    const fmt = n => "₹" + Math.round(Number(n) || 0).toLocaleString('en-IN');
+
+    /* ============================================================
+       NUMBER TO HINDI WORDS CONVERTER
+       ============================================================ */
+    function numberToHindiWords(num) {
+      const n = Math.floor(Math.abs(Number(num) || 0));
+      if (n === 0) return "शून्य";
+
+      const units = [
+        "", "एक", "दो", "तीन", "चार", "पांच", "छह", "सात", "आठ", "नौ", "दस",
+        "ग्यारह", "बारह", "तेरह", "चौदह", "पंद्रह", "सोलह", "सत्रह", "अट्ठारह", "उन्नीस", "बीस",
+        "इक्कीस", "बाईस", "तेईस", "चौबीस", "पच्चीस", "छब्बीस", "सत्ताईस", "अट्ठाइस", "उनतीस", "तीस",
+        "इकतीस", "बत्तीस", "तैंतीस", "चौंतीस", "पैंतीस", "छत्तीस", "सैंतीस", "अड़तीस", "उनतालीस", "चालीस",
+        "इकतालीस", "बयालीस", "तैंतालीस", "चौवालीस", "पैंतालीस", "छियालीस", "सैंतालीस", "अड़तालीस", "उनचास", "पचास",
+        "इक्यावन", "बावन", "तिरेपन", "चौवन", "पचपन", "छप्पन", "सत्तावन", "अट्ठावन", "उनसठ", "साठ",
+        "इकसठ", "बासठ", "तिरेसठ", "चौंसठ", "पैंसठ", "छियासठ", "सरसठ", "अड़सठ", "उनहत्तर", "सत्तर",
+        "इकहत्तर", "बहत्तर", "तिहत्तर", "चौहत्तर", "पचहत्तर", "छिहत्तर", "सतहत्तर", "अठहत्तर", "उन्नासी", "अस्सी",
+        "इक्यासी", "बयासी", "तिरासी", "चौरासी", "पचासी", "छियासी", "सत्तासी", "अट्ठासी", "नवासी", "नब्बे",
+        "इक्यानवे", "बानवे", "तिरानवे", "चौरानवे", "पंचानवे", "छियानवे", "सत्तानवे", "अट्ठानवे", "निन्यानवे"
+      ];
+
+      function convertPart(val) {
+        let str = "";
+        const crore = Math.floor(val / 10000000);
+        val %= 10000000;
+        const lakh = Math.floor(val / 100000);
+        val %= 100000;
+        const thousand = Math.floor(val / 1000);
+        val %= 1000;
+        const hundred = Math.floor(val / 100);
+        const rem = val % 100;
+
+        if (crore > 0) str += units[crore] + " करोड़ ";
+        if (lakh > 0) str += units[lakh] + " लाख ";
+        if (thousand > 0) str += units[thousand] + " हजार ";
+        if (hundred > 0) str += units[hundred] + " सौ ";
+        if (rem > 0) str += units[rem] + " ";
+
+        return str.trim();
+      }
+
+      return convertPart(n);
+    }
+
+    /* ============================================================
+       AUTHENTICATION & SECURITY
+       ============================================================ */
+    function checkAuth() {
+      try {
+        const session = JSON.parse(sessionStorage.getItem('koteshwar_auth_session') || '{}');
+        const now = Date.now();
+        // 2 hours timeout
+        if (session && session.auth && (now - session.timestamp < 2 * 60 * 60 * 1000)) {
+          document.getElementById('authOverlay').style.display = 'none';
+          initPortal();
+          return true;
+        }
+      } catch (e) {}
+
+      document.getElementById('authOverlay').style.display = 'flex';
+      return false;
+    }
+
+    function handleAuthSubmit(e) {
+      e.preventDefault();
+      const pin = document.getElementById('authPinInput').value.trim();
+      const msgBox = document.getElementById('authMsgBox');
+
+      if (VALID_PINS.includes(pin)) {
+        sessionStorage.setItem('koteshwar_auth_session', JSON.stringify({
+          auth: true,
+          timestamp: Date.now()
+        }));
+        msgBox.textContent = "";
+        document.getElementById('authOverlay').style.display = 'none';
+        initPortal();
+      } else {
+        msgBox.textContent = "अमान्य पिन! कृपया सही कार्यकर्ता पिन दर्ज करें।";
+        document.getElementById('authPinInput').value = "";
+        document.getElementById('authPinInput').focus();
+      }
+    }
+
+    function togglePinVisibility() {
+      const inp = document.getElementById('authPinInput');
+      const icon = document.getElementById('pinEyeIcon');
+      if (inp.type === 'password') {
+        inp.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        inp.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
+
+    function handleLogout() {
+      if (confirm("क्या आप कार्यकर्ता पोर्टल से बाहर निकलना (लॉगआउट) चाहते हैं?")) {
+        sessionStorage.removeItem('koteshwar_auth_session');
+        window.location.reload();
+      }
+    }
+
+    /* ============================================================
+       INITIALIZATION
+       ============================================================ */
+    window.addEventListener('DOMContentLoaded', () => {
+      // Set today's date in form date pickers
+      const today = new Date().toISOString().split('T')[0];
+      const elDeclDate = document.getElementById('declDate');
+      const elCollDate = document.getElementById('collDate');
+      if (elDeclDate) elDeclDate.value = today;
+      if (elCollDate) elCollDate.value = today;
+
+      // Load saved webhook URL
+      if (webhookUrl) {
+        const inp = document.getElementById('webhookUrlInput');
+        if (inp) inp.value = webhookUrl;
+      }
+
+      checkAuth();
+    });
+
+    async function initPortal() {
+      loadCollectionsFromStorage();
+      await loadDeclarationsData();
+      renderAllPortals();
+    }
+
+    /* ============================================================
+       DATA LOAD & MERGE
+       ============================================================ */
+    function loadCollectionsFromStorage() {
+      try {
+        const saved = localStorage.getItem('koteshwar_collections_ledger');
+        if (saved) {
+          collectionsList = JSON.parse(saved);
+        } else {
+          collectionsList = [];
+        }
+      } catch (e) {
+        collectionsList = [];
+      }
+    }
+
+    function saveCollectionsToStorage() {
+      try {
+        localStorage.setItem('koteshwar_collections_ledger', JSON.stringify(collectionsList));
+      } catch (e) {}
+    }
+
+    async function loadDeclarationsData(forceRefresh = false) {
+      updateRibbon(true, "डेटा लोड हो रहा है...");
+
+      // 1. Try cache if not forced
+      if (!forceRefresh) {
+        try {
+          const cached = localStorage.getItem('koteshwar_declarations_cache');
+          if (cached) {
+            declarationsList = JSON.parse(cached);
+          }
+        } catch (e) {}
+      }
+
+      // 2. Fetch live from Google Sheet
+      try {
+        const res = await fetch(GVIZ_URL);
+        if (res.ok) {
+          const raw = await res.text();
+          const match = raw.match(/setResponse\(([\s\S]*)\);?/);
+          if (match) {
+            const data = JSON.parse(match[1]);
+            const rows = data.table && data.table.rows ? data.table.rows : [];
+            const fetched = [];
+
+            for (let i = 0; i < rows.length; i++) {
+              const c = rows[i].c;
+              if (!c || c.length < 5) continue;
+              const sno = c[0] && c[0].v !== null ? c[0].v : (i + 1);
+              const name = c[1] && c[1].v !== null ? String(c[1].v).trim() : "";
+              const city = c[2] && c[2].v !== null ? String(c[2].v).trim() : "अन्य";
+              const notes = c[3] && c[3].v !== null ? String(c[3].v).trim() : "";
+              const rawAmt = c[4] && c[4].v !== null ? String(c[4].v) : "0";
+              const receipt = c[5] && c[5].v !== null ? String(c[5].v).trim() : "-";
+              const dateVal = c[6] ? (c[6].f || c[6].v || "") : "";
+              const rawDep = c[7] && c[7].v !== null ? String(c[7].v) : "0";
+              const rawBal = c[8] && c[8].v !== null ? String(c[8].v) : "0";
+
+              if (!name && !rawAmt) continue;
+              const amt = parseFloat(String(rawAmt).replace(/[^0-9.]/g, '')) || 0;
+              const dep = parseFloat(String(rawDep).replace(/[^0-9.]/g, '')) || 0;
+              const bal = parseFloat(String(rawBal).replace(/[^0-9.]/g, '')) || 0;
+
+              if (name || amt > 0) {
+                fetched.push({
+                  sno: sno,
+                  name: name,
+                  city: city || "अन्य",
+                  notes: notes,
+                  amount: amt,
+                  deposited: dep,
+                  balance: bal,
+                  receipt: receipt || "-",
+                  date: String(dateVal).trim()
+                });
+              }
+            }
+
+            if (fetched.length > 0) {
+              declarationsList = fetched;
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("Live fetch error, falling back to cached/local declarations", err);
+      }
+
+      // 3. Merge custom local declarations if any
+      try {
+        const custom = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
+        if (Array.isArray(custom)) {
+          custom.forEach(item => {
+            if (!declarationsList.find(d => String(d.sno) === String(item.sno))) {
+              declarationsList.push(item);
+            }
+          });
+        }
+      } catch (e) {}
+
+      // 4. Reconcile with Collections ledger
+      reconcileCollectionsWithDeclarations();
+
+      // Save updated cache
+      try {
+        localStorage.setItem('koteshwar_declarations_cache', JSON.stringify(declarationsList));
+      } catch (e) {}
+
+      updateRibbon(false, `डेटा सिंक पूर्ण (${declarationsList.length} घोषणाएं, ${collectionsList.length} संग्रह)`);
+    }
+
+    function reconcileCollectionsWithDeclarations() {
+      // Sum collections per donor
+      const collMap = {};
+      collectionsList.forEach(c => {
+        if (c.donorSno) {
+          collMap[c.donorSno] = (collMap[c.donorSno] || 0) + (Number(c.amount) || 0);
+        }
+      });
+
+      // Update declaration deposited & balance
+      declarationsList.forEach(d => {
+        const localColl = collMap[d.sno] || 0;
+        // Don't double count if sheet already includes deposited, but ensure at least local collections are reflected
+        if (localColl > 0 && d.deposited < localColl) {
+          d.deposited = localColl;
+        }
+        d.balance = Math.max(0, (Number(d.amount) || 0) - (Number(d.deposited) || 0));
+      });
+    }
+
+    function updateRibbon(isSyncing, msg) {
+      const dot = document.getElementById('ribbonDot');
+      const text = document.getElementById('ribbonStatusText');
+      const icon = document.getElementById('ribbonRefreshIcon');
+      if (text) text.textContent = msg;
+      if (dot) {
+        if (isSyncing) dot.classList.add('syncing');
+        else dot.classList.remove('syncing');
+      }
+      if (icon) {
+        if (isSyncing) icon.classList.add('fa-spin');
+        else icon.classList.remove('fa-spin');
+      }
+    }
+
+    async function refreshPortalData(force = true) {
+      await loadDeclarationsData(force);
+      renderAllPortals();
+    }
+
+    /* ============================================================
+       MASTER RENDER FUNCTION
+       ============================================================ */
+    function renderAllPortals() {
+      renderKpis();
+      populateVillageDropdowns();
+      renderDeclarationsTable();
+      renderCollectionsTable();
+      renderPendingTable();
+      updateNextDeclarationSno();
+      updateBadges();
+    }
+
+    function updateBadges() {
+      const bDecl = document.getElementById('tabBadgeDeclarations');
+      const bColl = document.getElementById('tabBadgeCollections');
+      if (bDecl) bDecl.textContent = declarationsList.length;
+      if (bColl) bColl.textContent = collectionsList.length;
+    }
+
+    function updateNextDeclarationSno() {
+      let maxSno = 0;
+      declarationsList.forEach(d => {
+        const s = parseInt(d.sno, 10);
+        if (!isNaN(s) && s > maxSno) maxSno = s;
+      });
+      const nextSno = maxSno + 1;
+      const lbl = document.getElementById('lblNextDeclarationSno');
+      if (lbl) lbl.textContent = nextSno;
+
+      // Also suggest next collection receipt number
+      const nextRcpt = "KTR-2026-" + String(collectionsList.length + 1).padStart(4, '0');
+      const elRcpt = document.getElementById('collReceiptNo');
+      if (elRcpt && !elRcpt.value) elRcpt.value = nextRcpt;
+    }
+
+    function renderKpis() {
+      const totalPledged = declarationsList.reduce((s, d) => s + (Number(d.amount) || 0), 0);
+      const totalDeposited = declarationsList.reduce((s, d) => s + (Number(d.deposited) || 0), 0);
+      const totalPending = Math.max(0, totalPledged - totalDeposited);
+      const pendingCount = declarationsList.filter(d => (Number(d.balance) > 0)).length;
+      const rate = totalPledged > 0 ? ((totalDeposited / totalPledged) * 100).toFixed(1) : "0.0";
+
+      document.getElementById('kpiTotalPledged').textContent = fmt(totalPledged);
+      document.getElementById('kpiPledgedCount').textContent = `${declarationsList.length} दानदाता संकल्प`;
+
+      document.getElementById('kpiTotalCollected').textContent = fmt(totalDeposited);
+      document.getElementById('kpiCollectionsCount').textContent = `${collectionsList.length} रसीदें जारी`;
+
+      document.getElementById('kpiTotalPending').textContent = fmt(totalPending);
+      document.getElementById('kpiPendingCount').textContent = `${pendingCount} परिवारों से वसूली शेष`;
+
+      document.getElementById('kpiCollectionRate').textContent = `${rate}%`;
+    }
+
+    function populateVillageDropdowns() {
+      const villages = Array.from(new Set(declarationsList.map(d => d.city).filter(Boolean))).sort();
+      ['filterDeclVillage', 'filterPendingVillage'].forEach(id => {
+        const select = document.getElementById(id);
+        if (!select) return;
+        const currentVal = select.value;
+        select.innerHTML = '<option value="all">सभी ग्राम / नगर</option>' +
+          villages.map(v => `<option value="${v}">${v}</option>`).join('');
+        select.value = currentVal;
+      });
+    }
+
+    /* ============================================================
+       TAB SWITCHING
+       ============================================================ */
+    function switchPortalTab(tabId, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.portal-pane').forEach(p => p.classList.remove('active'));
+
+      if (!btn) {
+        btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => {
+          const oc = b.getAttribute('onclick') || '';
+          return oc.includes(`'${tabId}'`);
+        });
+      }
+      if (btn) btn.classList.add('active');
+
+      const target = document.getElementById('pane-' + tabId);
+      if (target) target.classList.add('active');
+    }
+
+    /* ==================== FORM HELPERS ==================== */
+    function toggleCustomVillageInput(select, wrapId) {
+      const wrap = document.getElementById(wrapId);
+      if (wrap) wrap.style.display = select.value === 'other' ? 'block' : 'none';
+    }
+
+    function toggleRefField(mode) {
+      const wrap = document.getElementById('refFieldWrap');
+      const lbl = document.getElementById('lblRefNo');
+      if (!wrap || !lbl) return;
+      if (mode.includes('UPI')) {
+        lbl.textContent = "UPI UTR / संदर्भ क्रमांक";
+        wrap.style.display = 'block';
+      } else if (mode.includes('चेक')) {
+        lbl.textContent = "बैंक चेक क्रमांक एवं बैंक नाम";
+        wrap.style.display = 'block';
+      } else if (mode.includes('ट्रांसफर')) {
+        lbl.textContent = "NEFT / IMPS UTR संदर्भ";
+        wrap.style.display = 'block';
+      } else {
+        lbl.textContent = "संदर्भ (यदि कोई हो)";
+        wrap.style.display = 'block';
+      }
+    }
+
+    document.getElementById('declAmount').addEventListener('input', function() {
+      const words = numberToHindiWords(this.value);
+      document.getElementById('declAmountWords').textContent = this.value ? `${words} रुपये मात्र` : 'राशि शब्दों में...';
+    });
+
+    function updateCollAmountWords(val) {
+      const words = numberToHindiWords(val);
+      document.getElementById('collAmountWords').textContent = val ? `${words} रुपये मात्र` : 'राशि शब्दों में...';
+    }
+
+    /* ============================================================
+       SAVE DECLARATION (TAB 1)
+       ============================================================ */
+    async function handleSaveDeclaration(e) {
+      e.preventDefault();
+
+      let maxSno = 0;
+      declarationsList.forEach(d => {
+        const s = parseInt(d.sno, 10);
+        if (!isNaN(s) && s > maxSno) maxSno = s;
+      });
+      const nextSno = maxSno + 1;
+
+      const name = document.getElementById('declName').value.trim();
+      let city = document.getElementById('declVillageSelect').value;
+      if (city === 'other') {
+        city = document.getElementById('declCustomVillage').value.trim() || 'अन्य';
+      }
+      const amount = parseFloat(document.getElementById('declAmount').value) || 0;
+      const mobile = document.getElementById('declMobile').value.trim();
+      const date = document.getElementById('declDate').value;
+      const collector = document.getElementById('declCollector').value.trim();
+      const notes = document.getElementById('declNotes').value.trim();
+
+      const newDecl = {
+        sno: nextSno,
+        name: name,
+        city: city,
+        notes: notes,
+        mobile: mobile,
+        amount: amount,
+        deposited: 0,
+        balance: amount,
+        receipt: "-",
+        date: date,
+        collector: collector
+      };
+
+      // 1. Save locally
+      declarationsList.unshift(newDecl);
+      try {
+        const custom = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
+        custom.push(newDecl);
+        localStorage.setItem('koteshwar_custom_declarations', JSON.stringify(custom));
+        localStorage.setItem('koteshwar_declarations_cache', JSON.stringify(declarationsList));
+      } catch (err) {}
+
+      // 2. Post to Webhook if available
+      postWebhookData('addDeclaration', newDecl);
+
+      renderAllPortals();
+
+      // Offer immediate collection
+      if (confirm(`घोषणा सुरक्षित हो गई!\n\nदानदाता: ${name} (ग्राम: ${city})\nघोषित संकल्प: ${fmt(amount)}\n\nक्या आप अभी इस दानदाता के लिए धन प्राप्ति रसीद काटना चाहते हैं?`)) {
+        document.getElementById('newDeclarationForm').reset();
+        selectDonorForCollection(newDecl);
+        switchPortalTab('new-collection');
+      } else {
+        document.getElementById('newDeclarationForm').reset();
+        document.getElementById('declAmountWords').textContent = 'राशि शब्दों में...';
+      }
+    }
+
+    /* ============================================================
+       DONOR LOOKUP & SELECTION (TAB 2)
+       ============================================================ */
+    function toggleDirectDonorMode(isDirect) {
+      document.getElementById('donorLookupGroup').style.display = isDirect ? 'none' : 'block';
+      document.getElementById('directDonorFields').style.display = isDirect ? 'grid' : 'none';
+      if (isDirect) clearSelectedDonor();
+    }
+
+    function handleDonorSearchInput(val) {
+      const box = document.getElementById('donorSuggestionsBox');
+      const q = val.trim().toLowerCase();
+      if (!q || q.length < 1) {
+        box.style.display = 'none';
+        return;
+      }
+
+      const matches = declarationsList.filter(d => {
+        const name = String(d.name || '').toLowerCase();
+        const city = String(d.city || '').toLowerCase();
+        const sno = String(d.sno || '');
+        const mob = String(d.mobile || '');
+        return name.includes(q) || city.includes(q) || sno === q || mob.includes(q);
+      }).slice(0, 10);
+
+      if (matches.length === 0) {
+        box.innerHTML = `<div style="padding:10px;font-size:12px;color:var(--text-muted);text-align:center;">कोई दानदाता नहीं मिला। कृपया सीधे नया नाम दर्ज करें।</div>`;
+        box.style.display = 'block';
+        return;
+      }
+
+      box.innerHTML = matches.map(m => `
+        <div class="donor-suggestion-item" onclick="selectDonorFromList(${m.sno})">
+          <div>
+            <div class="s-name">${m.name}</div>
+            <div class="s-meta">क्र. #${m.sno} • ग्राम: ${m.city} • जमा: ${fmt(m.deposited)} • शेष: ${fmt(m.balance)}</div>
+          </div>
+          <div class="s-amt">${fmt(m.amount)}</div>
+        </div>
+      `).join('');
+      box.style.display = 'block';
+    }
+
+    function selectDonorFromList(sno) {
+      const donor = declarationsList.find(d => String(d.sno) === String(sno));
+      if (donor) selectDonorForCollection(donor);
+      document.getElementById('donorSuggestionsBox').style.display = 'none';
+      document.getElementById('donorSearchInput').value = donor ? donor.name : '';
+    }
+
+    function selectDonorForCollection(donor) {
+      selectedDonor = donor;
+      document.getElementById('selectedDonorBanner').classList.add('visible');
+      document.getElementById('selDonorName').textContent = donor.name;
+      document.getElementById('selDonorMeta').textContent = `क्रम संख्या: #${donor.sno} | ग्राम: ${donor.city}`;
+      document.getElementById('selPledgedAmt').textContent = fmt(donor.amount);
+      document.getElementById('selDepositedAmt').textContent = fmt(donor.deposited);
+      document.getElementById('selBalanceAmt').textContent = fmt(donor.balance);
+
+      // Pre-fill suggested collection amount with remaining balance
+      if (donor.balance > 0) {
+        document.getElementById('collAmount').value = donor.balance;
+        updateCollAmountWords(donor.balance);
+      }
+    }
+
+    function clearSelectedDonor() {
+      selectedDonor = null;
+      document.getElementById('selectedDonorBanner').classList.remove('visible');
+      document.getElementById('donorSearchInput').value = '';
+    }
+
+    /* ============================================================
+       SAVE COLLECTION (TAB 2)
+       ============================================================ */
+    async function handleSaveCollection(e) {
+      e.preventDefault();
+
+      const isDirect = document.getElementById('chkDirectDonor').checked;
+      let donorSno = null;
+      let donorName = "";
+      let city = "";
+      let mobile = "";
+      let pledgedAmt = 0;
+
+      if (isDirect) {
+        donorName = document.getElementById('directDonorName').value.trim();
+        city = document.getElementById('directDonorCity').value.trim() || 'अन्य';
+        mobile = document.getElementById('directDonorMobile').value.trim();
+        pledgedAmt = parseFloat(document.getElementById('collAmount').value) || 0;
+      } else {
+        if (!selectedDonor) {
+          alert("कृपया दानदाता सूची में से दानदाता का चयन करें!");
+          document.getElementById('donorSearchInput').focus();
+          return;
+        }
+        donorSno = selectedDonor.sno;
+        donorName = selectedDonor.name;
+        city = selectedDonor.city;
+        mobile = selectedDonor.mobile || '';
+        pledgedAmt = selectedDonor.amount;
+      }
+
+      const receiptNo = document.getElementById('collReceiptNo').value.trim();
+      const amount = parseFloat(document.getElementById('collAmount').value) || 0;
+      const paymentMode = document.getElementById('collPaymentMode').value;
+      const refNo = document.getElementById('collRefNo').value.trim();
+      const date = document.getElementById('collDate').value;
+      const collector = document.getElementById('collCollector').value.trim();
+      const remarks = document.getElementById('collRemarks').value.trim();
+
+      const newCollection = {
+        id: "coll_" + Date.now(),
+        receiptNo: receiptNo,
+        donorSno: donorSno,
+        donorName: donorName,
+        city: city,
+        mobile: mobile,
+        amount: amount,
+        paymentMode: paymentMode,
+        refNo: refNo,
+        date: date,
+        collector: collector,
+        remarks: remarks,
+        timestamp: new Date().toISOString()
+      };
+
+      // 1. Add to separate collections ledger
+      collectionsList.unshift(newCollection);
+      saveCollectionsToStorage();
+
+      // 2. Update donor declaration
+      if (donorSno && selectedDonor) {
+        selectedDonor.deposited = (Number(selectedDonor.deposited) || 0) + amount;
+        selectedDonor.balance = Math.max(0, (Number(selectedDonor.amount) || 0) - selectedDonor.deposited);
+        try {
+          localStorage.setItem('koteshwar_declarations_cache', JSON.stringify(declarationsList));
+        } catch (err) {}
+      }
+
+      // 3. Post to Google Sheet webhook
+      postWebhookData('addCollection', newCollection);
+
+      renderAllPortals();
+
+      // 4. Open Official Receipt Modal
+      openReceiptModal({
+        receiptNo: receiptNo,
+        date: date,
+        name: donorName,
+        city: city,
+        mobile: mobile,
+        amount: amount,
+        paymentMode: paymentMode,
+        refNo: refNo,
+        collector: collector,
+        pledged: pledgedAmt || amount,
+        deposited: donorSno && selectedDonor ? selectedDonor.deposited : amount,
+        balance: donorSno && selectedDonor ? selectedDonor.balance : 0
+      });
+
+      // Reset form
+      document.getElementById('newCollectionForm').reset();
+      clearSelectedDonor();
+      updateNextDeclarationSno();
+    }
+
+    /* ============================================================
+       DIGITAL RECEIPT & WHATSAPP MODAL
+       ============================================================ */
+    function openReceiptModal(rcpt) {
+      document.getElementById('rcptViewNo').textContent = rcpt.receiptNo;
+      document.getElementById('rcptViewDate').textContent = rcpt.date;
+      document.getElementById('rcptViewName').textContent = rcpt.name;
+      document.getElementById('rcptViewCity').textContent = rcpt.city;
+      document.getElementById('rcptViewMode').textContent = rcpt.paymentMode;
+
+      const refRow = document.getElementById('rcptViewRefRow');
+      if (rcpt.refNo) {
+        document.getElementById('rcptViewRef').textContent = rcpt.refNo;
+        refRow.style.display = 'flex';
+      } else {
+        refRow.style.display = 'none';
+      }
+
+      document.getElementById('rcptViewAmount').textContent = fmt(rcpt.amount);
+      const words = numberToHindiWords(rcpt.amount);
+      document.getElementById('rcptViewWords').textContent = `${words} रुपये मात्र`;
+
+      document.getElementById('rcptViewPledged').textContent = fmt(rcpt.pledged);
+      document.getElementById('rcptViewTotalDeposited').textContent = fmt(rcpt.deposited);
+      document.getElementById('rcptViewBalance').textContent = fmt(rcpt.balance);
+      document.getElementById('rcptViewCollector').textContent = rcpt.collector || "अधिकृत प्रतिनिधि";
+
+      const tag = document.getElementById('rcptViewStatusTag');
+      if (rcpt.balance <= 0) {
+        tag.textContent = "स्थिति: संकल्प पूर्ण ✅";
+        tag.style.color = "var(--sage)";
+      } else {
+        tag.textContent = "स्थिति: आंशिक प्राप्त ⏳";
+        tag.style.color = "var(--gold-dark)";
+      }
+
+      // Prepare Devotional WhatsApp Message
+      const waText =
+        `🚩 *माँ नर्मदा घाट निर्माण सेवा महाअभियान* 🚩\n` +
+        `*श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान*\n` +
+        `कोटेश्वर तीर्थ, कोठड़ा (म.प्र.)\n\n` +
+        `*आधिकारिक डिजिटल पावती / धन प्राप्ति रसीद*\n` +
+        `----------------------------------------\n` +
+        `पावती क्रमांक: *${rcpt.receiptNo}*\n` +
+        `दिनांक: *${rcpt.date}*\n` +
+        `दानदाता: *${rcpt.name}*\n` +
+        `ग्राम / नगर: *${rcpt.city}*\n\n` +
+        `माँ नर्मदा के पावन तट पर भव्य घाट निर्माण सेवा महाअभियान हेतु आपका पुनीत जनसहयोग प्राप्त हुआ:\n` +
+        `प्राप्त राशि: *${fmt(rcpt.amount)}*\n` +
+        `(अक्षरी: *${words} रुपये मात्र*)\n` +
+        `भुगतान माध्यम: *${rcpt.paymentMode}* ${rcpt.refNo ? `(संदर्भ: ${rcpt.refNo})` : ''}\n\n` +
+        `कुल घोषित संकल्प: *${fmt(rcpt.pledged)}*\n` +
+        `अब तक कुल जमा: *${fmt(rcpt.deposited)}*\n` +
+        (rcpt.balance > 0 ? `शेष संकल्प राशि: *${fmt(rcpt.balance)}*\n` : `संकल्प स्थिति: *शत-प्रतिशत पूर्ण* ✅\n`) +
+        `अधिकृत प्राप्तकर्ता: *${rcpt.collector || 'कोटेश्वर संस्थान'}*\n\n` +
+        `माँ रेवा की कृपा आप एवं आपके परिवार पर सदैव बनी रहे।\n` +
+        `*॥ नर्मदे हर ॥* 🙏\n\n` +
+        `लाइव वित्तीय पारदर्शिता पोर्टल:\nhttps://koteshwar-ghat-nirman.vercel.app/`;
+
+      const btnWa = document.getElementById('btnShareWhatsAppReceipt');
+      btnWa.onclick = function() {
+        const phone = rcpt.mobile ? rcpt.mobile.replace(/[^0-9]/g, '') : '';
+        const url = phone && phone.length === 10
+          ? `https://api.whatsapp.com/send?phone=91${phone}&text=${encodeURIComponent(waText)}`
+          : `https://api.whatsapp.com/send?text=${encodeURIComponent(waText)}`;
+        window.open(url, '_blank');
+      };
+
+      document.getElementById('receiptModalBackdrop').classList.add('open');
+    }
+
+    function closeReceiptModal(e) {
+      if (e && e.target !== e.currentTarget && !e.target.closest('.btn-modal-close')) return;
+      document.getElementById('receiptModalBackdrop').classList.remove('open');
+    }
+
+    /* ============================================================
+       TABLE RENDERING & FILTERING
+       ============================================================ */
+    // Declarations Ledger Table
+    function renderDeclarationsTable() {
+      const q = (document.getElementById('searchDeclTable')?.value || '').toLowerCase();
+      const village = document.getElementById('filterDeclVillage')?.value || 'all';
+      const status = document.getElementById('filterDeclStatus')?.value || 'all';
+
+      const filtered = declarationsList.filter(d => {
+        const matchesQ = !q || String(d.name).toLowerCase().includes(q) || String(d.city).toLowerCase().includes(q) || String(d.sno) === q;
+        const matchesV = village === 'all' || d.city === village;
+        let matchesS = true;
+        if (status === 'paid') matchesS = d.balance <= 0 && d.deposited > 0;
+        else if (status === 'partial') matchesS = d.deposited > 0 && d.balance > 0;
+        else if (status === 'pending') matchesS = d.deposited === 0;
+        return matchesQ && matchesV && matchesS;
+      });
+
+      const tbody = document.getElementById('declTableBody');
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text-muted);">कोई दानदाता रिकॉर्ड नहीं मिला।</td></tr>`;
+        return;
+      }
+
+      // Display first 100 for speed
+      const displayList = filtered.slice(0, 100);
+      tbody.innerHTML = displayList.map(d => {
+        let statusBadge = '<span class="badge-status pending"><i class="fa-solid fa-clock"></i> शेष</span>';
+        if (d.balance <= 0 && d.deposited > 0) {
+          statusBadge = '<span class="badge-status paid"><i class="fa-solid fa-check"></i> पूर्ण</span>';
+        } else if (d.deposited > 0 && d.balance > 0) {
+          statusBadge = '<span class="badge-status partial"><i class="fa-solid fa-hourglass-half"></i> आंशिक</span>';
+        }
+
+        return `
+          <tr>
+            <td style="font-weight:700;color:var(--text-muted);">#${d.sno}</td>
+            <td><strong>${d.name}</strong>${d.notes ? `<div style="font-size:11px;color:var(--text-muted);">${d.notes}</div>` : ''}</td>
+            <td>${d.city}</td>
+            <td style="text-align:right;font-weight:700;color:var(--teal);">${fmt(d.amount)}</td>
+            <td style="text-align:right;font-weight:700;color:var(--sage);">${fmt(d.deposited)}</td>
+            <td style="text-align:right;font-weight:700;color:var(--saffron);">${fmt(d.balance)}</td>
+            <td style="text-align:center;">${statusBadge}</td>
+            <td style="text-align:center;">
+              <button class="btn-table-action" onclick="jumpToCollection(${d.sno})">
+                <i class="fa-solid fa-plus"></i> जमा लें
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById('declTableSummary').textContent = `दिखाए जा रहे हैं: ${displayList.length} / कुल ${filtered.length} दानदाता`;
+    }
+
+    function filterDeclarationsTable() {
+      renderDeclarationsTable();
+    }
+
+    function jumpToCollection(sno) {
+      const donor = declarationsList.find(d => String(d.sno) === String(sno));
+      if (donor) {
+        selectDonorForCollection(donor);
+        switchPortalTab('new-collection');
+      }
+    }
+
+    // Collections Ledger Table
+    function renderCollectionsTable() {
+      const q = (document.getElementById('searchCollTable')?.value || '').toLowerCase();
+      const mode = document.getElementById('filterCollMode')?.value || 'all';
+
+      const filtered = collectionsList.filter(c => {
+        const matchesQ = !q || String(c.receiptNo).toLowerCase().includes(q) || String(c.donorName).toLowerCase().includes(q) || String(c.city).toLowerCase().includes(q);
+        const matchesM = mode === 'all' || c.paymentMode.includes(mode);
+        return matchesQ && matchesM;
+      });
+
+      const tbody = document.getElementById('collTableBody');
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--text-muted);">कोई संग्रह रिकॉर्ड नहीं है।</td></tr>`;
+        document.getElementById('collTableSummary').textContent = `कुल संग्रह: ₹0 (0 रसीदें)`;
+        return;
+      }
+
+      const totalColl = filtered.reduce((s, c) => s + (Number(c.amount) || 0), 0);
+      tbody.innerHTML = filtered.map(c => `
+        <tr>
+          <td style="font-weight:800;color:var(--teal);">${c.receiptNo}</td>
+          <td>${c.date}</td>
+          <td><strong>${c.donorName}</strong></td>
+          <td>${c.city}</td>
+          <td style="text-align:right;font-weight:800;color:var(--sage);">${fmt(c.amount)}</td>
+          <td><span style="font-size:11.5px;background:var(--sandstone-light);padding:2px 8px;border-radius:10px;">${c.paymentMode}</span></td>
+          <td><span style="font-size:11px;color:var(--text-muted);">${c.refNo || '-'}</span></td>
+          <td><span style="font-size:11.5px;">${c.collector || '-'}</span></td>
+          <td style="text-align:center;">
+            <button class="btn-table-action" onclick="reprintCollectionReceipt('${c.receiptNo}')">
+              <i class="fa-solid fa-receipt"></i> पावती
+            </button>
+          </td>
+        </tr>
+      `).join('');
+
+      document.getElementById('collTableSummary').textContent = `दिखाए जा रहे संग्रह: ${filtered.length} रसीदें • कुल योग: ${fmt(totalColl)}`;
+    }
+
+    function filterCollectionsTable() {
+      renderCollectionsTable();
+    }
+
+    function reprintCollectionReceipt(rcptNo) {
+      const coll = collectionsList.find(c => c.receiptNo === rcptNo);
+      if (!coll) return;
+      const donor = declarationsList.find(d => String(d.sno) === String(coll.donorSno));
+      openReceiptModal({
+        receiptNo: coll.receiptNo,
+        date: coll.date,
+        name: coll.donorName,
+        city: coll.city,
+        mobile: coll.mobile || '',
+        amount: coll.amount,
+        paymentMode: coll.paymentMode,
+        refNo: coll.refNo,
+        collector: coll.collector,
+        pledged: donor ? donor.amount : coll.amount,
+        deposited: donor ? donor.deposited : coll.amount,
+        balance: donor ? donor.balance : 0
+      });
+    }
+
+    // Pending Follow-Up Table
+    function renderPendingTable() {
+      const q = (document.getElementById('searchPendingTable')?.value || '').toLowerCase();
+      const village = document.getElementById('filterPendingVillage')?.value || 'all';
+
+      const pendingDonors = declarationsList.filter(d => (Number(d.balance) > 0)).sort((a, b) => (b.balance - a.balance));
+
+      const filtered = pendingDonors.filter(d => {
+        const matchesQ = !q || String(d.name).toLowerCase().includes(q) || String(d.city).toLowerCase().includes(q) || String(d.sno) === q;
+        const matchesV = village === 'all' || d.city === village;
+        return matchesQ && matchesV;
+      });
+
+      const tbody = document.getElementById('pendingTableBody');
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--sage);font-weight:700;"><i class="fa-solid fa-circle-check"></i> सभी दानदाताओं की राशि पूर्ण प्राप्त हो चुकी है!</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.slice(0, 100).map(d => {
+        const waFollowup = encodeURIComponent(
+          `🚩 *माँ नर्मदा घाट निर्माण सेवा महाअभियान: पावन स्मरण* 🚩\n\n` +
+          `सादर प्रणाम ${d.name} जी,\n` +
+          `श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान, कोटेश्वर तीर्थ (कोठड़ा) घाट निर्माण कार्य में आपके द्वारा माँ नर्मदा के पावन चरणों में *${fmt(d.amount)}* का जनसहयोग संकल्प लिया गया था।\n\n` +
+          `अब तक जमा राशि: *${fmt(d.deposited)}*\n` +
+          `शेष संकल्प राशि: *${fmt(d.balance)}*\n\n` +
+          `घाट निर्माण कार्य तीव्र गति से प्रगति पर है। आपसे सादर विनम्र निवेदन है कि अपनी पावन संकल्प राशि संस्थान के अधिकृत कार्यकर्ताओं अथवा बैंक खाते में समर्पित कर पुण्य के भागी बनें।\n\n` +
+          `*॥ नर्मदे हर ॥* 🙏\n` +
+          `https://koteshwar-ghat-nirman.vercel.app/`
+        );
+
+        return `
+          <tr>
+            <td style="font-weight:700;color:var(--text-muted);">#${d.sno}</td>
+            <td><strong>${d.name}</strong>${d.notes ? `<div style="font-size:11px;color:var(--text-muted);">${d.notes}</div>` : ''}</td>
+            <td>${d.city}</td>
+            <td style="text-align:right;font-weight:700;">${fmt(d.amount)}</td>
+            <td style="text-align:right;font-weight:700;color:var(--sage);">${fmt(d.deposited)}</td>
+            <td style="text-align:right;font-weight:800;color:var(--saffron);">${fmt(d.balance)}</td>
+            <td style="text-align:center;">
+              <div style="display:inline-flex;gap:4px;">
+                <button class="btn-table-action" onclick="jumpToCollection(${d.sno})" style="background:var(--sage-light);color:var(--sage);border-color:var(--sage);">
+                  <i class="fa-solid fa-plus"></i> जमा लें
+                </button>
+                <a href="https://api.whatsapp.com/send?text=${waFollowup}" target="_blank" class="btn-table-action" style="color:var(--whatsapp);border-color:var(--whatsapp);" title="WhatsApp स्मरण भेजें">
+                  <i class="fa-brands fa-whatsapp"></i> स्मरण
+                </a>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterPendingTable() {
+      renderPendingTable();
+    }
+
+    /* ============================================================
+       WEBHOOK POST & SETTINGS
+       ============================================================ */
+    function saveWebhookUrl() {
+      const url = document.getElementById('webhookUrlInput').value.trim();
+      localStorage.setItem('koteshwar_webhook_url', url);
+      webhookUrl = url;
+      alert("वेबहुक URL सफलतापूर्वक सुरक्षित कर दिया गया है!");
+    }
+
+    async function testWebhookConnection() {
+      const url = document.getElementById('webhookUrlInput').value.trim();
+      if (!url) {
+        alert("कृपया पहले Webhook URL दर्ज करें!");
+        return;
+      }
+      try {
+        updateRibbon(true, "वेबहुक कनेक्शन जांचा जा रहा है...");
+        const res = await fetch(url);
+        const data = await res.json();
+        alert("सफल! Google Apps Script से संपर्क स्थापित हो गया है: " + (data.message || "OK"));
+        updateRibbon(false, "वेबहुक सक्रिय एवं प्रमाणित");
+      } catch (err) {
+        alert("वेबहुक से सीधा परीक्षण CORS के कारण ब्राउज़र में ब्लॉक हो सकता है, लेकिन डेटा पोस्टिंग पृष्ठभूमि में कार्य करेगी।");
+        updateRibbon(false, "वेबहुक कॉन्फ़िगर है");
+      }
+    }
+
+    async function postWebhookData(action, data) {
+      if (!webhookUrl) return;
+      try {
+        updateRibbon(true, "Google Sheet में सुरक्षित हो रहा है...");
+        await fetch(webhookUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: action, data: data })
+        });
+        updateRibbon(false, "Google Sheet में डेटा सफलतापूर्वक सुरक्षित किया गया");
+      } catch (e) {
+        console.warn("Webhook post background sync notice:", e);
+        updateRibbon(false, "स्थानीय रूप से सुरक्षित (ऑफ़लाइन कैश)");
+      }
+    }
+
+    /* ============================================================
+       EXPORT & BACKUP UTILITIES
+       ============================================================ */
+    function exportDeclarationsCSV() {
+      let csv = "क्रमांक,दानदाता का नाम,ग्राम/नगर,संदर्भ,घोषित संकल्प (रु),जमा राशि (रु),शेष राशि (रु),रसीद क्र.,दिनांक\n";
+      declarationsList.forEach(d => {
+        csv += `"${d.sno}","${d.name}","${d.city}","${d.notes || ''}","${d.amount}","${d.deposited}","${d.balance}","${d.receipt}","${d.date}"\n`;
+      });
+      downloadBlob(csv, "koteshwar_declarations_ledger.csv", "text/csv;charset=utf-8;");
+    }
+
+    function exportCollectionsCSV() {
+      let csv = "रसीद क्रमांक,दिनांक,दानदाता क्रमांक,दानदाता का नाम,ग्राम/नगर,प्राप्त राशि (रु),भुगतान माध्यम,संदर्भ ID,प्राप्तकर्ता,टिप्पणी\n";
+      collectionsList.forEach(c => {
+        csv += `"${c.receiptNo}","${c.date}","${c.donorSno || ''}","${c.donorName}","${c.city}","${c.amount}","${c.paymentMode}","${c.refNo || ''}","${c.collector || ''}","${c.remarks || ''}"\n`;
+      });
+      downloadBlob(csv, "koteshwar_collections_ledger.csv", "text/csv;charset=utf-8;");
+    }
+
+    function downloadAllDataJSON() {
+      const backup = {
+        declarations: declarationsList,
+        collections: collectionsList,
+        exportDate: new Date().toISOString()
+      };
+      downloadBlob(JSON.stringify(backup, null, 2), "koteshwar_ghat_nirman_backup.json", "application/json;charset=utf-8;");
+    }
+
+    function downloadBlob(content, filename, type) {
+      const blob = new Blob(["\uFEFF" + content], { type: type });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
