@@ -1363,7 +1363,7 @@
     // GViz SQL Query: Fetches columns for complete dynamic accounting:
     // A: S.No., B: Donor Name, C: City, D: In Memory Of / Notes, F: Pledged Amount, G: Receipt No., H: Pledge Date, I: Deposited Amount, L: Balance
     // (Never fetches Col E: Mobile No, Col J: Mode, Col K: Date)
-    const GVIZ_QUERY_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_TAB)}&tq=${encodeURIComponent('SELECT A, B, C, D, F, G, H, I, L')}`;
+    const GVIZ_QUERY_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_TAB)}&tq=${encodeURIComponent('SELECT A, B, C, D, E, F, G, H, I, L')}`;
 
     // Dynamic State (starts empty - no hardcoded donor rows!)
     let declarations = [];
@@ -1372,6 +1372,17 @@
     const PAGE_SIZE = 50;
 
     const fmt = n => "₹" + Math.round(Number(n) || 0).toLocaleString('en-IN');
+
+    function cleanMobileNumber(raw) {
+      if (raw === null || raw === undefined) return '';
+      let str = String(raw).trim();
+      if (str.endsWith('.0')) str = str.slice(0, -2);
+      else if (str.includes('.')) str = str.split('.')[0];
+      str = str.replace(/[^0-9]/g, '');
+      if (str.length === 12 && str.startsWith('91')) str = str.substring(2);
+      else if (str.length === 11 && str.startsWith('0')) str = str.substring(1);
+      return str;
+    }
 
     /* ==================== INSPIRATIONAL STORIES DATA ==================== */
     const STORIES_DATA = [
@@ -1566,16 +1577,18 @@
           const city = c[2] && c[2].v !== null ? String(c[2].v).trim() : "अन्य";
           // Col D: Notes / In Memory Of (3)
           const notes = c[3] && c[3].v !== null ? String(c[3].v).trim() : "";
-          // Col F: Pledged Amount (4 in SELECT query)
-          const rawAmt = c[4] && c[4].v !== null ? String(c[4].v) : "0";
-          // Col G: Receipt No. (5 in SELECT query)
-          const receipt = c[5] && c[5].v !== null ? String(c[5].v).trim() : "-";
-          // Col H: Pledge Date (6 in SELECT query)
-          const dateVal = c[6] ? (c[6].f || c[6].v || "") : "";
-          // Col I: Deposited Amount (7 in SELECT query)
-          const rawDep = c[7] && c[7].v !== null ? String(c[7].v) : "0";
-          // Col L: Balance (8 in SELECT query)
-          const rawBal = c[8] && c[8].v !== null ? String(c[8].v) : "0";
+          // Col E: Mobile No. (4 in SELECT query)
+          const mobile = c[4] ? cleanMobileNumber(c[4].f || c[4].v || "") : "";
+          // Col F: Pledged Amount (5 in SELECT query)
+          const rawAmt = c[5] && c[5].v !== null ? String(c[5].v) : "0";
+          // Col G: Receipt No. (6 in SELECT query)
+          const receipt = c[6] && c[6].v !== null ? String(c[6].v).trim() : "-";
+          // Col H: Pledge Date (7 in SELECT query)
+          const dateVal = c[7] ? (c[7].f || c[7].v || "") : "";
+          // Col I: Deposited Amount (8 in SELECT query)
+          const rawDep = c[8] && c[8].v !== null ? String(c[8].v) : "0";
+          // Col L: Balance (9 in SELECT query)
+          const rawBal = c[9] && c[9].v !== null ? String(c[9].v) : "0";
 
           if (!name && !rawAmt) continue;
 
@@ -1590,6 +1603,7 @@
               name: name,
               city: city || "अन्य",
               notes: notes,
+              mobile: mobile,
               amount: amt,
               deposited: dep,
               balance: bal,
@@ -1614,6 +1628,7 @@
                 const lname = lc[1] && lc[1].v !== null ? String(lc[1].v).trim() : "";
                 const lcity = lc[2] && lc[2].v !== null ? String(lc[2].v).trim() : "अन्य";
                 const lnotes = lc[3] && lc[3].v !== null ? String(lc[3].v).trim() : "";
+                const lmobile = lc[4] ? cleanMobileNumber(lc[4].f || lc[4].v || "") : "";
                 const lamt = parseFloat(String(lc[5] && lc[5].v !== null ? lc[5].v : "0").replace(/[^0-9.]/g, '')) || 0;
                 const lrcpt = lc[6] && lc[6].v !== null ? String(lc[6].v).trim() : "-";
                 const ldate = lc[7] ? (lc[7].f || lc[7].v || "") : "";
@@ -1624,6 +1639,7 @@
                     name: lname,
                     city: lcity,
                     notes: lnotes,
+                    mobile: lmobile,
                     amount: lamt,
                     deposited: 0,
                     balance: lamt,
@@ -1741,6 +1757,7 @@
               d.amount = Number(ed.amount) || d.amount;
               d.receipt = ed.receipt || d.receipt;
               d.date = ed.date || d.date;
+              if (ed.mobile !== undefined) d.mobile = ed.mobile;
               d.balance = Math.max(0, d.amount - (d.deposited || 0));
             }
           });

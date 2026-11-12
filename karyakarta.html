@@ -1539,7 +1539,7 @@
        CONSTANTS & USERS
        ============================================================ */
     const SHEET_ID = '1Gw-tjQuVRzp6jO57jdH7OzvfEx4Brw_DV6uRb1cUDt8';
-    const GVIZ_BULK_DECL_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Declarations&tq=${encodeURIComponent('SELECT A, B, C, D, F, G, H, I, L')}`;
+    const GVIZ_BULK_DECL_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Declarations&tq=${encodeURIComponent('SELECT A, B, C, D, E, F, G, H, I, L')}`;
     const GVIZ_LIVE_DECL_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent('Live Declaration')}`;
     const GVIZ_BULK_COLL_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Collections`;
     const GVIZ_LIVE_COLL_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent('Live Collection')}`;
@@ -1561,6 +1561,17 @@
     let webhookUrl = localStorage.getItem('koteshwar_webhook_url') || '';
 
     const fmt = n => "₹" + Math.round(Number(n) || 0).toLocaleString('en-IN');
+
+    function cleanMobileNumber(raw) {
+      if (raw === null || raw === undefined) return '';
+      let str = String(raw).trim();
+      if (str.endsWith('.0')) str = str.slice(0, -2);
+      else if (str.includes('.')) str = str.split('.')[0];
+      str = str.replace(/[^0-9]/g, '');
+      if (str.length === 12 && str.startsWith('91')) str = str.substring(2);
+      else if (str.length === 11 && str.startsWith('0')) str = str.substring(1);
+      return str;
+    }
 
     /* ============================================================
        NUMBER TO HINDI WORDS CONVERTER
@@ -1868,11 +1879,12 @@
               const name = c[1] && c[1].v !== null ? String(c[1].v).trim() : "";
               const city = c[2] && c[2].v !== null ? String(c[2].v).trim() : "अन्य";
               const notes = c[3] && c[3].v !== null ? String(c[3].v).trim() : "";
-              const rawAmt = c[4] && c[4].v !== null ? String(c[4].v) : "0";
-              const receipt = c[5] && c[5].v !== null ? String(c[5].v).trim() : "-";
-              const dateVal = c[6] ? (c[6].f || c[6].v || "") : "";
-              const rawDep = c[7] && c[7].v !== null ? String(c[7].v) : "0";
-              const rawBal = c[8] && c[8].v !== null ? String(c[8].v) : "0";
+              const mobile = c[4] ? cleanMobileNumber(c[4].f || c[4].v || "") : "";
+              const rawAmt = c[5] && c[5].v !== null ? String(c[5].v) : "0";
+              const receipt = c[6] && c[6].v !== null ? String(c[6].v).trim() : "-";
+              const dateVal = c[7] ? (c[7].f || c[7].v || "") : "";
+              const rawDep = c[8] && c[8].v !== null ? String(c[8].v) : "0";
+              const rawBal = c[9] && c[9].v !== null ? String(c[9].v) : "0";
 
               if (!name && !rawAmt) continue;
               const amt = parseFloat(String(rawAmt).replace(/[^0-9.]/g, '')) || 0;
@@ -1885,6 +1897,7 @@
                   name: name,
                   city: city || "अन्य",
                   notes: notes,
+                  mobile: mobile,
                   amount: amt,
                   initialDeposited: dep,
                   deposited: dep,
@@ -1920,7 +1933,7 @@
               const name = c[1] && c[1].v !== null ? String(c[1].v).trim() : "";
               const city = c[2] && c[2].v !== null ? String(c[2].v).trim() : "अन्य";
               const notes = c[3] && c[3].v !== null ? String(c[3].v).trim() : "";
-              const mobile = c[4] && c[4].v !== null ? String(c[4].v).trim() : "";
+              const mobile = c[4] ? cleanMobileNumber(c[4].f || c[4].v || "") : "";
               const rawAmt = c[5] && c[5].v !== null ? String(c[5].v) : "0";
               const amt = parseFloat(String(rawAmt).replace(/[^0-9.]/g, '')) || 0;
               const receipt = c[6] && c[6].v !== null ? String(c[6].v).trim() : "-";
@@ -2870,7 +2883,8 @@
       const sortOrder = document.getElementById('sortDeclOrder')?.value || 'latest_date';
 
       const filtered = declarationsList.filter(d => {
-        const matchesQ = !q || String(d.name).toLowerCase().includes(q) || String(d.city).toLowerCase().includes(q) || String(d.sno) === q;
+        const mob = cleanMobileNumber(d.mobile);
+        const matchesQ = !q || String(d.name).toLowerCase().includes(q) || String(d.city).toLowerCase().includes(q) || String(d.sno) === q || mob.includes(q);
         const matchesV = village === 'all' || d.city === village;
         return matchesQ && matchesV;
       });
@@ -2908,6 +2922,11 @@
           <td>
             <strong>${d.name}</strong>
             ${d.notes ? `<div style="font-size:10.5px;color:var(--text-muted);">${d.notes}</div>` : ''}
+            ${cleanMobileNumber(d.mobile) ? `
+              <div style="font-size:10.5px;color:var(--teal);margin-top:2px;">
+                <a href="tel:${cleanMobileNumber(d.mobile)}" style="color:var(--teal);text-decoration:none;"><i class="fa-solid fa-phone" style="font-size:9px;"></i> ${cleanMobileNumber(d.mobile)}</a>
+              </div>
+            ` : ''}
             ${d.collectorUsername ? `<div style="font-size:9.5px;color:var(--teal);margin-top:2px;"><i class="fa-solid fa-user-check"></i> ${d.collector || d.collectorUsername}</div>` : ''}
           </td>
           <td>${d.city}</td>
@@ -3145,19 +3164,21 @@
       }
 
       tbody.innerHTML = filtered.slice(0, 150).map(d => {
+        const cleanPhone = cleanMobileNumber(d.mobile);
         const waRemind = encodeURIComponent(
           `🚩 *माँ नर्मदा घाट निर्माण सेवा महाअभियान: पावन स्मरण* 🚩\n\n` +
           `सादर प्रणाम ${d.name} जी,\n` +
           `कोटेश्वर तीर्थ (कोठड़ा) घाट निर्माण कार्य में आपके द्वारा माँ नर्मदा के पावन चरणों में *${fmt(d.amount)}* का जनसहयोग संकल्प लिया गया था।\n\n` +
+          `स्थान / ग्राम: *${d.city || 'अन्य'}*\n` +
+          (cleanPhone ? `पंजीकृत मोबाइल: *${cleanPhone}*\n` : '') +
           `जमा राशि: *${fmt(d.deposited)}*\n` +
           `शेष संकल्प राशि: *${fmt(d.balance)}*\n\n` +
           `घाट निर्माण कार्य तीव्र गति से प्रगति पर है। आपसे सादर विनम्र निवेदन है कि अपनी पावन संकल्प राशि संस्थान के कार्यकर्ताओं अथवा बैंक खाते में समर्पित कर पुण्य के भागी बनें।\n\n` +
           `*॥ नर्मदे हर ॥* 🙏\n` +
           `https://koteshwar-ghat-nirman.vercel.app/`
         );
-        const phone = d.mobile ? String(d.mobile).replace(/[^0-9]/g, '') : '';
-        const waUrl = phone && phone.length === 10
-          ? `https://api.whatsapp.com/send?phone=91${phone}&text=${waRemind}`
+        const waUrl = cleanPhone && cleanPhone.length === 10
+          ? `https://api.whatsapp.com/send?phone=91${cleanPhone}&text=${waRemind}`
           : `https://api.whatsapp.com/send?text=${waRemind}`;
 
         return `
@@ -3169,7 +3190,17 @@
             <td>
               <strong>${d.name}</strong>
               ${d.notes ? `<div style="font-size:10.5px;color:var(--text-muted);">${d.notes}</div>` : ''}
-              ${d.mobile ? `<div style="font-size:10.5px;color:var(--teal);margin-top:2px;"><i class="fa-solid fa-phone" style="font-size:9px;"></i> ${d.mobile}</div>` : ''}
+              ${cleanPhone ? `
+                <div style="font-size:11px;color:var(--teal);margin-top:3px;font-weight:600;">
+                  <a href="tel:${cleanPhone}" style="color:var(--teal);text-decoration:none;display:inline-flex;align-items:center;gap:4px;" title="${cleanPhone} पर कॉल करें">
+                    <i class="fa-solid fa-phone" style="font-size:10px;"></i> ${cleanPhone}
+                  </a>
+                </div>
+              ` : `
+                <div style="font-size:10.5px;color:#d97706;margin-top:3px;cursor:pointer;" onclick="openEditDeclarationModal(${d.sno})" title="मोबाइल नंबर जोड़ें">
+                  <i class="fa-solid fa-phone-slash" style="font-size:9.5px;"></i> <span style="text-decoration:underline;">+ मोबाइल जोड़ें</span>
+                </div>
+              `}
             </td>
             <td>${d.city}</td>
             <td style="text-align:right;font-size:12px;">${fmt(d.amount)}</td>
@@ -3180,9 +3211,21 @@
                 <button class="btn-outline-action" onclick="jumpToCollection(${d.sno})" style="padding:3px 7px;font-size:11px;" title="रसीद काटें">
                   <i class="fa-solid fa-plus"></i> रसीद
                 </button>
-                <a href="${waUrl}" target="_blank" class="btn-wa-sm" title="WhatsApp पर स्मरण संदेश भेजें">
-                  <i class="fa-brands fa-whatsapp"></i> स्मरण
-                </a>
+                ${cleanPhone && cleanPhone.length === 10 ? `
+                  <a href="tel:${cleanPhone}" class="btn-outline-action" style="padding:3px 6px;font-size:11px;color:var(--teal);border-color:var(--teal);" title="${cleanPhone} पर कॉल करें">
+                    <i class="fa-solid fa-phone"></i>
+                  </a>
+                  <a href="${waUrl}" target="_blank" class="btn-wa-sm" title="WhatsApp पर ${cleanPhone} को स्मरण भेजें">
+                    <i class="fa-brands fa-whatsapp"></i> स्मरण
+                  </a>
+                ` : `
+                  <a href="${waUrl}" target="_blank" class="btn-wa-sm" title="WhatsApp पर स्मरण भेजें (संपर्क चुनें)">
+                    <i class="fa-brands fa-whatsapp"></i> स्मरण
+                  </a>
+                `}
+                <button class="btn-action-icon edit" onclick="openEditDeclarationModal(${d.sno})" title="मोबाइल / विवरण संपादित करें" style="padding:3px 6px;">
+                  <i class="fa-solid fa-pen" style="font-size:10px;"></i>
+                </button>
               </div>
             </td>
           </tr>
