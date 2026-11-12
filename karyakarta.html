@@ -856,11 +856,24 @@
             </div>
 
             <div class="form-group">
-              <label>ग्राम / नगर <span class="req">*</span></label>
-              <input type="text" id="declVillageQuickSearch" class="form-input" placeholder="🔍 त्वरित ग्राम खोज (उदा. निसरपुर, कुक्षी, कोठड़ा...)" oninput="filterVillageOptions(this.value, 'declVillageSelect')" style="margin-bottom:6px;font-size:12px;padding:6px 10px;" />
-              <select id="declVillageSelect" class="form-select" required>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <label style="margin:0;">ग्राम / नगर <span class="req">*</span></label>
+                <button type="button" class="btn-outline-action" onclick="toggleAddNewVillage('decl')" style="padding:1px 7px;font-size:10.5px;color:var(--teal);">
+                  <i class="fa-solid fa-plus"></i> नया ग्राम जोड़ें
+                </button>
+              </div>
+              <input type="text" id="declVillageQuickSearch" class="form-input" placeholder="🔍 अंग्रेज़ी या हिंदी में लिखें (उदा. Nisarpur, Kukshi, कोठड़ा...)" oninput="filterVillageOptions(this.value, 'declVillageSelect', 'decl')" style="margin-bottom:6px;font-size:12px;padding:6px 10px;" />
+              <select id="declVillageSelect" class="form-select" onchange="handleVillageSelectChange(this, 'decl')" required>
                 <option value="">-- ग्राम चुनें --</option>
               </select>
+              <div id="declNewVillageWrap" style="display:none;margin-top:6px;background:rgba(18,63,66,0.05);padding:6px 8px;border-radius:6px;border:1px dashed var(--teal);">
+                <div style="display:flex;gap:6px;">
+                  <input type="text" id="declNewVillageInput" class="form-input" placeholder="नया ग्राम नाम लिखें (उदा. राजपुर)" style="font-size:12px;" />
+                  <button type="button" class="btn-submit-action" onclick="confirmAddNewVillage('decl')" style="padding:6px 12px;font-size:11.5px;white-space:nowrap;">
+                    जोड़ें
+                  </button>
+                </div>
+              </div>
             </div>
 
             <div class="form-group">
@@ -942,10 +955,24 @@
               <input type="text" id="directDonorName" class="form-input" placeholder="दानदाता का नाम" />
             </div>
             <div class="form-group">
-              <label>ग्राम / नगर <span class="req">*</span></label>
-              <select id="directDonorCity" class="form-select">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <label style="margin:0;">ग्राम / नगर <span class="req">*</span></label>
+                <button type="button" class="btn-outline-action" onclick="toggleAddNewVillage('direct')" style="padding:1px 7px;font-size:10.5px;color:var(--teal);">
+                  <i class="fa-solid fa-plus"></i> नया ग्राम
+                </button>
+              </div>
+              <input type="text" id="directVillageQuickSearch" class="form-input" placeholder="🔍 खोजें (उदा. Nisarpur...)" oninput="filterVillageOptions(this.value, 'directDonorCity', 'direct')" style="margin-bottom:6px;font-size:12px;padding:6px 10px;" />
+              <select id="directDonorCity" class="form-select" onchange="handleVillageSelectChange(this, 'direct')">
                 <option value="">-- ग्राम चुनें --</option>
               </select>
+              <div id="directNewVillageWrap" style="display:none;margin-top:6px;background:rgba(18,63,66,0.05);padding:6px 8px;border-radius:6px;border:1px dashed var(--teal);">
+                <div style="display:flex;gap:6px;">
+                  <input type="text" id="directNewVillageInput" class="form-input" placeholder="नया ग्राम नाम (उदा. राजपुर)" style="font-size:12px;" />
+                  <button type="button" class="btn-submit-action" onclick="confirmAddNewVillage('direct')" style="padding:6px 12px;font-size:11.5px;white-space:nowrap;">
+                    जोड़ें
+                  </button>
+                </div>
+              </div>
             </div>
             <div class="form-group">
               <label>मोबाइल नंबर</label>
@@ -1132,39 +1159,84 @@
     <!-- ==================== TAB 5: PENDING FOLLOW-UP LIST ==================== -->
     <div class="portal-pane" id="pane-pending-list">
       <div class="form-box-card">
-        <div class="form-box-head">
-          <h3><i class="fa-solid fa-hourglass-half" style="color:var(--saffron);"></i> लंबित वसूली सूची (बकाया संकल्प)</h3>
-          <span style="font-size:11px;color:var(--saffron);font-weight:700;">प्राथमिकता क्रम (अधिकतम बकाया पहले)</span>
+        <div class="form-box-head" style="flex-wrap:wrap;gap:8px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <h3><i class="fa-solid fa-hourglass-half" style="color:var(--saffron);"></i> लंबित वसूली सूची (बकाया संकल्प)</h3>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span id="pendingStatsBadge" style="font-size:11.5px;color:var(--saffron);font-weight:700;background:rgba(217,119,6,0.1);padding:4px 10px;border-radius:12px;border:1px solid rgba(217,119,6,0.25);">लोड हो रहा है...</span>
+            <button class="btn-outline-action" onclick="exportPendingCSV()" title="लंबित वसूली सूची CSV डाउनलोड करें" style="padding:4px 10px;font-size:11.5px;">
+              <i class="fa-solid fa-file-csv"></i> CSV
+            </button>
+          </div>
         </div>
 
-        <div class="ledger-controls-row">
-          <div class="search-input-wrap">
+        <!-- Comprehensive Multi-Filter Bar -->
+        <div class="ledger-controls-row" style="flex-wrap:wrap;gap:8px;background:var(--sandstone-light);padding:10px;border-radius:10px;margin-bottom:12px;">
+          <!-- 1. Text Search (Name, SNo, Notes, Mobile) -->
+          <div class="search-input-wrap" style="flex:1;min-width:180px;">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchPendingTable" placeholder="दानदाता या ग्राम खोजें..." oninput="filterPendingTable()" />
+            <input type="text" id="searchPendingTable" placeholder="दानदाता, ग्राम, मोबाइल या #क्र..." oninput="filterPendingTable()" />
           </div>
+
+          <!-- 2. Village Filter (All villages + canonical & new) -->
+          <select id="filterPendingVillage" class="form-select" style="max-width:150px;" onchange="filterPendingTable()">
+            <option value="all">सभी ग्राम</option>
+          </select>
+
+          <!-- 3. Declaration Date Filter -->
+          <div style="display:flex;align-items:center;gap:4px;background:#FFFFFF;padding:2px 8px;border-radius:8px;border:1px solid #D6D0C4;">
+            <label style="font-size:11px;color:var(--text-muted);white-space:nowrap;"><i class="fa-regular fa-calendar"></i> दिनांक:</label>
+            <input type="date" id="filterPendingDate" style="border:none;outline:none;font-size:11.5px;padding:3px;max-width:125px;background:transparent;" onchange="filterPendingTable()" title="घोषणा दिनांक से फ़िल्टर करें" />
+            <button type="button" class="btn-outline-action" onclick="clearPendingDateFilter()" title="दिनांक फ़िल्टर हटाएं" style="padding:2px 6px;font-size:10px;border:none;">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+
+          <!-- 4. Amount Range Filter -->
+          <select id="filterPendingAmount" class="form-select" style="max-width:155px;" onchange="filterPendingTable()">
+            <option value="all">सभी बकाया राशि</option>
+            <option value="50k_plus">₹50,000+ (विशिष्ट)</option>
+            <option value="21k_50k">₹21,000 - ₹50,000</option>
+            <option value="11k_21k">₹11,000 - ₹21,000</option>
+            <option value="5k_11k">₹5,000 - ₹11,000</option>
+            <option value="under_5k">₹5,000 तक</option>
+          </select>
+
+          <!-- 5. Sort By Dropdown -->
+          <select id="sortPendingOrder" class="form-select" style="max-width:175px;" onchange="filterPendingTable()">
+            <option value="balance_desc" selected>💰 अधिकतम बकाया पहले</option>
+            <option value="latest_date">📅 नवीनतम घोषणा दिनांक</option>
+            <option value="oldest_date">⏳ पुरानी घोषणा (दीर्घ बकाया)</option>
+            <option value="amount_desc">💎 कुल संकल्प (अधिकतम)</option>
+            <option value="sno_asc">🔢 क्रम संख्या (#1...)</option>
+            <option value="name_asc">👤 नाम (अ से ज्ञ)</option>
+          </select>
         </div>
 
         <div class="table-container">
           <table class="data-table" id="pendingTable">
             <thead>
               <tr>
-                <th>क्र.</th>
-                <th>दानदाता</th>
-                <th>ग्राम</th>
-                <th style="text-align:right;">संकल्प</th>
+                <th style="width:45px;">क्र.</th>
+                <th style="width:95px;">घोषणा दिनांक</th>
+                <th>दानदाता का नाम</th>
+                <th>ग्राम / नगर</th>
+                <th style="text-align:right;">संकल्प (₹)</th>
+                <th style="text-align:right;">जमा (₹)</th>
                 <th style="text-align:right;">बकाया (₹)</th>
-                <th style="text-align:center;">कार्यवाही</th>
+                <th style="text-align:center;width:125px;">कार्यवाही</th>
               </tr>
             </thead>
             <tbody id="pendingTableBody">
-              <tr><td colspan="6" style="text-align:center;padding:20px;">लोड हो रहा है...</td></tr>
+              <tr><td colspan="8" style="text-align:center;padding:24px;">लोड हो रहा है...</td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- ==================== TAB 6: DATA SINKS & SETTINGS (डेटा कहाँ जाता है) ==================== -->
+    <!-- ==================== TAB 6: DATA SINKS<!-- ==================== TAB 6: DATA SINKS & SETTINGS (डेटा कहाँ जाता है) ==================== -->
     <div class="portal-pane" id="pane-settings-sync">
       <!-- Data Sinks Architecture Info Box -->
       <div class="form-box-card">
@@ -1346,8 +1418,22 @@
           </div>
           <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
             <div class="form-group">
-              <label>ग्राम / नगर <span style="color:var(--saffron);">*</span></label>
-              <select id="editDeclCity" class="form-select" required></select>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <label style="margin:0;">ग्राम / नगर <span style="color:var(--saffron);">*</span></label>
+                <button type="button" class="btn-outline-action" onclick="toggleAddNewVillage('editDecl')" style="padding:1px 7px;font-size:10.5px;color:var(--teal);">
+                  <i class="fa-solid fa-plus"></i> नया ग्राम
+                </button>
+              </div>
+              <input type="text" id="editDeclVillageQuickSearch" class="form-input" placeholder="🔍 खोजें (उदा. Nisarpur...)" oninput="filterVillageOptions(this.value, 'editDeclCity', 'editDecl')" style="margin-bottom:6px;font-size:12px;padding:6px 10px;" />
+              <select id="editDeclCity" class="form-select" onchange="handleVillageSelectChange(this, 'editDecl')" required></select>
+              <div id="editDeclNewVillageWrap" style="display:none;margin-top:6px;background:rgba(18,63,66,0.05);padding:6px 8px;border-radius:6px;border:1px dashed var(--teal);">
+                <div style="display:flex;gap:6px;">
+                  <input type="text" id="editDeclNewVillageInput" class="form-input" placeholder="नया ग्राम नाम" style="font-size:12px;" />
+                  <button type="button" class="btn-submit-action" onclick="confirmAddNewVillage('editDecl')" style="padding:6px 12px;font-size:11.5px;white-space:nowrap;">
+                    जोड़ें
+                  </button>
+                </div>
+              </div>
             </div>
             <div class="form-group">
               <label>संकल्प राशि (₹) <span style="color:var(--saffron);">*</span></label>
@@ -2000,7 +2086,7 @@
     const CANONICAL_VILLAGES = [
       "अंजड़", "अजन्दा", "अमलाल", "अम्बाड़ा", "आलिराजपुर", "आली", "इन्दौर", "उज्जैन", "एकलदुना",
       "कडमाल / खापरखेड़ा", "करोली", "कापसी", "कुक्षी", "कोटेश्वर / कोठड़ा", "कोठड़ा", "कोलगांव",
-      "खण्डवा", "खराजना", "गंधवानी", "गणपुर", "घुलासा", "चिखल्da", "चिखल्दा", "जांगरवा", "जामली", "जोतपुर",
+      "खण्डवा", "खराजना", "गंधवानी", "गणपुर", "घुलासा", "चिखल्दा", "जांगरवा", "जामली", "जोतपुर",
       "जोबट", "झाबुआ", "डेहर", "डेहरी", "डोंगरगांव", "ढुकणी", "तेजगदिया पुरा", "देवगढ़", "देवला",
       "देशवाल्या", "धार", "नगुर", "ननोदा", "नर्मदानगर", "नवादपुरा", "नानपुर", "निम्बोल", "निसरपुर",
       "पंचखेड़ा", "पिपल्या", "फुलगांव", "बड़दा", "बड़वानी", "बड़वान्या", "बड़ा बड़दा", "बाजरी खेड़ा",
@@ -2008,6 +2094,163 @@
       "मोदनी", "रतलाम", "रसवा", "रिंगनोद", "रेपकुआ", "लिंगवा", "लोणी", "लोहारा", "लोहारी",
       "साततलाई", "सिरसाला", "सिलकुआ", "सुसारी", "सेंधवा", "सेमल्या", "अन्य"
     ];
+
+    // Comprehensive English/Roman to Hindi village mapping for instant search & auto-fill
+    const VILLAGE_ALIASES = {
+      'nisarpur': 'निसरपुर', 'nisarpura': 'निसरपुर', 'nissarpur': 'निसरपुर', 'nisar': 'निसरपुर', 'nisurpur': 'निसरपुर', 'nisharpur': 'निसरपुर',
+      'kukshi': 'कुक्षी', 'kuxi': 'कुक्षी', 'kuksi': 'कुक्षी', 'kuxy': 'कुक्षी',
+      'kothda': 'कोठड़ा', 'kothada': 'कोठड़ा', 'koteshwar': 'कोटेश्वर / कोठड़ा', 'kotda': 'कोठड़ा', 'koteswar': 'कोटेश्वर / कोठड़ा', 'kothra': 'कोठड़ा',
+      'silkua': 'सिलकुआ', 'silkuwa': 'सिलकुआ', 'silkuva': 'सिलकुआ', 'silqua': 'सिलकुआ', 'shilkua': 'सिलकुआ',
+      'deshwalya': 'देशवाल्या', 'deshwalia': 'देशवाल्या', 'deshwaliya': 'देशवाल्या', 'deshvalya': 'देशवाल्या',
+      'nanpur': 'नानपुर', 'naanpur': 'नानपुर',
+      'susari': 'सुसारी', 'susaari': 'सुसारी', 'soosari': 'सुसारी',
+      'kadmal': 'कडमाल / खापरखेड़ा', 'khaparkheda': 'कडमाल / खापरखेड़ा', 'khaparkhedi': 'कडमाल / खापरखेड़ा',
+      'gandhwani': 'गंधवानी', 'gandhvani': 'गंधवानी',
+      'ghulasa': 'घुलासा', 'ghulaasa': 'घुलासा', 'gulasa': 'घुलासा',
+      'khandwa': 'खण्डवा', 'khandva': 'खण्डवा',
+      'alirajpur': 'आलिराजपुर', 'aalirajpur': 'आलिराजपुर',
+      'loni': 'लोणी', 'lonee': 'लोणी',
+      'bhavariyan': 'भवरियां', 'bhavariya': 'भवरियां', 'bhawariya': 'भवरियां',
+      'nimbol': 'निम्बोल', 'neembol': 'निम्बोल',
+      'badwani': 'बड़वानी', 'barwani': 'बड़वानी', 'barvani': 'बड़वानी', 'badvani': 'बड़वानी',
+      'kolgaon': 'कोलगांव', 'kolgav': 'कोलगांव', 'kolganw': 'कोलगांव',
+      'piplya': 'पिपल्या', 'pipliya': 'पिपल्या',
+      'manawar': 'मनावर', 'manavar': 'मनावर',
+      'lingwa': 'लिंगवा', 'lingva': 'लिंगवा',
+      'semlya': 'सेमल्या', 'semaliya': 'सेमल्या',
+      'barda': 'बड़दा', 'barada': 'बड़दा', 'bada barda': 'बड़ा बड़दा',
+      'kharajna': 'खराजना', 'kharajana': 'खराजना',
+      'anjad': 'अंजड़', 'anjud': 'अंजड़',
+      'bedwalya': 'बेड़वाल्या', 'bedwaliya': 'बेड़वाल्या',
+      'ali': 'आली', 'aali': 'आली',
+      'ujjain': 'उज्जैन', 'ujjan': 'उज्जैन',
+      'dhar': 'धार', 'dhaar': 'धार',
+      'indore': 'इन्दौर', 'indor': 'इन्दौर',
+      'dhamnod': 'धामनोद',
+      'sendhwa': 'सेंधवा', 'sendhva': 'सेंधवा',
+      'sanawad': 'सनावद', 'sanavad': 'सनावद',
+      'dharampuri': 'धरमपुरी', 'dharmpuri': 'धरमपुरी',
+      'maheshwar': 'महेश्वर',
+      'mandleshwar': 'मण्‍डलेश्‍वर',
+      'khargone': 'खरगोन', 'khargon': 'खरगोन',
+      'badwah': 'बड़वाह', 'barwah': 'बड़वाह',
+      'jobat': 'जोबट', 'jhabua': 'झाबुआ', 'ratlam': 'रतलाम',
+      'bagh': 'बाघ', 'lohari': 'लोहारी', 'dehari': 'डेहरी', 'dehar': 'डेहर',
+      'chikhald': 'चिखल्दा', 'chikhlda': 'चिखल्दा',
+      'jamli': 'जामली', 'kapsi': 'कापसी', 'karoli': 'करोली',
+      'dongargaon': 'डोंगरगांव', 'devgarh': 'देवगढ़', 'devla': 'देवला',
+      'sattalai': 'साततलाई', 'sirsala': 'सिरसाला', 'panchkheda': 'पंचखेड़ा',
+      'fulgaon': 'फुलगांव', 'bajri kheda': 'बाजरी खेड़ा', 'bathi': 'बाठी',
+      'bodhwada': 'बोधवाड़ा', 'mandvi': 'मांडवी', 'modni': 'मोदनी',
+      'raswa': 'रसवा', 'ringnod': 'रिंगनोद', 'repkua': 'रेपकुआ',
+      'lohara': 'लोहारा', 'dhukni': 'ढुकणी', 'amlaal': 'अमलाल', 'ambada': 'अम्बाड़ा',
+      'ajanda': 'अजन्दा', 'ganpur': 'गणपुर', 'jangarwa': 'जांगरवा', 'jodhpur': 'जोतपुर',
+      'nagur': 'नगुर', 'nanoda': 'ननोदा', 'narmadanagar': 'नर्मदानगर', 'nawadpura': 'नवादपुरा',
+      'tejagadiya pura': 'तेजगदिया पुरा', 'madhya pradesh': 'मध्यप्रदेश', 'maharashtra': 'महाराष्ट्र'
+    };
+
+    function normalizeHindiToRoman(text) {
+      if (!text) return '';
+      const charMap = {
+        'क': 'k', 'ख': 'kh', 'ग': 'g', 'घ': 'gh', 'ङ': 'ng',
+        'च': 'ch', 'छ': 'chh', 'ज': 'j', 'झ': 'jh', 'ञ': 'ny',
+        'ट': 't', 'ठ': 'th', 'ड': 'd', 'ढ': 'dh', 'ण': 'n',
+        'त': 't', 'थ': 'th', 'द': 'd', 'ध': 'dh', 'न': 'n',
+        'प': 'p', 'फ': 'ph', 'ब': 'b', 'भ': 'bh', 'म': 'm',
+        'य': 'y', 'र': 'r', 'ल': 'l', 'व': 'v',
+        'श': 'sh', 'ष': 'sh', 'स': 's', 'ह': 'h',
+        'क्ष': 'ksh', 'त्र': 'tr', 'ज्ञ': 'gy', 'श्र': 'shr',
+        'ा': 'a', 'ि': 'i', 'ी': 'ee', 'ु': 'u', 'ू': 'oo',
+        'े': 'e', 'ै': 'ai', 'ो': 'o', 'ौ': 'au',
+        'ं': 'n', 'ँ': 'n', 'ः': 'h', '्': '',
+        'अ': 'a', 'आ': 'aa', 'इ': 'i', 'ई': 'ee', 'उ': 'u', 'ऊ': 'oo',
+        'ए': 'e', 'ऐ': 'ai', 'ओ': 'o', 'औ': 'au',
+        'ड़': 'd', 'ढ़': 'dh', 'ज़': 'z', 'फ़': 'f'
+      };
+      let result = '';
+      for (let i = 0; i < text.length; i++) {
+        const two = text.substr(i, 2);
+        if (charMap[two] !== undefined) {
+          result += charMap[two];
+          i++;
+        } else if (charMap[text[i]] !== undefined) {
+          result += charMap[text[i]];
+        } else {
+          result += text[i];
+        }
+      }
+      return result.toLowerCase().replace(/[^a-z0-9]/g, '');
+    }
+
+    function getAllKnownVillages() {
+      const villageSet = new Set(CANONICAL_VILLAGES);
+
+      // Add villages from loaded declarations
+      declarationsList.forEach(d => {
+        if (d.city && d.city.trim() && d.city !== 'undefined' && d.city !== 'null') {
+          villageSet.add(d.city.trim());
+        }
+      });
+
+      // Add villages from loaded collections
+      collectionsList.forEach(c => {
+        if (c.city && c.city.trim() && c.city !== 'undefined' && c.city !== 'null') {
+          villageSet.add(c.city.trim());
+        }
+      });
+
+      // Add custom dynamically added villages from localStorage
+      try {
+        const custom = JSON.parse(localStorage.getItem('koteshwar_custom_villages') || '[]');
+        if (Array.isArray(custom)) {
+          custom.forEach(v => {
+            if (v && v.trim()) villageSet.add(v.trim());
+          });
+        }
+      } catch (e) {}
+
+      return Array.from(villageSet).sort((a, b) => a.localeCompare(b, 'hi'));
+    }
+
+    function getMatchingVillages(query) {
+      const q = (query || '').trim().toLowerCase();
+      const allVillages = getAllKnownVillages();
+      if (!q) return allVillages;
+
+      const matches = [];
+      const seen = new Set();
+
+      // 1. Direct alias match (e.g. 'nisarpur' -> 'निसरपुर')
+      for (const [en, hi] of Object.entries(VILLAGE_ALIASES)) {
+        if (en === q || en.startsWith(q) || en.includes(q)) {
+          if (allVillages.includes(hi) && !seen.has(hi)) {
+            matches.push(hi);
+            seen.add(hi);
+          }
+        }
+      }
+
+      // 2. Direct Hindi match (e.g. 'नि' -> 'निसरपुर')
+      for (const v of allVillages) {
+        if (v.toLowerCase().includes(q) && !seen.has(v)) {
+          matches.push(v);
+          seen.add(v);
+        }
+      }
+
+      // 3. Phonetic Roman transliteration match
+      if (matches.length === 0) {
+        for (const v of allVillages) {
+          const rom = normalizeHindiToRoman(v);
+          if (rom.includes(q) && !seen.has(v)) {
+            matches.push(v);
+            seen.add(v);
+          }
+        }
+      }
+
+      return matches;
+    }
 
     function parseDateToTime(dStr, fallbackSno, timestamp) {
       if (timestamp) {
@@ -2070,35 +2313,95 @@
       return str;
     }
 
-    function filterVillageOptions(searchQuery, selectId) {
-      const q = (searchQuery || '').trim().toLowerCase();
+    function filterVillageOptions(searchQuery, selectId, prefix) {
+      const q = (searchQuery || '').trim();
       const select = document.getElementById(selectId);
       if (!select) return;
 
-      const villageSet = new Set(CANONICAL_VILLAGES);
-      declarationsList.forEach(d => {
-        if (d.city && d.city.trim() && d.city !== 'undefined' && d.city !== 'null') {
-          villageSet.add(d.city.trim());
-        }
-      });
-      const all = Array.from(villageSet).sort((a, b) => a.localeCompare(b, 'hi'));
+      const matches = getMatchingVillages(q);
+      const all = getAllKnownVillages();
 
-      const filtered = q ? all.filter(v => v.toLowerCase().includes(q)) : all;
-      select.innerHTML = `<option value="">-- ग्राम चुनें (${filtered.length}) --</option>` +
-        filtered.map(v => `<option value="${v}">${v}</option>`).join('');
-      if (filtered.length === 1) {
-        select.value = filtered[0];
+      let html = `<option value="">-- ग्राम चुनें (${matches.length}) --</option>`;
+
+      // If user typed something not already in list, offer immediate add option
+      if (q && !all.includes(q)) {
+        html += `<option value="__ADD_NEW__" style="color:var(--teal);font-weight:700;">➕ नया ग्राम जोड़ें: "${q}"</option>`;
+      }
+
+      html += matches.map(v => `<option value="${v}">${v}</option>`).join('');
+      select.innerHTML = html;
+
+      // Auto-select exact alias match (e.g. typing 'Nisarpur' auto-selects 'निसरपुर')
+      const aliasMatch = VILLAGE_ALIASES[q.toLowerCase()];
+      if (aliasMatch && matches.includes(aliasMatch)) {
+        select.value = aliasMatch;
+      } else if (matches.length === 1) {
+        select.value = matches[0];
       }
     }
 
-    function populateVillageDropdowns() {
-      const villageSet = new Set(CANONICAL_VILLAGES);
-      declarationsList.forEach(d => {
-        if (d.city && d.city.trim() && d.city !== 'undefined' && d.city !== 'null') {
-          villageSet.add(d.city.trim());
+    function handleVillageSelectChange(selectEl, prefix) {
+      if (!selectEl) return;
+      if (selectEl.value === '__ADD_NEW__') {
+        toggleAddNewVillage(prefix);
+      }
+    }
+
+    function toggleAddNewVillage(prefix) {
+      const wrap = document.getElementById(prefix + 'NewVillageWrap');
+      if (!wrap) return;
+      wrap.style.display = wrap.style.display === 'none' ? 'block' : 'none';
+      if (wrap.style.display === 'block') {
+        const inp = document.getElementById(prefix + 'NewVillageInput');
+        if (inp) {
+          const qs = document.getElementById(prefix + 'VillageQuickSearch');
+          if (qs && qs.value && qs.value.trim() !== '') {
+            inp.value = qs.value.trim();
+          }
+          inp.focus();
         }
-      });
-      const sortedVillages = Array.from(villageSet).sort((a, b) => a.localeCompare(b, 'hi'));
+      }
+    }
+
+    function confirmAddNewVillage(prefix) {
+      const inp = document.getElementById(prefix + 'NewVillageInput');
+      const newName = (inp ? inp.value : '').trim();
+      if (!newName) return alert("कृपया ग्राम का नाम दर्ज करें!");
+
+      addNewVillageToMaster(newName);
+
+      let selectId = 'declVillageSelect';
+      if (prefix === 'direct') selectId = 'directDonorCity';
+      else if (prefix === 'editDecl') selectId = 'editDeclCity';
+      else if (prefix === 'editColl') selectId = 'editCollCity';
+
+      const sel = document.getElementById(selectId);
+      if (sel) sel.value = newName;
+
+      const wrap = document.getElementById(prefix + 'NewVillageWrap');
+      if (wrap) wrap.style.display = 'none';
+
+      alert(`✅ नया ग्राम "${newName}" सफलतापूर्वक सूची में जुड़ गया!`);
+    }
+
+    function addNewVillageToMaster(name) {
+      if (!name) return;
+      const clean = name.trim();
+      if (!clean) return;
+
+      try {
+        let custom = JSON.parse(localStorage.getItem('koteshwar_custom_villages') || '[]');
+        if (!custom.includes(clean)) {
+          custom.push(clean);
+          localStorage.setItem('koteshwar_custom_villages', JSON.stringify(custom));
+        }
+      } catch (e) {}
+
+      populateVillageDropdowns();
+    }
+
+    function populateVillageDropdowns() {
+      const sortedVillages = getAllKnownVillages();
       const optionsHtml = sortedVillages.map(v => `<option value="${v}">${v}</option>`).join('');
 
       // 1. Add Declaration select
@@ -2106,7 +2409,7 @@
       if (declSelect) {
         const cur = declSelect.value;
         declSelect.innerHTML = `<option value="">-- ग्राम चुनें (${sortedVillages.length} ग्राम सूची) --</option>` + optionsHtml;
-        if (cur && villageSet.has(cur)) declSelect.value = cur;
+        if (cur && sortedVillages.includes(cur)) declSelect.value = cur;
       }
 
       // 2. Direct Collection select
@@ -2114,7 +2417,7 @@
       if (dirSelect) {
         const cur = dirSelect.value;
         dirSelect.innerHTML = `<option value="">-- ग्राम चुनें --</option>` + optionsHtml;
-        if (cur && villageSet.has(cur)) dirSelect.value = cur;
+        if (cur && sortedVillages.includes(cur)) dirSelect.value = cur;
       }
 
       // 3. Edit Declaration select
@@ -2122,7 +2425,7 @@
       if (editDeclSelect) {
         const cur = editDeclSelect.value;
         editDeclSelect.innerHTML = `<option value="">-- ग्राम चुनें --</option>` + optionsHtml;
-        if (cur && villageSet.has(cur)) editDeclSelect.value = cur;
+        if (cur && sortedVillages.includes(cur)) editDeclSelect.value = cur;
       }
 
       // 4. Edit Collection select
@@ -2130,7 +2433,7 @@
       if (editCollSelect) {
         const cur = editCollSelect.value;
         editCollSelect.innerHTML = `<option value="">-- ग्राम चुनें --</option>` + optionsHtml;
-        if (cur && villageSet.has(cur)) editCollSelect.value = cur;
+        if (cur && sortedVillages.includes(cur)) editCollSelect.value = cur;
       }
 
       // 5. Filter in declarations table
@@ -2139,6 +2442,23 @@
         const cur = filterSelect.value;
         filterSelect.innerHTML = '<option value="all">सभी ग्राम</option>' + optionsHtml;
         if (cur) filterSelect.value = cur;
+      }
+
+      // 6. Filter in pending follow-up table
+      const pendingFilter = document.getElementById('filterPendingVillage');
+      if (pendingFilter) {
+        const cur = pendingFilter.value;
+        // Show only villages that have pending pledges
+        const pendingVillageSet = new Set();
+        declarationsList.forEach(d => {
+          if (Number(d.balance) > 0 && d.city && d.city.trim()) {
+            pendingVillageSet.add(d.city.trim());
+          }
+        });
+        const pendingVillages = Array.from(pendingVillageSet).sort((a, b) => a.localeCompare(b, 'hi'));
+        pendingFilter.innerHTML = '<option value="all">सभी ग्राम (बकाया)</option>' +
+          pendingVillages.map(v => `<option value="${v}">${v}</option>`).join('');
+        if (cur) pendingFilter.value = cur;
       }
     }
 
@@ -2209,12 +2529,23 @@
       const nextSno = maxSno + 1;
 
       const name = document.getElementById('declName').value.trim();
-      const city = (document.getElementById('declVillageSelect').value || '').trim();
+      let city = (document.getElementById('declVillageSelect').value || '').trim();
+
+      // If user typed a new village in custom input or search box, accept without hard restriction
+      if (!city || city === '__ADD_NEW__') {
+        const customV = (document.getElementById('declNewVillageInput')?.value || '').trim();
+        const quickV = (document.getElementById('declVillageQuickSearch')?.value || '').trim();
+        city = customV || quickV;
+      }
+
       if (!city) {
-        alert("कृपया ग्राम / नगर का चयन करें!");
-        document.getElementById('declVillageSelect').focus();
+        alert("कृपया ग्राम / नगर का चयन करें या नया ग्राम नाम लिखें!");
+        document.getElementById('declVillageQuickSearch').focus();
         return;
       }
+
+      // Save new village to dynamic master list for future dropdowns
+      addNewVillageToMaster(city);
       const amount = parseFloat(document.getElementById('declAmount').value) || 0;
       const mobile = document.getElementById('declMobile').value.trim();
       const date = document.getElementById('declDate').value;
@@ -2684,21 +3015,136 @@
       renderCollectionsTable();
     }
 
+    function clearPendingDateFilter() {
+      const dt = document.getElementById('filterPendingDate');
+      if (dt) dt.value = '';
+      filterPendingTable();
+    }
+
+    function exportPendingCSV() {
+      const q = (document.getElementById('searchPendingTable')?.value || '').toLowerCase().trim();
+      const village = document.getElementById('filterPendingVillage')?.value || 'all';
+      const dateFilter = document.getElementById('filterPendingDate')?.value || '';
+      const amtFilter = document.getElementById('filterPendingAmount')?.value || 'all';
+
+      const pendingDonors = declarationsList.filter(d => (Number(d.balance) > 0));
+      const filtered = pendingDonors.filter(d => {
+        const matchesQ = !q ||
+          String(d.name).toLowerCase().includes(q) ||
+          String(d.city).toLowerCase().includes(q) ||
+          String(d.notes || '').toLowerCase().includes(q) ||
+          String(d.mobile || '').includes(q) ||
+          String(d.sno) === q;
+
+        const matchesV = !village || village === 'all' || d.city === village;
+
+        let matchesD = true;
+        if (dateFilter) {
+          const targetTime = new Date(dateFilter).setHours(0,0,0,0);
+          const donorTime = new Date(parseDateToTime(d.date, d.sno, d.timestamp || d.recordedAt)).setHours(0,0,0,0);
+          matchesD = targetTime === donorTime;
+        }
+
+        let matchesAmt = true;
+        const bal = Number(d.balance) || 0;
+        if (amtFilter === '50k_plus') matchesAmt = bal >= 50000;
+        else if (amtFilter === '21k_50k') matchesAmt = bal >= 21000 && bal < 50000;
+        else if (amtFilter === '11k_21k') matchesAmt = bal >= 11000 && bal < 21000;
+        else if (amtFilter === '5k_11k') matchesAmt = bal >= 5000 && bal < 11000;
+        else if (amtFilter === 'under_5k') matchesAmt = bal < 5000;
+
+        return matchesQ && matchesV && matchesD && matchesAmt;
+      });
+
+      let csv = "\uFEFFक्र.,घोषणा दिनांक,दानदाता का नाम,स्थान / ग्राम,मोबाइल,घोषित संकल्प (₹),जमा (₹),बकाया शेष (₹)\n";
+      filtered.forEach(d => {
+        csv += `"${d.sno}","${formatDisplayDate(d.date)}","${(d.name || '').replace(/"/g, '""')}","${(d.city || '').replace(/"/g, '""')}","${d.mobile || ''}","${d.amount}","${d.deposited}","${d.balance}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `koteshwar_pending_collections_${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
     function renderPendingTable() {
-      const q = (document.getElementById('searchPendingTable')?.value || '').toLowerCase();
-      const pendingDonors = declarationsList.filter(d => (Number(d.balance) > 0)).sort((a, b) => (b.balance - a.balance));
+      const q = (document.getElementById('searchPendingTable')?.value || '').toLowerCase().trim();
+      const village = document.getElementById('filterPendingVillage')?.value || 'all';
+      const dateFilter = document.getElementById('filterPendingDate')?.value || '';
+      const amtFilter = document.getElementById('filterPendingAmount')?.value || 'all';
+      const sortOrder = document.getElementById('sortPendingOrder')?.value || 'balance_desc';
+
+      const pendingDonors = declarationsList.filter(d => (Number(d.balance) > 0));
 
       const filtered = pendingDonors.filter(d => {
-        return !q || String(d.name).toLowerCase().includes(q) || String(d.city).toLowerCase().includes(q) || String(d.sno) === q;
+        const matchesQ = !q ||
+          String(d.name).toLowerCase().includes(q) ||
+          String(d.city).toLowerCase().includes(q) ||
+          String(d.notes || '').toLowerCase().includes(q) ||
+          String(d.mobile || '').includes(q) ||
+          String(d.sno) === q;
+
+        const matchesV = !village || village === 'all' || d.city === village;
+
+        let matchesD = true;
+        if (dateFilter) {
+          const targetTime = new Date(dateFilter).setHours(0,0,0,0);
+          const donorTime = new Date(parseDateToTime(d.date, d.sno, d.timestamp || d.recordedAt)).setHours(0,0,0,0);
+          matchesD = targetTime === donorTime;
+        }
+
+        let matchesAmt = true;
+        const bal = Number(d.balance) || 0;
+        if (amtFilter === '50k_plus') matchesAmt = bal >= 50000;
+        else if (amtFilter === '21k_50k') matchesAmt = bal >= 21000 && bal < 50000;
+        else if (amtFilter === '11k_21k') matchesAmt = bal >= 11000 && bal < 21000;
+        else if (amtFilter === '5k_11k') matchesAmt = bal >= 5000 && bal < 11000;
+        else if (amtFilter === 'under_5k') matchesAmt = bal < 5000;
+
+        return matchesQ && matchesV && matchesD && matchesAmt;
       });
+
+      // Sort
+      filtered.sort((a, b) => {
+        const balA = Number(a.balance) || 0;
+        const balB = Number(b.balance) || 0;
+        const tA = parseDateToTime(a.date, a.sno, a.recordedAt || a.timestamp);
+        const tB = parseDateToTime(b.date, b.sno, b.recordedAt || b.timestamp);
+
+        if (sortOrder === 'balance_desc') {
+          return (balB - balA) || (tB - tA);
+        } else if (sortOrder === 'latest_date') {
+          return (tB - tA) || (balB - balA);
+        } else if (sortOrder === 'oldest_date') {
+          return (tA - tB) || (balB - balA);
+        } else if (sortOrder === 'amount_desc') {
+          return (Number(b.amount) - Number(a.amount)) || (balB - balA);
+        } else if (sortOrder === 'sno_asc') {
+          return Number(a.sno) - Number(b.sno);
+        } else if (sortOrder === 'name_asc') {
+          return String(a.name).localeCompare(String(b.name), 'hi');
+        }
+        return 0;
+      });
+
+      // Update badge counter
+      const totalBal = filtered.reduce((sum, d) => sum + (Number(d.balance) || 0), 0);
+      const counterEl = document.getElementById('pendingStatsBadge');
+      if (counterEl) {
+        counterEl.textContent = `${filtered.length} दानदाता | कुल बकाया: ₹${totalBal.toLocaleString('en-IN')}`;
+      }
 
       const tbody = document.getElementById('pendingTableBody');
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--sage);font-weight:700;">सभी संकल्प पूर्ण प्राप्त हैं!</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text-muted);font-weight:600;">कोई लंबित संकल्प नहीं मिला।</td></tr>`;
         return;
       }
 
-      tbody.innerHTML = filtered.slice(0, 100).map(d => {
+      tbody.innerHTML = filtered.slice(0, 150).map(d => {
         const waRemind = encodeURIComponent(
           `🚩 *माँ नर्मदा घाट निर्माण सेवा महाअभियान: पावन स्मरण* 🚩\n\n` +
           `सादर प्रणाम ${d.name} जी,\n` +
@@ -2709,21 +3155,33 @@
           `*॥ नर्मदे हर ॥* 🙏\n` +
           `https://koteshwar-ghat-nirman.vercel.app/`
         );
+        const phone = d.mobile ? String(d.mobile).replace(/[^0-9]/g, '') : '';
+        const waUrl = phone && phone.length === 10
+          ? `https://api.whatsapp.com/send?phone=91${phone}&text=${waRemind}`
+          : `https://api.whatsapp.com/send?text=${waRemind}`;
 
         return `
           <tr>
             <td style="font-weight:700;color:var(--text-muted);">#${d.sno}</td>
-            <td><strong>${d.name}</strong></td>
+            <td style="white-space:nowrap;font-size:11.5px;color:var(--text-muted);">
+              <i class="fa-regular fa-calendar" style="margin-right:3px;font-size:10px;"></i>${formatDisplayDate(d.date)}
+            </td>
+            <td>
+              <strong>${d.name}</strong>
+              ${d.notes ? `<div style="font-size:10.5px;color:var(--text-muted);">${d.notes}</div>` : ''}
+              ${d.mobile ? `<div style="font-size:10.5px;color:var(--teal);margin-top:2px;"><i class="fa-solid fa-phone" style="font-size:9px;"></i> ${d.mobile}</div>` : ''}
+            </td>
             <td>${d.city}</td>
-            <td style="text-align:right;">${fmt(d.amount)}</td>
+            <td style="text-align:right;font-size:12px;">${fmt(d.amount)}</td>
+            <td style="text-align:right;font-size:12px;color:var(--sage);">${fmt(d.deposited)}</td>
             <td style="text-align:right;font-weight:800;color:var(--saffron);">${fmt(d.balance)}</td>
             <td style="text-align:center;">
-              <div style="display:inline-flex;gap:4px;">
-                <button class="btn-outline-action" onclick="jumpToCollection(${d.sno})" style="padding:3px 7px;font-size:11px;">
-                  रसीद
+              <div style="display:inline-flex;gap:4px;align-items:center;">
+                <button class="btn-outline-action" onclick="jumpToCollection(${d.sno})" style="padding:3px 7px;font-size:11px;" title="रसीद काटें">
+                  <i class="fa-solid fa-plus"></i> रसीद
                 </button>
-                <a href="https://api.whatsapp.com/send?text=${waRemind}" target="_blank" class="btn-wa-sm">
-                  स्मरण
+                <a href="${waUrl}" target="_blank" class="btn-wa-sm" title="WhatsApp पर स्मरण संदेश भेजें">
+                  <i class="fa-brands fa-whatsapp"></i> स्मरण
                 </a>
               </div>
             </td>
