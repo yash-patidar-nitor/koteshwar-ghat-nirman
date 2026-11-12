@@ -147,6 +147,94 @@ function doPost(e) {
         receiptNo: item.receiptNo || ("R-" + collSno)
       })).setMimeType(ContentService.MimeType.JSON);
 
+    } else if (action === "editDeclaration") {
+      // 3. EDIT DECLARATION IN LIVE DECLARATION TAB
+      var liveDeclSheet = ss.getSheetByName("Live Declaration");
+      var updated = false;
+      if (liveDeclSheet) {
+        var data = liveDeclSheet.getDataRange().getValues();
+        for (var i = 1; i < data.length; i++) {
+          if (String(data[i][0]).trim() === String(item.sno).trim()) {
+            if (item.name) liveDeclSheet.getRange(i + 1, 2).setValue(item.name);
+            if (item.city) liveDeclSheet.getRange(i + 1, 3).setValue(item.city);
+            if (item.notes !== undefined) liveDeclSheet.getRange(i + 1, 4).setValue(item.notes);
+            if (item.mobile !== undefined) liveDeclSheet.getRange(i + 1, 5).setValue(item.mobile);
+            if (item.amount !== undefined) liveDeclSheet.getRange(i + 1, 6).setValue(Number(item.amount) || 0);
+            if (item.receipt !== undefined) liveDeclSheet.getRange(i + 1, 7).setValue(item.receipt);
+            if (item.date) liveDeclSheet.getRange(i + 1, 8).setValue(item.date);
+            updated = true;
+            break;
+          }
+        }
+      }
+      return ContentService.createTextOutput(JSON.stringify({
+        status: updated ? "success" : "not_found",
+        message: updated ? "घोषणा प्रविष्टि सफलतापूर्वक अपडेट हो गई।" : "घोषणा रिकॉर्ड नहीं मिला।"
+      })).setMimeType(ContentService.MimeType.JSON);
+
+    } else if (action === "deleteDeclaration") {
+      // 4. DELETE DECLARATION FROM LIVE DECLARATION TAB
+      var liveDeclSheet = ss.getSheetByName("Live Declaration");
+      var deleted = false;
+      if (liveDeclSheet) {
+        var data = liveDeclSheet.getDataRange().getValues();
+        for (var i = 1; i < data.length; i++) {
+          if (String(data[i][0]).trim() === String(item.sno).trim()) {
+            liveDeclSheet.deleteRow(i + 1);
+            deleted = true;
+            break;
+          }
+        }
+      }
+      return ContentService.createTextOutput(JSON.stringify({
+        status: deleted ? "success" : "not_found",
+        message: deleted ? "घोषणा प्रविष्टि सफलतापूर्वक हटा दी गई।" : "घोषणा रिकॉर्ड नहीं मिला।"
+      })).setMimeType(ContentService.MimeType.JSON);
+
+    } else if (action === "editCollection") {
+      // 5. EDIT COLLECTION IN LIVE COLLECTION TAB
+      var liveCollSheet = ss.getSheetByName("Live Collection");
+      var updated = false;
+      if (liveCollSheet) {
+        var data = liveCollSheet.getDataRange().getValues();
+        for (var i = 1; i < data.length; i++) {
+          if (String(data[i][1]).trim() === String(item.receiptNo).trim()) {
+            if (item.donorName) liveCollSheet.getRange(i + 1, 4).setValue(item.donorName);
+            if (item.city) liveCollSheet.getRange(i + 1, 5).setValue(item.city);
+            if (item.amount !== undefined) liveCollSheet.getRange(i + 1, 6).setValue(Number(item.amount) || 0);
+            if (item.paymentMode) liveCollSheet.getRange(i + 1, 7).setValue(item.paymentMode);
+            if (item.date) liveCollSheet.getRange(i + 1, 8).setValue(item.date);
+            if (item.refNo !== undefined) liveCollSheet.getRange(i + 1, 9).setValue(item.refNo);
+            if (item.remarks !== undefined) liveCollSheet.getRange(i + 1, 12).setValue(item.remarks);
+            updated = true;
+            break;
+          }
+        }
+      }
+      return ContentService.createTextOutput(JSON.stringify({
+        status: updated ? "success" : "not_found",
+        message: updated ? "रसीद प्रविष्टि सफलतापूर्वक अपडेट हो गई।" : "रसीद रिकॉर्ड नहीं मिला।"
+      })).setMimeType(ContentService.MimeType.JSON);
+
+    } else if (action === "deleteCollection") {
+      // 6. DELETE COLLECTION FROM LIVE COLLECTION TAB
+      var liveCollSheet = ss.getSheetByName("Live Collection");
+      var deleted = false;
+      if (liveCollSheet) {
+        var data = liveCollSheet.getDataRange().getValues();
+        for (var i = 1; i < data.length; i++) {
+          if (String(data[i][1]).trim() === String(item.receiptNo).trim()) {
+            liveCollSheet.deleteRow(i + 1);
+            deleted = true;
+            break;
+          }
+        }
+      }
+      return ContentService.createTextOutput(JSON.stringify({
+        status: deleted ? "success" : "not_found",
+        message: deleted ? "रसीद प्रविष्टि सफलतापूर्वक हटा दी गई।" : "रसीद रिकॉर्ड नहीं मिला।"
+      })).setMimeType(ContentService.MimeType.JSON);
+
     } else {
       return ContentService.createTextOutput(JSON.stringify({
         status: "error",

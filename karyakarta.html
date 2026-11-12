@@ -1337,6 +1337,123 @@
     </div>
   </div>
 
+  <!-- ==================== MODAL: EDIT DECLARATION ==================== -->
+  <div class="modal-backdrop" id="editDeclModalBackdrop" onclick="closeEditDeclModal(event)">
+    <div class="modal-card" style="max-width:480px;">
+      <div class="modal-head">
+        <h4><i class="fa-solid fa-pen-to-square"></i> <span id="editDeclModalTitle">संकल्प विवरण संपादित करें</span></h4>
+        <button class="btn-modal-close" onclick="closeEditDeclModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="editDeclForm" onsubmit="handleSaveEditDeclaration(event)">
+        <div class="modal-body" style="padding:16px;max-height:75vh;overflow-y:auto;">
+          <input type="hidden" id="editDeclSno" />
+          <div class="form-group" style="margin-bottom:12px;">
+            <label>दानदाता का नाम <span style="color:var(--saffron);">*</span></label>
+            <input type="text" id="editDeclName" class="form-input" required />
+          </div>
+          <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+            <div class="form-group">
+              <label>ग्राम / नगर</label>
+              <input type="text" id="editDeclCity" class="form-input" required />
+            </div>
+            <div class="form-group">
+              <label>संकल्प राशि (₹) <span style="color:var(--saffron);">*</span></label>
+              <input type="number" id="editDeclAmount" class="form-input" min="1" required />
+            </div>
+          </div>
+          <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+            <div class="form-group">
+              <label>मोबाइल नंबर</label>
+              <input type="tel" id="editDeclMobile" class="form-input" placeholder="10 अंक" />
+            </div>
+            <div class="form-group">
+              <label>घोषणा दिनांक</label>
+              <input type="date" id="editDeclDate" class="form-input" />
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:12px;">
+            <label>स्मरण / पारिवारिक विवरण</label>
+            <input type="text" id="editDeclNotes" class="form-input" placeholder="उदा. स्व. श्री... की स्मृति में" />
+          </div>
+          <div class="form-group">
+            <label>रसीद संदर्भ (वैकल्पिक)</label>
+            <input type="text" id="editDeclReceipt" class="form-input" placeholder="-" />
+          </div>
+        </div>
+        <div class="modal-footer" style="padding:12px 16px;display:flex;gap:8px;justify-content:flex-end;">
+          <button type="button" class="btn-outline-action" onclick="closeEditDeclModal()">रद्द करें</button>
+          <button type="submit" class="btn-submit-action" style="padding:8px 16px;">
+            <i class="fa-solid fa-check"></i> परिवर्तन सुरक्षित करें
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: EDIT COLLECTION ==================== -->
+  <div class="modal-backdrop" id="editCollModalBackdrop" onclick="closeEditCollModal(event)">
+    <div class="modal-card" style="max-width:480px;">
+      <div class="modal-head">
+        <h4><i class="fa-solid fa-pen-to-square"></i> <span id="editCollModalTitle">रसीद विवरण संपादित करें</span></h4>
+        <button class="btn-modal-close" onclick="closeEditCollModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="editCollForm" onsubmit="handleSaveEditCollection(event)">
+        <div class="modal-body" style="padding:16px;max-height:75vh;overflow-y:auto;">
+          <input type="hidden" id="editCollOrigReceiptNo" />
+          <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+            <div class="form-group">
+              <label>रसीद बुक क्रमांक <span style="color:var(--saffron);">*</span></label>
+              <input type="text" id="editCollReceiptNo" class="form-input" required />
+            </div>
+            <div class="form-group">
+              <label>प्राप्ति दिनांक</label>
+              <input type="date" id="editCollDate" class="form-input" required />
+            </div>
+          </div>
+          <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+            <div class="form-group">
+              <label>दानदाता का नाम <span style="color:var(--saffron);">*</span></label>
+              <input type="text" id="editCollDonorName" class="form-input" required />
+            </div>
+            <div class="form-group">
+              <label>ग्राम / नगर</label>
+              <input type="text" id="editCollCity" class="form-input" />
+            </div>
+          </div>
+          <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+            <div class="form-group">
+              <label>प्राप्त राशि (₹) <span style="color:var(--saffron);">*</span></label>
+              <input type="number" id="editCollAmount" class="form-input" min="1" required />
+            </div>
+            <div class="form-group">
+              <label>भुगतान माध्यम</label>
+              <select id="editCollPaymentMode" class="form-select">
+                <option value="नकद">नकद (Cash)</option>
+                <option value="UPI / ऑनलाइन">UPI / ऑनलाइन QR</option>
+                <option value="बैंक चेक">बैंक चेक (Cheque)</option>
+                <option value="सीधा बैंक ट्रांसफर">सीधा बैंक ट्रांसफर (NEFT/RTGS)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:12px;">
+            <label>चेक / UTR / संदर्भ ID</label>
+            <input type="text" id="editCollRefNo" class="form-input" placeholder="वैकल्पिक" />
+          </div>
+          <div class="form-group">
+            <label>पावती टिप्पणी / विवरण</label>
+            <input type="text" id="editCollRemarks" class="form-input" placeholder="वैकल्पिक" />
+          </div>
+        </div>
+        <div class="modal-footer" style="padding:12px 16px;display:flex;gap:8px;justify-content:flex-end;">
+          <button type="button" class="btn-outline-action" onclick="closeEditCollModal()">रद्द करें</button>
+          <button type="submit" class="btn-submit-action" style="padding:8px 16px;">
+            <i class="fa-solid fa-check"></i> परिवर्तन सुरक्षित करें
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- ==================== JAVASCRIPT ==================== -->
   <script>
     /* ============================================================
@@ -1752,15 +1869,28 @@
         console.warn("Live Declaration sheet fetch error:", err);
       }
 
-      // Merge custom local declarations
+      // Merge custom local declarations & auto-sync any missing to sheet
       try {
+        const deletedDecls = new Set((JSON.parse(localStorage.getItem('koteshwar_deleted_declarations') || '[]')).map(String));
         const custom = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
         if (Array.isArray(custom)) {
           custom.forEach(item => {
-            if (!declarationsList.find(d => String(d.sno) === String(item.sno))) {
+            if (deletedDecls.has(String(item.sno))) return;
+            const existing = declarationsList.find(d => String(d.sno) === String(item.sno));
+            if (!existing) {
               declarationsList.push(item);
+              // Auto-sync to Google Sheet if missing from live sheet
+              if (webhookUrl) {
+                console.log("Auto-syncing declaration to Google Sheet:", item.sno, item.name);
+                postWebhookData('addDeclaration', item);
+              }
+            } else {
+              Object.assign(existing, item);
             }
           });
+        }
+        if (deletedDecls.size > 0) {
+          declarationsList = declarationsList.filter(d => !deletedDecls.has(String(d.sno)));
         }
       } catch (e) {}
 
@@ -2280,9 +2410,17 @@
           <td style="text-align:right;font-weight:700;color:var(--sage);">${fmt(d.deposited)}</td>
           <td style="text-align:right;font-weight:700;color:var(--saffron);">${fmt(d.balance)}</td>
           <td style="text-align:center;">
-            <button class="btn-outline-action" onclick="jumpToCollection(${d.sno})" style="padding:3px 7px;font-size:11px;">
-              <i class="fa-solid fa-plus"></i> रसीद
-            </button>
+            <div style="display:inline-flex;gap:4px;align-items:center;">
+              <button class="btn-outline-action" onclick="jumpToCollection(${d.sno})" title="रसीद काटें" style="padding:3px 7px;font-size:11px;">
+                <i class="fa-solid fa-plus"></i> रसीद
+              </button>
+              <button class="btn-outline-action" onclick="openEditDeclarationModal(${d.sno})" title="संपादित करें" style="padding:3px 6px;font-size:11px;color:var(--teal);">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button class="btn-outline-action" onclick="confirmDeleteDeclaration(${d.sno})" title="हटाएं" style="padding:3px 6px;font-size:11px;color:#C0392B;">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
           </td>
         </tr>
       `).join('');
@@ -2348,9 +2486,17 @@
             <td><span style="font-size:11px;background:var(--sandstone-light);padding:2px 6px;border-radius:6px;">${c.paymentMode}</span></td>
             <td><span style="font-size:11px;">${c.collector || '-'}</span></td>
             <td style="text-align:center;">
-              <a href="${waUrl}" target="_blank" class="btn-wa-sm">
-                <i class="fa-brands fa-whatsapp"></i> शेयर
-              </a>
+              <div style="display:inline-flex;gap:4px;align-items:center;">
+                <a href="${waUrl}" target="_blank" class="btn-wa-sm" title="WhatsApp पर शेयर करें">
+                  <i class="fa-brands fa-whatsapp"></i> शेयर
+                </a>
+                <button class="btn-outline-action" onclick="openEditCollectionModal('${c.receiptNo}')" title="संपादित करें" style="padding:3px 6px;font-size:11px;color:var(--teal);">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button class="btn-outline-action" onclick="confirmDeleteCollection('${c.receiptNo}')" title="हटाएं" style="padding:3px 6px;font-size:11px;color:#C0392B;">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
             </td>
           </tr>
         `;
@@ -2411,6 +2557,194 @@
 
     function filterPendingTable() {
       renderPendingTable();
+    }
+
+    /* ============================================================
+       EDIT & DELETE HANDLERS (DECLARATIONS & COLLECTIONS)
+       ============================================================ */
+    // 1. Edit Declaration
+    function openEditDeclarationModal(sno) {
+      const donor = declarationsList.find(d => String(d.sno) === String(sno));
+      if (!donor) return alert("दानदाता रिकॉर्ड नहीं मिला!");
+
+      document.getElementById('editDeclSno').value = donor.sno;
+      document.getElementById('editDeclModalTitle').textContent = `संकल्प विवरण संपादित करें (#${donor.sno} - ${donor.name})`;
+      document.getElementById('editDeclName').value = donor.name || '';
+      document.getElementById('editDeclCity').value = donor.city || '';
+      document.getElementById('editDeclAmount').value = donor.amount || '';
+      document.getElementById('editDeclMobile').value = donor.mobile || '';
+      document.getElementById('editDeclDate').value = donor.date || '';
+      document.getElementById('editDeclNotes').value = donor.notes || '';
+      document.getElementById('editDeclReceipt').value = donor.receipt || '-';
+
+      document.getElementById('editDeclModalBackdrop').classList.add('open');
+    }
+
+    function closeEditDeclModal(e) {
+      if (e && e.target !== e.currentTarget && !e.target.closest('.btn-modal-close') && e.type !== 'click') return;
+      document.getElementById('editDeclModalBackdrop').classList.remove('open');
+    }
+
+    async function handleSaveEditDeclaration(e) {
+      e.preventDefault();
+      const sno = document.getElementById('editDeclSno').value;
+      const donor = declarationsList.find(d => String(d.sno) === String(sno));
+      if (!donor) return;
+
+      const newName = document.getElementById('editDeclName').value.trim();
+      const newCity = document.getElementById('editDeclCity').value.trim() || 'अन्य';
+      const newAmount = parseFloat(document.getElementById('editDeclAmount').value) || 0;
+      const newMobile = document.getElementById('editDeclMobile').value.trim();
+      const newDate = document.getElementById('editDeclDate').value;
+      const newNotes = document.getElementById('editDeclNotes').value.trim();
+      const newReceipt = document.getElementById('editDeclReceipt').value.trim() || '-';
+
+      donor.name = newName;
+      donor.city = newCity;
+      donor.amount = newAmount;
+      donor.mobile = newMobile;
+      donor.date = newDate;
+      donor.notes = newNotes;
+      donor.receipt = newReceipt;
+      donor.balance = Math.max(0, donor.amount - (donor.deposited || 0));
+
+      // Update in local custom declarations if present
+      try {
+        let custom = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
+        const cIdx = custom.findIndex(c => String(c.sno) === String(sno));
+        if (cIdx >= 0) {
+          custom[cIdx] = Object.assign({}, custom[cIdx], donor);
+        } else {
+          custom.push(donor);
+        }
+        localStorage.setItem('koteshwar_custom_declarations', JSON.stringify(custom));
+        localStorage.setItem('koteshwar_declarations_cache', JSON.stringify(declarationsList));
+      } catch (err) {}
+
+      // Send webhook edit request
+      postWebhookData('editDeclaration', donor);
+
+      closeEditDeclModal();
+      renderAllPortals();
+      alert(`✅ दानदाता #${sno} (${newName}) का संकल्प विवरण सफलतापूर्वक अपडेट हो गया!`);
+    }
+
+    // 2. Delete Declaration
+    function confirmDeleteDeclaration(sno) {
+      const donor = declarationsList.find(d => String(d.sno) === String(sno));
+      if (!donor) return;
+
+      const msg = `क्या आप निश्चित रूप से दानदाता "${donor.name}" (क्रम #${donor.sno}, संकल्प ₹${donor.amount.toLocaleString('en-IN')}) का रिकॉर्ड हटाना चाहते हैं?`;
+      if (!confirm(msg)) return;
+
+      // Remove from memory
+      declarationsList = declarationsList.filter(d => String(d.sno) !== String(sno));
+
+      // Remove from localStorage custom declarations and track in deleted set
+      try {
+        let custom = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
+        custom = custom.filter(c => String(c.sno) !== String(sno));
+        localStorage.setItem('koteshwar_custom_declarations', JSON.stringify(custom));
+
+        let deleted = JSON.parse(localStorage.getItem('koteshwar_deleted_declarations') || '[]');
+        if (!deleted.includes(String(sno))) deleted.push(String(sno));
+        localStorage.setItem('koteshwar_deleted_declarations', JSON.stringify(deleted));
+
+        localStorage.setItem('koteshwar_declarations_cache', JSON.stringify(declarationsList));
+      } catch (err) {}
+
+      // Send webhook delete request
+      postWebhookData('deleteDeclaration', { sno: sno, name: donor.name });
+
+      renderAllPortals();
+      alert(`🗑️ संकल्प #${sno} सफलतापूर्वक हटा दिया गया।`);
+    }
+
+    // 3. Edit Collection
+    function openEditCollectionModal(receiptNo) {
+      const coll = collectionsList.find(c => String(c.receiptNo) === String(receiptNo));
+      if (!coll) return alert("रसीद रिकॉर्ड नहीं मिला!");
+
+      document.getElementById('editCollOrigReceiptNo').value = coll.receiptNo;
+      document.getElementById('editCollModalTitle').textContent = `रसीद संपादित करें (${coll.receiptNo})`;
+      document.getElementById('editCollReceiptNo').value = coll.receiptNo || '';
+      document.getElementById('editCollDate').value = coll.date || '';
+      document.getElementById('editCollDonorName').value = coll.donorName || '';
+      document.getElementById('editCollCity').value = coll.city || '';
+      document.getElementById('editCollAmount').value = coll.amount || '';
+      document.getElementById('editCollPaymentMode').value = coll.paymentMode || 'नकद';
+      document.getElementById('editCollRefNo').value = coll.refNo || '';
+      document.getElementById('editCollRemarks').value = coll.remarks || '';
+
+      document.getElementById('editCollModalBackdrop').classList.add('open');
+    }
+
+    function closeEditCollModal(e) {
+      if (e && e.target !== e.currentTarget && !e.target.closest('.btn-modal-close') && e.type !== 'click') return;
+      document.getElementById('editCollModalBackdrop').classList.remove('open');
+    }
+
+    async function handleSaveEditCollection(e) {
+      e.preventDefault();
+      const origReceiptNo = document.getElementById('editCollOrigReceiptNo').value;
+      const coll = collectionsList.find(c => String(c.receiptNo) === String(origReceiptNo));
+      if (!coll) return;
+
+      const newReceiptNo = document.getElementById('editCollReceiptNo').value.trim();
+      const newDate = document.getElementById('editCollDate').value;
+      const newDonorName = document.getElementById('editCollDonorName').value.trim();
+      const newCity = document.getElementById('editCollCity').value.trim();
+      const newAmount = parseFloat(document.getElementById('editCollAmount').value) || 0;
+      const newMode = document.getElementById('editCollPaymentMode').value;
+      const newRef = document.getElementById('editCollRefNo').value.trim();
+      const newRemarks = document.getElementById('editCollRemarks').value.trim();
+
+      coll.receiptNo = newReceiptNo;
+      coll.date = newDate;
+      coll.donorName = newDonorName;
+      coll.city = newCity;
+      coll.amount = newAmount;
+      coll.paymentMode = newMode;
+      coll.refNo = newRef;
+      coll.remarks = newRemarks;
+
+      saveCollectionsToStorage();
+      reconcileCollectionsWithDeclarations();
+
+      // Post webhook update
+      postWebhookData('editCollection', coll);
+
+      closeEditCollModal();
+      renderAllPortals();
+      alert(`✅ रसीद क्रमांक ${newReceiptNo} का विवरण सफलतापूर्वक अपडेट हो गया!`);
+    }
+
+    // 4. Delete Collection
+    function confirmDeleteCollection(receiptNo) {
+      const coll = collectionsList.find(c => String(c.receiptNo) === String(receiptNo));
+      if (!coll) return;
+
+      const msg = `क्या आप निश्चित रूप से रसीद क्रमांक "${coll.receiptNo}" (दानदाता: ${coll.donorName}, राशि: ${fmt(coll.amount)}) को हटाना चाहते हैं?`;
+      if (!confirm(msg)) return;
+
+      // Remove from memory
+      collectionsList = collectionsList.filter(c => String(c.receiptNo) !== String(receiptNo));
+      saveCollectionsToStorage();
+
+      // Track in deleted collections set
+      try {
+        let deleted = JSON.parse(localStorage.getItem('koteshwar_deleted_collections') || '[]');
+        if (!deleted.includes(String(receiptNo))) deleted.push(String(receiptNo));
+        localStorage.setItem('koteshwar_deleted_collections', JSON.stringify(deleted));
+      } catch (err) {}
+
+      reconcileCollectionsWithDeclarations();
+
+      // Send webhook delete request
+      postWebhookData('deleteCollection', { receiptNo: receiptNo, donorSno: coll.donorSno });
+
+      renderAllPortals();
+      alert(`🗑️ रसीद क्रमांक ${receiptNo} सफलतापूर्वक हटा दी गई।`);
     }
 
     /* ============================================================

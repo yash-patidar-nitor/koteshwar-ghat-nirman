@@ -1455,18 +1455,34 @@
     window.addEventListener('DOMContentLoaded', () => {
       renderStories();
 
-      // Check if browser has cached data from prior sync (instant display)
+      // Check if browser has cached data & local custom declarations (instant display)
       try {
         const cached = localStorage.getItem('koteshwar_declarations_cache');
         if (cached) {
           const parsed = JSON.parse(cached);
           if (Array.isArray(parsed) && parsed.length > 0) {
             declarations = parsed;
-            // Sort in decreasing order of amount
-            declarations.sort((a, b) => (b.amount - a.amount) || (a.sno - b.sno));
-            renderDashboardFromData();
-            updateSyncUI(false, `कैश से सक्रिय (${declarations.length} दानदाता)`, true);
           }
+        }
+        // Immediately merge custom declarations created via Karyakarta portal
+        const customDecls = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
+        const deletedDecls = new Set((JSON.parse(localStorage.getItem('koteshwar_deleted_declarations') || '[]')).map(String));
+        if (Array.isArray(customDecls)) {
+          customDecls.forEach(cd => {
+            if (deletedDecls.has(String(cd.sno))) return;
+            const idx = declarations.findIndex(d => String(d.sno) === String(cd.sno));
+            if (idx >= 0) declarations[idx] = Object.assign({}, declarations[idx], cd);
+            else declarations.push(cd);
+          });
+        }
+        if (deletedDecls.size > 0) {
+          declarations = declarations.filter(d => !deletedDecls.has(String(d.sno)));
+        }
+
+        if (declarations.length > 0) {
+          declarations.sort((a, b) => (b.amount - a.amount) || (a.sno - b.sno));
+          renderDashboardFromData();
+          updateSyncUI(false, `डेटा सक्रिय (${declarations.length} दानदाता)`, true);
         }
       } catch (e) {
         console.warn("Local storage cache read error", e);
@@ -1474,6 +1490,18 @@
 
       // Immediately fetch live real-time data from Google Sheet
       fetchGoogleSheetData();
+
+      // Listen for cross-tab updates from Karyakarta portal
+      window.addEventListener('storage', (e) => {
+        if (e.key && e.key.startsWith('koteshwar_')) {
+          fetchGoogleSheetData();
+        }
+      });
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          fetchGoogleSheetData();
+        }
+      });
     });
 
     /* ============================================================
@@ -1695,6 +1723,59 @@
           }
         } catch (e) {
           console.warn("Live Collection fetch notice:", e);
+        }
+
+        // 5. UNION WITH LOCAL STORAGE DECLARATIONS & COLLECTIONS (Instant reflection of Karyakarta entries)
+        try {
+          const deletedDecls = new Set((JSON.parse(localStorage.getItem('koteshwar_deleted_declarations') || '[]')).map(String));
+          const customDecls = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
+          if (Array.isArray(customDecls)) {
+            customDecls.forEach(cd => {
+              if (deletedDecls.has(String(cd.sno))) return;
+              const idx = fetchedDonors.findIndex(d => String(d.sno) === String(cd.sno));
+              const entry = {
+                sno: cd.sno,
+                name: cd.name,
+                city: cd.city || 'अन्य',
+                notes: cd.notes || '',
+                amount: Number(cd.amount) || 0,
+                deposited: Number(cd.deposited) || 0,
+                balance: Number(cd.balance !== undefined ? cd.balance : cd.amount),
+                receipt: cd.receipt || '-',
+                date: cd.date || ''
+              };
+              if (idx >= 0) {
+                fetchedDonors[idx].name = entry.name;
+                fetchedDonors[idx].city = entry.city;
+                fetchedDonors[idx].notes = entry.notes;
+                fetchedDonors[idx].amount = entry.amount;
+                fetchedDonors[idx].date = entry.date;
+              } else {
+                fetchedDonors.push(entry);
+              }
+            });
+          }
+
+          // Apply local collections
+          const deletedColls = new Set((JSON.parse(localStorage.getItem('koteshwar_deleted_collections') || '[]')).map(String));
+          const localColls = JSON.parse(localStorage.getItem('koteshwar_collections_ledger') || '[]');
+          if (Array.isArray(localColls)) {
+            localColls.forEach(lc => {
+              if (deletedColls.has(String(lc.receiptNo))) return;
+              applyCollectionRow(lc.receiptNo, lc.donorSno, lc.donorName, lc.city, Number(lc.amount) || 0, lc.date);
+            });
+          }
+
+          // Filter out any locally deleted declarations
+          if (deletedDecls.size > 0) {
+            for (let i = fetchedDonors.length - 1; i >= 0; i--) {
+              if (deletedDecls.has(String(fetchedDonors[i].sno))) {
+                fetchedDonors.splice(i, 1);
+              }
+            }
+          }
+        } catch (e) {
+          console.warn("Local storage union notice:", e);
         }
 
         if (fetchedDonors.length > 0) {
