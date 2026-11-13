@@ -1111,7 +1111,7 @@
                   <i class="fa-solid fa-plus"></i> नया ग्राम जोड़ें
                 </button>
               </div>
-              <input type="text" id="declVillageQuickSearch" class="form-input" placeholder="🔍 अंग्रेज़ी या हिंदी में लिखें (उदा. Nisarpur, Kukshi, कोठड़ा...)" oninput="filterVillageOptions(this.value, 'declVillageSelect', 'decl')" style="margin-bottom:6px;font-size:12px;padding:6px 10px;" />
+              <input type="text" id="declVillageQuickSearch" class="form-input" placeholder="🔍 अंग्रेज़ी या हिंदी में लिखें (उदा. Nisarpur, Kukshi, कोटेश्वर / कोठड़ा...)" oninput="filterVillageOptions(this.value, 'declVillageSelect', 'decl')" style="margin-bottom:6px;font-size:12px;padding:6px 10px;" />
               <select id="declVillageSelect" class="form-select" onchange="handleVillageSelectChange(this, 'decl')" required>
                 <option value="">-- ग्राम चुनें --</option>
               </select>
@@ -1210,7 +1210,7 @@
                   <i class="fa-solid fa-plus"></i> नया ग्राम
                 </button>
               </div>
-              <input type="text" id="directVillageQuickSearch" class="form-input" placeholder="🔍 खोजें (उदा. Nisarpur...)" oninput="filterVillageOptions(this.value, 'directDonorCity', 'direct')" style="margin-bottom:6px;font-size:12px;padding:6px 10px;" />
+              <input type="text" id="directVillageQuickSearch" class="form-input" placeholder="🔍 खोजें (उदा. Nisarpur, कोटेश्वर...)" oninput="filterVillageOptions(this.value, 'directDonorCity', 'direct')" style="margin-bottom:6px;font-size:12px;padding:6px 10px;" />
               <select id="directDonorCity" class="form-select" onchange="handleVillageSelectChange(this, 'direct')">
                 <option value="">-- ग्राम चुनें --</option>
               </select>
@@ -2222,7 +2222,6 @@
 
       if (fetchedColls.length > 0) {
         collectionsList = fetchedColls;
-        saveCollectionsToStorage();
       } else {
         // Offline fallback with deleted filter applied
         collectionsList = collectionsList.filter(c => !deletedColls.has(String(c.receiptNo).trim()));
@@ -2232,8 +2231,11 @@
             Object.assign(c, editedColls[rKey]);
           }
         });
-        saveCollectionsToStorage();
       }
+      collectionsList.forEach(c => {
+        c.city = normalizeVillage(c.city);
+      });
+      saveCollectionsToStorage();
     }
 
     function saveCollectionsToStorage() {
@@ -2439,6 +2441,10 @@
         }
       } catch (e) {}
 
+      declarationsList.forEach(d => {
+        d.city = normalizeVillage(d.city);
+      });
+
       // Reconcile collections with declarations
       reconcileCollectionsWithDeclarations();
 
@@ -2589,9 +2595,23 @@
       if (lbl) lbl.textContent = maxSno + 1;
     }
 
+    function normalizeVillage(v) {
+      if (!v) return "अन्य";
+      const str = String(v).trim();
+      if (/^(कोटेश्वर|कोठ[ड़ड]ा|कोट[ड़ड]ा|koteshwar|kothda|kotda|kothada|koteswar|kothra)/i.test(str) ||
+          str.includes('कोटेश्वर') || str.includes('कोठड़ा') || str.includes('कोठडा') || str.includes('कोटडा') ||
+          /koteshwar|kothda|kotda|kothada/i.test(str)) {
+        return "कोटेश्वर / कोठड़ा";
+      }
+      if (/^(कडमाल|खापरखेड़ा|kadmal|khaparkheda)/i.test(str) || str.includes('कडमाल') || str.includes('खापरखेड़ा')) {
+        return "कडमाल / खापरखेड़ा";
+      }
+      return str;
+    }
+
     const CANONICAL_VILLAGES = [
       "अंजड़", "अजन्दा", "अमलाल", "अम्बाड़ा", "आलिराजपुर", "आली", "इन्दौर", "उज्जैन", "एकलदुना",
-      "कडमाल / खापरखेड़ा", "करोली", "कापसी", "कुक्षी", "कोटेश्वर / कोठड़ा", "कोठड़ा", "कोलगांव",
+      "कडमाल / खापरखेड़ा", "करोली", "कापसी", "कुक्षी", "कोटेश्वर / कोठड़ा", "कोलगांव",
       "खण्डवा", "खराजना", "गंधवानी", "गणपुर", "घुलासा", "चिखल्दा", "जांगरवा", "जामली", "जोतपुर",
       "जोबट", "झाबुआ", "डेहर", "डेहरी", "डोंगरगांव", "ढुकणी", "तेजगदिया पुरा", "देवगढ़", "देवला",
       "देशवाल्या", "धार", "नगुर", "ननोदा", "नर्मदानगर", "नवादपुरा", "नानपुर", "निम्बोल", "निसरपुर",
@@ -2605,7 +2625,9 @@
     const VILLAGE_ALIASES = {
       'nisarpur': 'निसरपुर', 'nisarpura': 'निसरपुर', 'nissarpur': 'निसरपुर', 'nisar': 'निसरपुर', 'nisurpur': 'निसरपुर', 'nisharpur': 'निसरपुर',
       'kukshi': 'कुक्षी', 'kuxi': 'कुक्षी', 'kuksi': 'कुक्षी', 'kuxy': 'कुक्षी',
-      'kothda': 'कोठड़ा', 'kothada': 'कोठड़ा', 'koteshwar': 'कोटेश्वर / कोठड़ा', 'kotda': 'कोठड़ा', 'koteswar': 'कोटेश्वर / कोठड़ा', 'kothra': 'कोठड़ा',
+      'kothda': 'कोटेश्वर / कोठड़ा', 'kothada': 'कोटेश्वर / कोठड़ा', 'koteshwar': 'कोटेश्वर / कोठड़ा', 'kotda': 'कोटेश्वर / कोठड़ा', 'koteswar': 'कोटेश्वर / कोठड़ा', 'kothra': 'कोटेश्वर / कोठड़ा',
+      'kotada': 'कोटेश्वर / कोठड़ा', 'koteshwara': 'कोटेश्वर / कोठड़ा', 'koteshwar kothda': 'कोटेश्वर / कोठड़ा', 'kothda koteshwar': 'कोटेश्वर / कोठड़ा', 'koteshwar kotda': 'कोटेश्वर / कोठड़ा', 'kotda koteshwar': 'कोटेश्वर / कोठड़ा',
+      'kothda / koteshwar': 'कोटेश्वर / कोठड़ा', 'koteshwar / kothda': 'कोटेश्वर / कोठड़ा', 'koteshwar / kotda': 'कोटेश्वर / कोठड़ा', 'kotda / koteshwar': 'कोटेश्वर / कोठड़ा',
       'silkua': 'सिलकुआ', 'silkuwa': 'सिलकुआ', 'silkuva': 'सिलकुआ', 'silqua': 'सिलकुआ', 'shilkua': 'सिलकुआ',
       'deshwalya': 'देशवाल्या', 'deshwalia': 'देशवाल्या', 'deshwaliya': 'देशवाल्या', 'deshvalya': 'देशवाल्या',
       'nanpur': 'नानपुर', 'naanpur': 'नानपुर',
@@ -2689,19 +2711,19 @@
     }
 
     function getAllKnownVillages() {
-      const villageSet = new Set(CANONICAL_VILLAGES);
+      const villageSet = new Set(CANONICAL_VILLAGES.map(normalizeVillage));
 
       // Add villages from loaded declarations
       declarationsList.forEach(d => {
         if (d.city && d.city.trim() && d.city !== 'undefined' && d.city !== 'null') {
-          villageSet.add(d.city.trim());
+          villageSet.add(normalizeVillage(d.city));
         }
       });
 
       // Add villages from loaded collections
       collectionsList.forEach(c => {
         if (c.city && c.city.trim() && c.city !== 'undefined' && c.city !== 'null') {
-          villageSet.add(c.city.trim());
+          villageSet.add(normalizeVillage(c.city));
         }
       });
 
@@ -2710,10 +2732,19 @@
         const custom = JSON.parse(localStorage.getItem('koteshwar_custom_villages') || '[]');
         if (Array.isArray(custom)) {
           custom.forEach(v => {
-            if (v && v.trim()) villageSet.add(v.trim());
+            if (v && v.trim()) {
+              const nv = normalizeVillage(v.trim());
+              if (nv !== 'कोठड़ा' && nv !== 'कोटेश्वर') villageSet.add(nv);
+            }
           });
         }
       } catch (e) {}
+
+      // Explicitly delete any unclubbed standalone entries
+      villageSet.delete('कोठड़ा');
+      villageSet.delete('कोठडा');
+      villageSet.delete('कोटेश्वर');
+      villageSet.delete('कोटडा');
 
       return Array.from(villageSet).sort((a, b) => a.localeCompare(b, 'hi'));
     }
@@ -2723,15 +2754,23 @@
       const allVillages = getAllKnownVillages();
       if (!q) return allVillages;
 
+      // Special handling: searching for kothda or koteshwar gives ONLY the combined village
+      const isKoteshwarQ = /^(कोटेश्वर|कोठ[ड़ड]ा|कोट[ड़ड]ा|कोट|कोठ|koteshwar|kothda|kotda|kothada|koteswar|kothra|kot)/i.test(q) ||
+        normalizeVillage(q) === "कोटेश्वर / कोठड़ा";
+      if (isKoteshwarQ) {
+        return ["कोटेश्वर / कोठड़ा"];
+      }
+
       const matches = [];
       const seen = new Set();
 
       // 1. Direct alias match (e.g. 'nisarpur' -> 'निसरपुर')
       for (const [en, hi] of Object.entries(VILLAGE_ALIASES)) {
         if (en === q || en.startsWith(q) || en.includes(q)) {
-          if (allVillages.includes(hi) && !seen.has(hi)) {
-            matches.push(hi);
-            seen.add(hi);
+          const normHi = normalizeVillage(hi);
+          if (allVillages.includes(normHi) && !seen.has(normHi)) {
+            matches.push(normHi);
+            seen.add(normHi);
           }
         }
       }
@@ -2755,7 +2794,7 @@
         }
       }
 
-      return matches;
+      return matches.filter(v => v !== 'कोठड़ा' && v !== 'कोठडा' && v !== 'कोटेश्वर' && v !== 'कोटडा');
     }
 
     function parseDateToTime(dStr, fallbackSno, timestamp) {
@@ -2826,20 +2865,24 @@
 
       const matches = getMatchingVillages(q);
       const all = getAllKnownVillages();
+      const isKoteshwarQ = /^(कोटेश्वर|कोठ[ड़ड]ा|कोट[ड़ड]ा|कोट|कोठ|koteshwar|kothda|kotda|kothada|koteswar|kothra|kot)/i.test(q) ||
+        normalizeVillage(q) === "कोटेश्वर / कोठड़ा";
 
       let html = `<option value="">-- ग्राम चुनें (${matches.length}) --</option>`;
 
-      // If user typed something not already in list, offer immediate add option
-      if (q && !all.includes(q)) {
+      // If user typed something not already in list, offer immediate add option (never for koteshwar/kothda combined village)
+      if (q && !all.includes(q) && !isKoteshwarQ && matches.length === 0) {
         html += `<option value="__ADD_NEW__" style="color:var(--teal);font-weight:700;">➕ नया ग्राम जोड़ें: "${q}"</option>`;
       }
 
       html += matches.map(v => `<option value="${v}">${v}</option>`).join('');
       select.innerHTML = html;
 
-      // Auto-select exact alias match (e.g. typing 'Nisarpur' auto-selects 'निसरपुर')
+      // Auto-select exact alias match or combined match
       const aliasMatch = VILLAGE_ALIASES[q.toLowerCase()];
-      if (aliasMatch && matches.includes(aliasMatch)) {
+      if (isKoteshwarQ && matches.includes("कोटेश्वर / कोठड़ा")) {
+        select.value = "कोटेश्वर / कोठड़ा";
+      } else if (aliasMatch && matches.includes(aliasMatch)) {
         select.value = aliasMatch;
       } else if (matches.length === 1) {
         select.value = matches[0];
@@ -2871,15 +2914,28 @@
 
     function confirmAddNewVillage(prefix) {
       const inp = document.getElementById(prefix + 'NewVillageInput');
-      const newName = (inp ? inp.value : '').trim();
-      if (!newName) return alert("कृपया ग्राम का नाम दर्ज करें!");
+      const rawName = (inp ? inp.value : '').trim();
+      if (!rawName) return alert("कृपया ग्राम का नाम दर्ज करें!");
 
-      addNewVillageToMaster(newName);
+      const newName = normalizeVillage(rawName);
 
       let selectId = 'declVillageSelect';
       if (prefix === 'direct') selectId = 'directDonorCity';
       else if (prefix === 'editDecl') selectId = 'editDeclCity';
       else if (prefix === 'editColl') selectId = 'editCollCity';
+
+      if (newName === 'कोटेश्वर / कोठड़ा') {
+        const sel = document.getElementById(selectId);
+        if (sel) sel.value = 'कोटेश्वर / कोठड़ा';
+
+        const wrap = document.getElementById(prefix + 'NewVillageWrap');
+        if (wrap) wrap.style.display = 'none';
+
+        alert("ℹ️ कोटेश्वर एवं कोठड़ा को संयुक्त ग्राम 'कोटेश्वर / कोठड़ा' के रूप में पहले ही सम्मिलित किया गया है।");
+        return;
+      }
+
+      addNewVillageToMaster(newName);
 
       const sel = document.getElementById(selectId);
       if (sel) sel.value = newName;
@@ -2892,8 +2948,8 @@
 
     function addNewVillageToMaster(name) {
       if (!name) return;
-      const clean = name.trim();
-      if (!clean) return;
+      const clean = normalizeVillage(name.trim());
+      if (!clean || clean === 'कोटेश्वर / कोठड़ा') return;
 
       try {
         let custom = JSON.parse(localStorage.getItem('koteshwar_custom_villages') || '[]');
@@ -3121,12 +3177,13 @@
         return;
       }
 
+      const isKoteshwarQ = /^(कोटेश्वर|कोठ[ड़ड]ा|कोट[ड़ड]ा|कोट|कोठ|koteshwar|kothda|kotda|kothada|koteswar|kothra|kot)/i.test(q);
       const matches = declarationsList.filter(d => {
         const name = String(d.name || '').toLowerCase();
         const city = String(d.city || '').toLowerCase();
         const sno = String(d.sno || '');
         const mob = String(d.mobile || '');
-        return name.includes(q) || city.includes(q) || sno === q || mob.includes(q);
+        return name.includes(q) || city.includes(q) || (isKoteshwarQ && d.city === 'कोटेश्वर / कोठड़ा') || sno === q || mob.includes(q);
       }).slice(0, 8);
 
       if (matches.length === 0) {
@@ -3383,9 +3440,10 @@
       const village = document.getElementById('filterDeclVillage')?.value || 'all';
       const sortOrder = document.getElementById('sortDeclOrder')?.value || 'latest_date';
 
+      const isKoteshwarQ = /^(kot|koth|kotesh|कोठ|कोट)/i.test(q);
       const filtered = declarationsList.filter(d => {
         const mob = cleanMobileNumber(d.mobile);
-        const matchesQ = !q || String(d.name).toLowerCase().includes(q) || String(d.city).toLowerCase().includes(q) || String(d.sno) === q || mob.includes(q);
+        const matchesQ = !q || String(d.name).toLowerCase().includes(q) || String(d.city).toLowerCase().includes(q) || (isKoteshwarQ && d.city === 'कोटेश्वर / कोठड़ा') || String(d.sno) === q || mob.includes(q);
         const matchesV = village === 'all' || d.city === village;
         return matchesQ && matchesV;
       });
@@ -3467,11 +3525,13 @@
       const q = (document.getElementById('searchCollTable')?.value || '').toLowerCase();
       const userFilter = document.getElementById('filterCollKaryakarta')?.value || 'all';
 
+      const isKoteshwarQ = /^(kot|koth|kotesh|कोठ|कोट)/i.test(q);
       const filtered = collectionsList.filter(c => {
         const matchesQ = !q ||
           String(c.receiptNo).toLowerCase().includes(q) ||
           String(c.donorName).toLowerCase().includes(q) ||
           String(c.city).toLowerCase().includes(q) ||
+          (isKoteshwarQ && c.city === 'कोटेश्वर / कोठड़ा') ||
           String(c.paymentMode || '').toLowerCase().includes(q) ||
           String(c.refNo || '').toLowerCase().includes(q);
         const matchesU = userFilter === 'all' || (c.collectorUsername && c.collectorUsername === userFilter) || (c.collector && c.collector.includes(userFilter));
@@ -3568,10 +3628,12 @@
       const amtFilter = document.getElementById('filterPendingAmount')?.value || 'all';
 
       const pendingDonors = declarationsList.filter(d => (Number(d.balance) > 0));
+      const isKoteshwarQ = /^(kot|koth|kotesh|कोठ|कोट)/i.test(q);
       const filtered = pendingDonors.filter(d => {
         const matchesQ = !q ||
           String(d.name).toLowerCase().includes(q) ||
           String(d.city).toLowerCase().includes(q) ||
+          (isKoteshwarQ && d.city === 'कोटेश्वर / कोठड़ा') ||
           String(d.notes || '').toLowerCase().includes(q) ||
           String(d.mobile || '').includes(q) ||
           String(d.sno) === q;

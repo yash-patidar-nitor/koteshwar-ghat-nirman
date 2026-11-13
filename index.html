@@ -2308,6 +2308,20 @@
       return str;
     }
 
+    function normalizeVillage(v) {
+      if (!v) return "अन्य";
+      const str = String(v).trim();
+      if (/^(कोटेश्वर|कोठ[ड़ड]ा|कोट[ड़ड]ा|koteshwar|kothda|kotda|kothada|koteswar|kothra)/i.test(str) ||
+          str.includes('कोटेश्वर') || str.includes('कोठड़ा') || str.includes('कोठडा') || str.includes('कोटडा') ||
+          /koteshwar|kothda|kotda|kothada/i.test(str)) {
+        return "कोटेश्वर / कोठड़ा";
+      }
+      if (/^(कडमाल|खापरखेड़ा|kadmal|khaparkheda)/i.test(str) || str.includes('कडमाल') || str.includes('खापरखेड़ा')) {
+        return "कडमाल / खापरखेड़ा";
+      }
+      return str;
+    }
+
     function parseCSV(text) {
       const lines = [];
       let row = [];
@@ -2841,6 +2855,9 @@
         }
 
         if (fetchedDonors.length > 0) {
+          fetchedDonors.forEach(d => {
+            d.city = normalizeVillage(d.city);
+          });
           // Sort strictly in decreasing order of the amount (highest first)
           fetchedDonors.sort((a, b) => (b.amount - a.amount) || (a.sno - b.sno));
           declarations = fetchedDonors;
@@ -2882,7 +2899,8 @@
       // Group dynamically by city in real-time
       const cityMap = {};
       declarations.forEach(d => {
-        const c = d.city || "अन्य";
+        const c = normalizeVillage(d.city || "अन्य");
+        d.city = c;
         if (!cityMap[c]) cityMap[c] = { name: c, pledged: 0, received: 0, count: 0, highest: 0 };
         cityMap[c].pledged += d.amount;
         cityMap[c].received += (d.deposited || 0);
@@ -2985,12 +3003,14 @@
     function renderDonorTable() {
       const tbody = document.getElementById('donorTableBody');
       const search = (document.getElementById('donorSearchInput').value || '').trim().toLowerCase();
+      const isKoteshwarSearch = /^(kot|koth|kotesh|कोठ|कोट)/i.test(search);
 
       const filtered = declarations.filter(d => {
         const matchesVillage = (currentVillageFilter === 'all') || d.city === currentVillageFilter || d.city.includes(currentVillageFilter);
         const matchesSearch = !search || 
           d.name.toLowerCase().includes(search) || 
           d.city.toLowerCase().includes(search) || 
+          (isKoteshwarSearch && d.city === 'कोटेश्वर / कोठड़ा') ||
           (d.notes && d.notes.toLowerCase().includes(search)) ||
           (d.receipt && d.receipt.toLowerCase().includes(search));
         return matchesVillage && matchesSearch;
