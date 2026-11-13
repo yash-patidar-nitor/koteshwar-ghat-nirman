@@ -3046,26 +3046,171 @@
       container.innerHTML = html;
     }
 
+    /* English to Hindi Village mapping for instant search & transliteration */
+    const VILLAGE_ALIASES = {
+      'nisarpur': 'निसरपुर', 'nisarpura': 'निसरपुर', 'nissarpur': 'निसरपुर', 'nisar': 'निसरपुर', 'nisurpur': 'निसरपुर', 'nisharpur': 'निसरपुर',
+      'kukshi': 'कुक्षी', 'kuxi': 'कुक्षी', 'kuksi': 'कुक्षी', 'kuxy': 'कुक्षी',
+      'kothda': 'कोटेश्वर / कोठड़ा', 'kothada': 'कोटेश्वर / कोठड़ा', 'koteshwar': 'कोटेश्वर / कोठड़ा', 'kotda': 'कोटेश्वर / कोठड़ा', 'koteswar': 'कोटेश्वर / कोठड़ा', 'kothra': 'कोटेश्वर / कोठड़ा',
+      'silkua': 'सिलकुआ', 'silkuwa': 'सिलकुआ', 'silkuva': 'सिलकुआ',
+      'deshwalya': 'देशवाल्या', 'deshwalia': 'देशवाल्या',
+      'nanpur': 'नानपुर', 'susari': 'सुसारी',
+      'kadmal': 'कडमाल / खापरखेड़ा', 'khaparkheda': 'कडमाल / खापरखेड़ा',
+      'gandhwani': 'गंधवानी', 'ghulasa': 'घुलासा', 'khandwa': 'खण्डवा',
+      'alirajpur': 'आलीराजपुर', 'rajpur': 'राजपुर', 'bhavati': 'भावती',
+      'dhar': 'धार', 'barwani': 'बड़वानी', 'badwani': 'बड़वानी', 'anjad': 'अंजड़',
+      'manawar': 'मनावर', 'bhopal': 'भोपाल', 'indore': 'इन्दौर', 'mandleshwar': 'मंडलेश्वर',
+      'omkareshwar': 'ओंकारेश्वर', 'maheshwar': 'महेश्वर', 'khalghat': 'खलघाट',
+      'chikhalda': 'चिखलदा', 'chikhlda': 'चिखलदा', 'dharmrai': 'धरमराय'
+    };
+
+    function transliterateDevanagari(text) {
+      if (!text) return '';
+      const consonants = {
+        'क': 'k', 'ख': 'kh', 'ग': 'g', 'घ': 'gh', 'ङ': 'ng',
+        'च': 'ch', 'छ': 'chh', 'ज': 'j', 'झ': 'jh', 'ञ': 'ny',
+        'ट': 't', 'ठ': 'th', 'ड': 'd', 'ढ': 'dh', 'ण': 'n',
+        'त': 't', 'थ': 'th', 'द': 'd', 'ध': 'dh', 'न': 'n',
+        'प': 'p', 'फ': 'ph', 'ब': 'b', 'भ': 'bh', 'म': 'm',
+        'य': 'y', 'र': 'r', 'ल': 'l', 'व': 'v',
+        'श': 'sh', 'ष': 'sh', 'स': 's', 'ह': 'h',
+        'क्ष': 'ksh', 'त्र': 'tr', 'ज्ञ': 'gy', 'श्र': 'shr',
+        'ड़': 'd', 'ढ़': 'dh', 'ज़': 'z', 'फ़': 'f'
+      };
+      const vowels = {
+        'ा': 'a', 'ि': 'i', 'ी': 'i', 'ु': 'u', 'ू': 'u',
+        'े': 'e', 'ै': 'ai', 'ो': 'o', 'ौ': 'au',
+        'ं': 'n', 'ँ': 'n', 'ः': 'h',
+        'अ': 'a', 'आ': 'a', 'इ': 'i', 'ई': 'i', 'उ': 'u', 'ऊ': 'u',
+        'ए': 'e', 'ऐ': 'ai', 'ओ': 'o', 'औ': 'au', 'ऋ': 'ri'
+      };
+
+      let out = '';
+      const chars = Array.from(text);
+      for (let i = 0; i < chars.length; i++) {
+        const ch = chars[i];
+        const nxt = chars[i+1];
+        if (consonants[ch]) {
+          out += consonants[ch];
+          if (nxt === '्') {
+            i++;
+          } else if (!vowels[nxt]) {
+            out += 'a';
+          }
+        } else if (vowels[ch]) {
+          out += vowels[ch];
+        } else if (/[a-zA-Z0-9]/.test(ch)) {
+          out += ch.toLowerCase();
+        } else if (ch === ' ') {
+          out += ' ';
+        }
+      }
+      return out;
+    }
+
+    function phoneticKey(s) {
+      if (!s) return '';
+      return s.toLowerCase()
+        .replace(/[vw]/g, 'v')
+        .replace(/ph/g, 'f')
+        .replace(/sh/g, 's')
+        .replace(/ee|ea|i/g, 'i')
+        .replace(/oo|ou|u/g, 'u')
+        .replace(/aa|a/g, 'a')
+        .replace(/th/g, 't')
+        .replace(/dh/g, 'd')
+        .replace(/bh/g, 'b')
+        .replace(/kh/g, 'k')
+        .replace(/gh/g, 'g')
+        .replace(/ch/g, 'c')
+        .replace(/jh/g, 'j')
+        .replace(/[dr]/g, 'r')
+        .replace(/(.)\1+/g, '$1')
+        .replace(/[^a-z0-9]/g, '');
+    }
+
+    function smartConsonantKey(s) {
+      if (!s) return '';
+      return s.toLowerCase()
+        .replace(/[vw]/g, 'v')
+        .replace(/ph/g, 'f')
+        .replace(/sh/g, 's')
+        .replace(/th/g, 't')
+        .replace(/dh/g, 'd')
+        .replace(/bh/g, 'b')
+        .replace(/kh/g, 'k')
+        .replace(/gh/g, 'g')
+        .replace(/ch/g, 'c')
+        .replace(/jh/g, 'j')
+        .replace(/[dr]/g, 'r')
+        .replace(/[aeiou]/g, '')
+        .replace(/(.)\1+/g, '$1')
+        .replace(/[^a-z0-9]/g, '');
+    }
+
+    function matchDonorSearch(donor, query) {
+      if (!donor) return false;
+      const q = (query || '').trim().toLowerCase();
+      if (!q) return true;
+
+      const cleanQ = q.replace(/^#/, '');
+      const pkQ = phoneticKey(cleanQ);
+      const ckQ = smartConsonantKey(cleanQ);
+
+      // 1. S.No & Mobile & Receipt
+      if (cleanQ && (String(donor.sno) === cleanQ || String(donor.sno).startsWith(cleanQ))) return true;
+      if (cleanQ.length >= 3) {
+        const cleanMob = cleanMobileNumber(donor.mobile || '');
+        if (cleanMob && cleanMob.includes(cleanQ)) return true;
+        if (donor.receipt && String(donor.receipt).toLowerCase().includes(cleanQ)) return true;
+      }
+
+      // 2. Direct Hindi/English Name match
+      const name = String(donor.name || '').toLowerCase();
+      if (name.includes(q) || name.includes(cleanQ)) return true;
+
+      // 3. Direct Hindi/English City match
+      const city = String(donor.city || '').toLowerCase();
+      if (city.includes(q) || city.includes(cleanQ)) return true;
+
+      // 4. Notes match
+      if (donor.notes && String(donor.notes).toLowerCase().includes(q)) return true;
+
+      // 5. Koteshwar / Kothda combined match
+      const isKoteshwarQ = /^(कोटेश्वर|कोठ[ड़ड]ा|कोट[ड़ड]ा|कोट|कोठ|koteshwar|kothda|kotda|kothada|koteswar|kothra|kot)/i.test(q);
+      if (isKoteshwarQ && donor.city === 'कोटेश्वर / कोठड़ा') return true;
+
+      // 6. Village Alias match
+      for (const [aliasEn, aliasHi] of Object.entries(VILLAGE_ALIASES)) {
+        if (aliasEn === q || aliasEn.startsWith(q) || (q.length >= 4 && aliasEn.includes(q))) {
+          if (donor.city === aliasHi || donor.city.includes(aliasHi)) return true;
+        }
+      }
+
+      // 7. Name Roman transliteration & Phonetic match
+      const nameRom = transliterateDevanagari(donor.name);
+      if (nameRom.includes(q) || nameRom.includes(cleanQ)) return true;
+      if (pkQ && pkQ.length >= 3 && phoneticKey(nameRom).includes(pkQ)) return true;
+      if (ckQ && ckQ.length >= 3 && smartConsonantKey(nameRom).includes(ckQ)) return true;
+
+      // 8. City Roman transliteration & Phonetic match (Automatic for ANY new village!)
+      const cityRom = transliterateDevanagari(donor.city);
+      if (cityRom.includes(q) || cityRom.includes(cleanQ)) return true;
+      if (pkQ && pkQ.length >= 3 && phoneticKey(cityRom).includes(pkQ)) return true;
+      if (ckQ && ckQ.length >= 3 && smartConsonantKey(cityRom).includes(ckQ)) return true;
+
+      return false;
+    }
+
     /* ============================================================
        DYNAMIC DONORS DIRECTORY (SORTED DECREASING BY AMOUNT)
        ============================================================ */
     function renderDonorTable() {
       const tbody = document.getElementById('donorTableBody');
-      const search = (document.getElementById('donorSearchInput').value || '').trim().toLowerCase();
-      const isKoteshwarSearch = /^(kot|koth|kotesh|कोठ|कोट)/i.test(search);
-      const cleanSearch = search.replace(/^#/, '');
+      const search = (document.getElementById('donorSearchInput').value || '').trim();
 
       const filtered = declarations.filter(d => {
         const matchesVillage = (currentVillageFilter === 'all') || d.city === currentVillageFilter || d.city.includes(currentVillageFilter);
-        const matchesSearch = !search || 
-          d.name.toLowerCase().includes(search) || 
-          d.city.toLowerCase().includes(search) || 
-          (isKoteshwarSearch && d.city === 'कोटेश्वर / कोठड़ा') ||
-          (d.notes && d.notes.toLowerCase().includes(search)) ||
-          (d.receipt && d.receipt.toLowerCase().includes(search)) ||
-          String(d.sno) === search ||
-          String(d.sno) === cleanSearch ||
-          String(d.sno).includes(cleanSearch);
+        const matchesSearch = !search || matchDonorSearch(d, search);
         return matchesVillage && matchesSearch;
       });
 
