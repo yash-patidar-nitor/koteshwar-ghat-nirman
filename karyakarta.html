@@ -1081,14 +1081,25 @@
       <div class="form-box-card">
         <div class="form-box-head">
           <h3><i class="fa-solid fa-file-circle-plus" style="color:var(--gold-dark);"></i> नवीन घोषणा संकल्प प्रविष्टि</h3>
-          <span style="font-size:11px;background:var(--sandstone-light);padding:3px 8px;border-radius:12px;border:1px solid var(--sandstone);">
-            क्रम संख्या: <strong id="lblNextDeclarationSno">585</strong>
-          </span>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <label style="font-size:11.5px;display:flex;align-items:center;gap:6px;cursor:pointer;background:rgba(46,125,50,0.08);padding:4px 9px;border-radius:6px;border:1px solid rgba(46,125,50,0.3);font-weight:600;color:var(--sage);">
+              <input type="checkbox" id="chkDeclReceiveNow" onchange="toggleDeclReceiveNow(this.checked)" />
+              <span>साथ ही राशि प्राप्त करें (तुरंत रसीद काटें)</span>
+            </label>
+            <span style="font-size:11px;background:var(--sandstone-light);padding:3px 8px;border-radius:12px;border:1px solid var(--sandstone);">
+              क्रम संख्या: <strong id="lblNextDeclarationSno">585</strong>
+            </span>
+          </div>
         </div>
 
-        <div class="purpose-strip">
+        <div class="purpose-strip" id="declPurposeStripNormal">
           <i class="fa-solid fa-circle-info" style="color:var(--teal);"></i>
-          <span><strong>नोट:</strong> यहाँ केवल दानदाता का संकल्प दर्ज होता है। राशि बाद में आने पर "धन प्राप्ति / रसीद" टैब से अलग से रसीद काटी जा सकती है।</span>
+          <span><strong>नोट:</strong> केवल संकल्प दर्ज करने पर रसीद बाद में "धन प्राप्ति / रसीद" टैब से काटी जा सकती है। यदि दानदाता तुरंत राशि दे रहे हैं, तो ऊपर <strong>"साथ ही राशि प्राप्त करें"</strong> टिक करें।</span>
+        </div>
+
+        <div class="purpose-strip green" id="declPurposeStripReceipt" style="display:none;">
+          <i class="fa-brands fa-whatsapp" style="font-size:14px;color:var(--whatsapp);"></i>
+          <span><strong>घोषणा + रसीद मोड सक्रिय:</strong> घोषणा संकल्प और प्राप्त राशि की रसीद दोनों एक साथ दर्ज होंगी। रसीद नंबर भरें और सुरक्षित करते ही WhatsApp पावती तुरंत तैयार होगी।</span>
         </div>
 
         <!-- Inline Success Alert -->
@@ -1154,9 +1165,64 @@
             <input type="text" id="declNotes" class="form-input" placeholder="उदा. स्व. श्री कालूराम जी पाटीदार की पावन स्मृति में" />
           </div>
 
-          <div style="margin-top:14px;">
+          <!-- Instant Receipt Section (Visible when chkDeclReceiveNow is checked) -->
+          <div id="declReceiptSection" style="display:none;margin-top:14px;padding:14px;background:rgba(46,125,50,0.04);border:1.5px dashed var(--sage);border-radius:8px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:6px;">
+              <h4 style="margin:0;font-size:13px;color:var(--sage);display:flex;align-items:center;gap:6px;">
+                <i class="fa-solid fa-receipt"></i> तुरंत रसीद एवं भुगतान विवरण (Instant Receipt Details)
+              </h4>
+              <span style="font-size:11px;color:var(--text-muted);">रसीद बुक पर्ची नंबर व प्राप्त राशि भरें</span>
+            </div>
+
+            <div class="form-grid-3">
+              <div class="form-group">
+                <label>हस्तलिखित रसीद बुक क्रमांक (Manual Receipt No.) <span class="req">*</span></label>
+                <input type="text" id="declReceiptNo" class="form-input" placeholder="उदा. 1052 या Book-4/Rcpt-12" />
+                <div class="input-hint">भौतिक रसीद बुक का पर्ची नंबर</div>
+              </div>
+
+              <div class="form-group">
+                <label>प्राप्त राशि (₹) <span class="req">*</span></label>
+                <input type="number" id="declReceivedAmt" class="form-input amount" placeholder="उदा. 11000" min="1" step="1" oninput="updateDeclReceivedAmtWords(this.value)" />
+                <div class="input-hint" id="declReceivedAmtWords">राशि शब्दों में...</div>
+              </div>
+
+              <div class="form-group">
+                <label>भुगतान माध्यम <span class="req">*</span></label>
+                <select id="declPaymentMode" class="form-select" onchange="toggleDeclRefField(this.value)">
+                  <option value="नकद">नकद (Cash)</option>
+                  <option value="UPI / QR">UPI / QR कोड (PhonePe, GPay, Paytm)</option>
+                  <option value="बैंक चेक">बैंक चेक (Cheque)</option>
+                  <option value="बैंक ट्रांसफर (NEFT/IMPS)">बैंक ट्रांसफर (NEFT / IMPS)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-grid-3" style="margin-top:8px;">
+              <div class="form-group" id="declRefFieldWrap" style="display:none;">
+                <label id="declLblRefNo">चेक क्र. / UPI UTR / संदर्भ ID</label>
+                <input type="text" id="declRefNo" class="form-input" placeholder="ट्रांजेक्शन आईडी या चेक नंबर" />
+              </div>
+
+              <div class="form-group">
+                <label>पावती टिप्पणी / विवरण (वैकल्पिक)</label>
+                <input type="text" id="declReceiptRemarks" class="form-input" placeholder="उदा. प्रथम किस्त जमा / संकल्प पूर्ण" />
+              </div>
+            </div>
+          </div>
+
+          <div id="declSubmitNormalWrap" style="margin-top:14px;">
             <button type="submit" class="btn-submit-action">
               <i class="fa-solid fa-floppy-disk"></i> घोषणा संकल्प सुरक्षित करें
+            </button>
+          </div>
+
+          <div id="declSubmitReceiptWrap" style="display:none;margin-top:14px;flex-direction:column;gap:10px;">
+            <button type="button" class="btn-submit-whatsapp" onclick="handleSaveDeclaration(event, true)" style="margin-bottom:2px;">
+              <i class="fa-brands fa-whatsapp" style="font-size:18px;"></i> घोषणा एवं रसीद सुरक्षित करें + WhatsApp पावती भेजें
+            </button>
+            <button type="button" class="btn-outline-action" onclick="handleSaveDeclaration(event, false)" style="justify-content:center;padding:10px;">
+              <i class="fa-solid fa-file-invoice"></i> केवल घोषणा एवं रसीद सुरक्षित करें (पावती देखें)
             </button>
           </div>
         </form>
@@ -3071,10 +3137,88 @@
       }
     }
 
-    document.getElementById('declAmount').addEventListener('input', function() {
-      const words = numberToHindiWords(this.value);
-      document.getElementById('declAmountWords').textContent = this.value ? `${words} रुपये मात्र` : 'राशि शब्दों में...';
-    });
+    function toggleDeclRefField(mode) {
+      const wrap = document.getElementById('declRefFieldWrap');
+      const lbl = document.getElementById('declLblRefNo');
+      if (!wrap || !lbl) return;
+      if (mode.includes('UPI')) {
+        lbl.textContent = "UPI UTR / संदर्भ ID";
+        wrap.style.display = 'block';
+      } else if (mode.includes('चेक')) {
+        lbl.textContent = "बैंक चेक क्रमांक";
+        wrap.style.display = 'block';
+      } else if (mode.includes('ट्रांसफर')) {
+        lbl.textContent = "NEFT / IMPS संदर्भ";
+        wrap.style.display = 'block';
+      } else {
+        wrap.style.display = 'none';
+      }
+    }
+
+    function toggleDeclReceiveNow(isChecked) {
+      const receiptSection = document.getElementById('declReceiptSection');
+      const normalWrap = document.getElementById('declSubmitNormalWrap');
+      const receiptWrap = document.getElementById('declSubmitReceiptWrap');
+      const stripNormal = document.getElementById('declPurposeStripNormal');
+      const stripReceipt = document.getElementById('declPurposeStripReceipt');
+      const rcptNo = document.getElementById('declReceiptNo');
+      const rcptAmt = document.getElementById('declReceivedAmt');
+      const declAmt = document.getElementById('declAmount');
+
+      if (isChecked) {
+        if (receiptSection) receiptSection.style.display = 'block';
+        if (normalWrap) normalWrap.style.display = 'none';
+        if (receiptWrap) receiptWrap.style.display = 'flex';
+        if (stripNormal) stripNormal.style.display = 'none';
+        if (stripReceipt) stripReceipt.style.display = 'flex';
+        if (rcptNo) rcptNo.required = true;
+        if (rcptAmt) {
+          rcptAmt.required = true;
+          if (!rcptAmt.value && declAmt && declAmt.value) {
+            rcptAmt.value = declAmt.value;
+            updateDeclReceivedAmtWords(declAmt.value);
+          }
+        }
+        if (rcptNo) rcptNo.focus();
+      } else {
+        if (receiptSection) receiptSection.style.display = 'none';
+        if (normalWrap) normalWrap.style.display = 'block';
+        if (receiptWrap) receiptWrap.style.display = 'none';
+        if (stripNormal) stripNormal.style.display = 'flex';
+        if (stripReceipt) stripReceipt.style.display = 'none';
+        if (rcptNo) rcptNo.required = false;
+        if (rcptAmt) rcptAmt.required = false;
+      }
+    }
+
+    function updateDeclReceivedAmtWords(val) {
+      const words = numberToHindiWords(val);
+      const el = document.getElementById('declReceivedAmtWords');
+      if (el) el.textContent = val ? `${words} रुपये मात्र` : 'राशि शब्दों में...';
+    }
+
+    const declAmtEl = document.getElementById('declAmount');
+    if (declAmtEl) {
+      declAmtEl.addEventListener('input', function() {
+        const words = numberToHindiWords(this.value);
+        const wordsEl = document.getElementById('declAmountWords');
+        if (wordsEl) wordsEl.textContent = this.value ? `${words} रुपये मात्र` : 'राशि शब्दों में...';
+
+        const chk = document.getElementById('chkDeclReceiveNow');
+        const rcptAmtInput = document.getElementById('declReceivedAmt');
+        if (chk && chk.checked && rcptAmtInput && !rcptAmtInput.dataset.manualEdit) {
+          rcptAmtInput.value = this.value;
+          updateDeclReceivedAmtWords(this.value);
+        }
+      });
+    }
+
+    const declRcptAmtEl = document.getElementById('declReceivedAmt');
+    if (declRcptAmtEl) {
+      declRcptAmtEl.addEventListener('input', function() {
+        this.dataset.manualEdit = 'true';
+      });
+    }
 
     function updateCollAmountWords(val) {
       const words = numberToHindiWords(val);
@@ -3082,10 +3226,74 @@
     }
 
     /* ============================================================
-       TAB 1: SAVE DECLARATION (PURE PLEDGE - NO FORCED COLLECTION)
+       TAB 1: SAVE DECLARATION (WITH OPTIONAL IMMEDIATE RECEIPT)
        ============================================================ */
-    async function handleSaveDeclaration(e) {
-      e.preventDefault();
+    async function handleSaveDeclaration(e, isWhatsApp = false) {
+      if (e && e.preventDefault) e.preventDefault();
+
+      const name = document.getElementById('declName').value.trim();
+      if (!name) {
+        alert("कृपया दानदाता का शुभ नाम दर्ज करें!");
+        document.getElementById('declName').focus();
+        return;
+      }
+
+      let city = (document.getElementById('declVillageSelect').value || '').trim();
+      if (!city || city === '__ADD_NEW__') {
+        const customV = (document.getElementById('declNewVillageInput')?.value || '').trim();
+        const quickV = (document.getElementById('declVillageQuickSearch')?.value || '').trim();
+        city = customV || quickV;
+      }
+      if (!city) {
+        alert("कृपया ग्राम / नगर का चयन करें या नया ग्राम नाम लिखें!");
+        document.getElementById('declVillageQuickSearch').focus();
+        return;
+      }
+
+      addNewVillageToMaster(city);
+      let amount = parseFloat(document.getElementById('declAmount').value) || 0;
+      if (!amount || amount <= 0) {
+        alert("कृपया घोषित संकल्प राशि (₹) दर्ज करें!");
+        document.getElementById('declAmount').focus();
+        return;
+      }
+
+      const mobile = document.getElementById('declMobile').value.trim();
+      const date = document.getElementById('declDate').value || new Date().toISOString().split('T')[0];
+      const notes = document.getElementById('declNotes').value.trim();
+      const isReceiveNow = document.getElementById('chkDeclReceiveNow') && document.getElementById('chkDeclReceiveNow').checked;
+
+      let receiptNo = "-";
+      let receivedAmt = 0;
+      let paymentMode = "नकद";
+      let refNo = "";
+      let receiptRemarks = "";
+
+      if (isReceiveNow) {
+        receiptNo = (document.getElementById('declReceiptNo')?.value || '').trim();
+        if (!receiptNo) {
+          alert("कृपया हस्तलिखित रसीद बुक क्रमांक (Manual Receipt No.) दर्ज करें!");
+          document.getElementById('declReceiptNo').focus();
+          return;
+        }
+        receivedAmt = parseFloat(document.getElementById('declReceivedAmt')?.value) || 0;
+        if (!receivedAmt || receivedAmt <= 0) {
+          alert("कृपया प्राप्त राशि (₹) दर्ज करें!");
+          document.getElementById('declReceivedAmt').focus();
+          return;
+        }
+        if (receivedAmt > amount) {
+          if (!confirm(`प्राप्त राशि (₹${receivedAmt}) घोषित संकल्प (₹${amount}) से अधिक है। क्या आप घोषित संकल्प को भी बढ़ाकर ₹${receivedAmt} करना चाहते हैं?`)) {
+            document.getElementById('declReceivedAmt').focus();
+            return;
+          }
+          amount = receivedAmt;
+          document.getElementById('declAmount').value = amount;
+        }
+        paymentMode = document.getElementById('declPaymentMode')?.value || 'नकद';
+        refNo = (document.getElementById('declRefNo')?.value || '').trim();
+        receiptRemarks = (document.getElementById('declReceiptRemarks')?.value || '').trim();
+      }
 
       let maxSno = 0;
       declarationsList.forEach(d => {
@@ -3093,29 +3301,7 @@
         if (!isNaN(s) && s > maxSno) maxSno = s;
       });
       const nextSno = maxSno + 1;
-
-      const name = document.getElementById('declName').value.trim();
-      let city = (document.getElementById('declVillageSelect').value || '').trim();
-
-      // If user typed a new village in custom input or search box, accept without hard restriction
-      if (!city || city === '__ADD_NEW__') {
-        const customV = (document.getElementById('declNewVillageInput')?.value || '').trim();
-        const quickV = (document.getElementById('declVillageQuickSearch')?.value || '').trim();
-        city = customV || quickV;
-      }
-
-      if (!city) {
-        alert("कृपया ग्राम / नगर का चयन करें या नया ग्राम नाम लिखें!");
-        document.getElementById('declVillageQuickSearch').focus();
-        return;
-      }
-
-      // Save new village to dynamic master list for future dropdowns
-      addNewVillageToMaster(city);
-      const amount = parseFloat(document.getElementById('declAmount').value) || 0;
-      const mobile = document.getElementById('declMobile').value.trim();
-      const date = document.getElementById('declDate').value;
-      const notes = document.getElementById('declNotes').value.trim();
+      const balanceAmt = Math.max(0, amount - receivedAmt);
 
       const newDecl = {
         sno: nextSno,
@@ -3124,40 +3310,124 @@
         notes: notes,
         mobile: mobile,
         amount: amount,
-        deposited: 0,
-        balance: amount,
-        receipt: "-",
+        initialDeposited: 0,
+        deposited: receivedAmt,
+        balance: balanceAmt,
+        receipt: isReceiveNow ? receiptNo : "-",
         date: date,
         collector: currentUser ? currentUser.displayName : "अधिकृत कार्यकर्ता",
         collectorUsername: currentUser ? currentUser.username : "",
         recordedAt: new Date().toISOString()
       };
 
-      // 1. Save locally
+      // 1. Save declaration locally
       declarationsList.unshift(newDecl);
       try {
         const custom = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
         custom.push(newDecl);
         localStorage.setItem('koteshwar_custom_declarations', JSON.stringify(custom));
-        localStorage.setItem('koteshwar_declarations_cache', JSON.stringify(declarationsList));
       } catch (err) {}
 
-      // 2. Post to Webhook (Google Sheets)
+      // 2. Post declaration to Webhook (Google Sheets)
       postWebhookData('addDeclaration', newDecl);
+
+      let newCollection = null;
+      if (isReceiveNow) {
+        newCollection = {
+          id: "coll_" + Date.now(),
+          receiptNo: receiptNo,
+          donorSno: nextSno,
+          donorName: name,
+          city: city,
+          mobile: mobile,
+          amount: receivedAmt,
+          paymentMode: paymentMode,
+          refNo: refNo,
+          date: date,
+          collector: currentUser ? currentUser.displayName : "अधिकृत कार्यकर्ता",
+          collectorUsername: currentUser ? currentUser.username : "",
+          remarks: receiptRemarks || (balanceAmt === 0 ? "घोषणा के साथ पूर्ण राशि प्राप्त" : "घोषणा के साथ प्रथम किस्त प्राप्त"),
+          timestamp: new Date().toISOString()
+        };
+
+        // Save collection locally
+        collectionsList.unshift(newCollection);
+        try {
+          const customColls = JSON.parse(localStorage.getItem('koteshwar_custom_collections') || '[]');
+          customColls.unshift(newCollection);
+          localStorage.setItem('koteshwar_custom_collections', JSON.stringify(customColls));
+        } catch (err) {}
+        saveCollectionsToStorage();
+
+        // Post collection to Webhook (Google Sheets)
+        postWebhookData('addCollection', newCollection);
+      }
+
+      // Reconcile and save declarations cache
+      reconcileCollectionsWithDeclarations();
+      try {
+        localStorage.setItem('koteshwar_declarations_cache', JSON.stringify(declarationsList));
+      } catch (err) {}
 
       renderAllPortals();
       autoRefreshAfterTransaction();
 
-      // Show peaceful inline success message without prompting for money
+      // Show success alert
       const alertBox = document.getElementById('declSuccessAlert');
       const alertText = document.getElementById('declSuccessText');
-      alertText.textContent = `✅ संकल्प सुरक्षित हो गया: ${name} (${city}) - घोषित संकल्प ₹${amount.toLocaleString('en-IN')}`;
+      if (isReceiveNow) {
+        alertText.textContent = `✅ संकल्प व रसीद सुरक्षित हो गई: ${name} (${city}) - रसीद क्र. ${receiptNo}, प्राप्त: ₹${receivedAmt.toLocaleString('en-IN')}, शेष: ₹${balanceAmt.toLocaleString('en-IN')}`;
+      } else {
+        alertText.textContent = `✅ संकल्प सुरक्षित हो गया: ${name} (${city}) - घोषित संकल्प ₹${amount.toLocaleString('en-IN')}`;
+      }
       alertBox.classList.add('visible');
       setTimeout(() => alertBox.classList.remove('visible'), 6000);
 
+      // Reset form
       document.getElementById('newDeclarationForm').reset();
+      const today = new Date().toISOString().split('T')[0];
+      const elDeclDate = document.getElementById('declDate');
+      if (elDeclDate) elDeclDate.value = today;
       document.getElementById('declAmountWords').textContent = 'राशि शब्दों में...';
+      const elDeclRcptWords = document.getElementById('declReceivedAmtWords');
+      if (elDeclRcptWords) elDeclRcptWords.textContent = 'राशि शब्दों में...';
+      const chkReceiveNow = document.getElementById('chkDeclReceiveNow');
+      if (chkReceiveNow) {
+        chkReceiveNow.checked = false;
+        toggleDeclReceiveNow(false);
+      }
+      const rcptAmtInput = document.getElementById('declReceivedAmt');
+      if (rcptAmtInput) delete rcptAmtInput.dataset.manualEdit;
       applyUserProfile();
+
+      // If money received, open Digital Receipt & trigger WhatsApp if requested
+      if (isReceiveNow && newCollection) {
+        const rcptObj = {
+          receiptNo: receiptNo,
+          date: date,
+          name: name,
+          city: city,
+          mobile: mobile,
+          amount: receivedAmt,
+          paymentMode: paymentMode,
+          refNo: refNo,
+          collector: newDecl.collector,
+          collectorUsername: newDecl.collectorUsername,
+          pledged: amount,
+          deposited: receivedAmt,
+          balance: balanceAmt
+        };
+        openReceiptModal(rcptObj);
+
+        if (isWhatsApp) {
+          const phone = mobile ? mobile.replace(/[^0-9]/g, '') : '';
+          const text = buildWhatsAppReceiptText(rcptObj);
+          const waUrl = phone && phone.length === 10
+            ? `https://api.whatsapp.com/send?phone=91${phone}&text=${encodeURIComponent(text)}`
+            : `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+          window.open(waUrl, '_blank');
+        }
+      }
     }
 
     /* ============================================================
