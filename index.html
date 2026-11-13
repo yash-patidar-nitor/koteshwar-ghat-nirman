@@ -2339,11 +2339,22 @@
       return false;
     }
 
+    // Smart deletion filter (prevents sequence number collisions from blocking future declarations)
+    function isDeclarationDeleted(sno, name, deletedSet) {
+      if (!deletedSet || deletedSet.size === 0) return false;
+      const s = String(sno).trim();
+      const n = String(name || '').trim().toLowerCase();
+      if (deletedSet.has(`${s}:::${n}`)) return true;
+      if (deletedSet.has(s) && (n === 'asd' || n === 'yash' || n === 'test' || n === '')) return true;
+      return false;
+    }
+
     // Global App Cache Versioning (Immediate cache purge on all devices)
-    const APP_STORAGE_VERSION = '2026_11_13_v5';
+    const APP_STORAGE_VERSION = '2026_11_13_v7';
     try {
       if (localStorage.getItem('koteshwar_app_storage_version') !== APP_STORAGE_VERSION) {
         localStorage.removeItem('koteshwar_declarations_cache');
+        localStorage.removeItem('koteshwar_deleted_declarations');
         let customDecls = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
         if (Array.isArray(customDecls)) {
           customDecls = customDecls.filter(d => !isDummyTestDeclaration(d.sno, d.name, d.city, d.amount));
@@ -2488,7 +2499,7 @@
         const deletedDecls = new Set((JSON.parse(localStorage.getItem('koteshwar_deleted_declarations') || '[]')).map(String));
         if (Array.isArray(customDecls)) {
           customDecls.forEach(cd => {
-            if (deletedDecls.has(String(cd.sno))) return;
+            if (isDeclarationDeleted(cd.sno, cd.name, deletedDecls)) return;
             if (isDummyTestDeclaration(cd.sno, cd.name, cd.city, cd.amount)) return;
             const idx = declarations.findIndex(d => String(d.sno) === String(cd.sno));
             if (idx >= 0) declarations[idx] = Object.assign({}, declarations[idx], cd);
@@ -2496,7 +2507,7 @@
           });
         }
         if (deletedDecls.size > 0) {
-          declarations = declarations.filter(d => !deletedDecls.has(String(d.sno)));
+          declarations = declarations.filter(d => !isDeclarationDeleted(d.sno, d.name, deletedDecls));
         }
         declarations = declarations.filter(d => !isDummyTestDeclaration(d.sno, d.name, d.city, d.amount));
 
@@ -2830,7 +2841,7 @@
 
           if (Array.isArray(customDecls)) {
             customDecls.forEach(cd => {
-              if (deletedDecls.has(String(cd.sno))) return;
+              if (isDeclarationDeleted(cd.sno, cd.name, deletedDecls)) return;
               if (isDummyTestDeclaration(cd.sno, cd.name, cd.city, cd.amount)) return;
               const idx = fetchedDonors.findIndex(d => String(d.sno) === String(cd.sno));
               const entry = {
@@ -2880,7 +2891,7 @@
           // Filter out any locally deleted declarations
           if (deletedDecls.size > 0) {
             for (let i = fetchedDonors.length - 1; i >= 0; i--) {
-              if (deletedDecls.has(String(fetchedDonors[i].sno))) {
+              if (isDeclarationDeleted(fetchedDonors[i].sno, fetchedDonors[i].name, deletedDecls)) {
                 fetchedDonors.splice(i, 1);
               }
             }

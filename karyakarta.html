@@ -1158,6 +1158,12 @@
 
           <div class="form-grid-3">
             <div class="form-group">
+              <label>हस्तलिखित घोषणा रसीद / संकल्प पर्ची क्र. (Manual Receipt No.)</label>
+              <input type="text" id="declReceiptNo" class="form-input" placeholder="उदा. 1052 या Book-4/Rcpt-12" oninput="syncDeclReceiptToCollReceipt(this.value)" />
+              <div class="input-hint">भौतिक संकल्प पर्ची या रसीद बुक क्रमांक (वैकल्पिक)</div>
+            </div>
+
+            <div class="form-group">
               <label>संपर्क मोबाइल नंबर (गोपनीय)</label>
               <input type="tel" id="declMobile" class="form-input" placeholder="10 अंकों का मोबाइल" pattern="[0-9]{10}" />
             </div>
@@ -1166,16 +1172,18 @@
               <label>घोषणा दिनांक <span class="req">*</span></label>
               <input type="date" id="declDate" class="form-input" required />
             </div>
+          </div>
 
+          <div class="form-grid-2" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
             <div class="form-group">
               <label>प्रविष्टि कर्ता कार्यकर्ता (स्वतः)</label>
               <input type="text" id="declCollector" class="form-input" readonly style="background:#EEF5F3;font-weight:700;color:var(--teal);" />
             </div>
-          </div>
 
-          <div class="form-group">
-            <label>स्मरण / संदर्भ / पारिवारिक विवरण (वैकल्पिक)</label>
-            <input type="text" id="declNotes" class="form-input" placeholder="उदा. स्व. श्री कालूराम जी पाटीदार की पावन स्मृति में" />
+            <div class="form-group">
+              <label>स्मरण / संदर्भ / पारिवारिक विवरण (वैकल्पिक)</label>
+              <input type="text" id="declNotes" class="form-input" placeholder="उदा. स्व. श्री कालूराम जी पाटीदार की पावन स्मृति में" />
+            </div>
           </div>
 
           <!-- Instant Receipt Section (Visible when chkDeclReceiveNow is checked) -->
@@ -1189,9 +1197,9 @@
 
             <div class="form-grid-3">
               <div class="form-group">
-                <label>हस्तलिखित रसीद बुक क्रमांक (Manual Receipt No.) <span class="req">*</span></label>
-                <input type="text" id="declReceiptNo" class="form-input" placeholder="उदा. 1052 या Book-4/Rcpt-12" />
-                <div class="input-hint">भौतिक रसीद बुक का पर्ची नंबर</div>
+                <label>संग्रह रसीद क्रमांक (Collection Receipt No.) <span class="req">*</span></label>
+                <input type="text" id="declCollReceiptNo" class="form-input" placeholder="उदा. 1052 या Book-4/Rcpt-12" oninput="this.dataset.userEdited='true'" />
+                <div class="input-hint">प्राप्ति रसीद पर्ची नंबर (घोषणा रसीद से स्वतः सिंक)</div>
               </div>
 
               <div class="form-group">
@@ -1978,11 +1986,22 @@
       return false;
     }
 
+    // Smart deletion filter (prevents sequence number collisions from blocking future declarations)
+    function isDeclarationDeleted(sno, name, deletedSet) {
+      if (!deletedSet || deletedSet.size === 0) return false;
+      const s = String(sno).trim();
+      const n = String(name || '').trim().toLowerCase();
+      if (deletedSet.has(`${s}:::${n}`)) return true;
+      if (deletedSet.has(s) && (n === 'asd' || n === 'yash' || n === 'test' || n === '')) return true;
+      return false;
+    }
+
     // Global App Cache Versioning (Immediate cache purge on all devices)
-    const APP_STORAGE_VERSION = '2026_11_13_v5';
+    const APP_STORAGE_VERSION = '2026_11_13_v7';
     try {
       if (localStorage.getItem('koteshwar_app_storage_version') !== APP_STORAGE_VERSION) {
         localStorage.removeItem('koteshwar_declarations_cache');
+        localStorage.removeItem('koteshwar_deleted_declarations');
         let custom = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
         if (Array.isArray(custom)) {
           custom = custom.filter(d => !isDummyTestDeclaration(d.sno, d.name, d.city, d.amount));
@@ -2546,7 +2565,7 @@
 
         if (Array.isArray(custom)) {
           custom.forEach(item => {
-            if (deletedDecls.has(String(item.sno))) return;
+            if (isDeclarationDeleted(item.sno, item.name, deletedDecls)) return;
             if (isDummyTestDeclaration(item.sno, item.name, item.city, item.amount)) return;
             const existing = declarationsList.find(d => String(d.sno) === String(item.sno));
             if (!existing) {
@@ -2558,7 +2577,7 @@
           });
         }
         if (deletedDecls.size > 0) {
-          declarationsList = declarationsList.filter(d => !deletedDecls.has(String(d.sno)));
+          declarationsList = declarationsList.filter(d => !isDeclarationDeleted(d.sno, d.name, deletedDecls));
         }
       } catch (e) {}
 
@@ -3212,13 +3231,21 @@
       }
     }
 
+    function syncDeclReceiptToCollReceipt(val) {
+      const collRcpt = document.getElementById('declCollReceiptNo');
+      if (collRcpt && (!collRcpt.dataset.userEdited || collRcpt.value === '')) {
+        collRcpt.value = val;
+      }
+    }
+
     function toggleDeclReceiveNow(isChecked) {
       const receiptSection = document.getElementById('declReceiptSection');
       const normalWrap = document.getElementById('declSubmitNormalWrap');
       const receiptWrap = document.getElementById('declSubmitReceiptWrap');
       const stripNormal = document.getElementById('declPurposeStripNormal');
       const stripReceipt = document.getElementById('declPurposeStripReceipt');
-      const rcptNo = document.getElementById('declReceiptNo');
+      const declRcpt = document.getElementById('declReceiptNo');
+      const collRcpt = document.getElementById('declCollReceiptNo');
       const rcptAmt = document.getElementById('declReceivedAmt');
       const declAmt = document.getElementById('declAmount');
 
@@ -3228,7 +3255,12 @@
         if (receiptWrap) receiptWrap.style.display = 'flex';
         if (stripNormal) stripNormal.style.display = 'none';
         if (stripReceipt) stripReceipt.style.display = 'flex';
-        if (rcptNo) rcptNo.required = true;
+        if (collRcpt) {
+          collRcpt.required = true;
+          if (!collRcpt.value && declRcpt && declRcpt.value) {
+            collRcpt.value = declRcpt.value;
+          }
+        }
         if (rcptAmt) {
           rcptAmt.required = true;
           if (!rcptAmt.value && declAmt && declAmt.value) {
@@ -3236,14 +3268,15 @@
             updateDeclReceivedAmtWords(declAmt.value);
           }
         }
-        if (rcptNo) rcptNo.focus();
+        if (collRcpt && !collRcpt.value) collRcpt.focus();
+        else if (rcptAmt) rcptAmt.focus();
       } else {
         if (receiptSection) receiptSection.style.display = 'none';
         if (normalWrap) normalWrap.style.display = 'block';
         if (receiptWrap) receiptWrap.style.display = 'none';
         if (stripNormal) stripNormal.style.display = 'flex';
         if (stripReceipt) stripReceipt.style.display = 'none';
-        if (rcptNo) rcptNo.required = false;
+        if (collRcpt) collRcpt.required = false;
         if (rcptAmt) rcptAmt.required = false;
       }
     }
@@ -3320,19 +3353,24 @@
       const notes = document.getElementById('declNotes').value.trim();
       const isReceiveNow = document.getElementById('chkDeclReceiveNow') && document.getElementById('chkDeclReceiveNow').checked;
 
-      let receiptNo = "-";
+      const declReceiptVal = (document.getElementById('declReceiptNo')?.value || '').trim();
+      let receiptNo = declReceiptVal || "-";
+      let collReceiptNo = declReceiptVal || "-";
       let receivedAmt = 0;
       let paymentMode = "नकद";
       let refNo = "";
       let receiptRemarks = "";
 
       if (isReceiveNow) {
-        receiptNo = (document.getElementById('declReceiptNo')?.value || '').trim();
-        if (!receiptNo) {
+        const collReceiptInput = (document.getElementById('declCollReceiptNo')?.value || '').trim();
+        collReceiptNo = collReceiptInput || declReceiptVal;
+        if (!collReceiptNo) {
           alert("कृपया हस्तलिखित रसीद बुक क्रमांक (Manual Receipt No.) दर्ज करें!");
-          document.getElementById('declReceiptNo').focus();
+          const el = document.getElementById('declCollReceiptNo') || document.getElementById('declReceiptNo');
+          if (el) el.focus();
           return;
         }
+        receiptNo = collReceiptNo;
         receivedAmt = parseFloat(document.getElementById('declReceivedAmt')?.value) || 0;
         if (!receivedAmt || receivedAmt <= 0) {
           alert("कृपया प्राप्त राशि (₹) दर्ज करें!");
@@ -3370,12 +3408,19 @@
         initialDeposited: 0,
         deposited: receivedAmt,
         balance: balanceAmt,
-        receipt: isReceiveNow ? receiptNo : "-",
+        receipt: receiptNo,
         date: date,
         collector: currentUser ? currentUser.displayName : "अधिकृत कार्यकर्ता",
         collectorUsername: currentUser ? currentUser.username : "",
         recordedAt: new Date().toISOString()
       };
+
+      // Unblock this sequence number from deleted blacklist in case it was previously deleted
+      try {
+        let deleted = JSON.parse(localStorage.getItem('koteshwar_deleted_declarations') || '[]');
+        deleted = deleted.filter(s => String(s) !== String(nextSno) && !String(s).startsWith(`${nextSno}:::`));
+        localStorage.setItem('koteshwar_deleted_declarations', JSON.stringify(deleted));
+      } catch (err) {}
 
       // 1. Save declaration locally
       declarationsList.unshift(newDecl);
@@ -3392,7 +3437,7 @@
       if (isReceiveNow) {
         newCollection = {
           id: "coll_" + Date.now(),
-          receiptNo: receiptNo,
+          receiptNo: collReceiptNo,
           donorSno: nextSno,
           donorName: name,
           city: city,
@@ -4268,7 +4313,8 @@
         localStorage.setItem('koteshwar_edited_declarations', JSON.stringify(edited));
 
         let deleted = JSON.parse(localStorage.getItem('koteshwar_deleted_declarations') || '[]');
-        if (!deleted.includes(String(sno))) deleted.push(String(sno));
+        const delKey = `${sno}:::${(donor.name || '').toLowerCase()}`;
+        if (!deleted.includes(delKey)) deleted.push(delKey);
         localStorage.setItem('koteshwar_deleted_declarations', JSON.stringify(deleted));
 
         localStorage.setItem('koteshwar_declarations_cache', JSON.stringify(declarationsList));
@@ -4501,6 +4547,7 @@
       try {
         localStorage.removeItem('koteshwar_declarations_cache');
         localStorage.removeItem('koteshwar_collections_ledger');
+        localStorage.removeItem('koteshwar_deleted_declarations');
         let custom = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
         if (Array.isArray(custom)) {
           custom = custom.filter(d => !isDummyTestDeclaration(d.sno, d.name, d.city, d.amount));
