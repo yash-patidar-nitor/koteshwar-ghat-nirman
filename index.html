@@ -748,6 +748,56 @@
       gap: 6px;
     }
 
+    /* ==================== DEVELOPER CREDIT FOOTER ==================== */
+    .developer-credit-bar {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--sandstone);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .dev-credit-main {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+    }
+    .dev-credit-main strong {
+      color: var(--teal);
+      font-weight: 700;
+    }
+    .dev-credit-contact {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+    .dev-contact-link {
+      color: var(--teal);
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.15s ease;
+    }
+    .dev-contact-link:hover {
+      color: var(--gold-dark);
+      text-decoration: underline;
+    }
+    .dev-sep {
+      color: var(--sandstone-dark);
+      font-weight: 700;
+    }
+
     /* ==================== MODAL STYLES ==================== */
     .modal-backdrop {
       position: fixed;
@@ -866,6 +916,9 @@
       .footer-card-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
       .footer-actions-row { width: 100%; justify-content: flex-start; }
       .footer-sub-bar { flex-direction: column; align-items: flex-start; }
+      .developer-credit-bar { flex-direction: column; align-items: flex-start; gap: 6px; }
+      .dev-credit-contact { flex-direction: column; align-items: flex-start; gap: 4px; }
+      .dev-sep { display: none; }
     }
   </style>
 </head>
@@ -1312,6 +1365,19 @@
       <div class="footer-sub-bar">
         <span>॥ नर्मदे हर ॥ श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान • कोटेश्वर तीर्थ, कोठड़ा (म.प्र.)</span>
         <span>सर्वाधिकार सुरक्षित • पावन घाट निर्माण सेवा महाअभियान</span>
+      </div>
+
+      <div class="developer-credit-bar">
+        <div class="dev-credit-main">
+          <i class="fa-solid fa-code" style="color:var(--gold);"></i>
+          <span>developed and maintained by <strong>Goldy Mahendra Kamdar</strong></span>
+        </div>
+        <div class="dev-credit-contact">
+          <span>For feebacks or bugs please reach out to</span>
+          <a href="tel:+919131076286" class="dev-contact-link"><i class="fa-solid fa-phone"></i> +91 9131076286</a>
+          <span class="dev-sep">,</span>
+          <a href="mailto:yashkmd@gmail.com" class="dev-contact-link"><i class="fa-solid fa-envelope"></i> yashkmd@gmail.com</a>
+        </div>
       </div>
     </footer>
 
