@@ -801,22 +801,18 @@
       border-radius: 20px;
     }
     .dev-author-title {
-      font-size: 15.5px;
-      font-weight: 500;
-      color: #E6EDEC;
-      line-height: 1.4;
-    }
-    .dev-author-title strong {
-      color: #FFFFFF;
+      font-size: 20px;
       font-weight: 800;
-      font-size: 17.5px;
-      letter-spacing: 0.2px;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+      color: #FFFFFF;
+      letter-spacing: 0.3px;
+      line-height: 1.25;
+      margin: 2px 0 1px;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
     }
     .dev-reach-text {
       font-size: 13px;
-      color: #A9C2C3;
-      font-weight: 400;
+      color: #BFD8D9;
+      font-weight: 500;
     }
     .dev-contact-pills {
       display: flex;
@@ -886,11 +882,26 @@
       color: var(--text-secondary);
       line-height: 1.45;
     }
-    .auth-dev-name {
-      font-size: 13.5px;
+    .auth-dev-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
       font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
       color: var(--teal);
-      margin: 2px 0 4px;
+      background: rgba(18, 63, 66, 0.08);
+      border: 1px solid rgba(18, 63, 66, 0.15);
+      padding: 2px 8px;
+      border-radius: 12px;
+      margin-bottom: 4px;
+    }
+    .auth-dev-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--teal-dark);
+      margin: 2px 0 3px;
     }
     .auth-dev-reach {
       font-size: 11px;
@@ -1008,11 +1019,13 @@
         </div>
 
         <div class="auth-dev-credit-box">
-          <div class="auth-dev-name">developed and maintained by <strong>Goldy Mahendra Kamdar</strong></div>
-          <div class="auth-dev-reach">For feebacks or bugs please reach out to</div>
+          <span class="auth-dev-badge"><i class="fa-solid fa-code"></i> Developed &amp; Maintained by</span>
+          <div class="auth-dev-name">Goldy Mahendra Kamdar</div>
+          <div class="auth-dev-reach">For feedback, suggestions or technical support:</div>
           <div class="auth-dev-links">
-            <a href="tel:+919131076286"><i class="fa-solid fa-phone"></i> +91 9131076286</a>
-            <a href="mailto:yashkmd@gmail.com"><i class="fa-solid fa-envelope"></i> yashkmd@gmail.com</a>
+            <a href="tel:+919131076286" title="Call directly"><i class="fa-solid fa-phone"></i> +91 9131076286</a>
+            <a href="mailto:yashkmd@gmail.com" title="Send email"><i class="fa-solid fa-envelope"></i> yashkmd@gmail.com</a>
+            <a href="https://wa.me/919131076286?text=Hello%20Goldy,%20regarding%20Koteshwar%20Portal" target="_blank" rel="noopener noreferrer" style="color:var(--whatsapp);border-color:rgba(37,211,102,0.4);" title="WhatsApp Chat"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
           </div>
         </div>
       </div>
@@ -1630,6 +1643,9 @@
           <button class="btn-outline-action" onclick="refreshPortalData(true)">
             <i class="fa-solid fa-arrows-rotate"></i> Google Sheet से पुनः सिंक
           </button>
+          <button class="btn-outline-action" onclick="clearLocalAppCache()" style="color:#d9534f;border-color:rgba(217,83,79,0.5);" title="लोकल कैश साफ़ करें और ताज़ा डेटा लोड करें">
+            <i class="fa-solid fa-trash-can"></i> लोकल कैश साफ़ करें (Clear Cache)
+          </button>
         </div>
       </div>
     </div>
@@ -1644,11 +1660,10 @@
         <!-- ==================== PROMINENT DEVELOPER FOOTER SHOWCASE ==================== -->
         <div class="dev-prominent-card">
           <div class="dev-card-info">
-            <div class="dev-author-title">
-              developed and maintained by <strong>Goldy Mahendra Kamdar</strong>
-            </div>
+            <span class="dev-role-badge"><i class="fa-solid fa-code"></i> Developed &amp; Maintained by</span>
+            <div class="dev-author-title">Goldy Mahendra Kamdar</div>
             <div class="dev-reach-text">
-              For feebacks or bugs please reach out to
+              For feedback, suggestions or technical support, please reach out:
             </div>
           </div>
 
@@ -1937,6 +1952,45 @@
       else if (str.length === 11 && str.startsWith('0')) str = str.substring(1);
       return str;
     }
+
+    function normalizeVillage(v) {
+      if (!v) return "अन्य";
+      const str = String(v).trim();
+      if (/^(कोटेश्वर|कोठ[ड़ड]ा|कोट[ड़ड]ा|koteshwar|kothda|kotda|kothada|koteswar|kothra)/i.test(str) ||
+          str.includes('कोटेश्वर') || str.includes('कोठड़ा') || str.includes('कोठडा') || str.includes('कोटडा') ||
+          /koteshwar|kothda|kotda|kothada/i.test(str)) {
+        return "कोटेश्वर / कोठड़ा";
+      }
+      if (/^(कडमाल|खापरखेड़ा|kadmal|khaparkheda)/i.test(str) || str.includes('कडमाल') || str.includes('खापरखेड़ा')) {
+        return "कडमाल / खापरखेड़ा";
+      }
+      return str;
+    }
+
+    // Filter ghost/test rows
+    function isDummyTestDeclaration(sno, name, city, amt) {
+      const s = String(sno || '').trim();
+      const n = String(name || '').trim().toLowerCase();
+      const c = String(city || '').trim().toLowerCase();
+      if ((s === '585' || s === '586') && (n === 'asd' || n === 'yash' || c.includes('nisarpur'))) return true;
+      if (n === 'asd' || n === 'test' || n === 'testing') return true;
+      if ((n === 'asd' || n === 'yash') && (Number(amt) <= 0 || !amt)) return true;
+      return false;
+    }
+
+    // Global App Cache Versioning (Immediate cache purge on all devices)
+    const APP_STORAGE_VERSION = '2026_11_13_v5';
+    try {
+      if (localStorage.getItem('koteshwar_app_storage_version') !== APP_STORAGE_VERSION) {
+        localStorage.removeItem('koteshwar_declarations_cache');
+        let custom = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
+        if (Array.isArray(custom)) {
+          custom = custom.filter(d => !isDummyTestDeclaration(d.sno, d.name, d.city, d.amount));
+          localStorage.setItem('koteshwar_custom_declarations', JSON.stringify(custom));
+        }
+        localStorage.setItem('koteshwar_app_storage_version', APP_STORAGE_VERSION);
+      }
+    } catch (e) {}
 
     function parseCSV(text) {
       const lines = [];
@@ -2314,7 +2368,9 @@
       if (!forceRefresh) {
         try {
           const cached = localStorage.getItem('koteshwar_declarations_cache');
-          if (cached) declarationsList = JSON.parse(cached);
+          if (cached) {
+            declarationsList = (JSON.parse(cached) || []).filter(d => !isDummyTestDeclaration(d.sno, d.name, d.city, d.amount));
+          }
         } catch (e) {}
       }
 
@@ -2442,6 +2498,8 @@
               const collector = c[8] && c[8].v !== null ? String(c[8].v).trim() : "";
               const collectorUser = c[9] && c[9].v !== null ? String(c[9].v).trim() : "";
 
+              if (isDummyTestDeclaration(sno, name, city, amt)) continue;
+
               if (name || amt > 0) {
                 // Check if already in list
                 const idx = declarationsList.findIndex(d => String(d.sno) === String(sno));
@@ -2489,14 +2547,11 @@
         if (Array.isArray(custom)) {
           custom.forEach(item => {
             if (deletedDecls.has(String(item.sno))) return;
+            if (isDummyTestDeclaration(item.sno, item.name, item.city, item.amount)) return;
             const existing = declarationsList.find(d => String(d.sno) === String(item.sno));
             if (!existing) {
               declarationsList.push(item);
-              // Auto-sync to Google Sheet if missing from live sheet
-              if (webhookUrl) {
-                console.log("Auto-syncing declaration to Google Sheet:", item.sno, item.name);
-                postWebhookData('addDeclaration', item);
-              }
+              // NOTE: Do NOT auto-post unconfirmed local items to Google Sheets during load to prevent ghost resurrection
             } else {
               Object.assign(existing, item);
             }
@@ -2506,6 +2561,8 @@
           declarationsList = declarationsList.filter(d => !deletedDecls.has(String(d.sno)));
         }
       } catch (e) {}
+
+      declarationsList = declarationsList.filter(d => !isDummyTestDeclaration(d.sno, d.name, d.city, d.amount));
 
       declarationsList.forEach(d => {
         d.city = normalizeVillage(d.city);
@@ -4418,6 +4475,41 @@
       } catch (e) {
         console.warn("Webhook background sync notice:", e);
       }
+    }
+
+    async function refreshPortalData(force = true) {
+      updateRibbon(true, "Google Sheet से ताज़ा डेटा लोड हो रहा है...");
+      try {
+        await Promise.all([
+          loadCollectionsFromStorage(force),
+          loadDeclarationsData(force)
+        ]);
+        reconcileCollectionsWithDeclarations();
+        renderAllPortals();
+        updateRibbon(false, "डेटा ताज़ा एवं सिंक है");
+        alert("✅ Google Sheet से डेटा सफलतापूर्वक पुनः सिंक हो गया है!");
+      } catch (e) {
+        console.error("Manual refresh notice:", e);
+        updateRibbon(false, "ऑफ़लाइन मोड (लोकल कैश सक्रिय)");
+      }
+    }
+
+    function clearLocalAppCache() {
+      if (!confirm("क्या आप इस डिवाइस का पुराना कैश साफ़ करके Google Sheet से बिल्कुल नया डेटा लोड करना चाहते हैं?")) {
+        return;
+      }
+      try {
+        localStorage.removeItem('koteshwar_declarations_cache');
+        localStorage.removeItem('koteshwar_collections_ledger');
+        let custom = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
+        if (Array.isArray(custom)) {
+          custom = custom.filter(d => !isDummyTestDeclaration(d.sno, d.name, d.city, d.amount));
+          localStorage.setItem('koteshwar_custom_declarations', JSON.stringify(custom));
+        }
+        localStorage.setItem('koteshwar_app_storage_version', APP_STORAGE_VERSION);
+      } catch (e) {}
+      alert("✅ लोकल कैश साफ़ कर दिया गया है! अब Google Sheet से ताज़ा डेटा लाया जा रहा है...");
+      refreshPortalData(true);
     }
 
     /* ============================================================

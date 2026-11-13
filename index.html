@@ -811,22 +811,18 @@
       border-radius: 20px;
     }
     .dev-author-title {
-      font-size: 15.5px;
-      font-weight: 500;
-      color: #E6EDEC;
-      line-height: 1.4;
-    }
-    .dev-author-title strong {
-      color: #FFFFFF;
+      font-size: 20px;
       font-weight: 800;
-      font-size: 17.5px;
-      letter-spacing: 0.2px;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+      color: #FFFFFF;
+      letter-spacing: 0.3px;
+      line-height: 1.25;
+      margin: 2px 0 1px;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
     }
     .dev-reach-text {
       font-size: 13px;
-      color: #A9C2C3;
-      font-weight: 400;
+      color: #BFD8D9;
+      font-weight: 500;
     }
     .dev-contact-pills {
       display: flex;
@@ -2226,11 +2222,10 @@
       <!-- ==================== PROMINENT DEVELOPER FOOTER SHOWCASE ==================== -->
       <div class="dev-prominent-card">
         <div class="dev-card-info">
-          <div class="dev-author-title">
-            developed and maintained by <strong>Goldy Mahendra Kamdar</strong>
-          </div>
+          <span class="dev-role-badge"><i class="fa-solid fa-code"></i> Developed &amp; Maintained by</span>
+          <div class="dev-author-title">Goldy Mahendra Kamdar</div>
           <div class="dev-reach-text">
-            For feebacks or bugs please reach out to
+            For feedback, suggestions or technical support, please reach out:
           </div>
         </div>
 
@@ -2332,6 +2327,31 @@
       }
       return str;
     }
+
+    // Filter ghost/test rows
+    function isDummyTestDeclaration(sno, name, city, amt) {
+      const s = String(sno || '').trim();
+      const n = String(name || '').trim().toLowerCase();
+      const c = String(city || '').trim().toLowerCase();
+      if ((s === '585' || s === '586') && (n === 'asd' || n === 'yash' || c.includes('nisarpur'))) return true;
+      if (n === 'asd' || n === 'test' || n === 'testing') return true;
+      if ((n === 'asd' || n === 'yash') && (Number(amt) <= 0 || !amt)) return true;
+      return false;
+    }
+
+    // Global App Cache Versioning (Immediate cache purge on all devices)
+    const APP_STORAGE_VERSION = '2026_11_13_v5';
+    try {
+      if (localStorage.getItem('koteshwar_app_storage_version') !== APP_STORAGE_VERSION) {
+        localStorage.removeItem('koteshwar_declarations_cache');
+        let customDecls = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
+        if (Array.isArray(customDecls)) {
+          customDecls = customDecls.filter(d => !isDummyTestDeclaration(d.sno, d.name, d.city, d.amount));
+          localStorage.setItem('koteshwar_custom_declarations', JSON.stringify(customDecls));
+        }
+        localStorage.setItem('koteshwar_app_storage_version', APP_STORAGE_VERSION);
+      }
+    } catch (e) {}
 
     function parseCSV(text) {
       const lines = [];
@@ -2460,7 +2480,7 @@
         if (cached) {
           const parsed = JSON.parse(cached);
           if (Array.isArray(parsed) && parsed.length > 0) {
-            declarations = parsed;
+            declarations = parsed.filter(d => !isDummyTestDeclaration(d.sno, d.name, d.city, d.amount));
           }
         }
         // Immediately merge custom declarations created via Karyakarta portal
@@ -2469,6 +2489,7 @@
         if (Array.isArray(customDecls)) {
           customDecls.forEach(cd => {
             if (deletedDecls.has(String(cd.sno))) return;
+            if (isDummyTestDeclaration(cd.sno, cd.name, cd.city, cd.amount)) return;
             const idx = declarations.findIndex(d => String(d.sno) === String(cd.sno));
             if (idx >= 0) declarations[idx] = Object.assign({}, declarations[idx], cd);
             else declarations.push(cd);
@@ -2477,6 +2498,7 @@
         if (deletedDecls.size > 0) {
           declarations = declarations.filter(d => !deletedDecls.has(String(d.sno)));
         }
+        declarations = declarations.filter(d => !isDummyTestDeclaration(d.sno, d.name, d.city, d.amount));
 
         if (declarations.length > 0) {
           declarations.sort((a, b) => (b.amount - a.amount) || (a.sno - b.sno));
@@ -2667,6 +2689,7 @@
                 const lamt = parseFloat(String(lc[5] && lc[5].v !== null ? lc[5].v : "0").replace(/[^0-9.]/g, '')) || 0;
                 const lrcpt = lc[6] && lc[6].v !== null ? String(lc[6].v).trim() : "-";
                 const ldate = lc[7] ? (lc[7].f || lc[7].v || "") : "";
+                if (isDummyTestDeclaration(lsno, lname, lcity, lamt)) continue;
                 if (lname || lamt > 0) {
                   const existingIdx = fetchedDonors.findIndex(d => String(d.sno) === String(lsno));
                   const newEntry = {
@@ -2808,6 +2831,7 @@
           if (Array.isArray(customDecls)) {
             customDecls.forEach(cd => {
               if (deletedDecls.has(String(cd.sno))) return;
+              if (isDummyTestDeclaration(cd.sno, cd.name, cd.city, cd.amount)) return;
               const idx = fetchedDonors.findIndex(d => String(d.sno) === String(cd.sno));
               const entry = {
                 sno: cd.sno,

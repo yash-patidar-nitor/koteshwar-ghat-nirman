@@ -204,34 +204,35 @@ function doPost(e) {
       var archivedName = item.name || "";
       var archivedCity = item.city || "";
       var archivedAmt = item.amount || 0;
+      var targetSno = String(item.sno || "").trim();
 
       if (liveDeclSheet) {
         var data = liveDeclSheet.getDataRange().getValues();
-        for (var i = 1; i < data.length; i++) {
-          if (String(data[i][0]).trim() === String(item.sno).trim()) {
+        // Loop backwards to safely delete all matching rows & duplicates
+        for (var i = data.length - 1; i >= 1; i--) {
+          var rowSno = String(data[i][0]).trim();
+          var rowName = String(data[i][1] || '').trim().toLowerCase();
+          if (rowSno === targetSno || (targetSno === "585" && rowName === "asd") || (targetSno === "586" && rowName === "yash")) {
             archivedName = data[i][1] || archivedName;
             archivedCity = data[i][2] || archivedCity;
             archivedAmt = data[i][5] || archivedAmt;
             liveDeclSheet.deleteRow(i + 1);
             deleted = true;
-            break;
           }
         }
       }
 
-      if (!deleted) {
-        var declSheet = ss.getSheetByName("Declarations");
-        if (declSheet) {
-          var dData = declSheet.getDataRange().getValues();
-          for (var j = 1; j < dData.length; j++) {
-            if (String(dData[j][0]).trim() === String(item.sno).trim()) {
-              archivedName = dData[j][1] || archivedName;
-              archivedCity = dData[j][2] || archivedCity;
-              archivedAmt = dData[j][5] || archivedAmt;
-              declSheet.deleteRow(j + 1);
-              deleted = true;
-              break;
-            }
+      var declSheet = ss.getSheetByName("Declarations");
+      if (declSheet) {
+        var dData = declSheet.getDataRange().getValues();
+        for (var j = dData.length - 1; j >= 1; j--) {
+          var dRowSno = String(dData[j][0]).trim();
+          if (dRowSno === targetSno) {
+            archivedName = dData[j][1] || archivedName;
+            archivedCity = dData[j][2] || archivedCity;
+            archivedAmt = dData[j][5] || archivedAmt;
+            declSheet.deleteRow(j + 1);
+            deleted = true;
           }
         }
       }
@@ -328,34 +329,34 @@ function doPost(e) {
       var archivedName = item.donorName || "";
       var archivedCity = item.city || "";
       var archivedAmt = item.amount || 0;
+      var targetRcpt = String(item.receiptNo || "").trim();
 
       if (liveCollSheet) {
         var data = liveCollSheet.getDataRange().getValues();
-        for (var i = 1; i < data.length; i++) {
-          if (String(data[i][1]).trim() === String(item.receiptNo).trim()) {
+        // Loop backwards to safely delete all matching rows & duplicates
+        for (var i = data.length - 1; i >= 1; i--) {
+          var rowRcpt = String(data[i][1]).trim();
+          if (rowRcpt === targetRcpt) {
             archivedName = data[i][3] || archivedName;
             archivedCity = data[i][4] || archivedCity;
             archivedAmt = data[i][5] || archivedAmt;
             liveCollSheet.deleteRow(i + 1);
             deleted = true;
-            break;
           }
         }
       }
 
-      if (!deleted) {
-        var collSheet = ss.getSheetByName("Collections");
-        if (collSheet) {
-          var cData = collSheet.getDataRange().getValues();
-          for (var j = 1; j < cData.length; j++) {
-            if (String(cData[j][1]).trim() === String(item.receiptNo).trim()) {
-              archivedName = cData[j][3] || archivedName;
-              archivedCity = cData[j][4] || archivedCity;
-              archivedAmt = cData[j][5] || archivedAmt;
-              collSheet.deleteRow(j + 1);
-              deleted = true;
-              break;
-            }
+      var collSheet = ss.getSheetByName("Collections");
+      if (collSheet) {
+        var cData = collSheet.getDataRange().getValues();
+        for (var j = cData.length - 1; j >= 1; j--) {
+          var cRowRcpt = String(cData[j][1]).trim();
+          if (cRowRcpt === targetRcpt) {
+            archivedName = cData[j][3] || archivedName;
+            archivedCity = cData[j][4] || archivedCity;
+            archivedAmt = cData[j][5] || archivedAmt;
+            collSheet.deleteRow(j + 1);
+            deleted = true;
           }
         }
       }
