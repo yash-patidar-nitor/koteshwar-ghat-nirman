@@ -1825,7 +1825,11 @@
        ============================================================ */
     async function loadCollectionsFromStorage(forceRefresh = false) {
       if (forceRefresh) {
-        collectionsList = [];
+        // Retain existing local collections list during refresh to prevent temporary drops
+        try {
+          const saved = localStorage.getItem('koteshwar_collections_ledger');
+          if (saved) collectionsList = JSON.parse(saved);
+        } catch (e) {}
       } else {
         // 1. Load local offline storage first
         try {
@@ -1913,6 +1917,10 @@
 
       const deletedColls = new Set((JSON.parse(localStorage.getItem('koteshwar_deleted_collections') || '[]')).map(String));
       const editedColls = JSON.parse(localStorage.getItem('koteshwar_edited_collections') || '{}');
+      let customColls = [];
+      try {
+        customColls = JSON.parse(localStorage.getItem('koteshwar_custom_collections') || '[]');
+      } catch (e) {}
 
       // Apply edits & filter deleted
       fetchedColls = fetchedColls.filter(c => !deletedColls.has(String(c.receiptNo).trim()));
@@ -1923,13 +1931,20 @@
         }
       });
 
-      if (forceRefresh || fetchedLiveOk) {
-        // When online or force-refreshed, Google Sheet is source of truth
-        collectionsList = fetchedColls;
-        saveCollectionsToStorage();
-      } else if (fetchedColls.length > 0) {
-        // Merge sheet collections with local offline collections
-        const existingRcpts = new Set(fetchedColls.map(c => String(c.receiptNo).trim()));
+      // Retain locally created/offline collections that are not yet in Google Sheet (and not deleted)
+      const existingRcpts = new Set(fetchedColls.map(c => String(c.receiptNo).trim()));
+
+      if (Array.isArray(customColls)) {
+        customColls.forEach(c => {
+          const rKey = String(c.receiptNo).trim();
+          if (!deletedColls.has(rKey) && !existingRcpts.has(rKey)) {
+            fetchedColls.unshift(c);
+            existingRcpts.add(rKey);
+          }
+        });
+      }
+
+      if (Array.isArray(collectionsList)) {
         collectionsList.forEach(localItem => {
           const rKey = String(localItem.receiptNo).trim();
           if (!deletedColls.has(rKey) && !existingRcpts.has(rKey)) {
@@ -1937,6 +1952,9 @@
             existingRcpts.add(rKey);
           }
         });
+      }
+
+      if (fetchedColls.length > 0) {
         collectionsList = fetchedColls;
         saveCollectionsToStorage();
       } else {
@@ -2235,6 +2253,44 @@
         refreshBtns.forEach(b => b.classList.remove('rotating'));
       }
     }
+
+    let backgroundSyncTimer = null;
+    let isBackgroundSyncing = false;
+
+    // Silent background refresh that updates everything without showing alerts
+    async function silentAutoRefresh() {
+      if (isBackgroundSyncing) return;
+      isBackgroundSyncing = true;
+      try {
+        await loadCollectionsFromStorage(true);
+        await loadDeclarationsData(true);
+        reconcileCollectionsWithDeclarations();
+        renderAllPortals();
+        console.log("Silent auto-refresh complete:", new Date().toLocaleTimeString());
+      } catch (e) {
+        console.warn("Silent background auto-sync notice:", e);
+      } finally {
+        isBackgroundSyncing = false;
+      }
+    }
+
+    // Auto-refresh after a transaction has committed to Google Sheets
+    function autoRefreshAfterTransaction(delayMs = 2000) {
+      if (backgroundSyncTimer) clearTimeout(backgroundSyncTimer);
+      backgroundSyncTimer = setTimeout(() => {
+        silentAutoRefresh();
+      }, delayMs);
+    }
+
+    // Auto-sync when user returns to app/tab on mobile
+    window.addEventListener('focus', () => {
+      silentAutoRefresh();
+    });
+
+    // Periodic background sync every 45 seconds to keep devices in sync
+    setInterval(() => {
+      silentAutoRefresh();
+    }, 45000);
 
     function renderAllPortals() {
       try { populateVillageDropdowns(); } catch (e) { console.error("Error in populateVillageDropdowns:", e); }
@@ -2659,6 +2715,10 @@
 
       const target = document.getElementById('pane-' + tabId);
       if (target) target.classList.add('active');
+
+      if (tabId === 'declarations-ledger') renderDeclarationsTable();
+      else if (tabId === 'collections-ledger') renderCollectionsTable();
+      else if (tabId === 'pending-list') renderPendingTable();
     }
 
     /* ==================== FORM HELPERS ==================== */
@@ -2760,6 +2820,7 @@
       postWebhookData('addDeclaration', newDecl);
 
       renderAllPortals();
+      autoRefreshAfterTransaction();
 
       // Show peaceful inline success message without prompting for money
       const alertBox = document.getElementById('declSuccessAlert');
@@ -2903,6 +2964,11 @@
 
       // 1. Save collection independently in collections ledger
       collectionsList.unshift(newCollection);
+      try {
+        const customColls = JSON.parse(localStorage.getItem('koteshwar_custom_collections') || '[]');
+        customColls.unshift(newCollection);
+        localStorage.setItem('koteshwar_custom_collections', JSON.stringify(customColls));
+      } catch (err) {}
       saveCollectionsToStorage();
 
       // 2. Reconcile with declarations (updates deposited, balance, and direct donors)
@@ -2915,6 +2981,7 @@
       postWebhookData('addCollection', newCollection);
 
       renderAllPortals();
+      autoRefreshAfterTransaction();
 
       // 4. Show success banner
       const alertBox = document.getElementById('collSuccessAlert');
@@ -3512,6 +3579,7 @@
 
       closeEditDeclModal();
       renderAllPortals();
+      autoRefreshAfterTransaction();
       alert(`✅ दानदाता #${sno} (${newName}) का संकल्प विवरण सफलतापूर्वक अपडेट हो गया!`);
     }
 
@@ -3559,6 +3627,7 @@
       });
 
       renderAllPortals();
+      autoRefreshAfterTransaction();
       alert(`🗑️ संकल्प #${sno} सफलतापूर्वक हटा दिया गया (सॉफ्ट डिलीट पुरालेख 'Deleted Archive' में सुरक्षित दर्ज)।`);
     }
 
@@ -3621,6 +3690,13 @@
         let editedColls = JSON.parse(localStorage.getItem('koteshwar_edited_collections') || '{}');
         editedColls[newReceiptNo] = Object.assign({}, coll);
         localStorage.setItem('koteshwar_edited_collections', JSON.stringify(editedColls));
+
+        let customColls = JSON.parse(localStorage.getItem('koteshwar_custom_collections') || '[]');
+        const cIdx = customColls.findIndex(c => String(c.receiptNo) === String(origReceiptNo));
+        if (cIdx >= 0) {
+          customColls[cIdx] = Object.assign({}, customColls[cIdx], coll);
+          localStorage.setItem('koteshwar_custom_collections', JSON.stringify(customColls));
+        }
       } catch (err) {}
 
       saveCollectionsToStorage();
@@ -3631,6 +3707,7 @@
 
       closeEditCollModal();
       renderAllPortals();
+      autoRefreshAfterTransaction();
       alert(`✅ रसीद क्रमांक ${newReceiptNo} का विवरण सफलतापूर्वक अपडेट हो गया!`);
     }
 
@@ -3659,6 +3736,10 @@
         let editedColls = JSON.parse(localStorage.getItem('koteshwar_edited_collections') || '{}');
         delete editedColls[receiptNo];
         localStorage.setItem('koteshwar_edited_collections', JSON.stringify(editedColls));
+
+        let customColls = JSON.parse(localStorage.getItem('koteshwar_custom_collections') || '[]');
+        customColls = customColls.filter(c => String(c.receiptNo) !== String(receiptNo));
+        localStorage.setItem('koteshwar_custom_collections', JSON.stringify(customColls));
       } catch (err) {}
 
       // Clear cached collection and restore donor baseline if initialDeposited was missing
@@ -3694,6 +3775,7 @@
       });
 
       renderAllPortals();
+      autoRefreshAfterTransaction();
       alert(`🗑️ रसीद क्रमांक ${receiptNo} सफलतापूर्वक हटा दी गई (सॉफ्ट डिलीट पुरालेख 'Deleted Archive' में सुरक्षित दर्ज)।`);
     }
 
