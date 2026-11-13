@@ -1808,6 +1808,11 @@
                 const dcity = cc[4] && cc[4].v !== null ? String(cc[4].v).trim() : "अन्य";
                 const camt = parseFloat(String(cc[5] && cc[5].v !== null ? cc[5].v : "0").replace(/[^0-9.]/g, '')) || 0;
                 const ldate = cc[7] ? (cc[7].f || cc[7].v || "") : "";
+
+                // Skip header row if present
+                if (lrcpt.includes('रसीद क्रमांक') || dname.includes('शुभ नाम') || String(cc[0]?.v || '').includes('क्र.')) continue;
+                if (!dname && camt <= 0) continue;
+
                 applyCollectionRow(lrcpt, dsno, dname, dcity, camt, ldate);
               }
             }

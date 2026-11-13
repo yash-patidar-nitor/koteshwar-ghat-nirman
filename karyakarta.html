@@ -169,6 +169,21 @@
       color: #fff;
       border-color: rgba(255, 255, 255, 0.25);
     }
+    .btn-header-refresh {
+      background: rgba(209, 154, 80, 0.25);
+      color: #FFE6BD;
+      border-color: rgba(209, 154, 80, 0.5);
+    }
+    .btn-header-refresh:hover {
+      background: rgba(209, 154, 80, 0.4);
+      color: #FFFFFF;
+    }
+    .rotating i, .rotating .fa-arrows-rotate {
+      animation: spin-refresh 0.8s linear infinite;
+    }
+    @keyframes spin-refresh {
+      100% { transform: rotate(360deg); }
+    }
     .btn-header-logout {
       background: rgba(200, 75, 49, 0.3);
       color: #FFC0B3;
@@ -792,6 +807,9 @@
           <i class="fa-solid fa-circle-user" style="color:var(--gold-light);"></i>
           <span id="headerUserDisplayName">कार्यकर्ता</span>
         </div>
+        <button onclick="refreshPortalData(true)" class="btn-header btn-header-refresh btn-refresh-trigger" id="btnHeaderRefresh" title="Google Sheet से डेटा ताज़ा करें">
+          <i class="fa-solid fa-arrows-rotate"></i> <span>ताज़ा करें</span>
+        </button>
         <a href="index.html" class="btn-header btn-header-public" title="सार्वजनिक डैशबोर्ड">
           <i class="fa-solid fa-house"></i>
         </a>
@@ -1062,9 +1080,14 @@
       <div class="form-box-card">
         <div class="form-box-head">
           <h3><i class="fa-solid fa-clipboard-list" style="color:var(--teal);"></i> संपूर्ण घोषणा सूची (Declarations)</h3>
-          <button class="btn-outline-action" onclick="exportDeclarationsCSV()">
-            <i class="fa-solid fa-file-csv"></i> CSV
-          </button>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button class="btn-outline-action btn-refresh-trigger" onclick="refreshPortalData(true)" title="Google Sheet से डेटा ताज़ा करें" style="padding:4px 10px;font-size:11.5px;color:var(--teal);border-color:var(--teal);">
+              <i class="fa-solid fa-arrows-rotate"></i> ताज़ा करें
+            </button>
+            <button class="btn-outline-action" onclick="exportDeclarationsCSV()">
+              <i class="fa-solid fa-file-csv"></i> CSV
+            </button>
+          </div>
         </div>
 
         <div class="ledger-controls-row">
@@ -1111,9 +1134,14 @@
       <div class="form-box-card">
         <div class="form-box-head">
           <h3><i class="fa-solid fa-file-invoice-dollar" style="color:var(--sage);"></i> वास्तविक संग्रह सूची (Collections)</h3>
-          <button class="btn-outline-action" onclick="exportCollectionsCSV()">
-            <i class="fa-solid fa-file-csv"></i> CSV
-          </button>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button class="btn-outline-action btn-refresh-trigger" onclick="refreshPortalData(true)" title="Google Sheet से डेटा ताज़ा करें" style="padding:4px 10px;font-size:11.5px;color:var(--teal);border-color:var(--teal);">
+              <i class="fa-solid fa-arrows-rotate"></i> ताज़ा करें
+            </button>
+            <button class="btn-outline-action" onclick="exportCollectionsCSV()">
+              <i class="fa-solid fa-file-csv"></i> CSV
+            </button>
+          </div>
         </div>
 
         <div class="purpose-strip green">
@@ -1163,8 +1191,11 @@
           <div style="display:flex;align-items:center;gap:8px;">
             <h3><i class="fa-solid fa-hourglass-half" style="color:var(--saffron);"></i> लंबित वसूली सूची (बकाया संकल्प)</h3>
           </div>
-          <div style="display:flex;align-items:center;gap:10px;">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
             <span id="pendingStatsBadge" style="font-size:11.5px;color:var(--saffron);font-weight:700;background:rgba(217,119,6,0.1);padding:4px 10px;border-radius:12px;border:1px solid rgba(217,119,6,0.25);">लोड हो रहा है...</span>
+            <button class="btn-outline-action btn-refresh-trigger" onclick="refreshPortalData(true)" title="Google Sheet से डेटा ताज़ा करें" style="padding:4px 10px;font-size:11.5px;color:var(--teal);border-color:var(--teal);">
+              <i class="fa-solid fa-arrows-rotate"></i> ताज़ा करें
+            </button>
             <button class="btn-outline-action" onclick="exportPendingCSV()" title="लंबित वसूली सूची CSV डाउनलोड करें" style="padding:4px 10px;font-size:11.5px;">
               <i class="fa-solid fa-file-csv"></i> CSV
             </button>
@@ -1792,13 +1823,17 @@
     /* ============================================================
        DATA LOAD & RECONCILE
        ============================================================ */
-    async function loadCollectionsFromStorage() {
-      // 1. Load local offline storage first
-      try {
-        const saved = localStorage.getItem('koteshwar_collections_ledger');
-        collectionsList = saved ? JSON.parse(saved) : [];
-      } catch (e) {
+    async function loadCollectionsFromStorage(forceRefresh = false) {
+      if (forceRefresh) {
         collectionsList = [];
+      } else {
+        // 1. Load local offline storage first
+        try {
+          const saved = localStorage.getItem('koteshwar_collections_ledger');
+          collectionsList = saved ? JSON.parse(saved) : [];
+        } catch (e) {
+          collectionsList = [];
+        }
       }
 
       let fetchedColls = [];
@@ -1819,23 +1854,26 @@
           const collectorUser = c[10] && c[10].v !== null ? String(c[10].v).trim() : "";
           const remarks = c[11] && c[11].v !== null ? String(c[11].v).trim() : "";
 
-          if (donorName || amt > 0 || rcptNo) {
-            fetchedColls.push({
-              id: `${prefix}_${i}`,
-              receiptNo: rcptNo,
-              donorSno: donorSno,
-              donorName: donorName,
-              city: city,
-              amount: amt,
-              paymentMode: mode,
-              refNo: refNo,
-              date: String(dateVal).trim(),
-              collector: collector,
-              collectorUsername: collectorUser,
-              remarks: remarks,
-              timestamp: new Date().toISOString()
-            });
-          }
+          // Skip header row if present
+          if (rcptNo.includes('रसीद क्रमांक') || donorName.includes('शुभ नाम') || String(c[0]?.v || '').includes('क्र.')) continue;
+          if (!donorName && amt <= 0 && !rcptNo) continue;
+          if (amt <= 0 && !donorName) continue;
+
+          fetchedColls.push({
+            id: `${prefix}_${i}`,
+            receiptNo: rcptNo,
+            donorSno: donorSno,
+            donorName: donorName,
+            city: city,
+            amount: amt,
+            paymentMode: mode,
+            refNo: refNo,
+            date: String(dateVal).trim(),
+            collector: collector,
+            collectorUsername: collectorUser,
+            remarks: remarks,
+            timestamp: new Date().toISOString()
+          });
         }
       };
 
@@ -1856,6 +1894,7 @@
       }
 
       // 3. Fetch live collections from 'Live Collection' sheet
+      let fetchedLiveOk = false;
       try {
         const resLive = await fetch(GVIZ_LIVE_COLL_URL);
         if (resLive.ok) {
@@ -1865,6 +1904,7 @@
             const data = JSON.parse(match[1]);
             const rows = data.table && data.table.rows ? data.table.rows : [];
             parseCollRows(rows, "LR");
+            fetchedLiveOk = true;
           }
         }
       } catch (err) {
@@ -1874,16 +1914,21 @@
       const deletedColls = new Set((JSON.parse(localStorage.getItem('koteshwar_deleted_collections') || '[]')).map(String));
       const editedColls = JSON.parse(localStorage.getItem('koteshwar_edited_collections') || '{}');
 
-      if (fetchedColls.length > 0) {
-        // Apply edits & filter deleted
-        fetchedColls = fetchedColls.filter(c => !deletedColls.has(String(c.receiptNo)));
-        fetchedColls.forEach(c => {
-          if (editedColls[String(c.receiptNo)]) {
-            Object.assign(c, editedColls[String(c.receiptNo)]);
-          }
-        });
+      // Apply edits & filter deleted
+      fetchedColls = fetchedColls.filter(c => !deletedColls.has(String(c.receiptNo).trim()));
+      fetchedColls.forEach(c => {
+        const rKey = String(c.receiptNo).trim();
+        if (editedColls[rKey]) {
+          Object.assign(c, editedColls[rKey]);
+        }
+      });
 
-        // Merge sheet collections with local collections (avoiding duplicate receipt numbers)
+      if (forceRefresh || fetchedLiveOk) {
+        // When online or force-refreshed, Google Sheet is source of truth
+        collectionsList = fetchedColls;
+        saveCollectionsToStorage();
+      } else if (fetchedColls.length > 0) {
+        // Merge sheet collections with local offline collections
         const existingRcpts = new Set(fetchedColls.map(c => String(c.receiptNo).trim()));
         collectionsList.forEach(localItem => {
           const rKey = String(localItem.receiptNo).trim();
@@ -1895,12 +1940,15 @@
         collectionsList = fetchedColls;
         saveCollectionsToStorage();
       } else {
-        collectionsList = collectionsList.filter(c => !deletedColls.has(String(c.receiptNo)));
+        // Offline fallback with deleted filter applied
+        collectionsList = collectionsList.filter(c => !deletedColls.has(String(c.receiptNo).trim()));
         collectionsList.forEach(c => {
-          if (editedColls[String(c.receiptNo)]) {
-            Object.assign(c, editedColls[String(c.receiptNo)]);
+          const rKey = String(c.receiptNo).trim();
+          if (editedColls[rKey]) {
+            Object.assign(c, editedColls[rKey]);
           }
         });
+        saveCollectionsToStorage();
       }
     }
 
@@ -2134,8 +2182,10 @@
         const sKey = String(d.sno).trim();
         const nKey = String(d.name || '').trim().toLowerCase();
         const liveColl = (collMapSno[sKey] || 0) + (collMapName[nKey] || 0);
-        const baselineDep = Number(d.initialDeposited !== undefined ? d.initialDeposited : d.deposited) || 0;
-        d.deposited = baselineDep + liveColl;
+        if (d.initialDeposited === undefined) {
+          d.initialDeposited = Number(d.deposited) || 0;
+        }
+        d.deposited = (Number(d.initialDeposited) || 0) + liveColl;
         d.balance = Math.max(0, (Number(d.amount) || 0) - d.deposited);
       });
 
@@ -2165,9 +2215,25 @@
     }
 
     async function refreshPortalData(force = true) {
-      await loadDeclarationsData(force);
-      renderAllPortals();
-      alert("डेटा सफलतापूर्वक रीफ्रेश हो गया!");
+      const refreshBtns = document.querySelectorAll('.btn-refresh-trigger');
+      refreshBtns.forEach(b => b.classList.add('rotating'));
+      try {
+        if (force) {
+          try {
+            localStorage.removeItem('koteshwar_declarations_cache');
+          } catch (e) {}
+        }
+        await loadCollectionsFromStorage(force);
+        await loadDeclarationsData(force);
+        reconcileCollectionsWithDeclarations();
+        renderAllPortals();
+        alert("डेटा Google Sheet से सफलतापूर्वक रीफ्रेश हो गया!");
+      } catch (err) {
+        console.error("Refresh error:", err);
+        alert("डेटा रीफ्रेश करते समय त्रुटि आई। कृपया पुनः प्रयास करें।");
+      } finally {
+        refreshBtns.forEach(b => b.classList.remove('rotating'));
+      }
     }
 
     function renderAllPortals() {
@@ -3595,7 +3661,25 @@
         localStorage.setItem('koteshwar_edited_collections', JSON.stringify(editedColls));
       } catch (err) {}
 
+      // Clear cached collection and restore donor baseline if initialDeposited was missing
+      if (coll.donorSno) {
+        const donor = declarationsList.find(d => String(d.sno) === String(coll.donorSno));
+        if (donor && donor.initialDeposited === undefined) {
+          donor.initialDeposited = Math.max(0, (Number(donor.deposited) || 0) - (Number(coll.amount) || 0));
+        }
+      }
+      if (coll.donorName) {
+        const cName = coll.donorName.trim().toLowerCase();
+        const donor = declarationsList.find(d => String(d.name || '').trim().toLowerCase() === cName);
+        if (donor && donor.initialDeposited === undefined) {
+          donor.initialDeposited = Math.max(0, (Number(donor.deposited) || 0) - (Number(coll.amount) || 0));
+        }
+      }
+
       reconcileCollectionsWithDeclarations();
+      try {
+        localStorage.setItem('koteshwar_declarations_cache', JSON.stringify(declarationsList));
+      } catch (err) {}
 
       // Send webhook delete request with audit fields
       postWebhookData('deleteCollection', {
