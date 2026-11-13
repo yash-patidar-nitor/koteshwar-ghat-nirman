@@ -762,54 +762,127 @@
       gap: 6px;
     }
 
-    /* ==================== DEVELOPER CREDIT FOOTER ==================== */
-    .developer-credit-bar {
-      margin-top: 14px;
-      padding-top: 12px;
-      border-top: 1px dashed var(--sandstone);
+    /* ==================== PROMINENT DEVELOPER FOOTER SHOWCASE ==================== */
+    .dev-prominent-card {
+      margin-top: 18px;
+      padding: 20px 24px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #0A2426 0%, #123F42 55%, #1B5256 100%);
+      border: 1.5px solid rgba(209, 154, 80, 0.45);
+      box-shadow: 0 10px 28px rgba(10, 36, 38, 0.2), 0 2px 6px rgba(0, 0, 0, 0.12);
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 8px 16px;
-      font-size: 12px;
-      color: var(--text-secondary);
-      line-height: 1.5;
+      gap: 16px 24px;
+      color: #FFFFFF;
+      position: relative;
+      overflow: hidden;
     }
-    .dev-credit-main {
+    .dev-prominent-card::before {
+      content: "";
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(209, 154, 80, 0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .dev-card-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 1;
+    }
+    .dev-role-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-weight: 500;
-    }
-    .dev-credit-main strong {
-      color: var(--teal);
+      width: fit-content;
+      font-size: 11px;
       font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: #F3D09F;
+      background: rgba(209, 154, 80, 0.18);
+      border: 1px solid rgba(209, 154, 80, 0.35);
+      padding: 3px 10px;
+      border-radius: 20px;
     }
-    .dev-credit-contact {
+    .dev-author-title {
+      font-size: 15.5px;
+      font-weight: 500;
+      color: #E6EDEC;
+      line-height: 1.4;
+    }
+    .dev-author-title strong {
+      color: #FFFFFF;
+      font-weight: 800;
+      font-size: 17.5px;
+      letter-spacing: 0.2px;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    }
+    .dev-reach-text {
+      font-size: 13px;
+      color: #A9C2C3;
+      font-weight: 400;
+    }
+    .dev-contact-pills {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      z-index: 1;
+    }
+    .dev-btn-pill {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-      font-size: 11.5px;
-      color: var(--text-muted);
-    }
-    .dev-contact-link {
-      color: var(--teal);
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 24px;
+      font-size: 13px;
       font-weight: 600;
       text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      transition: color 0.15s ease;
+      transition: all 0.22s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      cursor: pointer;
     }
-    .dev-contact-link:hover {
-      color: var(--gold-dark);
-      text-decoration: underline;
+    .dev-btn-phone {
+      background: rgba(255, 255, 255, 0.1);
+      color: #FFFFFF;
+      border: 1px solid rgba(209, 154, 80, 0.4);
     }
-    .dev-sep {
-      color: var(--sandstone-dark);
-      font-weight: 700;
+    .dev-btn-phone:hover {
+      background: var(--gold);
+      color: #0A2426;
+      border-color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(209, 154, 80, 0.35);
+    }
+    .dev-btn-email {
+      background: rgba(255, 255, 255, 0.1);
+      color: #FFFFFF;
+      border: 1px solid rgba(209, 154, 80, 0.4);
+    }
+    .dev-btn-email:hover {
+      background: #FFFFFF;
+      color: var(--teal-dark);
+      border-color: #FFFFFF;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+    }
+    .dev-btn-whatsapp {
+      background: rgba(37, 211, 102, 0.18);
+      color: #25D366;
+      border: 1px solid rgba(37, 211, 102, 0.4);
+    }
+    .dev-btn-whatsapp:hover {
+      background: #25D366;
+      color: #FFFFFF;
+      border-color: #25D366;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
     }
 
     /* ============================================================
@@ -1470,9 +1543,23 @@
       .footer-card-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
       .footer-actions-row { width: 100%; justify-content: flex-start; }
       .footer-sub-bar { flex-direction: column; align-items: flex-start; }
-      .developer-credit-bar { flex-direction: column; align-items: flex-start; gap: 6px; }
-      .dev-credit-contact { flex-direction: column; align-items: flex-start; gap: 4px; }
-      .dev-sep { display: none; }
+      .dev-prominent-card {
+        padding: 16px 18px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+      }
+      .dev-contact-pills {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .dev-btn-pill {
+        width: 100%;
+        justify-content: center;
+        padding: 10px 14px;
+      }
     }
   </style>
 </head>
@@ -2200,16 +2287,33 @@
         <span>सर्वाधिकार सुरक्षित • पावन घाट निर्माण सेवा महाअभियान</span>
       </div>
 
-      <div class="developer-credit-bar">
-        <div class="dev-credit-main">
-          <i class="fa-solid fa-code" style="color:var(--gold);"></i>
-          <span>developed and maintained by <strong>Goldy Mahendra Kamdar</strong></span>
+      <!-- ==================== PROMINENT DEVELOPER FOOTER SHOWCASE ==================== -->
+      <div class="dev-prominent-card">
+        <div class="dev-card-info">
+          <div class="dev-role-badge">
+            <i class="fa-solid fa-code"></i> Technical Development & Maintenance
+          </div>
+          <div class="dev-author-title">
+            developed and maintained by <strong>Goldy Mahendra Kamdar</strong>
+          </div>
+          <div class="dev-reach-text">
+            For feebacks or bugs please reach out to
+          </div>
         </div>
-        <div class="dev-credit-contact">
-          <span>For feebacks or bugs please reach out to</span>
-          <a href="tel:+919131076286" class="dev-contact-link"><i class="fa-solid fa-phone"></i> +91 9131076286</a>
-          <span class="dev-sep">,</span>
-          <a href="mailto:yashkmd@gmail.com" class="dev-contact-link"><i class="fa-solid fa-envelope"></i> yashkmd@gmail.com</a>
+
+        <div class="dev-contact-pills">
+          <a href="tel:+919131076286" class="dev-btn-pill dev-btn-phone" title="Call directly">
+            <i class="fa-solid fa-phone"></i>
+            <span>+91 9131076286</span>
+          </a>
+          <a href="mailto:yashkmd@gmail.com" class="dev-btn-pill dev-btn-email" title="Send email">
+            <i class="fa-solid fa-envelope"></i>
+            <span>yashkmd@gmail.com</span>
+          </a>
+          <a href="https://wa.me/919131076286?text=Hello%20Goldy,%20regarding%20Koteshwar%20Ghat%20Portal" target="_blank" rel="noopener noreferrer" class="dev-btn-pill dev-btn-whatsapp" title="WhatsApp Chat">
+            <i class="fa-brands fa-whatsapp"></i>
+            <span>WhatsApp</span>
+          </a>
         </div>
       </div>
     </footer>
