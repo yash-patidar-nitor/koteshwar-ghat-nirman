@@ -1569,9 +1569,9 @@
 
           <!-- 5. Sort By Dropdown -->
           <select id="sortPendingOrder" class="form-select" style="max-width:185px;" onchange="filterPendingTable()">
-            <option value="latest_date" selected>📅 नवीनतम संकल्प पहले</option>
+            <option value="balance_desc" selected>💰 अधिकतम बकाया पहले (घटते क्रम में)</option>
+            <option value="latest_date">📅 नवीनतम संकल्प पहले</option>
             <option value="sno_desc">🔢 नवीनतम क्रमांक (#585...)</option>
-            <option value="balance_desc">💰 अधिकतम बकाया पहले</option>
             <option value="oldest_date">⏳ पुरानी घोषणा (दीर्घ बकाया)</option>
             <option value="amount_desc">💎 कुल संकल्प (अधिकतम)</option>
             <option value="sno_asc">🔢 क्रम संख्या (#1...)</option>
@@ -4300,7 +4300,7 @@
       const village = document.getElementById('filterPendingVillage')?.value || 'all';
       const dateFilter = document.getElementById('filterPendingDate')?.value || '';
       const amtFilter = document.getElementById('filterPendingAmount')?.value || 'all';
-      const sortOrder = document.getElementById('sortPendingOrder')?.value || 'latest_date';
+      const sortOrder = document.getElementById('sortPendingOrder')?.value || 'balance_desc';
 
       const pendingDonors = declarationsList.filter(d => (Number(d.balance) > 0));
 
@@ -4329,20 +4329,22 @@
         return matchesQ && matchesV && matchesD && matchesAmt;
       });
 
-      // Sort
+      // Sort (Default: Decreasing Order of Balance Amount)
       filtered.sort((a, b) => {
         const balA = Number(a.balance) || 0;
         const balB = Number(b.balance) || 0;
-        const tA = parseDateToTime(a.date, a.sno, a.recordedAt || a.timestamp);
-        const tB = parseDateToTime(b.date, b.sno, b.recordedAt || b.timestamp);
 
-        if (sortOrder === 'latest_date') {
+        if (sortOrder === 'balance_desc') {
+          return (balB - balA) || (Number(b.sno) - Number(a.sno));
+        } else if (sortOrder === 'latest_date') {
+          const tA = parseDateToTime(a.date, a.sno, a.recordedAt || a.timestamp);
+          const tB = parseDateToTime(b.date, b.sno, b.recordedAt || b.timestamp);
           return (tB - tA) || (Number(b.sno) - Number(a.sno));
         } else if (sortOrder === 'sno_desc') {
           return (Number(b.sno) - Number(a.sno));
-        } else if (sortOrder === 'balance_desc') {
-          return (balB - balA) || (tB - tA);
         } else if (sortOrder === 'oldest_date') {
+          const tA = parseDateToTime(a.date, a.sno, a.recordedAt || a.timestamp);
+          const tB = parseDateToTime(b.date, b.sno, b.recordedAt || b.timestamp);
           return (tA - tB) || (balB - balA);
         } else if (sortOrder === 'amount_desc') {
           return (Number(b.amount) - Number(a.amount)) || (balB - balA);
@@ -4351,7 +4353,7 @@
         } else if (sortOrder === 'name_asc') {
           return String(a.name).localeCompare(String(b.name), 'hi');
         }
-        return 0;
+        return (balB - balA) || (Number(b.sno) - Number(a.sno));
       });
 
       // Update badge counter
