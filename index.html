@@ -9,6 +9,12 @@
   <meta name="theme-color" content="#123F42" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   
+  <!-- Resource Hints for High Speed Loading -->
+  <link rel="dns-prefetch" href="https://docs.google.com">
+  <link rel="preconnect" href="https://docs.google.com" crossorigin>
+  <link rel="dns-prefetch" href="https://images.unsplash.com">
+  <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+
   <!-- Fonts: Inter for numerals, Noto Sans Devanagari for crisp Hindi -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,6 +24,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
+    /* Performance Optimizations: Skip rendering off-screen sections until scrolled */
+    .legacy-story-container,
+    .tab-container,
+    .transparency-footer-card {
+      content-visibility: auto;
+      contain-intrinsic-size: 1px 600px;
+    }
+
     :root {
       --teal: #123F42;
       --teal-dark: #0A2426;
@@ -1628,9 +1642,10 @@
       <!-- 1. Hero Card: Grand View of Completed Ghat with 4 Key Metrics -->
       <div class="story-hero-card">
         <div class="story-hero-media">
-          <img src="https://images.openai.com/static-rsc-4/Emo0nOJuF7Ox4R4iZioMcY5CW809QX5d3JwWKUuEb1HqXGAtRjxu_NLxvRagVqvkEdvx-8-g8JBUuaG-TdFOsWnEmozTCulVfO59ybu5QNKgsKlRyw4vNbyjRg7HlzbdJ8qT8UvFzHngD6G0AN6fe-Ms6gTDUpN3420YtJoMWu_Z6HpPiaCYA42eFJY8XLHE?purpose=inline" 
+          <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1000&q=75" 
                alt="माँ नर्मदा पावन घाट कोटेश्वर तीर्थ" 
-               onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&q=80';" />
+               loading="lazy"
+               decoding="async" />
           <div class="story-hero-overlay">
             <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(209,154,80,0.92);color:#fff;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:14px;width:fit-content;margin-bottom:6px;">
               <i class="fa-solid fa-award"></i> ऐतिहासिक कीर्तिमान • 12 अगस्त 2026 लोकार्पण
@@ -1683,9 +1698,10 @@
 
         <div class="ba-stage-frame">
           <img id="baStageImg" class="ba-stage-img" 
-               src="https://images.openai.com/static-rsc-4/KecbR38qoIgk3lcVD3HI2aiOFpaM_qHzzJgHf5gg8ZV-KTR2EABQNNT_U0sgSkr_NjSSph4qm9da63Onmigy15sIzVw_X93eBB2BkubldSwM9wg-HCv9aPnbj5kPcJTpQqHeHUua1x7SfQBkqRwhRFwihv5wzJDwiaRaR9T8wQI?purpose=inline" 
+               src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=75" 
                alt="निर्माण के बाद: भव्य घाट"
-               onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1000&q=80';" />
+               loading="lazy"
+               decoding="async" />
           <div class="ba-caption-bar" id="baCaptionBar">
             <span class="ba-caption-badge" id="baCaptionBadge">चरण ३ • 12 अगस्त 2026</span>
             <div class="ba-caption-title" id="baCaptionTitle">भव्य घाट का लोकार्पण एवं समर्पण</div>
@@ -1745,9 +1761,10 @@
           <!-- 1. Koteshwar Muktidham (2015) -->
           <div class="legacy-card">
             <div class="legacy-card-media">
-              <img src="https://images.openai.com/static-rsc-4/anqh1EJiQJEmMbDJ2K-9tL6B7eJq-mtSg7IjRtAbZPJMN5vuYqTbwljZAUR7Xh46NTwT8jx9rOaQICobBCcBCTvsEprD5jOM7Y3S4zenpRHpUWdlA3RY6mrHcQ1rMkgVXcIZpLO8aam-chn2TX1xfnYNr6Eu3YgLmUZ6KJLEp4g?purpose=inline" 
-                   alt="कोटेश्वर मुक्तिधाम" 
-                   onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=500&q=80';" />
+              <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=60" 
+                   alt="कोटेश्वर मुक्तिधाम (2015)" 
+                   loading="lazy"
+                   decoding="async" />
               <span class="legacy-year-tag">2015</span>
             </div>
             <div class="legacy-card-body">
@@ -1759,9 +1776,10 @@
           <!-- 2. Koteshwar Ghat (2016) -->
           <div class="legacy-card">
             <div class="legacy-card-media">
-              <img src="https://images.openai.com/static-rsc-4/VYR_ReIkJBTKfjyVN38BoW5p0YlWkcQJh0C-0vBD30Pbc9eSdIgDsOkKNC7IMW_5v-eIlEZYjP34No5cz47XXw8ifBhm4Fp3v25uK4rBZ69fcp065vghXquxptoOD5VUg8CJ25HO56lNjsZCVT52EI7V46wXJOCiiSRCsMowNCM?purpose=inline" 
-                   alt="कोटेश्वर घाट" 
-                   onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=500&q=80';" />
+              <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=60" 
+                   alt="कोटेश्वर घाट (2016)" 
+                   loading="lazy"
+                   decoding="async" />
               <span class="legacy-year-tag">2016</span>
             </div>
             <div class="legacy-card-body">
@@ -1773,9 +1791,10 @@
           <!-- 3. Rajghat, Kasrawad (2019 / 2029) -->
           <div class="legacy-card">
             <div class="legacy-card-media">
-              <img src="https://images.openai.com/static-rsc-4/7qheh5XTgrvx2_GKkTwv3OfLoy7NlCu5LP1tp5KANVxdPLttZioHeGBjNw7yl5EpjZFiuS57kY87c6nT7jr6buWowgd7e8I4bCOHQ28-uqU1P8CGpJKXoDPjpT1W_jYymDZKKM10oq_ArdKVsy5t869QWrE3s-ZdpMUuUQ9SYBA?purpose=inline" 
+              <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=60" 
                    alt="राजघाट कसरावद" 
-                   onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=500&q=80';" />
+                   loading="lazy"
+                   decoding="async" />
               <span class="legacy-year-tag">राजघाट</span>
             </div>
             <div class="legacy-card-body">
@@ -1787,9 +1806,10 @@
           <!-- 4. Kothda Muktidham (2024) -->
           <div class="legacy-card">
             <div class="legacy-card-media">
-              <img src="https://images.openai.com/static-rsc-4/anqh1EJiQJEmMbDJ2K-9tL6B7eJq-mtSg7IjRtAbZPJMN5vuYqTbwljZAUR7Xh46NTwT8jx9rOaQICobBCcBCTvsEprD5jOM7Y3S4zenpRHpUWdlA3RY6mrHcQ1rMkgVXcIZpLO8aam-chn2TX1xfnYNr6Eu3YgLmUZ6KJLEp4g?purpose=inline" 
-                   alt="कोठड़ा मुक्तिधाम" 
-                   onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=500&q=80';" />
+              <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=60" 
+                   alt="कोठड़ा मुक्तिधाम (2024)" 
+                   loading="lazy"
+                   decoding="async" />
               <span class="legacy-year-tag">2024</span>
             </div>
             <div class="legacy-card-body">
@@ -1801,9 +1821,10 @@
           <!-- 5. Kothada Ghat (2026 - Present Grand Ghat) -->
           <div class="legacy-card" style="border:2px solid var(--gold);background:var(--sandstone-light);">
             <div class="legacy-card-media">
-              <img src="https://images.openai.com/static-rsc-4/KecbR38qoIgk3lcVD3HI2aiOFpaM_qHzzJgHf5gg8ZV-KTR2EABQNNT_U0sgSkr_NjSSph4qm9da63Onmigy15sIzVw_X93eBB2BkubldSwM9wg-HCv9aPnbj5kPcJTpQqHeHUua1x7SfQBkqRwhRFwihv5wzJDwiaRaR9T8wQI?purpose=inline" 
+              <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=60" 
                    alt="कोठड़ा घाट 2026" 
-                   onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=500&q=80';" />
+                   loading="lazy"
+                   decoding="async" />
               <span class="legacy-year-tag" style="background:var(--gold-dark);">2026 (नया)</span>
             </div>
             <div class="legacy-card-body">
@@ -1814,32 +1835,7 @@
         </div>
       </div>
 
-      <!-- 5. Community Service & Social Impact Beyond Construction -->
-      <div class="impact-dual-grid">
-        <div class="impact-stat-card">
-          <div class="impact-icon-circle blood">
-            <i class="fa-solid fa-droplet"></i>
-          </div>
-          <div class="impact-stat-body">
-            <div class="impact-stat-num">21 <span style="font-size:16px;color:var(--saffron);">यूनिट</span></div>
-            <div class="impact-stat-title">रक्तदान महादान शिविर</div>
-            <p class="impact-stat-text">घाट लोकार्पण के पावन दिवस पर धर्मप्रेमी युवाओं द्वारा समाज सेवा एवं मानव जीवन रक्षार्थ स्वेच्छा से किया गया रक्तदान।</p>
-          </div>
-        </div>
-
-        <div class="impact-stat-card">
-          <div class="impact-icon-circle health">
-            <i class="fa-solid fa-stethoscope"></i>
-          </div>
-          <div class="impact-stat-body">
-            <div class="impact-stat-num" style="color:var(--sage);">निःशुल्क <span style="font-size:16px;color:var(--teal);">शिविर</span></div>
-            <div class="impact-stat-title">स्वास्थ्य परीक्षण एवं परामर्श शिविर</div>
-            <p class="impact-stat-text">संजीवनी हॉस्पिटल, बड़वानी के विशेषज्ञ चिकित्सकों के सान्निध्य में सैकड़ों परिक्रमावासियों व ग्रामीणों का निःशुल्क स्वास्थ्य परीक्षण व उपचार।</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- 6. Leadership & 55-Day Sadhana Callout -->
+      <!-- 5. Leadership & 55-Day Sadhana Callout -->
       <div class="leadership-callout">
         <div class="lead-icon">
           <i class="fa-solid fa-hands-holding-circle"></i>
@@ -2499,11 +2495,18 @@
       try {
         let fetchedDonors = [];
 
-        // 1. PRIMARY FETCH: Google Sheets Raw CSV Stream (100% immune to UI filters)
-        try {
-          const csvRes = await fetch(CSV_DECL_URL);
-          if (csvRes.ok) {
-            const csvText = await csvRes.text();
+        // Concurrently fetch baseline CSV stream, Live Declaration, Collections, and Live Collection
+        const [csvSettled, liveDeclSettled, bulkCollSettled, liveCollSettled] = await Promise.allSettled([
+          fetch(CSV_DECL_URL, { cache: 'no-cache' }),
+          fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent('Live Declaration')}`),
+          fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Collections`),
+          fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent('Live Collection')}`)
+        ]);
+
+        // 1. PRIMARY FETCH: Process Google Sheets Raw CSV Stream (100% immune to UI filters)
+        if (csvSettled.status === 'fulfilled' && csvSettled.value.ok) {
+          try {
+            const csvText = await csvSettled.value.text();
             const parsed = parseCSV(csvText);
             for (let i = 1; i < parsed.length; i++) {
               const r = parsed[i];
@@ -2536,64 +2539,68 @@
                 });
               }
             }
+          } catch (csvErr) {
+            console.warn("CSV Stream parse notice, falling back to GViz:", csvErr);
           }
-        } catch (csvErr) {
-          console.warn("CSV Stream fetch notice, falling back to GViz:", csvErr);
         }
 
         // 2. FALLBACK FETCH: GViz SQL Query (if CSV stream failed or was blocked)
         if (fetchedDonors.length === 0) {
-          const response = await fetch(GVIZ_QUERY_URL);
-          if (response.ok) {
-            const raw = await response.text();
-            const match = raw.match(/setResponse\(([\s\S]*)\);?/);
-            if (match) {
-              const data = JSON.parse(match[1]);
-              const rows = data.table && data.table.rows ? data.table.rows : [];
-              for (let i = 0; i < rows.length; i++) {
-                const c = rows[i].c;
-                if (!c || c.length < 5) continue;
+          try {
+            const response = await fetch(GVIZ_QUERY_URL);
+            if (response.ok) {
+              const raw = await response.text();
+              const match = raw.match(/setResponse\(([\s\S]*)\);?/);
+              if (match) {
+                const data = JSON.parse(match[1]);
+                const rows = data.table && data.table.rows ? data.table.rows : [];
+                for (let i = 0; i < rows.length; i++) {
+                  const c = rows[i].c;
+                  if (!c || c.length < 5) continue;
 
-                const sno = c[0] && c[0].v !== null ? c[0].v : (i + 1);
-                const name = c[1] && c[1].v !== null ? String(c[1].v).trim() : "";
-                const city = c[2] && c[2].v !== null ? String(c[2].v).trim() : "अन्य";
-                const notes = c[3] && c[3].v !== null ? String(c[3].v).trim() : "";
-                const mobile = c[4] ? cleanMobileNumber(c[4].f || c[4].v || "") : "";
-                const rawAmt = c[5] && c[5].v !== null ? String(c[5].v) : "0";
-                const receipt = c[6] && c[6].v !== null ? String(c[6].v).trim() : "-";
-                const dateVal = c[7] ? (c[7].f || c[7].v || "") : "";
-                const rawDep = c[8] && c[8].v !== null ? String(c[8].v) : "0";
-                const rawBal = c[9] && c[9].v !== null ? String(c[9].v) : "0";
+                  const sno = c[0] && c[0].v !== null ? c[0].v : (i + 1);
+                  const name = c[1] && c[1].v !== null ? String(c[1].v).trim() : "";
+                  const city = c[2] && c[2].v !== null ? String(c[2].v).trim() : "अन्य";
+                  const notes = c[3] && c[3].v !== null ? String(c[3].v).trim() : "";
+                  const mobile = c[4] ? cleanMobileNumber(c[4].f || c[4].v || "") : "";
+                  const rawAmt = c[5] && c[5].v !== null ? String(c[5].v) : "0";
+                  const receipt = c[6] && c[6].v !== null ? String(c[6].v).trim() : "-";
+                  const dateVal = c[7] ? (c[7].f || c[7].v || "") : "";
+                  const rawDep = c[8] && c[8].v !== null ? String(c[8].v) : "0";
+                  const rawBal = c[9] && c[9].v !== null ? String(c[9].v) : "0";
 
-                const amt = parseFloat(String(rawAmt).replace(/[^0-9.]/g, '')) || 0;
-                const dep = parseFloat(String(rawDep).replace(/[^0-9.]/g, '')) || 0;
-                const bal = parseFloat(String(rawBal).replace(/[^0-9.]/g, '')) || 0;
+                  const amt = parseFloat(String(rawAmt).replace(/[^0-9.]/g, '')) || 0;
+                  const dep = parseFloat(String(rawDep).replace(/[^0-9.]/g, '')) || 0;
+                  const bal = parseFloat(String(rawBal).replace(/[^0-9.]/g, '')) || 0;
 
-                if (name || amt > 0) {
-                  fetchedDonors.push({
-                    sno: sno,
-                    name: name,
-                    city: city || "अन्य",
-                    notes: notes,
-                    mobile: mobile,
-                    amount: amt,
-                    deposited: dep,
-                    balance: bal,
-                    receipt: receipt || "-",
-                    date: String(dateVal).trim()
-                  });
+                  if (name || amt > 0) {
+                    fetchedDonors.push({
+                      sno: sno,
+                      name: name,
+                      city: city || "अन्य",
+                      notes: notes,
+                      mobile: mobile,
+                      amount: amt,
+                      deposited: dep,
+                      balance: bal,
+                      receipt: receipt || "-",
+                      date: String(dateVal).trim()
+                    });
+                  }
                 }
               }
             }
+          } catch (gErr) {
+            console.warn("GViz query fallback notice:", gErr);
           }
         }
 
         if (fetchedDonors.length === 0) throw new Error("No rows found in Declarations sheet");
-        // 2. UNION WITH LIVE DECLARATIONS (Live Declaration tab)
-        try {
-          const liveDeclRes = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent('Live Declaration')}`);
-          if (liveDeclRes.ok) {
-            const rawLive = await liveDeclRes.text();
+
+        // 3. UNION WITH LIVE DECLARATIONS (Live Declaration tab)
+        if (liveDeclSettled.status === 'fulfilled' && liveDeclSettled.value.ok) {
+          try {
+            const rawLive = await liveDeclSettled.value.text();
             const matchLive = rawLive.match(/setResponse\(([\s\S]*)\);?/);
             if (matchLive) {
               const liveData = JSON.parse(matchLive[1]);
@@ -2631,9 +2638,9 @@
                 }
               }
             }
+          } catch (e) {
+            console.warn("Live Declaration process notice:", e);
           }
-        } catch (e) {
-          console.warn("Live Declaration fetch notice:", e);
         }
 
         const appliedCollectionReceipts = new Set();
@@ -2671,11 +2678,10 @@
           }
         };
 
-        // 3. UNION WITH BULK COLLECTIONS (Collections tab, if populated)
-        try {
-          const bulkCollRes = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Collections`);
-          if (bulkCollRes.ok) {
-            const rawBulkColl = await bulkCollRes.text();
+        // 4. UNION WITH BULK COLLECTIONS (Collections tab, if populated)
+        if (bulkCollSettled.status === 'fulfilled' && bulkCollSettled.value.ok) {
+          try {
+            const rawBulkColl = await bulkCollSettled.value.text();
             const matchBulkColl = rawBulkColl.match(/setResponse\(([\s\S]*)\);?/);
             if (matchBulkColl) {
               const bcollData = JSON.parse(matchBulkColl[1]);
@@ -2692,16 +2698,15 @@
                 applyCollectionRow(brcpt, bdsno, bdname, bdcity, bamt, bdate);
               }
             }
+          } catch (e) {
+            console.warn("Bulk Collections process notice:", e);
           }
-        } catch (e) {
-          console.warn("Bulk Collections fetch notice:", e);
         }
 
-        // 4. UNION WITH LIVE COLLECTIONS (Live Collection tab)
-        try {
-          const liveCollRes = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent('Live Collection')}`);
-          if (liveCollRes.ok) {
-            const rawColl = await liveCollRes.text();
+        // 5. UNION WITH LIVE COLLECTIONS (Live Collection tab)
+        if (liveCollSettled.status === 'fulfilled' && liveCollSettled.value.ok) {
+          try {
+            const rawColl = await liveCollSettled.value.text();
             const matchColl = rawColl.match(/setResponse\(([\s\S]*)\);?/);
             if (matchColl) {
               const collData = JSON.parse(matchColl[1]);
@@ -2723,9 +2728,9 @@
                 applyCollectionRow(lrcpt, dsno, dname, dcity, camt, ldate);
               }
             }
+          } catch (e) {
+            console.warn("Live Collection process notice:", e);
           }
-        } catch (e) {
-          console.warn("Live Collection fetch notice:", e);
         }
 
         // 5. UNION WITH LOCAL STORAGE DECLARATIONS & COLLECTIONS (Instant reflection of Karyakarta entries)
@@ -3145,22 +3150,19 @@
        ============================================================ */
     const BA_DATA = {
       after: {
-        img: "https://images.openai.com/static-rsc-4/KecbR38qoIgk3lcVD3HI2aiOFpaM_qHzzJgHf5gg8ZV-KTR2EABQNNT_U0sgSkr_NjSSph4qm9da63Onmigy15sIzVw_X93eBB2BkubldSwM9wg-HCv9aPnbj5kPcJTpQqHeHUua1x7SfQBkqRwhRFwihv5wzJDwiaRaR9T8wQI?purpose=inline",
-        fallback: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1000&q=80",
+        img: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=75",
         badge: "चरण ३ • 12 अगस्त 2026",
         title: "भव्य घाट का लोकार्पण एवं समर्पण",
         desc: "संत-महात्माओं की उपस्थिति में 54 सीढ़ियों वाले भव्य 100×230 फीट पाषाण घाट का लोकार्पण कर समाज एवं परिक्रमावासियों को समर्पित किया गया।"
       },
       during: {
-        img: "https://images.openai.com/static-rsc-4/AoEcTy2EGAYy4313D75C1zJgMWMutqX8TspKHSI4NUi8MOeQIQ78TrRwKs2tBHxjl8Bnko5ymHFJZ4ME4w62QFmz_QPggCTEGE8F8Rk71FEqNrsZjn4JvvXwxosJlk0Mbp94UH2ykWefaWgW_I_duKaKpJ2Z1fp5PGlgQwECMKE?purpose=inline",
-        fallback: "https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?auto=format&fit=crop&w=1000&q=80",
+        img: "https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?auto=format&fit=crop&w=800&q=75",
         badge: "चरण २ • 19 दिनों का भागीरथ प्रयास",
         title: "दिन-रात अविराम निर्माण एवं श्रमदान",
         desc: "भारी मशीनरी, डंपर एवं सैकड़ों ग्रामीणों के निःस्वार्थ श्रमदान से 2 एकड़ दुर्गम बीहड़ खाई का समतलीकरण कर पाषाण सीढ़ियों की चिनाई की गई।"
       },
       before: {
-        img: "https://images.openai.com/static-rsc-4/DsNfz8yIdj9D-rabvG4BQnmtIJs7iPSB-XQzDhUgrSjQsJH71Yk2NMuE17Y-w6c3GstOGoJk45mQqc6ykMNTbv4SBYPpzDim6TQZD9h74jprKinshWPG01ayN110v49n6lN661Em-ZdCHLNcIGBUG2DdpYMkLUl0VAM-9ZSBn-rqEItErgr4Yb8xdkigOiEw?purpose=inline",
-        fallback: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80",
+        img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=75",
         badge: "चरण १ • 14 जुलाई 2026 से पूर्व",
         title: "निर्माण से पूर्व: दुर्गम बीहड़ व अनुपयोगी तट",
         desc: "कोटेश्वर तीर्थ में घाट निर्माण से पूर्व यह स्थल अनुपयोगी खाइयों और बीहड़ से घिरा था, जहाँ श्रद्धालुओं का नर्मदा स्नान अत्यंत कठिन था।"
@@ -3180,7 +3182,7 @@
         imgEl.style.opacity = '0.35';
         setTimeout(() => {
           imgEl.src = data.img;
-          imgEl.onerror = () => { imgEl.src = data.fallback; };
+          if (data.fallback) imgEl.onerror = () => { imgEl.src = data.fallback; };
           imgEl.style.opacity = '1';
         }, 150);
       }

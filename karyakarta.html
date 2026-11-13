@@ -8,6 +8,10 @@
   <meta name="theme-color" content="#123F42" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
+  <!-- Resource Hints for High Speed Loading -->
+  <link rel="dns-prefetch" href="https://docs.google.com">
+  <link rel="preconnect" href="https://docs.google.com" crossorigin>
+
   <!-- Fonts: Inter for numbers, Noto Sans Devanagari for crisp Hindi typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1926,15 +1930,14 @@
 
     async function initPortal() {
       try {
-        await loadCollectionsFromStorage();
+        await Promise.all([
+          loadCollectionsFromStorage(),
+          loadDeclarationsData()
+        ]);
       } catch (err) {
-        console.error("Collections load notice:", err);
+        console.error("Portal load notice:", err);
       }
-      try {
-        await loadDeclarationsData();
-      } catch (err) {
-        console.error("Declarations load notice:", err);
-      }
+      reconcileCollectionsWithDeclarations();
       renderAllPortals();
     }
 
@@ -2359,8 +2362,10 @@
             localStorage.removeItem('koteshwar_declarations_cache');
           } catch (e) {}
         }
-        await loadCollectionsFromStorage(force);
-        await loadDeclarationsData(force);
+        await Promise.all([
+          loadCollectionsFromStorage(force),
+          loadDeclarationsData(force)
+        ]);
         reconcileCollectionsWithDeclarations();
         renderAllPortals();
         alert("डेटा Google Sheet से सफलतापूर्वक रीफ्रेश हो गया!");
@@ -2380,8 +2385,10 @@
       if (isBackgroundSyncing) return;
       isBackgroundSyncing = true;
       try {
-        await loadCollectionsFromStorage(true);
-        await loadDeclarationsData(true);
+        await Promise.all([
+          loadCollectionsFromStorage(true),
+          loadDeclarationsData(true)
+        ]);
         reconcileCollectionsWithDeclarations();
         renderAllPortals();
         console.log("Silent auto-refresh complete:", new Date().toLocaleTimeString());
