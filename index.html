@@ -798,6 +798,546 @@
       font-weight: 700;
     }
 
+    /* ============================================================
+       KOTESHWAR IMPACT & LEGACY STORYTELLING STYLES
+       ============================================================ */
+    .legacy-story-container {
+      background: var(--white);
+      border: 1px solid var(--sandstone);
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      padding: 24px 22px;
+      margin-top: 24px;
+      margin-bottom: 24px;
+    }
+    .story-section-header {
+      text-align: center;
+      max-width: 820px;
+      margin: 0 auto 24px;
+      border-bottom: 2px solid var(--sandstone-light);
+      padding-bottom: 16px;
+    }
+    .story-section-header .sub-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--gold-subtle);
+      color: var(--gold-dark);
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+    .story-section-header h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--teal);
+      margin: 0 0 6px;
+      line-height: 1.3;
+    }
+    .story-section-header p {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* 1. Hero Card with Large Photo & 4 Big Metrics */
+    .story-hero-card {
+      border: 1px solid var(--sandstone);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--sandstone-light);
+      margin-bottom: 26px;
+      display: flex;
+      flex-direction: column;
+    }
+    .story-hero-media {
+      position: relative;
+      width: 100%;
+      height: 380px;
+      overflow: hidden;
+      background: #0A2426;
+    }
+    .story-hero-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .story-hero-media:hover img {
+      transform: scale(1.02);
+    }
+    .story-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(18, 63, 66, 0.2) 0%, rgba(10, 36, 38, 0.88) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 24px 22px;
+      color: #fff;
+    }
+    .story-hero-overlay h3 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #fff;
+      margin: 0 0 4px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+    .story-hero-overlay p {
+      font-size: 14.5px;
+      color: var(--ivory);
+      margin: 0;
+      max-width: 750px;
+      line-height: 1.5;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    }
+
+    /* 4 Key Metrics Bar */
+    .metric-badge-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      padding: 16px;
+      background: #FFFFFF;
+      border-top: 2px solid var(--gold);
+    }
+    .metric-box {
+      text-align: center;
+      padding: 10px 8px;
+      border-radius: 8px;
+      background: var(--sandstone-light);
+      border: 1px solid rgba(18, 63, 66, 0.08);
+      transition: all 0.2s ease;
+    }
+    .metric-box:hover {
+      background: #fff;
+      border-color: var(--gold);
+      box-shadow: 0 2px 8px rgba(209, 154, 80, 0.15);
+    }
+    .metric-val {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--teal);
+      line-height: 1.1;
+      font-feature-settings: "tnum";
+    }
+    .metric-val span {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gold-dark);
+      margin-left: 2px;
+    }
+    .metric-lbl {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* 2. Before / During / After Module */
+    .ba-module {
+      margin-bottom: 30px;
+      background: var(--white);
+      border: 1px solid var(--sandstone);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .ba-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .ba-title-wrap h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--teal);
+      margin: 0 0 2px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ba-title-wrap p {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+    .ba-tab-group {
+      display: inline-flex;
+      background: var(--sandstone-light);
+      border: 1px solid var(--sandstone);
+      padding: 3px;
+      border-radius: 24px;
+      gap: 4px;
+    }
+    .ba-tab-btn {
+      background: none;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .ba-tab-btn.active {
+      background: var(--teal);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(18, 63, 66, 0.25);
+    }
+    .ba-stage-frame {
+      position: relative;
+      width: 100%;
+      height: 380px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #0A2426;
+      border: 1px solid var(--sandstone);
+    }
+    .ba-stage-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: opacity 0.3s ease;
+    }
+    .ba-caption-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(180deg, transparent 0%, rgba(10, 36, 38, 0.92) 100%);
+      padding: 16px 18px;
+      color: #fff;
+    }
+    .ba-caption-badge {
+      display: inline-block;
+      background: var(--gold);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 4px;
+    }
+    .ba-caption-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+    .ba-caption-desc {
+      font-size: 12.5px;
+      color: var(--ivory);
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    /* 3. Interactive Milestones Timeline */
+    .timeline-wrap {
+      margin-bottom: 30px;
+    }
+    .timeline-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      position: relative;
+    }
+    .timeline-card {
+      background: var(--sandstone-light);
+      border: 1px solid var(--sandstone);
+      border-top: 3px solid var(--teal);
+      border-radius: 10px;
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.25s ease;
+    }
+    .timeline-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(18, 63, 66, 0.08);
+      border-top-color: var(--gold);
+    }
+    .tl-date-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gold-dark);
+      background: var(--gold-subtle);
+      padding: 3px 8px;
+      border-radius: 12px;
+      align-self: flex-start;
+      margin-bottom: 8px;
+    }
+    .tl-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--teal);
+      margin-bottom: 6px;
+      line-height: 1.35;
+    }
+    .tl-desc {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin: 0;
+      flex: 1;
+    }
+
+    /* 4. Legacy Grid (5 Ghats & 3 Mukti Dhams) */
+    .legacy-section {
+      margin-bottom: 30px;
+    }
+    .legacy-sub-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--sandstone);
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+    }
+    .legacy-sub-header h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--teal);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .legacy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .legacy-card {
+      background: #FFFFFF;
+      border: 1px solid var(--sandstone);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.2s ease;
+    }
+    .legacy-card:hover {
+      border-color: var(--gold);
+      box-shadow: 0 4px 12px rgba(18, 63, 66, 0.08);
+    }
+    .legacy-card-media {
+      width: 100%;
+      height: 150px;
+      overflow: hidden;
+      background: var(--sandstone-light);
+      position: relative;
+    }
+    .legacy-card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .legacy-year-tag {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: var(--teal);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
+    .legacy-card-body {
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .legacy-card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--teal);
+      margin-bottom: 4px;
+    }
+    .legacy-card-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    /* 5. Social Impact & Community Grid */
+    .impact-dual-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+    .impact-stat-card {
+      background: var(--sandstone-light);
+      border: 1px solid var(--sandstone);
+      border-radius: 10px;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .impact-icon-circle {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .impact-icon-circle.blood {
+      background: var(--saffron-light);
+      color: var(--saffron);
+    }
+    .impact-icon-circle.health {
+      background: var(--sage-light);
+      color: var(--sage);
+    }
+    .impact-stat-body {
+      flex: 1;
+    }
+    .impact-stat-num {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--teal);
+      line-height: 1.1;
+    }
+    .impact-stat-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--teal-dark);
+      margin: 2px 0 2px;
+    }
+    .impact-stat-text {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    /* 6. Leadership & 55-Day Sadhana Box */
+    .leadership-callout {
+      background: linear-gradient(135deg, rgba(18, 63, 66, 0.04) 0%, rgba(209, 154, 80, 0.08) 100%);
+      border: 1px solid rgba(209, 154, 80, 0.35);
+      border-left: 5px solid var(--gold);
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .leadership-callout .lead-icon {
+      font-size: 24px;
+      color: var(--gold-dark);
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+    .leadership-callout h4 {
+      font-size: 15.5px;
+      font-weight: 800;
+      color: var(--teal);
+      margin: 0 0 6px;
+    }
+    .leadership-callout p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* 7. Future Vision & 8-Acre Master Plan */
+    .master-plan-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+    }
+    .master-plan-card {
+      background: #FFFFFF;
+      border: 1px solid var(--sandstone);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 12px;
+      align-self: flex-start;
+      margin-bottom: 8px;
+    }
+    .status-badge.planned {
+      background: var(--gold-subtle);
+      color: var(--gold-dark);
+    }
+    .status-badge.in-progress {
+      background: var(--teal-subtle);
+      color: var(--teal);
+    }
+    .status-badge.completed {
+      background: var(--sage-light);
+      color: var(--sage);
+    }
+    .master-card-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--teal);
+      margin-bottom: 4px;
+    }
+    .master-card-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .metric-badge-grid { grid-template-columns: 1fr 1fr; }
+      .timeline-grid { grid-template-columns: 1fr; }
+      .impact-dual-grid { grid-template-columns: 1fr; }
+      .story-hero-media { height: 260px; }
+      .ba-stage-frame { height: 260px; }
+    }
+    @media (max-width: 600px) {
+      .story-section-header h2 { font-size: 20px; }
+      .metric-badge-grid { grid-template-columns: 1fr 1fr; }
+      .ba-header-row { flex-direction: column; align-items: flex-start; }
+      .story-hero-media { height: 210px; }
+      .ba-stage-frame { height: 210px; }
+      .legacy-grid { grid-template-columns: 1fr; }
+      .master-plan-grid { grid-template-columns: 1fr; }
+      .leadership-callout { flex-direction: column; gap: 8px; }
+    }
+
     /* ==================== MODAL STYLES ==================== */
     .modal-backdrop {
       position: fixed;
@@ -1073,7 +1613,304 @@
       </div>
     </section>
 
-    <!-- 3. PRESTIGIOUS SEGMENTED NAVIGATION CONTROLS (1. VILLAGES, 2. DONORS, 3. STORIES) -->
+    <!-- ============================================================
+         3. KOTESHWAR IMPACT & LEGACY STORYTELLING SECTION
+         (भौतिक विकास, 19-दिवसीय निर्माण, 5 घाटों व 3 मुक्तिधामों की विरासत एवं मास्टर प्लान)
+         ============================================================ -->
+    <section class="legacy-story-container" id="koteshwarLegacyStory">
+      <!-- Section Header -->
+      <div class="story-section-header">
+        <span class="sub-badge"><i class="fa-solid fa-om"></i> पावन विकास यात्रा</span>
+        <h2>कोटेश्वर की विकास यात्रा – आस्था, सेवा और जनसहयोग की कहानी</h2>
+        <p>कोटेश्वर तीर्थ (कोठड़ा) में 19 दिनों के भागीरथ प्रयास, जनसहयोग, श्रद्धा और सामूहिक सेवा से निर्मित भव्य माँ नर्मदा घाट की प्रेरणादायी यात्रा एवं भावी संकल्प</p>
+      </div>
+
+      <!-- 1. Hero Card: Grand View of Completed Ghat with 4 Key Metrics -->
+      <div class="story-hero-card">
+        <div class="story-hero-media">
+          <img src="https://images.openai.com/static-rsc-4/Emo0nOJuF7Ox4R4iZioMcY5CW809QX5d3JwWKUuEb1HqXGAtRjxu_NLxvRagVqvkEdvx-8-g8JBUuaG-TdFOsWnEmozTCulVfO59ybu5QNKgsKlRyw4vNbyjRg7HlzbdJ8qT8UvFzHngD6G0AN6fe-Ms6gTDUpN3420YtJoMWu_Z6HpPiaCYA42eFJY8XLHE?purpose=inline" 
+               alt="माँ नर्मदा पावन घाट कोटेश्वर तीर्थ" 
+               onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&q=80';" />
+          <div class="story-hero-overlay">
+            <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(209,154,80,0.92);color:#fff;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:14px;width:fit-content;margin-bottom:6px;">
+              <i class="fa-solid fa-award"></i> ऐतिहासिक कीर्तिमान • 12 अगस्त 2026 लोकार्पण
+            </span>
+            <h3>एक संकल्प, एक समाज, एक भव्य धरोहर</h3>
+            <p>श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान द्वारा नर्मदा अंचल के समस्त श्रद्धालुओं एवं दानदाताओं के सहयोग से तैयार कोटेश्वर तीर्थ का भव्य पाषाण घाट।</p>
+          </div>
+        </div>
+
+        <!-- 4 Key Achievement Metrics -->
+        <div class="metric-badge-grid">
+          <div class="metric-box">
+            <div class="metric-val">19 <span>दिन</span></div>
+            <div class="metric-lbl"><i class="fa-solid fa-bolt" style="color:var(--gold);"></i> निर्माण अवधि</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-val">54</div>
+            <div class="metric-lbl"><i class="fa-solid fa-stairs" style="color:var(--teal);"></i> निर्मित सीढ़ियाँ</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-val">230 <span>फीट</span></div>
+            <div class="metric-lbl"><i class="fa-solid fa-arrows-left-right" style="color:var(--gold-dark);"></i> घाट की चौड़ाई</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-val">100 <span>फीट</span></div>
+            <div class="metric-lbl"><i class="fa-solid fa-water" style="color:var(--sage);"></i> घाट की लंबाई (तट)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Before, During & After Interactive Comparison Module -->
+      <div class="ba-module">
+        <div class="ba-header-row">
+          <div class="ba-title-wrap">
+            <h3><i class="fa-solid fa-images" style="color:var(--gold);"></i> निर्माण यात्रा: पहले, निर्माण के दौरान और लोकार्पण</h3>
+            <p>देखें कैसे 19 दिनों के निरंतर श्रमदान से बीहड़ तट एक दिव्य तीर्थ घाट में परिवर्तित हुआ</p>
+          </div>
+          <div class="ba-tab-group">
+            <button type="button" class="ba-tab-btn active" onclick="switchBeforeAfterTab('after', this)">
+              <i class="fa-solid fa-sparkles"></i> निर्माण के बाद
+            </button>
+            <button type="button" class="ba-tab-btn" onclick="switchBeforeAfterTab('during', this)">
+              <i class="fa-solid fa-person-digging"></i> निर्माण के दौरान
+            </button>
+            <button type="button" class="ba-tab-btn" onclick="switchBeforeAfterTab('before', this)">
+              <i class="fa-solid fa-clock-rotate-left"></i> निर्माण से पूर्व
+            </button>
+          </div>
+        </div>
+
+        <div class="ba-stage-frame">
+          <img id="baStageImg" class="ba-stage-img" 
+               src="https://images.openai.com/static-rsc-4/KecbR38qoIgk3lcVD3HI2aiOFpaM_qHzzJgHf5gg8ZV-KTR2EABQNNT_U0sgSkr_NjSSph4qm9da63Onmigy15sIzVw_X93eBB2BkubldSwM9wg-HCv9aPnbj5kPcJTpQqHeHUua1x7SfQBkqRwhRFwihv5wzJDwiaRaR9T8wQI?purpose=inline" 
+               alt="निर्माण के बाद: भव्य घाट"
+               onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1000&q=80';" />
+          <div class="ba-caption-bar" id="baCaptionBar">
+            <span class="ba-caption-badge" id="baCaptionBadge">चरण ३ • 12 अगस्त 2026</span>
+            <div class="ba-caption-title" id="baCaptionTitle">भव्य घाट का लोकार्पण एवं समर्पण</div>
+            <p class="ba-caption-desc" id="baCaptionDesc">संत-महात्माओं की उपस्थिति में 54 सीढ़ियों वाले भव्य 100×230 फीट पाषाण घाट का लोकार्पण कर समाज एवं परिक्रमावासियों को समर्पित किया गया।</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Interactive Milestones Timeline -->
+      <div class="timeline-wrap">
+        <div style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;">
+          <h4 style="font-size:16px;font-weight:700;color:var(--teal);margin:0;display:flex;align-items:center;gap:8px;">
+            <i class="fa-solid fa-timeline" style="color:var(--gold);"></i> कोटेश्वर घाट निर्माण के ऐतिहासिक पड़ाव
+          </h4>
+          <span style="font-size:12px;color:var(--text-muted);"><i class="fa-solid fa-calendar-days"></i> जुलाई - अगस्त 2026</span>
+        </div>
+
+        <div class="timeline-grid">
+          <!-- Step 1: Bhoomi Pujan -->
+          <div class="timeline-card">
+            <span class="tl-date-badge"><i class="fa-solid fa-flag"></i> 14 जुलाई 2026</span>
+            <div class="tl-title">पावन भूमि पूजन</div>
+            <p class="tl-desc">माँ नर्मदा घाट निर्माण के प्रथम चरण का वैदिक मंत्रोच्चार एवं संतों के आशीर्वाद के साथ विधिवत शुभारंभ हुआ।</p>
+          </div>
+
+          <!-- Step 2: 19 Days Construction -->
+          <div class="timeline-card" style="border-top-color:var(--gold);">
+            <span class="tl-date-badge" style="background:var(--gold-subtle);color:var(--gold-dark);"><i class="fa-solid fa-stopwatch"></i> 19-दिवसीय कीर्तिमान</span>
+            <div class="tl-title">अविराम श्रमदान व निर्माण</div>
+            <p class="tl-desc">भारी मशीनरी, डंपर एवं सैकड़ों ग्रामीणों के श्रमदान से 2 एकड़ दुर्गम बीहड़ का समतलीकरण कर 54 सीढ़ियों का घाट निर्मित।</p>
+          </div>
+
+          <!-- Step 3: Inauguration -->
+          <div class="timeline-card" style="border-top-color:var(--sage);">
+            <span class="tl-date-badge" style="background:var(--sage-light);color:var(--sage);"><i class="fa-solid fa-certificate"></i> 12 अगस्त 2026</span>
+            <div class="tl-title">भव्य लोकार्पण महोत्सव</div>
+            <p class="tl-desc">पूज्य संत-महात्माओं, जनप्रतिनिधियों एवं हजारों श्रद्धालुओं की उपस्थिति में घाट का लोकार्पण एवं समाज को समर्पण।</p>
+          </div>
+
+          <!-- Step 4: Future Expansion -->
+          <div class="timeline-card" style="border-top-color:var(--gold-dark);">
+            <span class="tl-date-badge" style="background:var(--teal-subtle);color:var(--teal);"><i class="fa-solid fa-compass-drafting"></i> आगामी विकास</span>
+            <div class="tl-title">8 एकड़ का मास्टर प्लान</div>
+            <p class="tl-desc">घाट विस्तार (300 फीट), सर्वसुविधायुक्त मुक्तिधाम, भव्य मंदिर, धर्मशाला एवं परिक्रमावासी केंद्र की कार्ययोजना।</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Historical Legacy of Sansthan (5 Ghats & 3 Mukti Dhams) -->
+      <div class="legacy-section">
+        <div class="legacy-sub-header">
+          <h4><i class="fa-solid fa-monument" style="color:var(--gold);"></i> संस्थान की ऐतिहासिक सेवा धरोहर (घाट एवं मुक्तिधाम)</h4>
+          <span style="font-size:12px;color:var(--teal);font-weight:600;"><i class="fa-solid fa-award"></i> 5 पावन घाट • 3 मुक्तिधाम</span>
+        </div>
+
+        <div class="legacy-grid">
+          <!-- 1. Koteshwar Muktidham (2015) -->
+          <div class="legacy-card">
+            <div class="legacy-card-media">
+              <img src="https://images.openai.com/static-rsc-4/anqh1EJiQJEmMbDJ2K-9tL6B7eJq-mtSg7IjRtAbZPJMN5vuYqTbwljZAUR7Xh46NTwT8jx9rOaQICobBCcBCTvsEprD5jOM7Y3S4zenpRHpUWdlA3RY6mrHcQ1rMkgVXcIZpLO8aam-chn2TX1xfnYNr6Eu3YgLmUZ6KJLEp4g?purpose=inline" 
+                   alt="कोटेश्वर मुक्तिधाम" 
+                   onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=500&q=80';" />
+              <span class="legacy-year-tag">2015</span>
+            </div>
+            <div class="legacy-card-body">
+              <div class="legacy-card-title"><i class="fa-solid fa-hands-praying" style="color:var(--gold-dark);"></i> कोटेश्वर मुक्तिधाम</div>
+              <p class="legacy-card-desc">संस्थान द्वारा कोटेश्वर तीर्थ में समाज को समर्पित सुव्यवस्थित एवं शांत मुक्तिधाम परिसर।</p>
+            </div>
+          </div>
+
+          <!-- 2. Koteshwar Ghat (2016) -->
+          <div class="legacy-card">
+            <div class="legacy-card-media">
+              <img src="https://images.openai.com/static-rsc-4/VYR_ReIkJBTKfjyVN38BoW5p0YlWkcQJh0C-0vBD30Pbc9eSdIgDsOkKNC7IMW_5v-eIlEZYjP34No5cz47XXw8ifBhm4Fp3v25uK4rBZ69fcp065vghXquxptoOD5VUg8CJ25HO56lNjsZCVT52EI7V46wXJOCiiSRCsMowNCM?purpose=inline" 
+                   alt="कोटेश्वर घाट" 
+                   onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=500&q=80';" />
+              <span class="legacy-year-tag">2016</span>
+            </div>
+            <div class="legacy-card-body">
+              <div class="legacy-card-title"><i class="fa-solid fa-water" style="color:var(--teal);"></i> कोटेश्वर घाट</div>
+              <p class="legacy-card-desc">श्रद्धालुओं एवं परिक्रमावासियों के सुगम स्नान हेतु कोटेश्वर में प्रथम पक्के घाट का पावन निर्माण।</p>
+            </div>
+          </div>
+
+          <!-- 3. Rajghat, Kasrawad (2019 / 2029) -->
+          <div class="legacy-card">
+            <div class="legacy-card-media">
+              <img src="https://images.openai.com/static-rsc-4/7qheh5XTgrvx2_GKkTwv3OfLoy7NlCu5LP1tp5KANVxdPLttZioHeGBjNw7yl5EpjZFiuS57kY87c6nT7jr6buWowgd7e8I4bCOHQ28-uqU1P8CGpJKXoDPjpT1W_jYymDZKKM10oq_ArdKVsy5t869QWrE3s-ZdpMUuUQ9SYBA?purpose=inline" 
+                   alt="राजघाट कसरावद" 
+                   onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=500&q=80';" />
+              <span class="legacy-year-tag">राजघाट</span>
+            </div>
+            <div class="legacy-card-body">
+              <div class="legacy-card-title"><i class="fa-solid fa-archway" style="color:var(--gold);"></i> राजघाट (कसरावद)</div>
+              <p class="legacy-card-desc">कसरावद क्षेत्र में नर्मदा तट पर श्रद्धालुओं हेतु पक्के घाट व जनसुविधाओं का पावन निर्माण।</p>
+            </div>
+          </div>
+
+          <!-- 4. Kothda Muktidham (2024) -->
+          <div class="legacy-card">
+            <div class="legacy-card-media">
+              <img src="https://images.openai.com/static-rsc-4/anqh1EJiQJEmMbDJ2K-9tL6B7eJq-mtSg7IjRtAbZPJMN5vuYqTbwljZAUR7Xh46NTwT8jx9rOaQICobBCcBCTvsEprD5jOM7Y3S4zenpRHpUWdlA3RY6mrHcQ1rMkgVXcIZpLO8aam-chn2TX1xfnYNr6Eu3YgLmUZ6KJLEp4g?purpose=inline" 
+                   alt="कोठड़ा मुक्तिधाम" 
+                   onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=500&q=80';" />
+              <span class="legacy-year-tag">2024</span>
+            </div>
+            <div class="legacy-card-body">
+              <div class="legacy-card-title"><i class="fa-solid fa-hands-praying" style="color:var(--gold-dark);"></i> कोठड़ा मुक्तिधाम</div>
+              <p class="legacy-card-desc">ग्राम कोठड़ा में अंतिम संस्कार व परिजनों के विश्राम हेतु छायादार शेड व पेयजल युक्त मुक्तिधाम।</p>
+            </div>
+          </div>
+
+          <!-- 5. Kothada Ghat (2026 - Present Grand Ghat) -->
+          <div class="legacy-card" style="border:2px solid var(--gold);background:var(--sandstone-light);">
+            <div class="legacy-card-media">
+              <img src="https://images.openai.com/static-rsc-4/KecbR38qoIgk3lcVD3HI2aiOFpaM_qHzzJgHf5gg8ZV-KTR2EABQNNT_U0sgSkr_NjSSph4qm9da63Onmigy15sIzVw_X93eBB2BkubldSwM9wg-HCv9aPnbj5kPcJTpQqHeHUua1x7SfQBkqRwhRFwihv5wzJDwiaRaR9T8wQI?purpose=inline" 
+                   alt="कोठड़ा घाट 2026" 
+                   onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=500&q=80';" />
+              <span class="legacy-year-tag" style="background:var(--gold-dark);">2026 (नया)</span>
+            </div>
+            <div class="legacy-card-body">
+              <div class="legacy-card-title"><i class="fa-solid fa-star" style="color:var(--gold);"></i> कोठड़ा घाट (पावन महाअभियान)</div>
+              <p class="legacy-card-desc">19 दिनों में 54 सीढ़ियों के साथ निर्मित 100×230 फीट का भव्य पाषाण घाट, 12 अगस्त 2026 को लोकार्पित।</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Community Service & Social Impact Beyond Construction -->
+      <div class="impact-dual-grid">
+        <div class="impact-stat-card">
+          <div class="impact-icon-circle blood">
+            <i class="fa-solid fa-droplet"></i>
+          </div>
+          <div class="impact-stat-body">
+            <div class="impact-stat-num">21 <span style="font-size:16px;color:var(--saffron);">यूनिट</span></div>
+            <div class="impact-stat-title">रक्तदान महादान शिविर</div>
+            <p class="impact-stat-text">घाट लोकार्पण के पावन दिवस पर धर्मप्रेमी युवाओं द्वारा समाज सेवा एवं मानव जीवन रक्षार्थ स्वेच्छा से किया गया रक्तदान।</p>
+          </div>
+        </div>
+
+        <div class="impact-stat-card">
+          <div class="impact-icon-circle health">
+            <i class="fa-solid fa-stethoscope"></i>
+          </div>
+          <div class="impact-stat-body">
+            <div class="impact-stat-num" style="color:var(--sage);">निःशुल्क <span style="font-size:16px;color:var(--teal);">शिविर</span></div>
+            <div class="impact-stat-title">स्वास्थ्य परीक्षण एवं परामर्श शिविर</div>
+            <p class="impact-stat-text">संजीवनी हॉस्पिटल, बड़वानी के विशेषज्ञ चिकित्सकों के सान्निध्य में सैकड़ों परिक्रमावासियों व ग्रामीणों का निःशुल्क स्वास्थ्य परीक्षण व उपचार।</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Leadership & 55-Day Sadhana Callout -->
+      <div class="leadership-callout">
+        <div class="lead-icon">
+          <i class="fa-solid fa-hands-holding-circle"></i>
+        </div>
+        <div>
+          <h4>श्री मोहन भाई पाटीदार (भंवरिया) एवं 55-दिवसीय कार्यकर्ता साधना</h4>
+          <p>
+            संस्थान के मुख्य प्रेरणास्रोत <strong>श्री मोहन भाई पाटीदार (भंवरिया)</strong> एवं समर्पित कार्यकर्ताओं की टोली ने बिना किसी व्यक्तिगत स्वार्थ व संस्थागत व्यय के, अपने निजी वाहनों व समय से 55 दिनों तक 40 से अधिक ग्रामों में घर-घर जाकर पावन अलख जगाई। साथ ही जिन सेवाभावी बंधुओं ने निःशुल्क ट्रैक्टर, जेसीबी, डंपर एवं अन्य मशीनरी उपलब्ध कराई, उन सभी का योगदान इस पावन महाअभियान की स्वर्णिम नींव है।
+          </p>
+        </div>
+      </div>
+
+      <!-- 7. Future Vision & 8-Acre Master Plan -->
+      <div>
+        <div style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--sandstone);padding-bottom:8px;">
+          <h4 style="font-size:16px;font-weight:700;color:var(--teal);margin:0;display:flex;align-items:center;gap:8px;">
+            <i class="fa-solid fa-compass-drafting" style="color:var(--gold);"></i> भविष्य का कोटेश्वर तीर्थ – 8 एकड़ का मास्टर प्लान
+          </h4>
+          <span style="font-size:12px;color:var(--text-muted);"><i class="fa-solid fa-layer-group"></i> चरणबद्ध निर्माण परिकल्पना</span>
+        </div>
+
+        <div class="master-plan-grid">
+          <!-- Project 1 -->
+          <div class="master-plan-card">
+            <span class="status-badge planned"><i class="fa-solid fa-clock"></i> नियोजित (Planned)</span>
+            <div class="master-card-title"><i class="fa-solid fa-arrows-left-right" style="color:var(--teal);"></i> घाट विस्तार (100 → 300 फीट)</div>
+            <p class="master-card-desc">वर्तमान 100 फीट घाट को नर्मदा तट के समानांतर 300 फीट तक विस्तृत कर विशाल स्नान परिसर का निर्माण।</p>
+          </div>
+
+          <!-- Project 2 -->
+          <div class="master-plan-card">
+            <span class="status-badge planned"><i class="fa-solid fa-clock"></i> नियोजित (Planned)</span>
+            <div class="master-card-title"><i class="fa-solid fa-hands-praying" style="color:var(--gold-dark);"></i> आधुनिक मुक्तिधाम</div>
+            <p class="master-card-desc">परिजनों हेतु छायादार बैठक, स्वच्छ पेयजल, दाह-संस्कार चबूतरे व व्यवस्थित पर्यावरण-अनुकूल परिसर।</p>
+          </div>
+
+          <!-- Project 3 -->
+          <div class="master-plan-card">
+            <span class="status-badge planned"><i class="fa-solid fa-clock"></i> नियोजित (Planned)</span>
+            <div class="master-card-title"><i class="fa-solid fa-om" style="color:var(--gold);"></i> भव्य मंदिर निर्माण</div>
+            <p class="master-card-desc">माँ नर्मदा एवं कोटेश्वर महादेव का नयनाभिराम गर्भगृह, शिखर एवं दिव्य महाआरती स्थल का विकास।</p>
+          </div>
+
+          <!-- Project 4 -->
+          <div class="master-plan-card">
+            <span class="status-badge planned"><i class="fa-solid fa-clock"></i> नियोजित (Planned)</span>
+            <div class="master-card-title"><i class="fa-solid fa-hotel" style="color:var(--teal);"></i> परिक्रमावासी धर्मशाला</div>
+            <p class="master-card-desc">प्रतिदिन पधारने वाले परिक्रमावासियों हेतु निःशुल्क विश्राम गृह, अन्नक्षेत्र, स्नानागार व सुरक्षा सुविधाएं।</p>
+          </div>
+
+          <!-- Project 5 -->
+          <div class="master-plan-card">
+            <span class="status-badge in-progress"><i class="fa-solid fa-person-digging"></i> प्रगति पर (In Progress)</span>
+            <div class="master-card-title"><i class="fa-solid fa-lightbulb" style="color:var(--sage);"></i> प्रकाश, सुरक्षा व पौधारोपण</div>
+            <p class="master-card-desc">हाईमास्ट सोलर लाइट्स, घाट किनारे मजबूत सुरक्षा रेलिंग, चेंजिंग रूम्स एवं घाट हरित पट्टी का निर्माण।</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. DETAILED DATA & PARTICIPATION DIRECTORY HEADER -->
+    <div class="detailed-tables-header" style="margin-top:28px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+      <div>
+        <h3 style="margin:0;font-size:18px;font-weight:800;color:var(--teal);display:flex;align-items:center;gap:8px;">
+          <i class="fa-solid fa-table-cells" style="color:var(--gold);"></i> जनसहयोग एवं सहभागी परिवारों का संपूर्ण विवरण
+        </h3>
+        <p style="margin:2px 0 0;font-size:12.5px;color:var(--text-secondary);">Google Sheet से लाइव संकलित: नगर एवं ग्रामवार सहभागिता, दानदाता निर्देशिका व प्रेरक प्रसंग</p>
+      </div>
+    </div>
+
+    <!-- 5. PRESTIGIOUS SEGMENTED NAVIGATION CONTROLS (1. VILLAGES, 2. DONORS, 3. STORIES) -->
     <nav class="segmented-tabs-wrapper">
       <div class="segmented-tabs">
         <!-- 1st Tab: Nagar/Gramwar Sahbhagita (Active by default) -->
@@ -2301,6 +3138,55 @@
     function closeCertModal(e) {
       if (e && e.target !== e.currentTarget && !e.target.closest('.btn-modal-close')) return;
       document.getElementById('certModalBackdrop').classList.remove('open');
+    }
+
+    /* ============================================================
+       KOTESHWAR LEGACY STORY: BEFORE / DURING / AFTER SWITCHER
+       ============================================================ */
+    const BA_DATA = {
+      after: {
+        img: "https://images.openai.com/static-rsc-4/KecbR38qoIgk3lcVD3HI2aiOFpaM_qHzzJgHf5gg8ZV-KTR2EABQNNT_U0sgSkr_NjSSph4qm9da63Onmigy15sIzVw_X93eBB2BkubldSwM9wg-HCv9aPnbj5kPcJTpQqHeHUua1x7SfQBkqRwhRFwihv5wzJDwiaRaR9T8wQI?purpose=inline",
+        fallback: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1000&q=80",
+        badge: "चरण ३ • 12 अगस्त 2026",
+        title: "भव्य घाट का लोकार्पण एवं समर्पण",
+        desc: "संत-महात्माओं की उपस्थिति में 54 सीढ़ियों वाले भव्य 100×230 फीट पाषाण घाट का लोकार्पण कर समाज एवं परिक्रमावासियों को समर्पित किया गया।"
+      },
+      during: {
+        img: "https://images.openai.com/static-rsc-4/AoEcTy2EGAYy4313D75C1zJgMWMutqX8TspKHSI4NUi8MOeQIQ78TrRwKs2tBHxjl8Bnko5ymHFJZ4ME4w62QFmz_QPggCTEGE8F8Rk71FEqNrsZjn4JvvXwxosJlk0Mbp94UH2ykWefaWgW_I_duKaKpJ2Z1fp5PGlgQwECMKE?purpose=inline",
+        fallback: "https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?auto=format&fit=crop&w=1000&q=80",
+        badge: "चरण २ • 19 दिनों का भागीरथ प्रयास",
+        title: "दिन-रात अविराम निर्माण एवं श्रमदान",
+        desc: "भारी मशीनरी, डंपर एवं सैकड़ों ग्रामीणों के निःस्वार्थ श्रमदान से 2 एकड़ दुर्गम बीहड़ खाई का समतलीकरण कर पाषाण सीढ़ियों की चिनाई की गई।"
+      },
+      before: {
+        img: "https://images.openai.com/static-rsc-4/DsNfz8yIdj9D-rabvG4BQnmtIJs7iPSB-XQzDhUgrSjQsJH71Yk2NMuE17Y-w6c3GstOGoJk45mQqc6ykMNTbv4SBYPpzDim6TQZD9h74jprKinshWPG01ayN110v49n6lN661Em-ZdCHLNcIGBUG2DdpYMkLUl0VAM-9ZSBn-rqEItErgr4Yb8xdkigOiEw?purpose=inline",
+        fallback: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80",
+        badge: "चरण १ • 14 जुलाई 2026 से पूर्व",
+        title: "निर्माण से पूर्व: दुर्गम बीहड़ व अनुपयोगी तट",
+        desc: "कोटेश्वर तीर्थ में घाट निर्माण से पूर्व यह स्थल अनुपयोगी खाइयों और बीहड़ से घिरा था, जहाँ श्रद्धालुओं का नर्मदा स्नान अत्यंत कठिन था।"
+      }
+    };
+
+    function switchBeforeAfterTab(stageKey, btn) {
+      document.querySelectorAll('.ba-tab-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      const data = BA_DATA[stageKey];
+      if (!data) return;
+      const imgEl = document.getElementById('baStageImg');
+      const badgeEl = document.getElementById('baCaptionBadge');
+      const titleEl = document.getElementById('baCaptionTitle');
+      const descEl = document.getElementById('baCaptionDesc');
+      if (imgEl) {
+        imgEl.style.opacity = '0.35';
+        setTimeout(() => {
+          imgEl.src = data.img;
+          imgEl.onerror = () => { imgEl.src = data.fallback; };
+          imgEl.style.opacity = '1';
+        }, 150);
+      }
+      if (badgeEl) badgeEl.textContent = data.badge;
+      if (titleEl) titleEl.textContent = data.title;
+      if (descEl) descEl.textContent = data.desc;
     }
   </script>
 </body>
