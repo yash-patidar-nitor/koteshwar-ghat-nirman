@@ -791,29 +791,29 @@
     .dev-role-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       width: fit-content;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
-      letter-spacing: 0.6px;
+      letter-spacing: 0.5px;
       text-transform: uppercase;
       color: #F3D09F;
       background: rgba(209, 154, 80, 0.18);
       border: 1px solid rgba(209, 154, 80, 0.35);
-      padding: 3px 10px;
+      padding: 2px 8px;
       border-radius: 20px;
     }
     .dev-author-title {
-      font-size: 20px;
-      font-weight: 800;
+      font-size: 15px;
+      font-weight: 700;
       color: #FFFFFF;
       letter-spacing: 0.3px;
       line-height: 1.25;
       margin: 2px 0 1px;
-      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
     }
     .dev-reach-text {
-      font-size: 13px;
+      font-size: 11.5px;
       color: #BFD8D9;
       font-weight: 500;
     }
@@ -901,15 +901,15 @@
       margin-bottom: 4px;
     }
     .auth-dev-name {
-      font-size: 14px;
-      font-weight: 800;
+      font-size: 12.5px;
+      font-weight: 700;
       color: var(--teal-dark);
-      margin: 2px 0 3px;
+      margin: 2px 0 2px;
     }
     .auth-dev-reach {
-      font-size: 11px;
+      font-size: 10.5px;
       color: var(--text-muted);
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
     .auth-dev-links {
       display: flex;
@@ -1347,8 +1347,20 @@
 
             <div class="form-group">
               <label>प्राप्त राशि (₹) <span class="req">*</span></label>
-              <input type="number" id="collAmount" class="form-input amount" placeholder="उदा. 11000" min="1" step="1" required oninput="updateCollAmountWords(this.value)" />
+              <input type="number" id="collAmount" class="form-input amount" placeholder="उदा. 11000" min="1" step="1" required oninput="handleCollAmountChange(this.value)" />
               <div class="input-hint" id="collAmountWords">राशि शब्दों में...</div>
+              <!-- Caution Box when receipt amount exceeds remaining balance -->
+              <div id="collExcessWarning" style="display:none;margin-top:8px;padding:10px 12px;border-radius:8px;background:#FFFBEB;border:1.5px solid #F59E0B;color:#92400E;font-size:12px;">
+                <div style="font-weight:700;display:flex;align-items:center;gap:6px;">
+                  <i class="fa-solid fa-triangle-exclamation" style="color:#D97706;"></i>
+                  <span>सावधानी: रसीद राशि शेष बकाया से अधिक है!</span>
+                </div>
+                <div id="collExcessMsg" style="margin-top:4px;font-size:11.5px;line-height:1.4;"></div>
+                <label style="display:flex;align-items:center;gap:6px;margin-top:6px;cursor:pointer;font-weight:600;color:var(--teal);">
+                  <input type="checkbox" id="chkAdjustDeclaration" checked style="accent-color:var(--teal);width:16px;height:16px;" />
+                  <span id="chkAdjustDeclarationLabel">घोषित संकल्प को भी नए कुल योग के अनुसार बढ़ाएं</span>
+                </label>
+              </div>
             </div>
 
             <div class="form-group">
@@ -1960,7 +1972,8 @@
       if (str.endsWith('.0')) str = str.slice(0, -2);
       else if (str.includes('.')) str = str.split('.')[0];
       str = str.replace(/[^0-9]/g, '');
-      if (str.length === 12 && str.startsWith('91')) str = str.substring(2);
+      if (str.length === 14 && str.startsWith('0091')) str = str.substring(4);
+      else if (str.length === 12 && str.startsWith('91')) str = str.substring(2);
       else if (str.length === 11 && str.startsWith('0')) str = str.substring(1);
       return str;
     }
@@ -3434,6 +3447,49 @@
       });
     }
 
+    function handleCollAmountChange(val) {
+      updateCollAmountWords(val);
+      checkCollAmountExcess(val);
+    }
+
+    function checkCollAmountExcess(val) {
+      const warnBox = document.getElementById('collExcessWarning');
+      const msgBox = document.getElementById('collExcessMsg');
+      const chkAdjust = document.getElementById('chkAdjustDeclaration');
+      const lblAdjust = document.getElementById('chkAdjustDeclarationLabel');
+      if (!warnBox || !msgBox) return;
+
+      const isDirect = document.getElementById('chkDirectDonor')?.checked;
+      if (isDirect || !selectedDonor) {
+        warnBox.style.display = 'none';
+        return;
+      }
+
+      const amt = parseFloat(val) || 0;
+      const curBalance = Number(selectedDonor.balance) || 0;
+      const curPledged = Number(selectedDonor.amount) || 0;
+      const curDeposited = Number(selectedDonor.deposited) || 0;
+
+      if (amt > curBalance && amt > 0) {
+        const excess = amt - curBalance;
+        const newPledged = curDeposited + amt;
+
+        msgBox.innerHTML = `
+          यह रसीद राशि (<strong>${fmt(amt)}</strong>) दानदाता के शेष बकाया संकल्प (<strong>${fmt(curBalance)}</strong>) से <strong>+${fmt(excess)}</strong> अधिक है।<br>
+          <span style="font-size:11px;color:var(--text-muted);">
+            (पूर्व घोषित संकल्प: ${fmt(curPledged)} | अब तक कुल जमा: ${fmt(curDeposited)})
+          </span>
+        `;
+        if (lblAdjust) {
+          lblAdjust.innerHTML = `घोषित संकल्प को भी <strong>${fmt(curPledged)}</strong> से बढ़ाकर <strong>${fmt(newPledged)}</strong> करें`;
+        }
+        if (chkAdjust) chkAdjust.checked = true;
+        warnBox.style.display = 'block';
+      } else {
+        warnBox.style.display = 'none';
+      }
+    }
+
     function updateCollAmountWords(val) {
       const words = numberToHindiWords(val);
       document.getElementById('collAmountWords').textContent = val ? `${words} रुपये मात्र` : 'राशि शब्दों में...';
@@ -3713,13 +3769,19 @@
       if (donor.balance > 0) {
         document.getElementById('collAmount').value = donor.balance;
         updateCollAmountWords(donor.balance);
+      } else {
+        document.getElementById('collAmount').value = '';
+        updateCollAmountWords('');
       }
+      checkCollAmountExcess(document.getElementById('collAmount')?.value || '');
     }
 
     function clearSelectedDonor() {
       selectedDonor = null;
       document.getElementById('selectedDonorBanner').classList.remove('visible');
       document.getElementById('donorSearchInput').value = '';
+      const warnBox = document.getElementById('collExcessWarning');
+      if (warnBox) warnBox.style.display = 'none';
     }
 
     /* ============================================================
@@ -3760,6 +3822,80 @@
       const refNo = document.getElementById('collRefNo').value.trim();
       const date = document.getElementById('collDate').value;
       const remarks = document.getElementById('collRemarks').value.trim();
+
+      // Check if collection exceeds balance for an existing donor
+      if (!isDirect && selectedDonor) {
+        const curBalance = Number(selectedDonor.balance) || 0;
+        const curPledged = Number(selectedDonor.amount) || 0;
+        const curDeposited = Number(selectedDonor.deposited) || 0;
+
+        if (amount > curBalance) {
+          const excess = amount - curBalance;
+          const newPledged = curDeposited + amount;
+
+          const chkAdjust = document.getElementById('chkAdjustDeclaration');
+          let shouldAdjust = chkAdjust && chkAdjust.checked;
+
+          if (!shouldAdjust) {
+            const confirmMsg =
+              `⚠️ सावधानी: रसीद राशि शेष बकाया से अधिक है!\n\n` +
+              `• दानदाता: ${selectedDonor.name} (#${selectedDonor.sno})\n` +
+              `• वर्तमान कुल संकल्प: ${fmt(curPledged)}\n` +
+              `• अब तक कुल जमा: ${fmt(curDeposited)}\n` +
+              `• शेष बकाया संकल्प: ${fmt(curBalance)}\n` +
+              `• नई रसीद राशि: ${fmt(amount)}\n` +
+              `• अतिरिक्त राशि: +${fmt(excess)}\n\n` +
+              `क्या आप दानदाता के घोषित संकल्प को भी बढ़ाकर ${fmt(newPledged)} करना चाहते हैं?\n\n` +
+              `[OK] = हाँ, संकल्प को बढ़ाकर ${fmt(newPledged)} करें और रसीद जारी करें\n` +
+              `[Cancel] = नहीं, मूल संकल्प वही रहने दें / रसीद जांचें`;
+
+            const userConfirmed = confirm(confirmMsg);
+            if (userConfirmed) {
+              shouldAdjust = true;
+            } else {
+              const proceedAnyway = confirm(
+                `क्या आप मूल संकल्प (${fmt(curPledged)}) को बिना बदले ही यह रसीद सुरक्षित करना चाहते हैं?\n\n` +
+                `(रसीद काटने पर शेष बकाया ₹0 हो जाएगा)`
+              );
+              if (!proceedAnyway) {
+                document.getElementById('collAmount').focus();
+                return;
+              }
+              shouldAdjust = false;
+            }
+          }
+
+          if (shouldAdjust) {
+            selectedDonor.amount = newPledged;
+            pledgedAmt = newPledged;
+
+            const declIdx = declarationsList.findIndex(d => String(d.sno) === String(selectedDonor.sno));
+            if (declIdx >= 0) {
+              declarationsList[declIdx].amount = newPledged;
+              declarationsList[declIdx].modified_by = currentUser ? currentUser.username : "karyakarta";
+              declarationsList[declIdx].modified_by_name = currentUser ? currentUser.displayName : "अधिकृत कार्यकर्ता";
+              declarationsList[declIdx].modified_at = new Date().toISOString();
+            }
+
+            // Save in localStorage edited declarations
+            try {
+              let edited = JSON.parse(localStorage.getItem('koteshwar_edited_declarations') || '{}');
+              edited[String(selectedDonor.sno)] = Object.assign({}, selectedDonor, { amount: newPledged });
+              localStorage.setItem('koteshwar_edited_declarations', JSON.stringify(edited));
+
+              let custom = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
+              const cIdx = custom.findIndex(c => String(c.sno) === String(selectedDonor.sno));
+              if (cIdx >= 0) {
+                custom[cIdx].amount = newPledged;
+                localStorage.setItem('koteshwar_custom_declarations', JSON.stringify(custom));
+              }
+            } catch (err) {}
+
+            // Post updated declaration to Google Sheets webhook
+            postWebhookData('editDeclaration', Object.assign({}, selectedDonor, { amount: newPledged }));
+          }
+        }
+      }
 
       const newCollection = {
         id: "coll_" + Date.now(),
