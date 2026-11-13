@@ -8,6 +8,9 @@
   
   <meta name="theme-color" content="#123F42" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   
   <!-- Resource Hints for High Speed Loading -->
   <link rel="dns-prefetch" href="https://docs.google.com">
@@ -2350,7 +2353,7 @@
     }
 
     // Global App Cache Versioning (Immediate cache purge on all devices)
-    const APP_STORAGE_VERSION = '2026_11_13_v7';
+    const APP_STORAGE_VERSION = '2026_11_13_v8';
     try {
       if (localStorage.getItem('koteshwar_app_storage_version') !== APP_STORAGE_VERSION) {
         localStorage.removeItem('koteshwar_declarations_cache');
@@ -3050,6 +3053,7 @@
       const tbody = document.getElementById('donorTableBody');
       const search = (document.getElementById('donorSearchInput').value || '').trim().toLowerCase();
       const isKoteshwarSearch = /^(kot|koth|kotesh|कोठ|कोट)/i.test(search);
+      const cleanSearch = search.replace(/^#/, '');
 
       const filtered = declarations.filter(d => {
         const matchesVillage = (currentVillageFilter === 'all') || d.city === currentVillageFilter || d.city.includes(currentVillageFilter);
@@ -3058,7 +3062,10 @@
           d.city.toLowerCase().includes(search) || 
           (isKoteshwarSearch && d.city === 'कोटेश्वर / कोठड़ा') ||
           (d.notes && d.notes.toLowerCase().includes(search)) ||
-          (d.receipt && d.receipt.toLowerCase().includes(search));
+          (d.receipt && d.receipt.toLowerCase().includes(search)) ||
+          String(d.sno) === search ||
+          String(d.sno) === cleanSearch ||
+          String(d.sno).includes(cleanSearch);
         return matchesVillage && matchesSearch;
       });
 

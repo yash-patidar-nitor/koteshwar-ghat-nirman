@@ -7,6 +7,9 @@
   <meta name="description" content="श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान - अधिकृत कार्यकर्ता पोर्टल (घोषणा एवं धन संग्रह प्रबंधन)" />
   <meta name="theme-color" content="#123F42" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
 
   <!-- Resource Hints for High Speed Loading -->
   <link rel="dns-prefetch" href="https://docs.google.com">
@@ -1553,9 +1556,10 @@
           </select>
 
           <!-- 5. Sort By Dropdown -->
-          <select id="sortPendingOrder" class="form-select" style="max-width:175px;" onchange="filterPendingTable()">
-            <option value="balance_desc" selected>💰 अधिकतम बकाया पहले</option>
-            <option value="latest_date">📅 नवीनतम घोषणा दिनांक</option>
+          <select id="sortPendingOrder" class="form-select" style="max-width:185px;" onchange="filterPendingTable()">
+            <option value="latest_date" selected>📅 नवीनतम संकल्प पहले</option>
+            <option value="sno_desc">🔢 नवीनतम क्रमांक (#585...)</option>
+            <option value="balance_desc">💰 अधिकतम बकाया पहले</option>
             <option value="oldest_date">⏳ पुरानी घोषणा (दीर्घ बकाया)</option>
             <option value="amount_desc">💎 कुल संकल्प (अधिकतम)</option>
             <option value="sno_asc">🔢 क्रम संख्या (#1...)</option>
@@ -1997,15 +2001,23 @@
     }
 
     // Global App Cache Versioning (Immediate cache purge on all devices)
-    const APP_STORAGE_VERSION = '2026_11_13_v7';
+    const APP_STORAGE_VERSION = '2026_11_13_v8';
     try {
       if (localStorage.getItem('koteshwar_app_storage_version') !== APP_STORAGE_VERSION) {
         localStorage.removeItem('koteshwar_declarations_cache');
+        localStorage.removeItem('koteshwar_collections_cache');
+        localStorage.removeItem('koteshwar_collections_ledger');
         localStorage.removeItem('koteshwar_deleted_declarations');
+        localStorage.removeItem('koteshwar_deleted_collections');
         let custom = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
         if (Array.isArray(custom)) {
           custom = custom.filter(d => !isDummyTestDeclaration(d.sno, d.name, d.city, d.amount));
           localStorage.setItem('koteshwar_custom_declarations', JSON.stringify(custom));
+        }
+        let customColls = JSON.parse(localStorage.getItem('koteshwar_custom_collections') || '[]');
+        if (Array.isArray(customColls)) {
+          customColls = customColls.filter(c => !isDummyTestDeclaration(c.donorSno, c.donorName, c.city, c.amount));
+          localStorage.setItem('koteshwar_custom_collections', JSON.stringify(customColls));
         }
         localStorage.setItem('koteshwar_app_storage_version', APP_STORAGE_VERSION);
       }
@@ -2600,6 +2612,7 @@
       const collMapName = {};
 
       collectionsList.forEach(c => {
+        if (isDummyTestDeclaration(c.donorSno, c.donorName, c.city, c.amount)) return;
         const amt = Number(c.amount) || 0;
         if (c.donorSno) {
           const sKey = String(c.donorSno).trim();
@@ -3808,14 +3821,23 @@
        TABLES RENDERING
        ============================================================ */
     function renderDeclarationsTable() {
-      const q = (document.getElementById('searchDeclTable')?.value || '').toLowerCase();
+      const q = (document.getElementById('searchDeclTable')?.value || '').toLowerCase().trim();
       const village = document.getElementById('filterDeclVillage')?.value || 'all';
       const sortOrder = document.getElementById('sortDeclOrder')?.value || 'latest_date';
 
       const isKoteshwarQ = /^(kot|koth|kotesh|कोठ|कोट)/i.test(q);
+      const cleanQ = q.replace(/^#/, '');
+
       const filtered = declarationsList.filter(d => {
         const mob = cleanMobileNumber(d.mobile);
-        const matchesQ = !q || String(d.name).toLowerCase().includes(q) || String(d.city).toLowerCase().includes(q) || (isKoteshwarQ && d.city === 'कोटेश्वर / कोठड़ा') || String(d.sno) === q || mob.includes(q);
+        const matchesQ = !q ||
+          String(d.name).toLowerCase().includes(q) ||
+          String(d.city).toLowerCase().includes(q) ||
+          (isKoteshwarQ && d.city === 'कोटेश्वर / कोठड़ा') ||
+          String(d.sno) === q ||
+          String(d.sno) === cleanQ ||
+          String(d.sno).includes(cleanQ) ||
+          mob.includes(cleanQ);
         const matchesV = village === 'all' || d.city === village;
         return matchesQ && matchesV;
       });
@@ -3894,16 +3916,21 @@
     }
 
     function renderCollectionsTable() {
-      const q = (document.getElementById('searchCollTable')?.value || '').toLowerCase();
+      const q = (document.getElementById('searchCollTable')?.value || '').toLowerCase().trim();
       const userFilter = document.getElementById('filterCollKaryakarta')?.value || 'all';
 
       const isKoteshwarQ = /^(kot|koth|kotesh|कोठ|कोट)/i.test(q);
+      const cleanQ = q.replace(/^#/, '');
       const filtered = collectionsList.filter(c => {
         const matchesQ = !q ||
           String(c.receiptNo).toLowerCase().includes(q) ||
+          String(c.receiptNo).toLowerCase().includes(cleanQ) ||
           String(c.donorName).toLowerCase().includes(q) ||
           String(c.city).toLowerCase().includes(q) ||
           (isKoteshwarQ && c.city === 'कोटेश्वर / कोठड़ा') ||
+          String(c.donorSno) === q ||
+          String(c.donorSno) === cleanQ ||
+          String(c.donorSno).includes(cleanQ) ||
           String(c.paymentMode || '').toLowerCase().includes(q) ||
           String(c.refNo || '').toLowerCase().includes(q);
         const matchesU = userFilter === 'all' || (c.collectorUsername && c.collectorUsername === userFilter) || (c.collector && c.collector.includes(userFilter));
@@ -4050,17 +4077,24 @@
       const village = document.getElementById('filterPendingVillage')?.value || 'all';
       const dateFilter = document.getElementById('filterPendingDate')?.value || '';
       const amtFilter = document.getElementById('filterPendingAmount')?.value || 'all';
-      const sortOrder = document.getElementById('sortPendingOrder')?.value || 'balance_desc';
+      const sortOrder = document.getElementById('sortPendingOrder')?.value || 'latest_date';
 
       const pendingDonors = declarationsList.filter(d => (Number(d.balance) > 0));
 
+      const cleanQ = q.replace(/^#/, '');
+      const isKoteshwarQ = /^(kot|koth|kotesh|कोठ|कोट)/i.test(q);
+
       const filtered = pendingDonors.filter(d => {
+        const cleanPhone = cleanMobileNumber(d.mobile);
         const matchesQ = !q ||
           String(d.name).toLowerCase().includes(q) ||
           String(d.city).toLowerCase().includes(q) ||
+          (isKoteshwarQ && d.city === 'कोटेश्वर / कोठड़ा') ||
           String(d.notes || '').toLowerCase().includes(q) ||
-          String(d.mobile || '').includes(q) ||
-          String(d.sno) === q;
+          cleanPhone.includes(cleanQ) ||
+          String(d.sno) === q ||
+          String(d.sno) === cleanQ ||
+          String(d.sno).includes(cleanQ);
 
         const matchesV = !village || village === 'all' || d.city === village;
 
@@ -4089,10 +4123,12 @@
         const tA = parseDateToTime(a.date, a.sno, a.recordedAt || a.timestamp);
         const tB = parseDateToTime(b.date, b.sno, b.recordedAt || b.timestamp);
 
-        if (sortOrder === 'balance_desc') {
+        if (sortOrder === 'latest_date') {
+          return (tB - tA) || (Number(b.sno) - Number(a.sno));
+        } else if (sortOrder === 'sno_desc') {
+          return (Number(b.sno) - Number(a.sno));
+        } else if (sortOrder === 'balance_desc') {
           return (balB - balA) || (tB - tA);
-        } else if (sortOrder === 'latest_date') {
-          return (tB - tA) || (balB - balA);
         } else if (sortOrder === 'oldest_date') {
           return (tA - tB) || (balB - balA);
         } else if (sortOrder === 'amount_desc') {
