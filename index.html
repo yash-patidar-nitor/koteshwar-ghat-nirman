@@ -1236,6 +1236,10 @@
       height: 100%;
       object-fit: cover;
       display: block;
+      transition: transform 0.35s ease;
+    }
+    .legacy-card:hover .legacy-card-media img {
+      transform: scale(1.05);
     }
     .legacy-year-tag {
       position: absolute;
@@ -1729,8 +1733,9 @@
       <!-- 1. Hero Card: Grand View of Completed Ghat with 4 Key Metrics -->
       <div class="story-hero-card">
         <div class="story-hero-media">
-          <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1000&q=75" 
+          <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&h=420&q=60" 
                alt="माँ नर्मदा पावन घाट कोटेश्वर तीर्थ" 
+               width="800" height="420"
                loading="lazy"
                decoding="async" />
           <div class="story-hero-overlay">
@@ -1785,8 +1790,9 @@
 
         <div class="ba-stage-frame">
           <img id="baStageImg" class="ba-stage-img" 
-               src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=75" 
+               src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=720&h=420&q=60" 
                alt="निर्माण के बाद: भव्य घाट"
+               width="720" height="420"
                loading="lazy"
                decoding="async" />
           <div class="ba-caption-bar" id="baCaptionBar">
@@ -1848,8 +1854,9 @@
           <!-- 1. Koteshwar Muktidham (2015) -->
           <div class="legacy-card">
             <div class="legacy-card-media">
-              <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=60" 
-                   alt="कोटेश्वर मुक्तिधाम (2015)" 
+              <img src="https://images.unsplash.com/photo-1596176530529-78163a4f7af2?auto=format&fit=crop&w=480&h=270&q=60" 
+                   alt="कोटेश्वर मुक्तिधाम - पवित्र नर्मदा तट परिसर (2015)" 
+                   width="480" height="270"
                    loading="lazy"
                    decoding="async" />
               <span class="legacy-year-tag">2015</span>
@@ -1863,8 +1870,9 @@
           <!-- 2. Koteshwar Ghat (2016) -->
           <div class="legacy-card">
             <div class="legacy-card-media">
-              <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=60" 
-                   alt="कोटेश्वर घाट (2016)" 
+              <img src="https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=480&h=270&q=60" 
+                   alt="कोटेश्वर घाट - पावन नर्मदा स्नान सीढ़ियाँ (2016)" 
+                   width="480" height="270"
                    loading="lazy"
                    decoding="async" />
               <span class="legacy-year-tag">2016</span>
@@ -1878,8 +1886,9 @@
           <!-- 3. Rajghat, Kasrawad (2019 / 2029) -->
           <div class="legacy-card">
             <div class="legacy-card-media">
-              <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=60" 
-                   alt="राजघाट कसरावद" 
+              <img src="https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=480&h=270&q=60" 
+                   alt="राजघाट (कसरावद) - ऐतिहासिक नर्मदा पाषाण घाट" 
+                   width="480" height="270"
                    loading="lazy"
                    decoding="async" />
               <span class="legacy-year-tag">राजघाट</span>
@@ -1893,8 +1902,9 @@
           <!-- 4. Kothda Muktidham (2024) -->
           <div class="legacy-card">
             <div class="legacy-card-media">
-              <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=60" 
-                   alt="कोठड़ा मुक्तिधाम (2024)" 
+              <img src="https://images.unsplash.com/photo-1588880331179-bc9b93a8cb5e?auto=format&fit=crop&w=480&h=270&q=60" 
+                   alt="कोठड़ा मुक्तिधाम - शांत एवं छायादार परिसर (2024)" 
+                   width="480" height="270"
                    loading="lazy"
                    decoding="async" />
               <span class="legacy-year-tag">2024</span>
@@ -1908,8 +1918,9 @@
           <!-- 5. Kothada Ghat (2026 - Present Grand Ghat) -->
           <div class="legacy-card" style="border:2px solid var(--gold);background:var(--sandstone-light);">
             <div class="legacy-card-media">
-              <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=60" 
-                   alt="कोठड़ा घाट 2026" 
+              <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=480&h=270&q=60" 
+                   alt="कोठड़ा घाट - 54 सीढ़ियों वाला भव्य पाषाण घाट (2026)" 
+                   width="480" height="270"
                    loading="lazy"
                    decoding="async" />
               <span class="legacy-year-tag" style="background:var(--gold-dark);">2026 (नया)</span>
@@ -3196,19 +3207,19 @@
        ============================================================ */
     const BA_DATA = {
       after: {
-        img: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=75",
+        img: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=720&h=420&q=60",
         badge: "चरण ३ • 12 अगस्त 2026",
         title: "भव्य घाट का लोकार्पण एवं समर्पण",
         desc: "संत-महात्माओं की उपस्थिति में 54 सीढ़ियों वाले भव्य 100×230 फीट पाषाण घाट का लोकार्पण कर समाज एवं परिक्रमावासियों को समर्पित किया गया।"
       },
       during: {
-        img: "https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?auto=format&fit=crop&w=800&q=75",
+        img: "https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?auto=format&fit=crop&w=720&h=420&q=60",
         badge: "चरण २ • 19 दिनों का भागीरथ प्रयास",
         title: "दिन-रात अविराम निर्माण एवं श्रमदान",
         desc: "भारी मशीनरी, डंपर एवं सैकड़ों ग्रामीणों के निःस्वार्थ श्रमदान से 2 एकड़ दुर्गम बीहड़ खाई का समतलीकरण कर पाषाण सीढ़ियों की चिनाई की गई।"
       },
       before: {
-        img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=75",
+        img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=720&h=420&q=60",
         badge: "चरण १ • 14 जुलाई 2026 से पूर्व",
         title: "निर्माण से पूर्व: दुर्गम बीहड़ व अनुपयोगी तट",
         desc: "कोटेश्वर तीर्थ में घाट निर्माण से पूर्व यह स्थल अनुपयोगी खाइयों और बीहड़ से घिरा था, जहाँ श्रद्धालुओं का नर्मदा स्नान अत्यंत कठिन था।"
