@@ -1061,14 +1061,22 @@
       color: #fff;
       box-shadow: 0 2px 6px rgba(18, 63, 66, 0.25);
     }
+    .ba-card {
+      background: #FFFFFF;
+      border: 1px solid var(--sandstone);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(18, 63, 66, 0.08);
+      margin-bottom: 20px;
+    }
     .ba-stage-frame {
       position: relative;
       width: 100%;
-      height: 380px;
-      border-radius: 10px;
+      aspect-ratio: 4 / 3;
+      max-height: 520px;
       overflow: hidden;
       background: #0A2426;
-      border: 1px solid var(--sandstone);
+      cursor: zoom-in;
     }
     .ba-stage-img {
       width: 100%;
@@ -1077,36 +1085,99 @@
       display: block;
       transition: opacity 0.3s ease;
     }
-    .ba-caption-bar {
+    .ba-zoom-hint {
       position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: linear-gradient(180deg, transparent 0%, rgba(10, 36, 38, 0.92) 100%);
-      padding: 16px 18px;
+      top: 12px;
+      right: 12px;
+      background: rgba(10, 36, 38, 0.78);
       color: #fff;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 600;
+      backdrop-filter: blur(4px);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      pointer-events: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+      z-index: 2;
+    }
+    .ba-caption-bar {
+      padding: 14px 18px;
+      background: #FFFFFF;
+      border-top: 1px solid var(--sandstone);
+      color: var(--text-primary);
     }
     .ba-caption-badge {
       display: inline-block;
-      background: var(--gold);
-      color: #fff;
+      background: var(--gold-subtle);
+      color: var(--gold-dark);
       font-size: 11px;
       font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 4px;
-      margin-bottom: 4px;
+      padding: 3px 9px;
+      border-radius: 6px;
+      letter-spacing: 0.3px;
     }
     .ba-caption-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 2px;
+      font-size: 16.5px;
+      font-weight: 800;
+      color: var(--teal);
+      margin: 6px 0 4px 0;
+      line-height: 1.35;
     }
     .ba-caption-desc {
-      font-size: 12.5px;
-      color: var(--ivory);
+      font-size: 13px;
+      color: var(--text-secondary);
       margin: 0;
-      line-height: 1.45;
+      line-height: 1.5;
+    }
+
+    /* Photo Zoom Lightbox Modal */
+    .photo-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: rgba(0, 0, 0, 0.94);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      backdrop-filter: blur(6px);
+    }
+    .photo-modal-content {
+      position: relative;
+      max-width: 96vw;
+      max-height: 94vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .photo-modal-content img {
+      max-width: 100%;
+      max-height: 82vh;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 4px 28px rgba(0,0,0,0.7);
+    }
+    .photo-modal-close {
+      position: absolute;
+      top: -38px;
+      right: 0;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 32px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 4px 10px;
+    }
+    .photo-modal-caption {
+      margin-top: 10px;
+      color: #fff;
+      font-size: 13.5px;
+      text-align: center;
+      font-weight: 600;
     }
 
     /* 3. Interactive Milestones Timeline */
@@ -1420,25 +1491,37 @@
         justify-content: center;
         gap: 4px;
       }
+      .ba-card {
+        border-radius: 10px;
+        margin-bottom: 16px;
+      }
       .ba-stage-frame {
-        height: 290px;
-        border-radius: 8px;
+        aspect-ratio: 4 / 3;
+        height: auto;
+        max-height: none;
+        border-radius: 9px 9px 0 0;
+      }
+      .ba-zoom-hint {
+        top: 8px;
+        right: 8px;
+        padding: 3px 8px;
+        font-size: 10px;
       }
       .ba-caption-bar {
-        padding: 8px 10px;
+        padding: 12px 14px;
       }
       .ba-caption-badge {
-        font-size: 10px;
-        padding: 1px 6px;
+        font-size: 10.5px;
+        padding: 2px 7px;
         margin-bottom: 2px;
       }
       .ba-caption-title {
-        font-size: 13.5px;
-        margin-bottom: 2px;
+        font-size: 15px;
+        margin: 4px 0 2px 0;
       }
       .ba-caption-desc {
-        font-size: 11px;
-        line-height: 1.35;
+        font-size: 12.5px;
+        line-height: 1.45;
       }
 
       .metric-badge-grid {
@@ -1779,15 +1862,22 @@
           </div>
         </div>
 
-        <div class="ba-stage-frame">
-          <img id="baStageImg" class="ba-stage-img" 
-               src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=720&h=420&q=60" 
-               alt="निर्माण के बाद: भव्य घाट"
-               width="720" height="420"
-               loading="lazy"
-               decoding="async" />
+        <div class="ba-card">
+          <div class="ba-stage-frame" onclick="openPhotoModal()" title="फोटो को पूर्ण आकार में देखने के लिए टैप करें">
+            <img id="baStageImg" class="ba-stage-img" 
+                 src="assets/nirman_after.webp" 
+                 alt="निर्माण के बाद: भव्य घाट"
+                 loading="eager"
+                 decoding="async" />
+            <div class="ba-zoom-hint">
+              <i class="fa-solid fa-expand"></i> <span>ज़ूम करें</span>
+            </div>
+          </div>
           <div class="ba-caption-bar" id="baCaptionBar">
-            <span class="ba-caption-badge" id="baCaptionBadge">चरण ३ • 12 अगस्त 2026</span>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:4px;">
+              <span class="ba-caption-badge" id="baCaptionBadge">चरण ३ • 12 अगस्त 2026</span>
+              <span style="font-size:11.5px;color:var(--text-muted);font-weight:600;"><i class="fa-regular fa-image" style="color:var(--gold-dark);"></i> वास्तविक छायाचित्र</span>
+            </div>
             <div class="ba-caption-title" id="baCaptionTitle">भव्य घाट का लोकार्पण एवं समर्पण</div>
             <p class="ba-caption-desc" id="baCaptionDesc">संत-महात्माओं की उपस्थिति में 56 सीढ़ियों वाले भव्य 100×230 फीट पाषाण घाट का लोकार्पण कर समाज एवं परिक्रमावासियों को समर्पित किया गया।</p>
           </div>
@@ -2376,6 +2466,15 @@
         </button>
         <button onclick="closeCertModal()" class="btn btn-white btn-sm">बंद करें</button>
       </div>
+    </div>
+  </div>
+
+  <!-- ==================== PHOTO ZOOM LIGHTBOX MODAL ==================== -->
+  <div id="photoZoomModal" class="photo-modal" style="display:none;" onclick="closePhotoModal(event)">
+    <div class="photo-modal-content" onclick="event.stopPropagation()">
+      <button type="button" class="photo-modal-close" onclick="closePhotoModal(event)">&times;</button>
+      <img id="photoModalImg" src="" alt="विस्तृत छायाचित्र" />
+      <div id="photoModalCaption" class="photo-modal-caption"></div>
     </div>
   </div>
 
@@ -3862,7 +3961,7 @@
        ============================================================ */
     const BA_DATA = {
       after: {
-        img: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=720&h=420&q=60",
+        img: "assets/nirman_after.webp",
         badge: "चरण ३ • 12 अगस्त 2026",
         title: "भव्य घाट का लोकार्पण एवं समर्पण",
         desc: "संत-महात्माओं की उपस्थिति में 56 सीढ़ियों वाले भव्य 100×230 फीट पाषाण घाट का लोकार्पण कर समाज एवं परिक्रमावासियों को समर्पित किया गया।"
@@ -3901,6 +4000,32 @@
       if (badgeEl) badgeEl.textContent = data.badge;
       if (titleEl) titleEl.textContent = data.title;
       if (descEl) descEl.textContent = data.desc;
+    }
+
+    /* ============================================================
+       PHOTO ZOOM LIGHTBOX MODAL
+       ============================================================ */
+    function openPhotoModal() {
+      const stageImg = document.getElementById('baStageImg');
+      const captionTitle = document.getElementById('baCaptionTitle');
+      const modal = document.getElementById('photoZoomModal');
+      const modalImg = document.getElementById('photoModalImg');
+      const modalCap = document.getElementById('photoModalCaption');
+      if (modal && stageImg && modalImg) {
+        modalImg.src = stageImg.src;
+        if (modalCap && captionTitle) modalCap.textContent = captionTitle.textContent;
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closePhotoModal(e) {
+      if (e) e.stopPropagation();
+      const modal = document.getElementById('photoZoomModal');
+      if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+      }
     }
   </script>
 </body>
