@@ -1719,7 +1719,7 @@
 
   <!-- ==================== MODAL: EDIT DECLARATION ==================== -->
   <div class="modal-backdrop" id="editDeclModalBackdrop" onclick="closeEditDeclModal(event)">
-    <div class="modal-card" style="max-width:480px;">
+    <div class="modal-card" style="max-width:480px;" onclick="event.stopPropagation()">
       <div class="modal-head">
         <h4><i class="fa-solid fa-pen-to-square"></i> <span id="editDeclModalTitle">संकल्प विवरण संपादित करें</span></h4>
         <button class="btn-modal-close" onclick="closeEditDeclModal()"><i class="fa-solid fa-xmark"></i></button>
@@ -1786,7 +1786,7 @@
 
   <!-- ==================== MODAL: EDIT COLLECTION ==================== -->
   <div class="modal-backdrop" id="editCollModalBackdrop" onclick="closeEditCollModal(event)">
-    <div class="modal-card" style="max-width:480px;">
+    <div class="modal-card" style="max-width:480px;" onclick="event.stopPropagation()">
       <div class="modal-head">
         <h4><i class="fa-solid fa-pen-to-square"></i> <span id="editCollModalTitle">रसीद विवरण संपादित करें</span></h4>
         <button class="btn-modal-close" onclick="closeEditCollModal()"><i class="fa-solid fa-xmark"></i></button>
@@ -2705,6 +2705,10 @@
     // Silent background refresh that updates everything without showing alerts
     async function silentAutoRefresh() {
       if (isBackgroundSyncing) return;
+      if (document.querySelector('.modal-backdrop.open')) {
+        // Modal is actively open, don't interrupt active user input
+        return;
+      }
       isBackgroundSyncing = true;
       try {
         await Promise.all([
@@ -4129,13 +4133,13 @@
           <td style="text-align:right;font-weight:700;color:var(--saffron);">${fmt(d.balance)}</td>
           <td style="text-align:center;">
             <div style="display:inline-flex;gap:4px;align-items:center;">
-              <button class="btn-outline-action" onclick="jumpToCollection(${d.sno})" title="रसीद काटें" style="padding:3px 7px;font-size:11px;">
+              <button class="btn-outline-action" onclick="jumpToCollection('${d.sno}')" title="रसीद काटें" style="padding:3px 7px;font-size:11px;">
                 <i class="fa-solid fa-plus"></i> रसीद
               </button>
-              <button class="btn-outline-action" onclick="openEditDeclarationModal(${d.sno})" title="संपादित करें" style="padding:3px 6px;font-size:11px;color:var(--teal);">
+              <button class="btn-outline-action" onclick="openEditDeclarationModal('${d.sno}')" title="संपादित करें" style="padding:3px 6px;font-size:11px;color:var(--teal);">
                 <i class="fa-solid fa-pen-to-square"></i>
               </button>
-              <button class="btn-outline-action" onclick="confirmDeleteDeclaration(${d.sno})" title="हटाएं (Soft Delete)" style="padding:3px 6px;font-size:11px;color:#C0392B;">
+              <button class="btn-outline-action" onclick="confirmDeleteDeclaration('${d.sno}')" title="हटाएं (Soft Delete)" style="padding:3px 6px;font-size:11px;color:#C0392B;">
                 <i class="fa-solid fa-trash"></i>
               </button>
             </div>
@@ -4201,6 +4205,7 @@
           const waUrl = phone && phone.length === 10
             ? `https://api.whatsapp.com/send?phone=91${phone}&text=${waMsg}`
             : `https://api.whatsapp.com/send?text=${waMsg}`;
+          const safeReceiptNo = String(c.receiptNo || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
 
           return `
             <tr>
@@ -4215,10 +4220,10 @@
                   <a href="${waUrl}" target="_blank" class="btn-wa-sm" title="WhatsApp पर शेयर करें">
                     <i class="fa-brands fa-whatsapp"></i> शेयर
                   </a>
-                  <button class="btn-outline-action" onclick="openEditCollectionModal('${c.receiptNo}')" title="संपादित करें" style="padding:3px 6px;font-size:11px;color:var(--teal);">
+                  <button class="btn-outline-action" onclick="openEditCollectionModal('${safeReceiptNo}')" title="संपादित करें" style="padding:3px 6px;font-size:11px;color:var(--teal);">
                     <i class="fa-solid fa-pen-to-square"></i>
                   </button>
-                  <button class="btn-outline-action" onclick="confirmDeleteCollection('${c.receiptNo}')" title="हटाएं" style="padding:3px 6px;font-size:11px;color:#C0392B;">
+                  <button class="btn-outline-action" onclick="confirmDeleteCollection('${safeReceiptNo}')" title="हटाएं" style="padding:3px 6px;font-size:11px;color:#C0392B;">
                     <i class="fa-solid fa-trash"></i>
                   </button>
                 </div>
@@ -4454,6 +4459,33 @@
     /* ============================================================
        EDIT & DELETE HANDLERS (DECLARATIONS & COLLECTIONS)
        ============================================================ */
+    function toIsoDateInput(dStr) {
+      if (!dStr) return '';
+      dStr = String(dStr).trim();
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dStr)) return dStr;
+      if (/^\d{4}-\d{2}-\d{2}T/.test(dStr)) return dStr.substring(0, 10);
+      if (/^\d{1,2}\.\d{1,2}\.\d{2,4}$/.test(dStr)) {
+        const p = dStr.split('.');
+        let y = parseInt(p[2], 10);
+        if (y < 100) y += 2000;
+        return `${y}-${p[1].padStart(2, '0')}-${p[0].padStart(2, '0')}`;
+      }
+      if (/^\d{1,2}\/\d{1,2}\/\d{2,4}$/.test(dStr)) {
+        const p = dStr.split('/');
+        let y = parseInt(p[2], 10);
+        if (y < 100) y += 2000;
+        return `${y}-${p[0].padStart(2, '0')}-${p[1].padStart(2, '0')}`;
+      }
+      const d = new Date(dStr);
+      if (!isNaN(d.getTime())) {
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
+      }
+      return '';
+    }
+
     // 1. Edit Declaration
     function openEditDeclarationModal(sno) {
       const donor = declarationsList.find(d => String(d.sno) === String(sno));
@@ -4465,21 +4497,18 @@
       
       const citySelect = document.getElementById('editDeclCity');
       if (citySelect) {
+        if (donor.city && !Array.from(citySelect.options).some(o => o.value === donor.city)) {
+          const opt = document.createElement('option');
+          opt.value = donor.city;
+          opt.textContent = donor.city;
+          citySelect.appendChild(opt);
+        }
         citySelect.value = donor.city || '';
       }
 
       document.getElementById('editDeclAmount').value = donor.amount || '';
       document.getElementById('editDeclMobile').value = donor.mobile || '';
-
-      // Normalize date for HTML date input
-      let dVal = donor.date || '';
-      if (/^\d{1,2}\.\d{1,2}\.\d{2,4}$/.test(dVal)) {
-        const p = dVal.split('.');
-        let y = parseInt(p[2], 10);
-        if (y < 100) y += 2000;
-        dVal = `${y}-${p[1].padStart(2, '0')}-${p[0].padStart(2, '0')}`;
-      }
-      document.getElementById('editDeclDate').value = dVal;
+      document.getElementById('editDeclDate').value = toIsoDateInput(donor.date);
       document.getElementById('editDeclNotes').value = donor.notes || '';
       document.getElementById('editDeclReceipt').value = donor.receipt || '-';
 
@@ -4487,7 +4516,7 @@
     }
 
     function closeEditDeclModal(e) {
-      if (e && e.target !== e.currentTarget && !e.target.closest('.btn-modal-close') && e.type !== 'click') return;
+      if (e && e.target !== e.currentTarget && !e.target.closest('.btn-modal-close')) return;
       document.getElementById('editDeclModalBackdrop').classList.remove('open');
     }
 
@@ -4603,11 +4632,19 @@
       document.getElementById('editCollOrigReceiptNo').value = coll.receiptNo;
       document.getElementById('editCollModalTitle').textContent = `रसीद संपादित करें (${coll.receiptNo})`;
       document.getElementById('editCollReceiptNo').value = coll.receiptNo || '';
-      document.getElementById('editCollDate').value = coll.date || '';
+      document.getElementById('editCollDate').value = toIsoDateInput(coll.date);
       document.getElementById('editCollDonorName').value = coll.donorName || '';
       
       const citySelect = document.getElementById('editCollCity');
-      if (citySelect) citySelect.value = coll.city || '';
+      if (citySelect) {
+        if (coll.city && !Array.from(citySelect.options).some(o => o.value === coll.city)) {
+          const opt = document.createElement('option');
+          opt.value = coll.city;
+          opt.textContent = coll.city;
+          citySelect.appendChild(opt);
+        }
+        citySelect.value = coll.city || '';
+      }
 
       document.getElementById('editCollAmount').value = coll.amount || '';
       document.getElementById('editCollPaymentMode').value = coll.paymentMode || 'नकद';
@@ -4618,7 +4655,7 @@
     }
 
     function closeEditCollModal(e) {
-      if (e && e.target !== e.currentTarget && !e.target.closest('.btn-modal-close') && e.type !== 'click') return;
+      if (e && e.target !== e.currentTarget && !e.target.closest('.btn-modal-close')) return;
       document.getElementById('editCollModalBackdrop').classList.remove('open');
     }
 
@@ -4666,8 +4703,8 @@
       saveCollectionsToStorage();
       reconcileCollectionsWithDeclarations();
 
-      // Post webhook update
-      postWebhookData('editCollection', coll);
+      // Post webhook update (including origReceiptNo for reliable remote lookup)
+      postWebhookData('editCollection', Object.assign({}, coll, { origReceiptNo }));
 
       closeEditCollModal();
       renderAllPortals();
