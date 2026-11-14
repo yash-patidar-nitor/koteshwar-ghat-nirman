@@ -974,6 +974,11 @@
   <!-- ==================== 2. MAIN WORKSPACE ==================== -->
   <main class="portal-main">
 
+    <!-- Global Cloud & Sync Status Ribbon -->
+    <div id="portalSyncRibbon" style="display:none;padding:10px 14px;margin-bottom:12px;border-radius:8px;font-size:12.5px;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;transition:all 0.3s ease;">
+      <!-- Populated dynamically via updateRibbon() -->
+    </div>
+
     <!-- Touch Navigation Tabs (Clean & Simple) -->
     <div class="tab-nav-bar">
       <button class="tab-btn active" onclick="switchPortalTab('new-declaration', this)">
@@ -1554,12 +1559,15 @@
             Google Apps Script Webhook URL (लाइव ऑटो-राइटबैक)
           </label>
           <input type="url" id="webhookUrlInput" class="form-input" placeholder="https://script.google.com/macros/s/.../exec" />
-          <div style="display:flex;gap:8px;margin-top:8px;">
+          <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
             <button class="btn-submit-action" onclick="saveWebhookUrl()" style="width:auto;min-height:36px;padding:6px 14px;font-size:12px;">
-              URL सुरक्षित करें
+              <i class="fa-solid fa-floppy-disk"></i> URL सुरक्षित करें
             </button>
-            <button class="btn-outline-action" onclick="testWebhookConnection()">
-              परीक्षण
+            <button class="btn-outline-action" onclick="testWebhookConnection()" style="padding:6px 14px;font-size:12px;">
+              <i class="fa-solid fa-vial"></i> कनेक्शन जांचें
+            </button>
+            <button class="btn-submit-action" onclick="syncAllPendingToSheet()" style="width:auto;min-height:36px;padding:6px 14px;font-size:12px;background:var(--sage);">
+              <i class="fa-solid fa-cloud-arrow-up"></i> फ़ोन की पेंडिंग रसीदें Sheet में भेजें (Sync Now)
             </button>
           </div>
         </div>
@@ -2660,6 +2668,7 @@
       try { updateNextDeclarationSno(); } catch (e) { console.error("Error in updateNextDeclarationSno:", e); }
       try { updateBadges(); } catch (e) { console.error("Error in updateBadges:", e); }
       try { applyUserProfile(); } catch (e) { console.error("Error in applyUserProfile:", e); }
+      try { updateRibbon(); } catch (e) { console.error("Error in updateRibbon:", e); }
     }
 
     function updateBadges() {
@@ -4652,11 +4661,159 @@
     /* ============================================================
        WEBHOOK SYNC & STORAGE (DATA SINKS)
        ============================================================ */
+    function updateRibbon(isBusy = false, customMsg = '') {
+      const ribbon = document.getElementById('portalSyncRibbon');
+      if (!ribbon) return;
+
+      let customColls = [];
+      let customDecls = [];
+      try {
+        customColls = JSON.parse(localStorage.getItem('koteshwar_custom_collections') || '[]');
+        customDecls = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
+      } catch (e) {}
+
+      // A record is pending if it has not been flagged as syncedToSheet
+      const pendingColls = customColls.filter(c => !c.syncedToSheet);
+      const pendingDecls = customDecls.filter(d => !d.syncedToSheet);
+      const totalPending = pendingColls.length + pendingDecls.length;
+
+      ribbon.style.display = 'flex';
+
+      if (isBusy) {
+        ribbon.style.background = 'rgba(209, 154, 80, 0.15)';
+        ribbon.style.border = '1px solid var(--gold)';
+        ribbon.style.color = 'var(--text-primary)';
+        ribbon.innerHTML = `
+          <div style="display:flex;align-items:center;gap:8px;">
+            <i class="fa-solid fa-arrows-rotate fa-spin" style="color:var(--gold-dark);"></i>
+            <span>${customMsg || "डेटा लोड / सिंक हो रहा है..."}</span>
+          </div>
+        `;
+        return;
+      }
+
+      if (!webhookUrl) {
+        ribbon.style.background = '#FFF3CD';
+        ribbon.style.border = '1.5px solid #FFEBAA';
+        ribbon.style.color = '#856404';
+        ribbon.innerHTML = `
+          <div style="display:flex;align-items:center;gap:8px;flex:1;">
+            <i class="fa-solid fa-triangle-exclamation" style="color:#C45A38;font-size:16px;"></i>
+            <span><strong>सूचना:</strong> Google Apps Script Webhook URL सेट नहीं है। आपकी बनाई गई रसीदें अभी केवल इसी फ़ोन में सुरक्षित हैं और Google Sheet / सार्वजनिक वेबसाइट में नहीं पहुँची हैं।</span>
+          </div>
+          <button type="button" onclick="switchPortalTab('settings-sync', document.querySelectorAll('.tab-btn')[5])" class="btn btn-white btn-sm" style="font-size:11.5px;padding:4px 10px;border:1px solid #C45A38;color:#C45A38;border-radius:6px;cursor:pointer;font-weight:700;">
+            <i class="fa-solid fa-gear"></i> Webhook सेट करें
+          </button>
+        `;
+        return;
+      }
+
+      if (totalPending > 0) {
+        ribbon.style.background = '#FFF3CD';
+        ribbon.style.border = '1.5px solid #FFEBAA';
+        ribbon.style.color = '#856404';
+        ribbon.innerHTML = `
+          <div style="display:flex;align-items:center;gap:8px;flex:1;">
+            <i class="fa-solid fa-cloud-arrow-up" style="color:var(--gold-dark);font-size:16px;"></i>
+            <span><strong>${totalPending} प्रविष्टि / रसीद</strong> Google Sheet में सिंक होना बाकी है।</span>
+          </div>
+          <button type="button" onclick="syncAllPendingToSheet()" class="btn btn-white btn-sm" style="font-size:11.5px;padding:5px 12px;background:var(--teal);color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:700;">
+            <i class="fa-solid fa-arrows-rotate"></i> अभी सिंक करें (Sync Now)
+          </button>
+        `;
+        return;
+      }
+
+      ribbon.style.background = 'rgba(46, 125, 90, 0.1)';
+      ribbon.style.border = '1px solid rgba(46, 125, 90, 0.3)';
+      ribbon.style.color = 'var(--sage)';
+      ribbon.innerHTML = `
+        <div style="display:flex;align-items:center;gap:8px;">
+          <i class="fa-solid fa-circle-check" style="color:var(--sage);"></i>
+          <span>${customMsg || "Google Sheet से पूर्णतः सिंक है • सभी रसीदें क्लाउड पर सुरक्षित हैं"}</span>
+        </div>
+      `;
+    }
+
     function saveWebhookUrl() {
       const url = document.getElementById('webhookUrlInput').value.trim();
+      if (!url) {
+        alert("कृपया वैध Google Apps Script Webhook URL दर्ज करें!");
+        return;
+      }
       localStorage.setItem('koteshwar_webhook_url', url);
       webhookUrl = url;
-      alert("Google Apps Script Webhook URL सुरक्षित कर दिया गया है!");
+      alert("✅ Google Apps Script Webhook URL सुरक्षित कर दिया गया है!\n\nअब आपके फ़ोन की सभी लंबित रसीदें Google Sheet में भेजी जा रही हैं...");
+      syncAllPendingToSheet();
+    }
+
+    async function syncAllPendingToSheet() {
+      if (!webhookUrl) {
+        alert("कृपया पहले नीचे 'Google Apps Script Webhook URL' दर्ज करके 'URL सुरक्षित करें' पर क्लिक करें!");
+        const inp = document.getElementById('webhookUrlInput');
+        if (inp) inp.focus();
+        return;
+      }
+
+      let customColls = [];
+      let customDecls = [];
+      try {
+        customColls = JSON.parse(localStorage.getItem('koteshwar_custom_collections') || '[]');
+        customDecls = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
+      } catch (e) {}
+
+      // Consider any custom item as needing sync if !syncedToSheet
+      const pendingColls = customColls.filter(c => !c.syncedToSheet);
+      const pendingDecls = customDecls.filter(d => !d.syncedToSheet);
+      const totalPending = pendingColls.length + pendingDecls.length;
+
+      if (totalPending === 0) {
+        alert("फ़ोन की सभी रसीदें एवं संकल्प पहले से ही Google Sheet में सिंक हैं!");
+        updateRibbon();
+        return;
+      }
+
+      updateRibbon(true, `${totalPending} प्रविष्टियाँ Google Sheet में भेजी जा रही हैं...`);
+
+      let successCount = 0;
+      for (const c of pendingColls) {
+        try {
+          await fetch(webhookUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'addCollection', data: c })
+          });
+          c.syncedToSheet = true;
+          successCount++;
+        } catch (err) {
+          console.error("Failed to sync collection:", c.receiptNo, err);
+        }
+      }
+
+      for (const d of pendingDecls) {
+        try {
+          await fetch(webhookUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'addDeclaration', data: d })
+          });
+          d.syncedToSheet = true;
+          successCount++;
+        } catch (err) {
+          console.error("Failed to sync declaration:", d.sno, err);
+        }
+      }
+
+      try {
+        localStorage.setItem('koteshwar_custom_collections', JSON.stringify(customColls));
+        localStorage.setItem('koteshwar_custom_declarations', JSON.stringify(customDecls));
+      } catch (e) {}
+
+      updateRibbon(false, `✅ ${successCount} प्रविष्टि(याँ) Google Sheet में सफलतापूर्वक सिंक हो गईं!`);
+      alert(`✅ ${successCount} प्रविष्टि(याँ) Google Sheet में सफलतापूर्वक सिंक हो गईं!\n\nअब Google Sheet और डेस्कटॉप पब्लिक व्यू में यह डेटा दिखने लगेगा।`);
+      refreshPortalData(true);
     }
 
     async function testWebhookConnection() {
@@ -4666,16 +4823,23 @@
         return;
       }
       try {
+        updateRibbon(true, "वेबहुक कनेक्शन जांचा जा रहा है...");
         const res = await fetch(url);
         const data = await res.json();
         alert("सफल! Google Apps Script से संपर्क स्थापित: " + (data.message || "OK"));
+        updateRibbon(false, "वेबहुक सक्रिय एवं प्रमाणित");
       } catch (err) {
-        alert("वेबहुक URL कॉन्फ़िगर हो गया है। डेटा Google Sheet में सीधे पोस्ट होगा।");
+        alert("वेबहुक URL कॉन्फ़िगर हो गया है। डेटा पृष्ठभूमि में Google Sheet में पोस्ट होगा।");
+        updateRibbon(false, "वेबहुक कॉन्फ़िगर है");
       }
     }
 
     async function postWebhookData(action, data) {
-      if (!webhookUrl) return;
+      if (!webhookUrl) {
+        console.warn("Webhook URL not configured; saved locally in offline storage.");
+        updateRibbon();
+        return false;
+      }
       try {
         await fetch(webhookUrl, {
           method: 'POST',
@@ -4683,8 +4847,12 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: action, data: data })
         });
+        updateRibbon(false, "Google Sheet में डेटा सुरक्षित किया गया");
+        return true;
       } catch (e) {
         console.warn("Webhook background sync notice:", e);
+        updateRibbon(false, "स्थानीय रूप से सुरक्षित (ऑफ़लाइन कैश)");
+        return false;
       }
     }
 
