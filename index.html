@@ -1848,8 +1848,8 @@
           <!-- Step 4: Future Expansion -->
           <div class="timeline-card" style="border-top-color:var(--gold-dark);">
             <span class="tl-date-badge" style="background:var(--teal-subtle);color:var(--teal);"><i class="fa-solid fa-compass-drafting"></i> आगामी विकास</span>
-            <div class="tl-title">8 एकड़ का मास्टर प्लान</div>
-            <p class="tl-desc">घाट विस्तार (300 फीट), सर्वसुविधायुक्त मुक्तिधाम, भव्य मंदिर, धर्मशाला एवं परिक्रमावासी केंद्र की कार्ययोजना।</p>
+            <div class="tl-title">9 एकड़ का मास्टर प्लान</div>
+            <p class="tl-desc">घाट विस्तार (500 फीट), सर्वसुविधायुक्त मुक्तिधाम, भव्य मंदिर, धर्मशाला एवं परिक्रमावासी केंद्र की कार्ययोजना।</p>
           </div>
         </div>
       </div>
@@ -1945,7 +1945,7 @@
       <div>
         <div style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--sandstone);padding-bottom:8px;">
           <h4 style="font-size:16px;font-weight:700;color:var(--teal);margin:0;display:flex;align-items:center;gap:8px;">
-            <i class="fa-solid fa-compass-drafting" style="color:var(--gold);"></i> भविष्य का कोटेश्वर तीर्थ – 8 एकड़ का मास्टर प्लान
+            <i class="fa-solid fa-compass-drafting" style="color:var(--gold);"></i> भविष्य का कोटेश्वर तीर्थ – 9 एकड़ का मास्टर प्लान
           </h4>
           <span style="font-size:12px;color:var(--text-muted);"><i class="fa-solid fa-layer-group"></i> चरणबद्ध निर्माण परिकल्पना</span>
         </div>
@@ -1954,8 +1954,8 @@
           <!-- Project 1 -->
           <div class="master-plan-card">
             <span class="status-badge planned"><i class="fa-solid fa-clock"></i> नियोजित (Planned)</span>
-            <div class="master-card-title"><i class="fa-solid fa-arrows-left-right" style="color:var(--teal);"></i> घाट विस्तार (100 → 300 फीट)</div>
-            <p class="master-card-desc">वर्तमान 100 फीट घाट को नर्मदा तट के समानांतर 300 फीट तक विस्तृत कर विशाल स्नान परिसर का निर्माण।</p>
+            <div class="master-card-title"><i class="fa-solid fa-arrows-left-right" style="color:var(--teal);"></i> घाट विस्तार (100 → 500 फीट)</div>
+            <p class="master-card-desc">वर्तमान 100 फीट घाट को नर्मदा तट के समानांतर 500 फीट तक विस्तृत कर विशाल स्नान परिसर का निर्माण।</p>
           </div>
 
           <!-- Project 2 -->
@@ -2010,7 +2010,11 @@
         <button class="seg-tab" onclick="switchTab('donors', this)">
           <i class="fa-solid fa-users"></i> <span>दानदाता निर्देशिका</span> <span class="seg-badge" id="tabDonorBadge">-</span>
         </button>
-        <!-- 3rd Tab: Prerna dai Prasang -->
+        <!-- 3rd Tab: Date-wise Donations -->
+        <button class="seg-tab" onclick="switchTab('dates', this)">
+          <i class="fa-solid fa-calendar-days"></i> <span>दिनांक वार दान विवरण</span> <span class="seg-badge" id="tabDateBadge">-</span>
+        </button>
+        <!-- 4th Tab: Prerna dai Prasang -->
         <button class="seg-tab" onclick="switchTab('stories', this)">
           <i class="fa-solid fa-star"></i> <span>प्रेरणादायी प्रसंग</span> <span class="seg-badge">8</span>
         </button>
@@ -2121,7 +2125,100 @@
       </div>
     </div>
 
-    <!-- ==================== TAB 3 (THIRD): PRERNA DAI PRASANG ==================== -->
+    <!-- ==================== TAB 3: DATE-WISE DONATIONS ==================== -->
+    <div id="pane-dates" class="tab-pane">
+      <div class="section-card">
+        <div class="section-header-box" style="margin-bottom:16px;">
+          <div>
+            <h2><i class="fa-solid fa-calendar-days" style="color:var(--gold);"></i> पावन जनसहयोग की दैनिक समयरेखा (Date-wise Donations)</h2>
+            <p>Google Sheet से लाइव संकलित: प्रत्येक तिथि पर प्राप्त दान संकल्प, जमा सहयोग राशि एवं समर्पित दानदाताओं का कालक्रमानुसार प्रामाणिक विवरण</p>
+          </div>
+          <span style="font-size:12px;color:var(--teal);font-weight:600;"><i class="fa-solid fa-clock-rotate-left"></i> कालक्रमानुसार व्यवस्थित</span>
+        </div>
+
+        <!-- Date Summary KPI Badges -->
+        <div class="date-kpi-grid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;margin-bottom:18px;">
+          <div class="summary-card" style="padding:12px 14px;background:#fff;border:1px solid var(--sandstone);border-radius:10px;border-left:4px solid var(--teal);">
+            <div style="font-size:11.5px;color:var(--text-muted);"><i class="fa-solid fa-calendar-check"></i> कुल सक्रिय दिवस</div>
+            <div id="dateKpiTotalDays" style="font-size:20px;font-weight:800;color:var(--teal);margin-top:2px;">-</div>
+            <div style="font-size:11px;color:var(--text-muted);">दान प्रविष्टि दिवस</div>
+          </div>
+          <div class="summary-card" style="padding:12px 14px;background:#fff;border:1px solid var(--sandstone);border-radius:10px;border-left:4px solid var(--gold);">
+            <div style="font-size:11.5px;color:var(--text-muted);"><i class="fa-solid fa-trophy"></i> सर्वोच्च संकलन दिवस</div>
+            <div id="dateKpiPeakDay" style="font-size:15px;font-weight:800;color:var(--gold-dark);margin-top:2px;">-</div>
+            <div id="dateKpiPeakAmt" style="font-size:11px;color:var(--text-muted);">-</div>
+          </div>
+          <div class="summary-card" style="padding:12px 14px;background:#fff;border:1px solid var(--sandstone);border-radius:10px;border-left:4px solid var(--sage);">
+            <div style="font-size:11.5px;color:var(--text-muted);"><i class="fa-solid fa-calendar-day"></i> नवीनतम संकलन दिवस</div>
+            <div id="dateKpiLatestDay" style="font-size:15px;font-weight:800;color:var(--sage);margin-top:2px;">-</div>
+            <div id="dateKpiLatestAmt" style="font-size:11px;color:var(--text-muted);">-</div>
+          </div>
+          <div class="summary-card" style="padding:12px 14px;background:#fff;border:1px solid var(--sandstone);border-radius:10px;border-left:4px solid #C45A38;">
+            <div style="font-size:11.5px;color:var(--text-muted);"><i class="fa-solid fa-hand-holding-dollar"></i> औसत दैनिक सहयोग</div>
+            <div id="dateKpiAvgDay" style="font-size:20px;font-weight:800;color:var(--teal);margin-top:2px;">-</div>
+            <div style="font-size:11px;color:var(--text-muted);">प्रति सक्रिय दिवस</div>
+          </div>
+        </div>
+
+        <!-- Filter Controls Bar -->
+        <div class="filter-controls-box" style="background:var(--sandstone-light);border:1px solid var(--sandstone);border-radius:10px;padding:12px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;">
+          <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;flex:1;min-width:260px;">
+            <!-- Search Input -->
+            <div style="position:relative;flex:1;min-width:180px;">
+              <i class="fa-solid fa-magnifying-glass" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:12px;"></i>
+              <input type="text" id="dateSearchInput" placeholder="नाम, ग्राम, रसीद या तिथि से खोजें..." oninput="handleDateFilterChange()" style="width:100%;padding:7px 10px 7px 30px;border-radius:6px;border:1px solid var(--sandstone);background:#fff;font-size:13px;outline:none;" />
+            </div>
+
+            <!-- Date Select Dropdown -->
+            <select id="dateSelectFilter" onchange="handleDateFilterChange()" style="padding:7px 10px;border-radius:6px;border:1px solid var(--sandstone);background:#fff;font-size:12.5px;color:var(--teal);font-weight:600;outline:none;max-width:250px;">
+              <option value="all">📅 सभी तिथियां (All Dates)</option>
+            </select>
+
+            <!-- Sort Select -->
+            <select id="dateSortOrder" onchange="handleDateFilterChange()" style="padding:7px 10px;border-radius:6px;border:1px solid var(--sandstone);background:#fff;font-size:12.5px;color:var(--teal);font-weight:600;outline:none;max-width:190px;">
+              <option value="date_desc" selected>📅 नवीनतम दिनांक पहले</option>
+              <option value="date_asc">⏳ पुरानी दिनांक पहले</option>
+              <option value="amt_desc">💰 सर्वाधिक राशि पहले</option>
+              <option value="count_desc">👥 अधिक दानदाता पहले</option>
+            </select>
+          </div>
+
+          <!-- View Toggle: Grouped vs Flat Table -->
+          <div style="display:flex;align-items:center;gap:4px;background:#fff;padding:3px;border-radius:8px;border:1px solid var(--sandstone);">
+            <button type="button" id="btnDateViewGrouped" onclick="setDateViewMode('grouped')" class="v-filter-btn active" style="padding:4px 10px;font-size:12px;border:none;border-radius:5px;cursor:pointer;">
+              <i class="fa-solid fa-layer-group"></i> दैनिक समूह
+            </button>
+            <button type="button" id="btnDateViewFlat" onclick="setDateViewMode('flat')" class="v-filter-btn" style="padding:4px 10px;font-size:12px;border:none;border-radius:5px;cursor:pointer;">
+              <i class="fa-solid fa-list-ol"></i> क्रमबद्ध सूची
+            </button>
+          </div>
+        </div>
+
+        <!-- Dynamic Container for Date-Wise Content -->
+        <div id="dateWiseContainer">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Pagination for Date Flat View -->
+        <div class="table-footer" id="datePaginationBar" style="display:none;margin-top:14px;">
+          <div style="font-size:12px;color:var(--text-muted);">
+            दिखाए जा रहे हैं: <span id="datePageRangeText" style="font-weight:700;color:var(--teal);">1-50</span> कुल <span id="datePageTotalText" style="font-weight:700;color:var(--teal);">0</span> दानदाताओं में से
+          </div>
+          <div class="page-btn-group">
+            <button class="btn btn-white btn-sm" id="btnDatePrevPage" onclick="changeDatePage(-1)">
+              <i class="fa-solid fa-chevron-left"></i> पिछला
+            </button>
+            <span id="datePageCurrentText" style="align-self:center;font-weight:600;padding:0 8px;">पेज 1</span>
+            <button class="btn btn-white btn-sm" id="btnDateNextPage" onclick="changeDatePage(1)">
+              अगला <i class="fa-solid fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==================== TAB 4 (FOURTH): PRERNA DAI PRASANG ==================== -->
     <div id="pane-stories" class="tab-pane">
       <div class="section-card">
         <div class="section-header-box">
@@ -2998,6 +3095,7 @@
       renderVillageTable(cityMap);
       renderFilterPills(cityMap);
       renderDonorTable();
+      renderDateWiseTab();
     }
 
     /* ============================================================
@@ -3333,6 +3431,381 @@
           </div>
         `;
       }).join('');
+    }
+
+    /* ============================================================
+       DATE-WISE DONATIONS LOGIC & RENDERING
+       ============================================================ */
+    let currentDateFilter = 'all';
+    let dateViewMode = 'grouped'; // 'grouped' or 'flat'
+    let currentDateSort = 'date_desc';
+    let currentDateSearch = '';
+    let dateFlatPage = 1;
+    const DATE_PAGE_SIZE = 50;
+    let computedDateGroups = [];
+    let expandedDateGroups = new Set();
+
+    function parseDateToTime(dStr, fallbackSno) {
+      if (!dStr || dStr === '-') return (Number(fallbackSno) || 0) * 1000;
+      const str = String(dStr).trim();
+      const dateMatch = str.match(/Date\((\d+),\s*(\d+),\s*(\d+)/i);
+      if (dateMatch) {
+        return new Date(parseInt(dateMatch[1], 10), parseInt(dateMatch[2], 10), parseInt(dateMatch[3], 10)).getTime();
+      }
+      if (/^\d{4}-\d{1,2}-\d{1,2}/.test(str)) {
+        const parts = str.split('-');
+        return new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10)).getTime();
+      }
+      if (/^\d{1,2}\.\d{1,2}\.\d{2,4}$/.test(str)) {
+        const parts = str.split('.');
+        let day = parseInt(parts[0], 10);
+        let month = parseInt(parts[1], 10) - 1;
+        let year = parseInt(parts[2], 10);
+        if (year < 100) year += 2000;
+        return new Date(year, month, day).getTime();
+      }
+      if (/^\d{1,2}\/\d{1,2}\/\d{2,4}$/.test(str)) {
+        const parts = str.split('/');
+        let day = parseInt(parts[0], 10);
+        let month = parseInt(parts[1], 10) - 1;
+        let year = parseInt(parts[2], 10);
+        if (year < 100) year += 2000;
+        return new Date(year, month, day).getTime();
+      }
+      const parsed = new Date(str).getTime();
+      if (!isNaN(parsed) && parsed > 0) return parsed;
+      return (Number(fallbackSno) || 0) * 1000;
+    }
+
+    function formatDisplayDate(dateStr) {
+      if (!dateStr || dateStr === '-') return 'अनिर्धारित तिथि';
+      const str = String(dateStr).trim();
+      const dateMatch = str.match(/Date\((\d+),\s*(\d+),\s*(\d+)/i);
+      if (dateMatch) {
+        const y = parseInt(dateMatch[1], 10);
+        const m = String(parseInt(dateMatch[2], 10) + 1).padStart(2, '0');
+        const d = String(parseInt(dateMatch[3], 10)).padStart(2, '0');
+        return `${d}/${m}/${y}`;
+      }
+      if (/^\d{4}-\d{1,2}-\d{1,2}/.test(str)) {
+        const parts = str.split('-');
+        return `${parts[2].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[0]}`;
+      }
+      if (/^\d{1,2}\.\d{1,2}\.\d{2,4}$/.test(str)) {
+        const parts = str.split('.');
+        let day = String(parseInt(parts[0], 10)).padStart(2, '0');
+        let month = String(parseInt(parts[1], 10)).padStart(2, '0');
+        let year = parseInt(parts[2], 10);
+        if (year < 100) year += 2000;
+        return `${day}/${month}/${year}`;
+      }
+      if (/^\d{1,2}\/\d{1,2}\/\d{2,4}$/.test(str)) {
+        const parts = str.split('/');
+        let day = String(parseInt(parts[0], 10)).padStart(2, '0');
+        let month = String(parseInt(parts[1], 10)).padStart(2, '0');
+        let year = parseInt(parts[2], 10);
+        if (year < 100) year += 2000;
+        return `${day}/${month}/${year}`;
+      }
+      return str;
+    }
+
+    function getSpecialDateBadge(dispDate) {
+      if (dispDate === '12/08/2026') return '<span style="background:var(--gold-subtle);color:var(--gold-dark);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;"><i class="fa-solid fa-sparkles"></i> भव्य लोकार्पण महोत्सव</span>';
+      if (dispDate === '14/07/2026') return '<span style="background:var(--sage-light);color:var(--sage);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;"><i class="fa-solid fa-flag"></i> पावन भूमि पूजन</span>';
+      return '';
+    }
+
+    function renderDateWiseTab() {
+      const groupMap = {};
+      declarations.forEach(d => {
+        const dispDate = formatDisplayDate(d.date);
+        const time = parseDateToTime(d.date, d.sno);
+        if (!groupMap[dispDate]) {
+          groupMap[dispDate] = {
+            dateKey: dispDate,
+            rawDate: d.date || '',
+            timestamp: time,
+            pledged: 0,
+            deposited: 0,
+            donors: []
+          };
+        }
+        groupMap[dispDate].pledged += (Number(d.amount) || 0);
+        groupMap[dispDate].deposited += (Number(d.deposited) || 0);
+        groupMap[dispDate].donors.push(d);
+      });
+
+      computedDateGroups = Object.values(groupMap);
+
+      if (expandedDateGroups.size === 0 && computedDateGroups.length > 0) {
+        const peak = [...computedDateGroups].sort((a,b) => b.pledged - a.pledged)[0];
+        if (peak) expandedDateGroups.add(peak.dateKey);
+      }
+
+      // Update KPI Badges
+      const datedGroups = computedDateGroups.filter(g => g.dateKey !== 'अनिर्धारित तिथि');
+      const totalDays = datedGroups.length;
+      const kpiTotalDays = document.getElementById('dateKpiTotalDays');
+      const tabBadge = document.getElementById('tabDateBadge');
+      if (kpiTotalDays) kpiTotalDays.textContent = `${totalDays} दिन`;
+      if (tabBadge) tabBadge.textContent = totalDays;
+
+      if (datedGroups.length > 0) {
+        const peak = [...datedGroups].sort((a,b) => b.pledged - a.pledged)[0];
+        const latest = [...datedGroups].sort((a,b) => b.timestamp - a.timestamp)[0];
+        const totalPledgedDated = datedGroups.reduce((s, g) => s + g.pledged, 0);
+        const avgDaily = Math.round(totalPledgedDated / datedGroups.length);
+
+        const elPeakDay = document.getElementById('dateKpiPeakDay');
+        const elPeakAmt = document.getElementById('dateKpiPeakAmt');
+        const elLatestDay = document.getElementById('dateKpiLatestDay');
+        const elLatestAmt = document.getElementById('dateKpiLatestAmt');
+        const elAvgDay = document.getElementById('dateKpiAvgDay');
+
+        if (elPeakDay) elPeakDay.textContent = peak.dateKey;
+        if (elPeakAmt) elPeakAmt.textContent = `${fmt(peak.pledged)} (${peak.donors.length} परिवार)`;
+        if (elLatestDay) elLatestDay.textContent = latest.dateKey;
+        if (elLatestAmt) elLatestAmt.textContent = `${fmt(latest.pledged)} (${latest.donors.length} परिवार)`;
+        if (elAvgDay) elAvgDay.textContent = fmt(avgDaily);
+      }
+
+      // Populate Date Dropdown
+      const dateSelect = document.getElementById('dateSelectFilter');
+      if (dateSelect) {
+        const sortedForSelect = [...computedDateGroups].sort((a,b) => b.timestamp - a.timestamp);
+        const prevVal = dateSelect.value;
+        dateSelect.innerHTML = `<option value="all">📅 सभी तिथियां (${totalDays} सक्रिय दिवस)</option>` +
+          sortedForSelect.map(g => `<option value="${g.dateKey}">${g.dateKey} (${g.donors.length} परिवार • ${fmt(g.pledged)})</option>`).join('');
+        if (prevVal && sortedForSelect.some(g => g.dateKey === prevVal)) {
+          dateSelect.value = prevVal;
+        }
+      }
+
+      renderDateWiseContent();
+    }
+
+    function setDateViewMode(mode) {
+      dateViewMode = mode;
+      const btnGrp = document.getElementById('btnDateViewGrouped');
+      const btnFlt = document.getElementById('btnDateViewFlat');
+      if (btnGrp) btnGrp.classList.toggle('active', mode === 'grouped');
+      if (btnFlt) btnFlt.classList.toggle('active', mode === 'flat');
+      renderDateWiseContent();
+    }
+
+    function handleDateFilterChange() {
+      const searchInput = document.getElementById('dateSearchInput');
+      const selectFilter = document.getElementById('dateSelectFilter');
+      const sortSelect = document.getElementById('dateSortOrder');
+
+      currentDateSearch = searchInput ? searchInput.value.trim().toLowerCase() : '';
+      currentDateFilter = selectFilter ? selectFilter.value : 'all';
+      currentDateSort = sortSelect ? sortSelect.value : 'date_desc';
+      dateFlatPage = 1;
+
+      if (currentDateFilter !== 'all') {
+        expandedDateGroups.add(currentDateFilter);
+      }
+
+      renderDateWiseContent();
+    }
+
+    function toggleDateGroup(key) {
+      if (expandedDateGroups.has(key)) {
+        expandedDateGroups.delete(key);
+      } else {
+        expandedDateGroups.add(key);
+      }
+      renderDateWiseContent();
+    }
+
+    function renderDateWiseContent() {
+      const container = document.getElementById('dateWiseContainer');
+      const paginationBar = document.getElementById('datePaginationBar');
+      if (!container) return;
+
+      let filteredGroups = computedDateGroups.map(g => {
+        let matchingDonors = g.donors;
+        if (currentDateSearch) {
+          matchingDonors = matchingDonors.filter(d => 
+            (d.name || '').toLowerCase().includes(currentDateSearch) ||
+            (d.city || '').toLowerCase().includes(currentDateSearch) ||
+            (d.receipt || '').toLowerCase().includes(currentDateSearch) ||
+            (d.notes || '').toLowerCase().includes(currentDateSearch) ||
+            (g.dateKey || '').toLowerCase().includes(currentDateSearch)
+          );
+        }
+        return {
+          ...g,
+          filteredDonors: matchingDonors
+        };
+      }).filter(g => {
+        if (currentDateFilter !== 'all' && g.dateKey !== currentDateFilter) return false;
+        return g.filteredDonors.length > 0;
+      });
+
+      if (currentDateSort === 'date_desc') {
+        filteredGroups.sort((a,b) => b.timestamp - a.timestamp);
+      } else if (currentDateSort === 'date_asc') {
+        filteredGroups.sort((a,b) => a.timestamp - b.timestamp);
+      } else if (currentDateSort === 'amt_desc') {
+        filteredGroups.sort((a,b) => b.pledged - a.pledged);
+      } else if (currentDateSort === 'count_desc') {
+        filteredGroups.sort((a,b) => b.donors.length - a.donors.length);
+      }
+
+      if (filteredGroups.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center;padding:40px 20px;color:var(--text-muted);">
+            <i class="fa-solid fa-calendar-xmark" style="font-size:36px;color:var(--sandstone);margin-bottom:12px;display:block;"></i>
+            <div style="font-size:15px;font-weight:700;color:var(--teal);">कोई दान प्रविष्टि नहीं मिली</div>
+            <p style="font-size:13px;margin-top:4px;">कृपया खोज शब्द या दिनांक फ़िल्टर बदलकर पुनः प्रयास करें।</p>
+          </div>
+        `;
+        if (paginationBar) paginationBar.style.display = 'none';
+        return;
+      }
+
+      if (dateViewMode === 'grouped') {
+        if (paginationBar) paginationBar.style.display = 'none';
+
+        container.innerHTML = filteredGroups.map((g, idx) => {
+          const isOpen = expandedDateGroups.has(g.dateKey) || currentDateFilter === g.dateKey;
+          const specialBadge = getSpecialDateBadge(g.dateKey);
+
+          return `
+            <div class="date-group-card" style="margin-bottom:12px;border:1px solid var(--sandstone);border-radius:10px;background:#fff;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.03);">
+              <div class="date-group-header" onclick="toggleDateGroup('${g.dateKey.replace(/'/g, "\\'")}')" style="padding:12px 14px;background:var(--sandstone-light);cursor:pointer;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;border-bottom:${isOpen ? '1px solid var(--sandstone)' : 'none'};">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                  <span style="background:var(--teal);color:#fff;padding:3px 10px;border-radius:6px;font-weight:700;font-size:13px;display:inline-flex;align-items:center;gap:6px;">
+                    <i class="fa-regular fa-calendar-days"></i> ${g.dateKey}
+                  </span>
+                  ${specialBadge}
+                  <span style="font-size:12.5px;color:var(--text-secondary);font-weight:600;">
+                    <i class="fa-solid fa-users"></i> ${g.filteredDonors.length} परिवार
+                  </span>
+                </div>
+                <div style="display:flex;align-items:center;gap:14px;">
+                  <div style="text-align:right;">
+                    <div style="font-size:14px;font-weight:800;color:var(--gold-dark);">${fmt(g.pledged)}</div>
+                    <div style="font-size:10.5px;color:var(--text-muted);">जमा: ${fmt(g.deposited)}</div>
+                  </div>
+                  <i class="fa-solid ${isOpen ? 'fa-chevron-up' : 'fa-chevron-down'}" style="color:var(--teal);font-size:13px;transition:transform 0.2s;"></i>
+                </div>
+              </div>
+              <div class="date-group-body" style="display:${isOpen ? 'block' : 'none'};">
+                <div class="table-responsive" style="max-height:420px;overflow-y:auto;">
+                  <table class="data-table" style="margin:0;">
+                    <thead>
+                      <tr>
+                        <th style="width:45px;">क्र.</th>
+                        <th>दानदाता का शुभ नाम</th>
+                        <th>स्थान / ग्राम</th>
+                        <th>घोषित संकल्प</th>
+                        <th>जमा राशि</th>
+                        <th>रसीद क्र.</th>
+                        <th>स्मरण / विवरण</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${g.filteredDonors.map((d, dIdx) => `
+                        <tr>
+                          <td><span style="font-weight:700;color:var(--text-muted);">${d.sno || (dIdx + 1)}</span></td>
+                          <td><strong style="color:var(--teal);font-size:13.5px;">${d.name}</strong></td>
+                          <td><span style="font-size:12.5px;color:var(--text-secondary);"><i class="fa-solid fa-location-dot" style="color:var(--gold-dark);font-size:10px;"></i> ${d.city}</span></td>
+                          <td><strong class="amount" style="color:var(--gold-dark);font-size:13.5px;">${fmt(d.amount)}</strong></td>
+                          <td><span style="font-weight:700;color:var(--teal);font-size:13px;">${fmt(d.deposited || 0)}</span></td>
+                          <td><span style="font-size:12px;color:var(--text-muted);">${d.receipt && d.receipt !== '-' ? d.receipt : '-'}</span></td>
+                          <td><span style="font-size:11.5px;color:var(--text-muted);">${d.notes || '-'}</span></td>
+                        </tr>
+                      `).join('')}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } else {
+        const allDonorsFlat = [];
+        filteredGroups.forEach(g => {
+          g.filteredDonors.forEach(d => {
+            allDonorsFlat.push({
+              ...d,
+              dispDate: g.dateKey,
+              groupTimestamp: g.timestamp
+            });
+          });
+        });
+
+        const totalItems = allDonorsFlat.length;
+        const totalPages = Math.ceil(totalItems / DATE_PAGE_SIZE) || 1;
+        if (dateFlatPage > totalPages) dateFlatPage = totalPages;
+        if (dateFlatPage < 1) dateFlatPage = 1;
+
+        const startIdx = (dateFlatPage - 1) * DATE_PAGE_SIZE;
+        const pageItems = allDonorsFlat.slice(startIdx, startIdx + DATE_PAGE_SIZE);
+
+        container.innerHTML = `
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width:45px;">क्र.</th>
+                  <th style="width:105px;">दिनांक</th>
+                  <th>दानदाता का शुभ नाम</th>
+                  <th>स्थान / ग्राम</th>
+                  <th>घोषित संकल्प</th>
+                  <th>जमा राशि</th>
+                  <th>रसीद क्र.</th>
+                  <th>स्मरण / विवरण</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${pageItems.map((d, idx) => `
+                  <tr>
+                    <td><span style="font-weight:700;color:var(--text-muted);">${d.sno || (startIdx + idx + 1)}</span></td>
+                    <td>
+                      <span style="font-size:12px;font-weight:700;color:var(--teal);white-space:nowrap;">
+                        <i class="fa-regular fa-calendar" style="font-size:10px;margin-right:3px;"></i>${d.dispDate}
+                      </span>
+                    </td>
+                    <td><strong style="color:var(--teal);font-size:13.5px;">${d.name}</strong></td>
+                    <td><span style="font-size:12.5px;color:var(--text-secondary);"><i class="fa-solid fa-location-dot" style="color:var(--gold-dark);font-size:10px;"></i> ${d.city}</span></td>
+                    <td><strong class="amount" style="color:var(--gold-dark);font-size:13.5px;">${fmt(d.amount)}</strong></td>
+                    <td><span style="font-weight:700;color:var(--teal);font-size:13px;">${fmt(d.deposited || 0)}</span></td>
+                    <td><span style="font-size:12px;color:var(--text-muted);">${d.receipt && d.receipt !== '-' ? d.receipt : '-'}</span></td>
+                    <td><span style="font-size:11.5px;color:var(--text-muted);">${d.notes || '-'}</span></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+
+        if (paginationBar) {
+          paginationBar.style.display = totalItems > DATE_PAGE_SIZE ? 'flex' : 'none';
+          const rangeEl = document.getElementById('datePageRangeText');
+          const totalEl = document.getElementById('datePageTotalText');
+          const curEl = document.getElementById('datePageCurrentText');
+          const btnPrev = document.getElementById('btnDatePrevPage');
+          const btnNext = document.getElementById('btnDateNextPage');
+
+          if (rangeEl) rangeEl.textContent = `${startIdx + 1}-${Math.min(startIdx + DATE_PAGE_SIZE, totalItems)}`;
+          if (totalEl) totalEl.textContent = totalItems;
+          if (curEl) curEl.textContent = `पेज ${dateFlatPage} / ${totalPages}`;
+          if (btnPrev) btnPrev.disabled = dateFlatPage <= 1;
+          if (btnNext) btnNext.disabled = dateFlatPage >= totalPages;
+        }
+      }
+    }
+
+    function changeDatePage(delta) {
+      dateFlatPage += delta;
+      renderDateWiseContent();
+      const el = document.getElementById('pane-dates');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     /* ============================================================
