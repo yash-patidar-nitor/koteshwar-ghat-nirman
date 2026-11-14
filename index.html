@@ -293,10 +293,9 @@
       font-size: 11.5px;
       color: var(--text-muted);
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 4px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
     }
     .kpi-badge {
       font-size: 10.5px;
@@ -765,123 +764,100 @@
       gap: 6px;
     }
 
-    /* ==================== PROMINENT DEVELOPER FOOTER SHOWCASE ==================== */
+    /* ==================== DEVELOPER FOOTER SHOWCASE ==================== */
     .dev-prominent-card {
       margin-top: 18px;
-      padding: 20px 24px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #0A2426 0%, #123F42 55%, #1B5256 100%);
-      border: 1.5px solid rgba(209, 154, 80, 0.45);
-      box-shadow: 0 10px 28px rgba(10, 36, 38, 0.2), 0 2px 6px rgba(0, 0, 0, 0.12);
+      padding: 14px 18px;
+      border-radius: 10px;
+      background: var(--sandstone-light);
+      border: 1px solid var(--sandstone);
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 16px 24px;
-      color: #FFFFFF;
-      position: relative;
-      overflow: hidden;
-    }
-    .dev-prominent-card::before {
-      content: "";
-      position: absolute;
-      top: -30px;
-      right: -30px;
-      width: 140px;
-      height: 140px;
-      background: radial-gradient(circle, rgba(209, 154, 80, 0.25) 0%, transparent 70%);
-      pointer-events: none;
+      gap: 12px 18px;
+      color: var(--text-primary);
     }
     .dev-card-info {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      z-index: 1;
+      gap: 4px;
     }
     .dev-role-badge {
       display: inline-flex;
       align-items: center;
       gap: 5px;
       width: fit-content;
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 700;
       letter-spacing: 0.5px;
       text-transform: uppercase;
-      color: #F3D09F;
-      background: rgba(209, 154, 80, 0.18);
-      border: 1px solid rgba(209, 154, 80, 0.35);
-      padding: 2px 8px;
-      border-radius: 20px;
+      color: var(--gold-dark);
+      background: var(--gold-subtle);
+      border: 1px solid rgba(209, 154, 80, 0.3);
+      padding: 2px 7px;
+      border-radius: 12px;
     }
     .dev-author-title {
-      font-size: 15px;
+      font-size: 13.5px;
       font-weight: 700;
-      color: #FFFFFF;
-      letter-spacing: 0.3px;
-      line-height: 1.25;
-      margin: 2px 0 1px;
-      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+      color: var(--teal);
+      letter-spacing: 0.2px;
+      line-height: 1.2;
+      margin: 1px 0;
     }
     .dev-reach-text {
-      font-size: 11.5px;
-      color: #BFD8D9;
+      font-size: 11px;
+      color: var(--text-muted);
       font-weight: 500;
     }
     .dev-contact-pills {
       display: flex;
       align-items: center;
       flex-wrap: wrap;
-      gap: 10px;
-      z-index: 1;
+      gap: 8px;
     }
     .dev-btn-pill {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 9px 16px;
-      border-radius: 24px;
-      font-size: 13px;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 18px;
+      font-size: 12px;
       font-weight: 600;
       text-decoration: none;
-      transition: all 0.22s ease;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      transition: all 0.2s ease;
       cursor: pointer;
     }
     .dev-btn-phone {
-      background: rgba(255, 255, 255, 0.1);
-      color: #FFFFFF;
-      border: 1px solid rgba(209, 154, 80, 0.4);
+      background: #FFFFFF;
+      color: var(--teal);
+      border: 1px solid var(--sandstone);
     }
     .dev-btn-phone:hover {
-      background: var(--gold);
-      color: #0A2426;
+      background: var(--gold-subtle);
       border-color: var(--gold);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(209, 154, 80, 0.35);
+      color: var(--teal-dark);
     }
     .dev-btn-email {
-      background: rgba(255, 255, 255, 0.1);
-      color: #FFFFFF;
-      border: 1px solid rgba(209, 154, 80, 0.4);
+      background: #FFFFFF;
+      color: var(--teal);
+      border: 1px solid var(--sandstone);
     }
     .dev-btn-email:hover {
-      background: #FFFFFF;
+      background: var(--teal-subtle);
+      border-color: var(--teal);
       color: var(--teal-dark);
-      border-color: #FFFFFF;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
     }
     .dev-btn-whatsapp {
-      background: rgba(37, 211, 102, 0.18);
-      color: #25D366;
-      border: 1px solid rgba(37, 211, 102, 0.4);
+      background: rgba(37, 211, 102, 0.1);
+      color: #1EBE5D;
+      border: 1px solid rgba(37, 211, 102, 0.3);
     }
     .dev-btn-whatsapp:hover {
       background: #25D366;
       color: #FFFFFF;
       border-color: #25D366;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
     }
 
     /* ============================================================
@@ -3409,8 +3385,7 @@
           `🚩 *माँ नर्मदा घाट निर्माण सेवा महाअभियान: प्रेरणादायी प्रसंग* 🚩\n\n` +
           `*${s.title}*\n${s.quote || ''}\n\n` +
           `${s.body}\n\n` +
-          `*माँ नर्मदे हर!* 🙏\n` +
-          `लाइव पोर्टल देखें: https://yash-patidar-nitor.github.io/koteshwar-ghat-nirman/`
+          `*माँ नर्मदे हर!* 🙏`
         );
 
         return `
@@ -3474,8 +3449,7 @@
         `दानदाता: *${name}*\n` +
         `स्थान: *${village}*\n` +
         `घोषित जनसहयोग संकल्प: *${fmt(amount)}*\n\n` +
-        `माँ नर्मदा के चरणों में आपका यह समर्पण सदैव वंदनीय रहेगा।\n*माँ नर्मदे हर!* 🙏\n` +
-        `https://yash-patidar-nitor.github.io/koteshwar-ghat-nirman/`;
+        `माँ नर्मदा के चरणों में आपका यह समर्पण सदैव वंदनीय रहेगा।\n*माँ नर्मदे हर!* 🙏`;
 
       document.getElementById('btnShareWhatsAppCert').onclick = function() {
         window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');

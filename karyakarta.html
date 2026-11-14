@@ -755,186 +755,100 @@
       flex-wrap: wrap;
       gap: 6px;
     }
-    /* ==================== PROMINENT DEVELOPER FOOTER SHOWCASE ==================== */
+    /* ==================== DEVELOPER FOOTER SHOWCASE ==================== */
     .dev-prominent-card {
       margin-top: 14px;
-      padding: 18px 22px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #0A2426 0%, #123F42 55%, #1B5256 100%);
-      border: 1.5px solid rgba(209, 154, 80, 0.45);
-      box-shadow: 0 10px 28px rgba(10, 36, 38, 0.2), 0 2px 6px rgba(0, 0, 0, 0.12);
+      padding: 14px 18px;
+      border-radius: 10px;
+      background: var(--sandstone-light);
+      border: 1px solid var(--sandstone);
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 16px 24px;
-      color: #FFFFFF;
-      position: relative;
-      overflow: hidden;
-    }
-    .dev-prominent-card::before {
-      content: "";
-      position: absolute;
-      top: -30px;
-      right: -30px;
-      width: 140px;
-      height: 140px;
-      background: radial-gradient(circle, rgba(209, 154, 80, 0.25) 0%, transparent 70%);
-      pointer-events: none;
+      gap: 12px 18px;
+      color: var(--text-primary);
     }
     .dev-card-info {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      z-index: 1;
+      gap: 4px;
     }
     .dev-role-badge {
       display: inline-flex;
       align-items: center;
       gap: 5px;
       width: fit-content;
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 700;
       letter-spacing: 0.5px;
       text-transform: uppercase;
-      color: #F3D09F;
-      background: rgba(209, 154, 80, 0.18);
-      border: 1px solid rgba(209, 154, 80, 0.35);
-      padding: 2px 8px;
-      border-radius: 20px;
+      color: var(--gold-dark);
+      background: var(--gold-subtle);
+      border: 1px solid rgba(209, 154, 80, 0.3);
+      padding: 2px 7px;
+      border-radius: 12px;
     }
     .dev-author-title {
-      font-size: 15px;
+      font-size: 13.5px;
       font-weight: 700;
-      color: #FFFFFF;
-      letter-spacing: 0.3px;
-      line-height: 1.25;
-      margin: 2px 0 1px;
-      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+      color: var(--teal);
+      letter-spacing: 0.2px;
+      line-height: 1.2;
+      margin: 1px 0;
     }
     .dev-reach-text {
-      font-size: 11.5px;
-      color: #BFD8D9;
+      font-size: 11px;
+      color: var(--text-muted);
       font-weight: 500;
     }
     .dev-contact-pills {
       display: flex;
       align-items: center;
       flex-wrap: wrap;
-      gap: 10px;
-      z-index: 1;
+      gap: 8px;
     }
     .dev-btn-pill {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 9px 16px;
-      border-radius: 24px;
-      font-size: 13px;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 18px;
+      font-size: 12px;
       font-weight: 600;
       text-decoration: none;
-      transition: all 0.22s ease;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      transition: all 0.2s ease;
       cursor: pointer;
     }
     .dev-btn-phone {
-      background: rgba(255, 255, 255, 0.1);
-      color: #FFFFFF;
-      border: 1px solid rgba(209, 154, 80, 0.4);
+      background: #FFFFFF;
+      color: var(--teal);
+      border: 1px solid var(--sandstone);
     }
     .dev-btn-phone:hover {
-      background: var(--gold);
-      color: #0A2426;
+      background: var(--gold-subtle);
       border-color: var(--gold);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(209, 154, 80, 0.35);
+      color: var(--teal-dark);
     }
     .dev-btn-email {
-      background: rgba(255, 255, 255, 0.1);
-      color: #FFFFFF;
-      border: 1px solid rgba(209, 154, 80, 0.4);
+      background: #FFFFFF;
+      color: var(--teal);
+      border: 1px solid var(--sandstone);
     }
     .dev-btn-email:hover {
-      background: #FFFFFF;
+      background: var(--teal-subtle);
+      border-color: var(--teal);
       color: var(--teal-dark);
-      border-color: #FFFFFF;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
     }
     .dev-btn-whatsapp {
-      background: rgba(37, 211, 102, 0.18);
-      color: #25D366;
-      border: 1px solid rgba(37, 211, 102, 0.4);
+      background: rgba(37, 211, 102, 0.1);
+      color: #1EBE5D;
+      border: 1px solid rgba(37, 211, 102, 0.3);
     }
     .dev-btn-whatsapp:hover {
       background: #25D366;
       color: #FFFFFF;
       border-color: #25D366;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
-    }
-
-    .auth-dev-credit-box {
-      margin-top: 14px;
-      padding: 12px 16px;
-      background: linear-gradient(135deg, rgba(18, 63, 66, 0.05), rgba(209, 154, 80, 0.08));
-      border: 1px solid rgba(209, 154, 80, 0.35);
-      border-radius: 10px;
-      text-align: center;
-      font-size: 11.5px;
-      color: var(--text-secondary);
-      line-height: 1.45;
-    }
-    .auth-dev-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      color: var(--teal);
-      background: rgba(18, 63, 66, 0.08);
-      border: 1px solid rgba(18, 63, 66, 0.15);
-      padding: 2px 8px;
-      border-radius: 12px;
-      margin-bottom: 4px;
-    }
-    .auth-dev-name {
-      font-size: 12.5px;
-      font-weight: 700;
-      color: var(--teal-dark);
-      margin: 2px 0 2px;
-    }
-    .auth-dev-reach {
-      font-size: 10.5px;
-      color: var(--text-muted);
-      margin-bottom: 5px;
-    }
-    .auth-dev-links {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .auth-dev-links a {
-      color: var(--teal);
-      font-weight: 600;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      background: #FFFFFF;
-      padding: 3px 8px;
-      border-radius: 12px;
-      border: 1px solid var(--sandstone);
-      font-size: 11px;
-      transition: all 0.15s ease;
-    }
-    .auth-dev-links a:hover {
-      border-color: var(--gold);
-      color: var(--gold-dark);
     }
 
     @media (max-width: 768px) {
@@ -985,6 +899,7 @@
             </label>
             <select id="authUsernameSelect" class="auth-select" required onchange="handleUserSelectChange(this.value)">
               <option value="">-- कार्यकर्ता चुनें --</option>
+              <option value="mohanpatidar">mohanpatidar (श्री मोहन भाई पाटीदार)</option>
               <option value="anilpatidar">anilpatidar (श्री अनिल पाटीदार)</option>
               <option value="raghavpatidar">raghavpatidar (श्री राघव पाटीदार)</option>
               <option value="mahendrapatidar">mahendrapatidar (श्री महेंद्र पाटीदार)</option>
@@ -1020,17 +935,6 @@
             <i class="fa-solid fa-arrow-left"></i> सार्वजनिक डैशबोर्ड देखें
           </a>
         </div>
-
-        <div class="auth-dev-credit-box">
-          <span class="auth-dev-badge"><i class="fa-solid fa-code"></i> Developed &amp; Maintained by</span>
-          <div class="auth-dev-name">Goldy Mahendra Kamdar</div>
-          <div class="auth-dev-reach">For feedback, suggestions or technical support:</div>
-          <div class="auth-dev-links">
-            <a href="tel:+919131076286" title="Call directly"><i class="fa-solid fa-phone"></i> +91 9131076286</a>
-            <a href="mailto:yashkmd@gmail.com" title="Send email"><i class="fa-solid fa-envelope"></i> yashkmd@gmail.com</a>
-            <a href="https://wa.me/919131076286?text=Hello%20Goldy,%20regarding%20Koteshwar%20Portal" target="_blank" rel="noopener noreferrer" style="color:var(--whatsapp);border-color:rgba(37,211,102,0.4);" title="WhatsApp Chat"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -1060,8 +964,8 @@
         <a href="index.html" class="btn-header btn-header-public" title="सार्वजनिक डैशबोर्ड">
           <i class="fa-solid fa-house"></i>
         </a>
-        <button onclick="handleLogout()" class="btn-header btn-header-logout" title="लॉगआउट">
-          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        <button type="button" onclick="handleLogout()" class="btn-header btn-header-logout" title="लॉगआउट">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> <span>लॉगआउट</span>
         </button>
       </div>
     </div>
@@ -1949,12 +1853,13 @@
     const GVIZ_LIVE_COLL_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent('Live Collection')}`;
 
     const AUTHORIZED_USERS = {
+      'mohanpatidar': { username: 'mohanpatidar', name: 'श्री मोहन भाई पाटीदार' },
       'anilpatidar': { username: 'anilpatidar', name: 'श्री अनिल पाटीदार' },
       'raghavpatidar': { username: 'raghavpatidar', name: 'श्री राघव पाटीदार' },
       'mahendrapatidar': { username: 'mahendrapatidar', name: 'श्री महेंद्र पाटीदार' }
     };
 
-    const VALID_PINS = ['narmadehar2026', 'कोटेश्वर2026', 'koteshwar2026', '12345'];
+    const VALID_PINS = ['20122026'];
 
     // State
     let currentUser = null;
@@ -2123,7 +2028,7 @@
        ============================================================ */
     function checkAuth() {
       try {
-        const session = JSON.parse(sessionStorage.getItem('koteshwar_auth_session') || '{}');
+        const session = JSON.parse(sessionStorage.getItem('koteshwar_auth_session') || localStorage.getItem('koteshwar_auth_session') || '{}');
         const now = Date.now();
         if (session && session.auth && session.username && (now - session.timestamp < 4 * 60 * 60 * 1000)) {
           currentUser = session;
@@ -2165,7 +2070,7 @@
 
       const matchedUser = AUTHORIZED_USERS[username];
       if (!matchedUser) {
-        msgBox.textContent = `अमान्य उपयोगकर्ता (@${username})! अधिकृत: anilpatidar, raghavpatidar, mahendrapatidar`;
+        msgBox.textContent = `अमान्य उपयोगकर्ता (@${username})! अधिकृत: mohanpatidar, anilpatidar, raghavpatidar, mahendrapatidar`;
         return;
       }
 
@@ -2184,6 +2089,7 @@
       };
 
       sessionStorage.setItem('koteshwar_auth_session', JSON.stringify(currentUser));
+      try { localStorage.setItem('koteshwar_auth_session', JSON.stringify(currentUser)); } catch (e) {}
       msgBox.textContent = "";
       applyUserProfile();
       document.getElementById('authOverlay').style.display = 'none';
@@ -2213,10 +2119,20 @@
     }
 
     function handleLogout() {
-      if (confirm("क्या आप लॉगआउट करना चाहते हैं?")) {
+      try {
         sessionStorage.removeItem('koteshwar_auth_session');
-        window.location.reload();
-      }
+        localStorage.removeItem('koteshwar_auth_session');
+      } catch (e) {}
+      currentUser = null;
+      const select = document.getElementById('authUsernameSelect');
+      if (select) select.value = '';
+      const pinInput = document.getElementById('authPinInput');
+      if (pinInput) pinInput.value = '';
+      const msgBox = document.getElementById('authMsgBox');
+      if (msgBox) msgBox.textContent = 'सफलतापूर्वक लॉगआउट किया गया।';
+      const overlay = document.getElementById('authOverlay');
+      if (overlay) overlay.style.display = 'flex';
+      window.location.reload();
     }
 
     /* ============================================================
@@ -4040,8 +3956,7 @@
         (rcpt.balance > 0 ? `शेष संकल्प राशि: *${fmt(rcpt.balance)}*\n` : `संकल्प स्थिति: *शत-प्रतिशत पूर्ण* ✅\n`) +
         `अधिकृत प्राप्तकर्ता: *${collectorStr}*\n\n` +
         `माँ रेवा की कृपा आप एवं आपके परिवार पर सदैव बनी रहे।\n` +
-        `*॥ नर्मदे हर ॥* 🙏\n\n` +
-        `पारदर्शिता पोर्टल: https://koteshwar-ghat-nirman.vercel.app/`;
+        `*॥ नर्मदे हर ॥* 🙏`;
     }
 
     function copyReceiptText() {
@@ -4380,8 +4295,7 @@
           `जमा राशि: *${fmt(d.deposited)}*\n` +
           `शेष संकल्प राशि: *${fmt(d.balance)}*\n\n` +
           `घाट निर्माण कार्य तीव्र गति से प्रगति पर है। आपसे सादर विनम्र निवेदन है कि अपनी पावन संकल्प राशि संस्थान के कार्यकर्ताओं अथवा बैंक खाते में समर्पित कर पुण्य के भागी बनें।\n\n` +
-          `*॥ नर्मदे हर ॥* 🙏\n` +
-          `https://koteshwar-ghat-nirman.vercel.app/`
+          `*॥ नर्मदे हर ॥* 🙏`
         );
         const waUrl = cleanPhone && cleanPhone.length === 10
           ? `https://api.whatsapp.com/send?phone=91${cleanPhone}&text=${waRemind}`
