@@ -4742,8 +4742,22 @@
       saveCollectionsToStorage();
       reconcileCollectionsWithDeclarations();
 
-      // Post webhook update (including origReceiptNo for reliable remote lookup)
-      postWebhookData('editCollection', Object.assign({}, coll, { origReceiptNo }));
+      // Post webhook update:
+      // If receipt number was changed, delete old receipt and add new one to ensure Google Sheet updates immediately
+      if (origReceiptNo && newReceiptNo && origReceiptNo !== newReceiptNo) {
+        postWebhookData('deleteCollection', {
+          receiptNo: origReceiptNo,
+          donorName: coll.donorName,
+          city: coll.city,
+          amount: coll.amount,
+          deleted_by: coll.modified_by,
+          deleted_by_name: coll.modified_by_name,
+          reason: `रसीद क्रमांक बदलकर ${newReceiptNo} किया गया`
+        });
+        postWebhookData('addCollection', coll);
+      } else {
+        postWebhookData('editCollection', Object.assign({}, coll, { origReceiptNo }));
+      }
 
       closeEditCollModal();
       renderAllPortals();
