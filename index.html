@@ -2126,6 +2126,17 @@
           <span style="font-size:12px;color:var(--text-muted);"><i class="fa-solid fa-arrow-down-wide-short"></i> सहयोग राशि के क्रम में व्यवस्थित</span>
         </div>
 
+        <!-- Village Search Toolbar -->
+        <div class="directory-toolbar" style="margin-bottom:14px;">
+          <div class="search-input-wrap" style="flex:1;min-width:240px;">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="villageSearchInput" class="search-field" placeholder="नगर या ग्राम का नाम खोजें (उदा. निसरपुर, कुक्षी, सिलकुआ...)" oninput="handleVillageSearch(this.value)">
+          </div>
+          <div style="font-size:12px;color:var(--text-muted);white-space:nowrap;padding:4px 8px;background:var(--sandstone-light);border-radius:6px;border:1px solid var(--sandstone);">
+            कुल नगर / ग्राम: <strong id="villageCountBadge" style="color:var(--teal);">-</strong>
+          </div>
+        </div>
+
         <div class="table-responsive">
           <table class="data-table">
             <thead>
@@ -2175,6 +2186,43 @@
         <!-- Filter Pills for Top Regions -->
         <div class="pills-filter-row" id="villageFilterPills">
           <!-- Dynamically populated -->
+        </div>
+
+        <!-- Dedicated Village Summary Header (Active when a specific village is clicked/filtered) -->
+        <div id="villageSummaryBanner" class="village-summary-banner" style="display:none;margin-bottom:16px;background:linear-gradient(135deg, rgba(18,63,66,0.06) 0%, rgba(201,154,71,0.12) 100%);border:1.5px solid var(--gold);border-radius:12px;padding:14px 18px;box-shadow:0 2px 8px rgba(18,63,66,0.05);">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+              <span style="background:var(--teal);color:#fff;padding:4px 12px;border-radius:6px;font-size:13.5px;font-weight:700;display:inline-flex;align-items:center;gap:6px;">
+                <i class="fa-solid fa-location-dot"></i> <span id="vBannerName">-</span>
+              </span>
+              <span style="font-size:13px;color:var(--text-secondary);font-weight:600;"><i class="fa-solid fa-chart-pie" style="color:var(--gold-dark);"></i> क्षेत्रीय जनसहयोग सारांश</span>
+            </div>
+            <button type="button" class="btn btn-white btn-sm" onclick="clearVillageFilter()" style="font-size:11.5px;padding:5px 12px;border:1px solid var(--sandstone);border-radius:6px;cursor:pointer;">
+              <i class="fa-solid fa-xmark" style="color:#C45A38;"></i> सभी क्षेत्र देखें (Clear Filter)
+            </button>
+          </div>
+          <div class="village-summary-grid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(135px, 1fr));gap:10px;">
+            <div style="background:#fff;padding:9px 12px;border-radius:8px;border:1px solid var(--sandstone);">
+              <div style="font-size:11px;color:var(--text-muted);"><i class="fa-solid fa-hand-holding-dollar"></i> कुल घोषित सहयोग</div>
+              <div id="vBannerPledged" style="font-size:16px;font-weight:800;color:var(--gold-dark);margin-top:2px;">₹0</div>
+            </div>
+            <div style="background:#fff;padding:9px 12px;border-radius:8px;border:1px solid var(--sandstone);">
+              <div style="font-size:11px;color:var(--text-muted);"><i class="fa-solid fa-circle-check" style="color:var(--sage);"></i> कुल जमा राशि</div>
+              <div id="vBannerReceived" style="font-size:16px;font-weight:800;color:var(--teal);margin-top:2px;">₹0</div>
+            </div>
+            <div style="background:#fff;padding:9px 12px;border-radius:8px;border:1px solid var(--sandstone);">
+              <div style="font-size:11px;color:var(--text-muted);"><i class="fa-solid fa-clock" style="color:#C45A38;"></i> शेष बकाया राशि</div>
+              <div id="vBannerPending" style="font-size:16px;font-weight:800;color:#C45A38;margin-top:2px;">₹0</div>
+            </div>
+            <div style="background:#fff;padding:9px 12px;border-radius:8px;border:1px solid var(--sandstone);">
+              <div style="font-size:11px;color:var(--text-muted);"><i class="fa-solid fa-users"></i> सहभागी परिवार</div>
+              <div id="vBannerFamilies" style="font-size:16px;font-weight:800;color:var(--teal);margin-top:2px;">0 परिवार</div>
+            </div>
+            <div style="background:#fff;padding:9px 12px;border-radius:8px;border:1px solid var(--sandstone);">
+              <div style="font-size:11px;color:var(--text-muted);"><i class="fa-solid fa-trophy" style="color:var(--gold);"></i> सर्वोच्च सहयोग</div>
+              <div id="vBannerHighest" style="font-size:16px;font-weight:800;color:var(--gold-dark);margin-top:2px;">₹0</div>
+            </div>
+          </div>
         </div>
 
         <!-- Donors Table Sorted Decreasing by Amount -->
@@ -3206,9 +3254,53 @@
     /* ============================================================
        DYNAMIC VILLAGE TABLE (GROUPED IN REAL-TIME FROM SHEET)
        ============================================================ */
+    let lastCityMap = {};
+    let currentVillageSearch = '';
+
+    function handleVillageSearch(val) {
+      currentVillageSearch = (val || '').trim().toLowerCase();
+      renderVillageTable();
+    }
+
     function renderVillageTable(cityMap) {
+      if (cityMap) lastCityMap = cityMap;
       const tbody = document.getElementById('villageTableBody');
-      const sortedList = Object.values(cityMap).sort((a, b) => b.pledged - a.pledged);
+      if (!tbody) return;
+
+      const totalVillages = Object.keys(lastCityMap).length;
+      let list = Object.values(lastCityMap);
+
+      if (currentVillageSearch) {
+        list = list.filter(v => {
+          const vName = (v.name || '').toLowerCase();
+          if (vName.includes(currentVillageSearch)) return true;
+          if (/^(कोटेश्वर|कोठ[ड़ड]ा|कोट[ड़ड]ा|कोट|कोठ|koteshwar|kothda|kotda|kothada|koteswar|kothra|kot)/i.test(currentVillageSearch) && v.name === 'कोटेश्वर / कोठड़ा') {
+            return true;
+          }
+          for (const [aliasEn, aliasHi] of Object.entries(VILLAGE_ALIASES)) {
+            if (aliasEn.includes(currentVillageSearch) || currentVillageSearch.includes(aliasEn)) {
+              if (v.name === aliasHi || v.name.includes(aliasHi) || aliasHi.includes(v.name)) return true;
+            }
+          }
+          if (typeof transliterateDevanagari === 'function') {
+            const translit = transliterateDevanagari(v.name).toLowerCase();
+            if (translit.includes(currentVillageSearch)) return true;
+          }
+          return false;
+        });
+      }
+
+      const badge = document.getElementById('villageCountBadge');
+      if (badge) {
+        badge.textContent = currentVillageSearch ? `${list.length} / ${totalVillages}` : `${totalVillages}`;
+      }
+
+      const sortedList = list.sort((a, b) => b.pledged - a.pledged);
+
+      if (sortedList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text-muted);"><i class="fa-solid fa-magnifying-glass"></i> "${currentVillageSearch}" नाम से कोई नगर या ग्राम नहीं मिला।</td></tr>`;
+        return;
+      }
 
       tbody.innerHTML = sortedList.map((v, i) => {
         const avg = v.count > 0 ? Math.round(v.pledged / v.count) : 0;
@@ -3408,6 +3500,37 @@
       const tbody = document.getElementById('donorTableBody');
       const search = (document.getElementById('donorSearchInput').value || '').trim();
 
+      // Update dedicated Village Summary Banner if a village filter is active
+      const vBanner = document.getElementById('villageSummaryBanner');
+      if (vBanner) {
+        if (currentVillageFilter && currentVillageFilter !== 'all') {
+          const villageDonors = declarations.filter(d => (d.city === currentVillageFilter || (d.city && d.city.includes(currentVillageFilter))));
+          const vPledged = villageDonors.reduce((sum, d) => sum + (Number(d.amount) || 0), 0);
+          const vReceived = villageDonors.reduce((sum, d) => sum + (Number(d.deposited) || 0), 0);
+          const vPending = Math.max(0, vPledged - vReceived);
+          const vFamilies = villageDonors.length;
+          const vHighest = villageDonors.reduce((max, d) => Math.max(max, Number(d.amount) || 0), 0);
+
+          const bName = document.getElementById('vBannerName');
+          const bPledged = document.getElementById('vBannerPledged');
+          const bReceived = document.getElementById('vBannerReceived');
+          const bPending = document.getElementById('vBannerPending');
+          const bFamilies = document.getElementById('vBannerFamilies');
+          const bHighest = document.getElementById('vBannerHighest');
+
+          if (bName) bName.textContent = currentVillageFilter;
+          if (bPledged) bPledged.textContent = fmt(vPledged);
+          if (bReceived) bReceived.textContent = fmt(vReceived);
+          if (bPending) bPending.textContent = fmt(vPending);
+          if (bFamilies) bFamilies.textContent = `${vFamilies} परिवार`;
+          if (bHighest) bHighest.textContent = fmt(vHighest);
+
+          vBanner.style.display = 'block';
+        } else {
+          vBanner.style.display = 'none';
+        }
+      }
+
       const filtered = declarations.filter(d => {
         const matchesVillage = (currentVillageFilter === 'all') || d.city === currentVillageFilter || d.city.includes(currentVillageFilter);
         const matchesSearch = !search || matchDonorSearch(d, search);
@@ -3481,12 +3604,27 @@
       renderDonorTable();
     }
 
+    function clearVillageFilter() {
+      currentVillageFilter = 'all';
+      currentPage = 1;
+      document.querySelectorAll('#villageFilterPills .v-filter-btn').forEach(b => {
+        b.classList.toggle('active', b.textContent.includes('सभी क्षेत्र'));
+      });
+      renderDonorTable();
+    }
+
     function setVillageFilter(villageName, btn) {
       currentVillageFilter = villageName;
       document.querySelectorAll('#villageFilterPills .v-filter-btn').forEach(b => b.classList.remove('active'));
       if (btn) btn.classList.add('active');
       currentPage = 1;
       renderDonorTable();
+      if (villageName !== 'all') {
+        const banner = document.getElementById('villageSummaryBanner');
+        if (banner) {
+          setTimeout(() => banner.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+        }
+      }
     }
 
     function filterDonorsByVillage(villageName) {
@@ -3497,6 +3635,12 @@
       document.querySelectorAll('#villageFilterPills .v-filter-btn').forEach(b => {
         b.classList.toggle('active', b.textContent.includes(villageName));
       });
+      const banner = document.getElementById('villageSummaryBanner');
+      if (banner) {
+        setTimeout(() => {
+          banner.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 120);
+      }
     }
 
     /* ============================================================
