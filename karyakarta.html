@@ -2650,54 +2650,125 @@
     }
 
     function reconcileCollectionsWithDeclarations() {
-      const collMapSno = {};
-      const collMapName = {};
+      // 1. Build fast lookup maps for declarations
+      const declById = new Map(); // sno or originalSno -> declaration
+      const declByReceipt = new Map(); // receipt -> declaration
+      const declByName = new Map(); // normalized name -> array of declarations
+
+      // Helper to clean and normalize names for fuzzy matching
+      const getNormKey = (str) => {
+        if (!str) return '';
+        return String(str)
+          .replace(/^(श्री|श्रीमती|सुश्री|डॉ\.|एडवोकेट|स्व\.|गं\.भा\.)\s+/gi, '')
+          .replace(/[\s\.\(\)\/\\,\-_]+/g, '')
+          .toLowerCase()
+          .trim();
+      };
+
+      declarationsList.forEach(d => {
+        // Reset deposited to initialDeposited (or 0) before recalculating from live collections
+        if (d.initialDeposited === undefined) {
+          d.initialDeposited = Number(d.deposited) || 0;
+        }
+        d.deposited = Number(d.initialDeposited) || 0;
+
+        if (d.sno) declById.set(String(d.sno).trim(), d);
+        if (d.originalSno) declById.set(String(d.originalSno).trim(), d);
+
+        if (d.receipt && String(d.receipt).trim() !== '-') {
+          declByReceipt.set(String(d.receipt).trim(), d);
+        }
+
+        if (d.name) {
+          const nk = getNormKey(d.name);
+          if (!declByName.has(nk)) declByName.set(nk, []);
+          declByName.get(nk).push(d);
+        }
+      });
+
+      // 2. Attribute collections to declarations dynamically
+      const matchedCollections = new Set();
 
       collectionsList.forEach(c => {
         if (isDummyTestDeclaration(c.donorSno, c.donorName, c.city, c.amount)) return;
         const amt = Number(c.amount) || 0;
+        if (amt <= 0) return;
+
+        let target = null;
+
+        // Priority 1: Match by donorSno (covers d.sno AND d.originalSno!)
         if (c.donorSno) {
           const sKey = String(c.donorSno).trim();
-          collMapSno[sKey] = (collMapSno[sKey] || 0) + amt;
-        } else if (c.donorName) {
-          const nKey = c.donorName.trim().toLowerCase();
-          collMapName[nKey] = (collMapName[nKey] || 0) + amt;
+          if (declById.has(sKey)) {
+            target = declById.get(sKey);
+          }
         }
-      });
 
-      declarationsList.forEach(d => {
-        const sKey = String(d.sno).trim();
-        const nKey = String(d.name || '').trim().toLowerCase();
-        const liveColl = (collMapSno[sKey] || 0) + (collMapName[nKey] || 0);
-        if (d.initialDeposited === undefined) {
-          d.initialDeposited = Number(d.deposited) || 0;
+        // Priority 2: Match by receipt number
+        if (!target && c.receiptNo) {
+          const rKey = String(c.receiptNo).trim();
+          if (declByReceipt.has(rKey)) {
+            target = declByReceipt.get(rKey);
+          }
         }
-        d.deposited = (Number(d.initialDeposited) || 0) + liveColl;
-        d.balance = Math.max(0, (Number(d.amount) || 0) - d.deposited);
-      });
 
-      // Also ensure walk-in donors from collections exist in declarationsList
-      collectionsList.forEach(c => {
-        const sKey = String(c.donorSno || '').trim();
-        const nKey = String(c.donorName || '').trim().toLowerCase();
-        const match = declarationsList.find(d => (sKey && String(d.sno).trim() === sKey) || (nKey && String(d.name || '').trim().toLowerCase() === nKey));
-        if (!match && c.donorName) {
-          declarationsList.push({
-            sno: c.donorSno || `COL-${c.receiptNo || 'DIR'}`,
-            name: c.donorName,
-            city: c.city || 'अन्य',
-            notes: 'सीधा सहयोग (Direct Collection)',
-            mobile: c.mobile || '',
-            amount: Number(c.amount) || 0,
-            initialDeposited: Number(c.amount) || 0,
-            deposited: Number(c.amount) || 0,
-            balance: 0,
-            receipt: c.receiptNo || '-',
-            date: c.date || '',
-            collector: c.collector || '',
-            collectorUsername: c.collectorUsername || ''
+        // Priority 3: Match by normalized donor name
+        if (!target && c.donorName) {
+          const nk = getNormKey(c.donorName);
+          const candidates = declByName.get(nk);
+          if (candidates && candidates.length > 0) {
+            if (candidates.length === 1) {
+              target = candidates[0];
+            } else {
+              target = candidates.find(cand => cand.city === c.city) || candidates[0];
+            }
+          }
+        }
+
+        // Priority 4: Partial / substring name match
+        if (!target && c.donorName) {
+          const cRaw = c.donorName.trim().toLowerCase();
+          target = declarationsList.find(d => {
+            const dRaw = (d.name || '').trim().toLowerCase();
+            return dRaw && (dRaw === cRaw || dRaw.includes(cRaw) || cRaw.includes(dRaw));
           });
         }
+
+        if (target) {
+          target.deposited = (Number(target.deposited) || 0) + amt;
+          matchedCollections.add(c);
+        }
+      });
+
+      // 3. Re-calculate balance dynamically for EVERY declaration
+      declarationsList.forEach(d => {
+        const pledged = Number(d.amount) || 0;
+        const dep = Number(d.deposited) || 0;
+        d.balance = Math.max(0, pledged - dep);
+      });
+
+      // 4. Any direct walk-in collections without a declaration
+      collectionsList.forEach(c => {
+        if (matchedCollections.has(c)) return;
+        if (isDummyTestDeclaration(c.donorSno, c.donorName, c.city, c.amount)) return;
+        if (!c.donorName) return;
+
+        const amt = Number(c.amount) || 0;
+        declarationsList.push({
+          sno: c.donorSno || `COL-${c.receiptNo || 'DIR'}`,
+          name: c.donorName,
+          city: c.city || 'अन्य',
+          notes: 'सीधा सहयोग (Direct Collection)',
+          mobile: c.mobile || '',
+          amount: amt,
+          initialDeposited: amt,
+          deposited: amt,
+          balance: 0,
+          receipt: c.receiptNo || '-',
+          date: c.date || '',
+          collector: c.collector || '',
+          collectorUsername: c.collectorUsername || ''
+        });
       });
     }
 
@@ -2776,6 +2847,7 @@
     }, 20000);
 
     function renderAllPortals() {
+      try { reconcileCollectionsWithDeclarations(); } catch (e) { console.error("Error in reconcileCollectionsWithDeclarations:", e); }
       try { populateVillageDropdowns(); } catch (e) { console.error("Error in populateVillageDropdowns:", e); }
       try { renderDeclarationsTable(); } catch (e) { console.error("Error in renderDeclarationsTable:", e); }
       try { renderCollectionsTable(); } catch (e) { console.error("Error in renderCollectionsTable:", e); }
@@ -4335,6 +4407,9 @@
     }
 
     function renderPendingTable() {
+      // Ensure all balances are dynamically calculated from latest collections
+      try { reconcileCollectionsWithDeclarations(); } catch (e) {}
+
       const q = (document.getElementById('searchPendingTable')?.value || '').toLowerCase().trim();
       const village = document.getElementById('filterPendingVillage')?.value || 'all';
       const dateFilter = document.getElementById('filterPendingDate')?.value || '';
