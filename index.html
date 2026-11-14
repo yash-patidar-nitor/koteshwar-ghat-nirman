@@ -1417,18 +1417,82 @@
       .metric-badge-grid { grid-template-columns: 1fr 1fr; }
       .timeline-grid { grid-template-columns: 1fr; }
       .impact-dual-grid { grid-template-columns: 1fr; }
-      .story-hero-media { height: 260px; }
-      .ba-stage-frame { height: 260px; }
+      .ba-stage-frame { height: 320px; }
     }
     @media (max-width: 600px) {
-      .story-section-header h2 { font-size: 20px; }
-      .metric-badge-grid { grid-template-columns: 1fr 1fr; }
-      .ba-header-row { flex-direction: column; align-items: flex-start; }
-      .story-hero-media { height: 210px; }
-      .ba-stage-frame { height: 210px; }
+      .legacy-story-container {
+        padding: 14px 6px;
+        border-radius: 10px;
+      }
+      .story-section-header {
+        margin-bottom: 16px;
+        padding-bottom: 10px;
+      }
+      .story-section-header h2 { font-size: 19px; }
+      .story-section-header p { font-size: 12px; }
+
+      /* Maximize usable area & image view for Nirman Yatra on mobile */
+      .ba-module {
+        padding: 8px 4px;
+        border-radius: 8px;
+        margin-bottom: 14px;
+      }
+      .ba-header-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        margin-bottom: 10px;
+        padding: 0 4px;
+      }
+      .ba-title-wrap h3 { font-size: 15px; }
+      .ba-title-wrap p { font-size: 11.5px; }
+      .ba-tab-group {
+        width: 100%;
+        display: flex;
+        gap: 3px;
+        padding: 2px;
+      }
+      .ba-tab-btn {
+        flex: 1;
+        padding: 6px 4px;
+        font-size: 11px;
+        justify-content: center;
+        gap: 4px;
+      }
+      .ba-stage-frame {
+        height: 290px;
+        border-radius: 8px;
+      }
+      .ba-caption-bar {
+        padding: 8px 10px;
+      }
+      .ba-caption-badge {
+        font-size: 10px;
+        padding: 1px 6px;
+        margin-bottom: 2px;
+      }
+      .ba-caption-title {
+        font-size: 13.5px;
+        margin-bottom: 2px;
+      }
+      .ba-caption-desc {
+        font-size: 11px;
+        line-height: 1.35;
+      }
+
+      .metric-badge-grid {
+        grid-template-columns: 1fr 1fr;
+        padding: 10px 6px;
+        gap: 8px;
+        margin-bottom: 18px;
+      }
+      .metric-box { padding: 8px 4px; }
+      .metric-val { font-size: 21px; }
+      .metric-lbl { font-size: 11px; }
+
       .legacy-grid { grid-template-columns: 1fr; }
       .master-plan-grid { grid-template-columns: 1fr; }
-      .leadership-callout { flex-direction: column; gap: 8px; }
+      .leadership-callout { flex-direction: column; gap: 8px; padding: 14px 12px; }
     }
 
     /* ==================== MODAL STYLES ==================== */
@@ -1545,6 +1609,8 @@
       .kpi-card { padding: 13px; }
       .kpi-amount { font-size: 20px; }
       .dashboard-wrap { padding: 14px 10px 50px; }
+      .legacy-story-container { padding: 18px 12px; }
+      .ba-module { padding: 14px 10px; }
 
       .footer-card-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
       .footer-actions-row { width: 100%; justify-content: flex-start; }
@@ -1762,7 +1828,7 @@
           <div class="ba-caption-bar" id="baCaptionBar">
             <span class="ba-caption-badge" id="baCaptionBadge">चरण ३ • 12 अगस्त 2026</span>
             <div class="ba-caption-title" id="baCaptionTitle">भव्य घाट का लोकार्पण एवं समर्पण</div>
-            <p class="ba-caption-desc" id="baCaptionDesc">संत-महात्माओं की उपस्थिति में 54 सीढ़ियों वाले भव्य 100×230 फीट पाषाण घाट का लोकार्पण कर समाज एवं परिक्रमावासियों को समर्पित किया गया।</p>
+            <p class="ba-caption-desc" id="baCaptionDesc">संत-महात्माओं की उपस्थिति में 56 सीढ़ियों वाले भव्य 100×230 फीट पाषाण घाट का लोकार्पण कर समाज एवं परिक्रमावासियों को समर्पित किया गया।</p>
           </div>
         </div>
       </div>
@@ -1774,7 +1840,7 @@
           <div class="metric-lbl"><i class="fa-solid fa-bolt" style="color:var(--gold);"></i> निर्माण अवधि</div>
         </div>
         <div class="metric-box">
-          <div class="metric-val">54</div>
+          <div class="metric-val">56</div>
           <div class="metric-lbl"><i class="fa-solid fa-stairs" style="color:var(--teal);"></i> निर्मित सीढ़ियाँ</div>
         </div>
         <div class="metric-box">
@@ -1808,7 +1874,7 @@
           <div class="timeline-card" style="border-top-color:var(--gold);">
             <span class="tl-date-badge" style="background:var(--gold-subtle);color:var(--gold-dark);"><i class="fa-solid fa-stopwatch"></i> 19-दिवसीय कीर्तिमान</span>
             <div class="tl-title">अविराम श्रमदान व निर्माण</div>
-            <p class="tl-desc">भारी मशीनरी, डंपर एवं सैकड़ों ग्रामीणों के श्रमदान से 2 एकड़ दुर्गम बीहड़ का समतलीकरण कर 54 सीढ़ियों का घाट निर्मित।</p>
+            <p class="tl-desc">भारी मशीनरी, डंपर एवं सैकड़ों ग्रामीणों के श्रमदान से 2 एकड़ दुर्गम बीहड़ का समतलीकरण कर 56 सीढ़ियों का घाट निर्मित।</p>
           </div>
 
           <!-- Step 3: Inauguration -->
@@ -1827,23 +1893,23 @@
         </div>
       </div>
 
-      <!-- 4. Historical Legacy of Sansthan (5 Ghats & 3 Mukti Dhams) -->
+      <!-- 4. Historical Legacy of Sansthan (6 Ghats & 3 Mukti Dhams) -->
       <div class="legacy-section">
         <div class="legacy-sub-header">
           <h4><i class="fa-solid fa-monument" style="color:var(--gold);"></i> संस्थान की ऐतिहासिक सेवा धरोहर (घाट एवं मुक्तिधाम)</h4>
-          <span style="font-size:12px;color:var(--teal);font-weight:600;"><i class="fa-solid fa-award"></i> 5 पावन घाट • 3 मुक्तिधाम</span>
+          <span style="font-size:12px;color:var(--teal);font-weight:600;"><i class="fa-solid fa-award"></i> 6 पावन घाट • 3 मुक्तिधाम</span>
         </div>
 
         <div class="legacy-grid">
-          <!-- 1. Koteshwar Muktidham (2015) -->
+          <!-- 1. Koteshwar Muktidham (2012) -->
           <div class="legacy-card">
             <div class="legacy-card-media">
               <img src="https://images.unsplash.com/photo-1596176530529-78163a4f7af2?auto=format&fit=crop&w=480&h=270&q=60" 
-                   alt="कोटेश्वर मुक्तिधाम - पवित्र नर्मदा तट परिसर (2015)" 
+                   alt="कोटेश्वर मुक्तिधाम - पवित्र परिसर (2012)" 
                    width="480" height="270"
                    loading="lazy"
                    decoding="async" />
-              <span class="legacy-year-tag">2015</span>
+              <span class="legacy-year-tag">2012</span>
             </div>
             <div class="legacy-card-body">
               <div class="legacy-card-title"><i class="fa-solid fa-hands-praying" style="color:var(--gold-dark);"></i> कोटेश्वर मुक्तिधाम</div>
@@ -1851,47 +1917,47 @@
             </div>
           </div>
 
-          <!-- 2. Koteshwar Ghat (2016) -->
+          <!-- 2. Koteshwar Tirtha Ghat (2016) -->
           <div class="legacy-card">
             <div class="legacy-card-media">
               <img src="https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=480&h=270&q=60" 
-                   alt="कोटेश्वर घाट - पावन नर्मदा स्नान सीढ़ियाँ (2016)" 
+                   alt="कोटेश्वर तीर्थ घाट - पावन नर्मदा स्नान सीढ़ियाँ (2016)" 
                    width="480" height="270"
                    loading="lazy"
                    decoding="async" />
               <span class="legacy-year-tag">2016</span>
             </div>
             <div class="legacy-card-body">
-              <div class="legacy-card-title"><i class="fa-solid fa-water" style="color:var(--teal);"></i> कोटेश्वर घाट</div>
+              <div class="legacy-card-title"><i class="fa-solid fa-water" style="color:var(--teal);"></i> कोटेश्वर तीर्थ घाट</div>
               <p class="legacy-card-desc">श्रद्धालुओं एवं परिक्रमावासियों के सुगम स्नान हेतु कोटेश्वर में प्रथम पक्के घाट का पावन निर्माण।</p>
             </div>
           </div>
 
-          <!-- 3. Rajghat, Kasrawad (2019 / 2029) -->
+          <!-- 3. Rajghat evam Muktidham (2019) -->
           <div class="legacy-card">
             <div class="legacy-card-media">
               <img src="https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=480&h=270&q=60" 
-                   alt="राजघाट (कसरावद) - ऐतिहासिक नर्मदा पाषाण घाट" 
+                   alt="राजघाट एवं मुक्तिधाम - ऐतिहासिक नर्मदा पाषाण घाट (2019)" 
                    width="480" height="270"
                    loading="lazy"
                    decoding="async" />
-              <span class="legacy-year-tag">राजघाट</span>
+              <span class="legacy-year-tag">2019</span>
             </div>
             <div class="legacy-card-body">
-              <div class="legacy-card-title"><i class="fa-solid fa-archway" style="color:var(--gold);"></i> राजघाट (कसरावद)</div>
-              <p class="legacy-card-desc">कसरावद क्षेत्र में नर्मदा तट पर श्रद्धालुओं हेतु पक्के घाट व जनसुविधाओं का पावन निर्माण।</p>
+              <div class="legacy-card-title"><i class="fa-solid fa-archway" style="color:var(--gold);"></i> राजघाट एवं मुक्तिधाम</div>
+              <p class="legacy-card-desc">कसरावद क्षेत्र में नर्मदा तट पर श्रद्धालुओं हेतु पक्के घाट व सर्वसुविधायुक्त मुक्तिधाम का पावन निर्माण।</p>
             </div>
           </div>
 
-          <!-- 4. Kothda Muktidham (2024) -->
+          <!-- 4. Kothda Muktidham (2020) -->
           <div class="legacy-card">
             <div class="legacy-card-media">
               <img src="https://images.unsplash.com/photo-1588880331179-bc9b93a8cb5e?auto=format&fit=crop&w=480&h=270&q=60" 
-                   alt="कोठड़ा मुक्तिधाम - शांत एवं छायादार परिसर (2024)" 
+                   alt="कोठड़ा मुक्तिधाम - शांत एवं छायादार परिसर (2020)" 
                    width="480" height="270"
                    loading="lazy"
                    decoding="async" />
-              <span class="legacy-year-tag">2024</span>
+              <span class="legacy-year-tag">2020</span>
             </div>
             <div class="legacy-card-body">
               <div class="legacy-card-title"><i class="fa-solid fa-hands-praying" style="color:var(--gold-dark);"></i> कोठड़ा मुक्तिधाम</div>
@@ -1899,11 +1965,59 @@
             </div>
           </div>
 
-          <!-- 5. Kothada Ghat (2026 - Present Grand Ghat) -->
+          <!-- 5. Chhoti Kasrawad Ghat (2022) -->
+          <div class="legacy-card">
+            <div class="legacy-card-media">
+              <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=480&h=270&q=60" 
+                   alt="छोटी कसरावद घाट - पाषाण घाट निर्माण (2022)" 
+                   width="480" height="270"
+                   loading="lazy"
+                   decoding="async" />
+              <span class="legacy-year-tag">2022</span>
+            </div>
+            <div class="legacy-card-body">
+              <div class="legacy-card-title"><i class="fa-solid fa-water" style="color:var(--teal);"></i> छोटी कसरावद घाट</div>
+              <p class="legacy-card-desc">छोटी कसरावद में माँ नर्मदा तट पर श्रद्धालुओं व ग्रामीणजनों के सुगम स्नान व पूजन हेतु पक्का घाट।</p>
+            </div>
+          </div>
+
+          <!-- 6. Jagirdarpura Ghat (2024) -->
+          <div class="legacy-card">
+            <div class="legacy-card-media">
+              <img src="https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=480&h=270&q=60" 
+                   alt="जागीरदारपुरा घाट - नर्मदा स्नान घाट (2024)" 
+                   width="480" height="270"
+                   loading="lazy"
+                   decoding="async" />
+              <span class="legacy-year-tag">2024</span>
+            </div>
+            <div class="legacy-card-body">
+              <div class="legacy-card-title"><i class="fa-solid fa-water" style="color:var(--teal);"></i> जागीरदारपुरा घाट</div>
+              <p class="legacy-card-desc">जागीरदारपुरा क्षेत्र में नर्मदा तट पर सुरक्षित स्नान सीढ़ियों एवं तट सुरक्षा दीवार का जनसहयोग से निर्माण।</p>
+            </div>
+          </div>
+
+          <!-- 7. Bodhwada Ghat (2025) -->
+          <div class="legacy-card">
+            <div class="legacy-card-media">
+              <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=480&h=270&q=60" 
+                   alt="बोधवाड़ा घाट - पावन नर्मदा तट (2025)" 
+                   width="480" height="270"
+                   loading="lazy"
+                   decoding="async" />
+              <span class="legacy-year-tag">2025</span>
+            </div>
+            <div class="legacy-card-body">
+              <div class="legacy-card-title"><i class="fa-solid fa-water" style="color:var(--teal);"></i> बोधवाड़ा घाट</div>
+              <p class="legacy-card-desc">बोधवाड़ा में नर्मदा तट पर सुगम स्नान, परिक्रमावासी विश्राम एवं पूजा-अर्चना हेतु आधुनिक पाषाण घाट का निर्माण।</p>
+            </div>
+          </div>
+
+          <!-- 8. Kothada Ghat (2026 - Present Grand Ghat) -->
           <div class="legacy-card" style="border:2px solid var(--gold);background:var(--sandstone-light);">
             <div class="legacy-card-media">
               <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=480&h=270&q=60" 
-                   alt="कोठड़ा घाट - 54 सीढ़ियों वाला भव्य पाषाण घाट (2026)" 
+                   alt="कोठड़ा घाट - 56 सीढ़ियों वाला भव्य पाषाण घाट (2026)" 
                    width="480" height="270"
                    loading="lazy"
                    decoding="async" />
@@ -1911,7 +2025,7 @@
             </div>
             <div class="legacy-card-body">
               <div class="legacy-card-title"><i class="fa-solid fa-star" style="color:var(--gold);"></i> कोठड़ा घाट (पावन महाअभियान)</div>
-              <p class="legacy-card-desc">19 दिनों में 54 सीढ़ियों के साथ निर्मित 100×230 फीट का भव्य पाषाण घाट, 12 अगस्त 2026 को लोकार्पित।</p>
+              <p class="legacy-card-desc">19 दिनों में 56 सीढ़ियों के साथ निर्मित 100×230 फीट का भव्य पाषाण घाट, 12 अगस्त 2026 को लोकार्पित।</p>
             </div>
           </div>
         </div>
@@ -3383,7 +3497,7 @@
         img: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=720&h=420&q=60",
         badge: "चरण ३ • 12 अगस्त 2026",
         title: "भव्य घाट का लोकार्पण एवं समर्पण",
-        desc: "संत-महात्माओं की उपस्थिति में 54 सीढ़ियों वाले भव्य 100×230 फीट पाषाण घाट का लोकार्पण कर समाज एवं परिक्रमावासियों को समर्पित किया गया।"
+        desc: "संत-महात्माओं की उपस्थिति में 56 सीढ़ियों वाले भव्य 100×230 फीट पाषाण घाट का लोकार्पण कर समाज एवं परिक्रमावासियों को समर्पित किया गया।"
       },
       during: {
         img: "https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?auto=format&fit=crop&w=720&h=420&q=60",
