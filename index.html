@@ -2121,7 +2121,7 @@
         <div class="section-header-box">
           <div>
             <h2><i class="fa-solid fa-city" style="color:var(--gold);"></i> सम्पूर्ण नगर एवं ग्रामवार सहभागिता तालिका</h2>
-            <p>Google Sheet से लाइव संकलित: क्षेत्रवार घोषित सहयोग राशि, सहभागी परिवार एवं सर्वोच्च योगदान</p>
+            <p>Google Sheet से लाइव संकलित: क्षेत्रवार घोषित सहयोग, कुल जमा राशि, सहभागी परिवार एवं सर्वोच्च योगदान</p>
           </div>
           <span style="font-size:12px;color:var(--text-muted);"><i class="fa-solid fa-arrow-down-wide-short"></i> सहयोग राशि के क्रम में व्यवस्थित</span>
         </div>
@@ -2144,6 +2144,7 @@
                 <th style="width:48px;">क्र.</th>
                 <th>स्थान / नगर / ग्राम</th>
                 <th>कुल घोषित जनसहयोग</th>
+                <th>कुल जमा राशि</th>
                 <th>सहभागी परिवार</th>
                 <th>औसत सहयोग</th>
                 <th>सर्वोच्च सहयोग</th>
@@ -3298,17 +3299,23 @@
       const sortedList = list.sort((a, b) => b.pledged - a.pledged);
 
       if (sortedList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text-muted);"><i class="fa-solid fa-magnifying-glass"></i> "${currentVillageSearch}" नाम से कोई नगर या ग्राम नहीं मिला।</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text-muted);"><i class="fa-solid fa-magnifying-glass"></i> "${currentVillageSearch}" नाम से कोई नगर या ग्राम नहीं मिला।</td></tr>`;
         return;
       }
 
       tbody.innerHTML = sortedList.map((v, i) => {
         const avg = v.count > 0 ? Math.round(v.pledged / v.count) : 0;
+        const received = v.received || 0;
+        const pct = v.pledged > 0 ? Math.round((received / v.pledged) * 100) : 0;
         return `
           <tr>
             <td><span style="font-weight:700;color:var(--text-muted);">${i + 1}</span></td>
             <td><strong style="color:var(--teal);font-size:14px;"><i class="fa-solid fa-location-dot" style="color:var(--gold-dark);font-size:11px;"></i> ${v.name}</strong></td>
             <td><strong class="amount" style="color:var(--gold-dark);font-size:15px;">${fmt(v.pledged)}</strong></td>
+            <td>
+              <strong class="amount" style="color:var(--teal);font-size:15px;">${fmt(received)}</strong>
+              ${v.pledged > 0 ? `<br><small style="font-size:10.5px;color:var(--sage);font-weight:600;"><i class="fa-solid fa-circle-check"></i> ${pct}% जमा</small>` : ''}
+            </td>
             <td><span style="font-size:13px;color:var(--teal);font-weight:600;">${v.count} परिवार</span></td>
             <td><span class="amount" style="color:var(--text-secondary);">${fmt(avg)}</span></td>
             <td><strong class="amount" style="color:var(--teal);">${fmt(v.highest)}</strong></td>
