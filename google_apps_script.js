@@ -58,8 +58,23 @@ function doPost(e) {
         "प्रविष्टि समय"
       ], "#123F42");
 
-      var lastRow = liveDeclSheet.getLastRow();
-      var nextSno = item.sno || (584 + lastRow);
+      var mainDeclSheet = ss.getSheetByName("Declarations");
+      var highestSno = 0;
+      if (mainDeclSheet && mainDeclSheet.getLastRow() > 1) {
+        var mainValues = mainDeclSheet.getRange(2, 1, mainDeclSheet.getLastRow() - 1, 1).getValues();
+        for (var m = 0; m < mainValues.length; m++) {
+          var val = parseInt(mainValues[m][0], 10);
+          if (!isNaN(val) && val > highestSno) highestSno = val;
+        }
+      }
+      if (liveDeclSheet.getLastRow() > 1) {
+        var liveValues = liveDeclSheet.getRange(2, 1, liveDeclSheet.getLastRow() - 1, 1).getValues();
+        for (var l = 0; l < liveValues.length; l++) {
+          var lVal = parseInt(liveValues[l][0], 10);
+          if (!isNaN(lVal) && lVal > highestSno) highestSno = lVal;
+        }
+      }
+      var nextSno = (item.sno && item.sno > highestSno) ? item.sno : (highestSno + 1);
 
       liveDeclSheet.appendRow([
         nextSno,
