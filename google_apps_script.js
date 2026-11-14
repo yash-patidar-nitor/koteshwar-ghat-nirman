@@ -17,7 +17,8 @@
  *    - Execute as: Me (आपका Google खाता)
  *    - Who has access: Anyone (कोई भी)
  * 5. "Deploy" पर क्लिक करें और जनरेट हुआ "Web app URL" कॉपी करें।
- * 6. इस URL को कार्यकर्ता पोर्टल (karyakarta.html) की सेटिंग्स में पेस्ट कर दें।
+ * 6. सक्रिय तैनात वेब ऐप URL (Active Production Webhook URL):
+ *    https://script.google.com/macros/s/AKfycbwS98khdbLX3wgfZWUgA5Qkb5OiKjbXOkB6g1uIGWGNWuDwP2WJp_K95wj5_TyE9wt9kw/exec
  * ==============================================================================
  */
 

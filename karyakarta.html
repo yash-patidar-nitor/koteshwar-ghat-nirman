@@ -1875,7 +1875,13 @@
     let collectionsList = [];
     let selectedDonor = null;
     let currentReceiptData = null;
-    let webhookUrl = localStorage.getItem('koteshwar_webhook_url') || '';
+    // Hardcoded Global Google Apps Script Webhook URL (Unified for all karyakartas & devices)
+    const DEFAULT_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwS98khdbLX3wgfZWUgA5Qkb5OiKjbXOkB6g1uIGWGNWuDwP2WJp_K95wj5_TyE9wt9kw/exec';
+    let webhookUrl = localStorage.getItem('koteshwar_webhook_url') || DEFAULT_WEBHOOK_URL;
+    if (!webhookUrl || !webhookUrl.startsWith('https://script.google.com/macros/s/')) {
+      webhookUrl = DEFAULT_WEBHOOK_URL;
+      try { localStorage.setItem('koteshwar_webhook_url', DEFAULT_WEBHOOK_URL); } catch (e) {}
+    }
 
     const fmt = n => "₹" + Math.round(Number(n) || 0).toLocaleString('en-IN');
 
@@ -2172,6 +2178,11 @@
       }
       reconcileCollectionsWithDeclarations();
       renderAllPortals();
+
+      // Automatically sync any pending offline entries to Google Sheet in the background
+      setTimeout(() => {
+        try { syncAllPendingToSheet(true); } catch (e) {}
+      }, 1200);
     }
 
     /* ============================================================
@@ -4747,11 +4758,13 @@
       syncAllPendingToSheet();
     }
 
-    async function syncAllPendingToSheet() {
+    async function syncAllPendingToSheet(silent = false) {
       if (!webhookUrl) {
-        alert("कृपया पहले नीचे 'Google Apps Script Webhook URL' दर्ज करके 'URL सुरक्षित करें' पर क्लिक करें!");
-        const inp = document.getElementById('webhookUrlInput');
-        if (inp) inp.focus();
+        if (!silent) {
+          alert("कृपया पहले नीचे 'Google Apps Script Webhook URL' दर्ज करके 'URL सुरक्षित करें' पर क्लिक करें!");
+          const inp = document.getElementById('webhookUrlInput');
+          if (inp) inp.focus();
+        }
         return;
       }
 
@@ -4768,7 +4781,9 @@
       const totalPending = pendingColls.length + pendingDecls.length;
 
       if (totalPending === 0) {
-        alert("फ़ोन की सभी रसीदें एवं संकल्प पहले से ही Google Sheet में सिंक हैं!");
+        if (!silent) {
+          alert("फ़ोन की सभी रसीदें एवं संकल्प पहले से ही Google Sheet में सिंक हैं!");
+        }
         updateRibbon();
         return;
       }
@@ -4812,7 +4827,9 @@
       } catch (e) {}
 
       updateRibbon(false, `✅ ${successCount} प्रविष्टि(याँ) Google Sheet में सफलतापूर्वक सिंक हो गईं!`);
-      alert(`✅ ${successCount} प्रविष्टि(याँ) Google Sheet में सफलतापूर्वक सिंक हो गईं!\n\nअब Google Sheet और डेस्कटॉप पब्लिक व्यू में यह डेटा दिखने लगेगा।`);
+      if (!silent) {
+        alert(`✅ ${successCount} प्रविष्टि(याँ) Google Sheet में सफलतापूर्वक सिंक हो गईं!\n\nअब Google Sheet और डेस्कटॉप पब्लिक व्यू में यह डेटा दिखने लगेगा।`);
+      }
       refreshPortalData(true);
     }
 
