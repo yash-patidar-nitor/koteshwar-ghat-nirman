@@ -2773,7 +2773,17 @@
       // Immediately fetch live real-time data from Google Sheet
       fetchGoogleSheetData();
 
-      // Listen for cross-tab updates from Karyakarta portal
+      // Cross-tab real-time sync via BroadcastChannel
+      try {
+        const syncChannel = new BroadcastChannel('koteshwar_sync_channel');
+        syncChannel.onmessage = (msg) => {
+          if (msg && msg.data && msg.data.type === 'REFRESH_REQUESTED') {
+            fetchGoogleSheetData();
+          }
+        };
+      } catch (e) {}
+
+      // Listen for cross-tab updates from Karyakarta portal storage
       window.addEventListener('storage', (e) => {
         if (e.key && e.key.startsWith('koteshwar_')) {
           fetchGoogleSheetData();
@@ -2784,10 +2794,14 @@
           fetchGoogleSheetData();
         }
       });
-      // Periodic background auto-refresh every 60s for live display
+      window.addEventListener('focus', () => {
+        fetchGoogleSheetData();
+      });
+
+      // Active auto-refresh every 20s for seamless multi-device live sync
       setInterval(() => {
         fetchGoogleSheetData();
-      }, 60000);
+      }, 20000);
     });
 
     /* ============================================================
@@ -2828,13 +2842,15 @@
 
       try {
         let fetchedDonors = [];
+        const ts = Date.now();
+        const getLiveGVizUrl = (tab) => `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(tab)}&_cb=${ts}`;
 
-        // Concurrently fetch baseline CSV stream, Live Declaration, Collections, and Live Collection
+        // Concurrently fetch baseline CSV stream, Live Declaration, Collections, and Live Collection (Zero-Cache)
         const [csvSettled, liveDeclSettled, bulkCollSettled, liveCollSettled] = await Promise.allSettled([
-          fetch(CSV_DECL_URL, { cache: 'no-cache' }),
-          fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent('Live Declaration')}`),
-          fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Collections`),
-          fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent('Live Collection')}`)
+          fetch(`${CSV_DECL_URL}&_cb=${ts}`, { cache: 'no-store' }),
+          fetch(getLiveGVizUrl('Live Declaration'), { cache: 'no-store' }),
+          fetch(getLiveGVizUrl('Collections'), { cache: 'no-store' }),
+          fetch(getLiveGVizUrl('Live Collection'), { cache: 'no-store' })
         ]);
 
         // 1. PRIMARY FETCH: Process Google Sheets Raw CSV Stream (100% immune to UI filters)
@@ -2881,7 +2897,7 @@
         // 2. FALLBACK FETCH: GViz SQL Query (if CSV stream failed or was blocked)
         if (fetchedDonors.length === 0) {
           try {
-            const response = await fetch(GVIZ_QUERY_URL);
+            const response = await fetch(`${GVIZ_QUERY_URL}&_cb=${ts}`, { cache: 'no-store' });
             if (response.ok) {
               const raw = await response.text();
               const match = raw.match(/setResponse\(([\s\S]*)\);?/);

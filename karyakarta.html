@@ -1860,6 +1860,31 @@
     const GVIZ_BULK_COLL_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Collections`;
     const GVIZ_LIVE_COLL_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent('Live Collection')}`;
 
+    function getLiveUrl(base) {
+      if (!base) return '';
+      const sep = base.includes('?') ? '&' : '?';
+      return `${base}${sep}_cb=${Date.now()}`;
+    }
+
+    // Cross-tab real-time sync broadcast channel
+    let syncChannel = null;
+    try {
+      syncChannel = new BroadcastChannel('koteshwar_sync_channel');
+      syncChannel.onmessage = (msg) => {
+        if (msg && msg.data && msg.data.type === 'REFRESH_REQUESTED') {
+          silentAutoRefresh();
+        }
+      };
+    } catch (e) {}
+
+    function broadcastSyncEvent() {
+      try {
+        if (syncChannel) {
+          syncChannel.postMessage({ type: 'REFRESH_REQUESTED', time: Date.now() });
+        }
+      } catch (e) {}
+    }
+
     const AUTHORIZED_USERS = {
       'mohanpatidar': { username: 'mohanpatidar', name: 'श्री मोहन भाई पाटीदार' },
       'anilpatidar': { username: 'anilpatidar', name: 'श्री अनिल पाटीदार' },
@@ -2248,7 +2273,7 @@
 
       // 2. Fetch bulk collections from 'Collections' sheet (if populated)
       try {
-        const resBulk = await fetch(GVIZ_BULK_COLL_URL);
+        const resBulk = await fetch(getLiveUrl(GVIZ_BULK_COLL_URL), { cache: 'no-store' });
         if (resBulk.ok) {
           const raw = await resBulk.text();
           const match = raw.match(/setResponse\(([\s\S]*)\);?/);
@@ -2265,7 +2290,7 @@
       // 3. Fetch live collections from 'Live Collection' sheet
       let fetchedLiveOk = false;
       try {
-        const resLive = await fetch(GVIZ_LIVE_COLL_URL);
+        const resLive = await fetch(getLiveUrl(GVIZ_LIVE_COLL_URL), { cache: 'no-store' });
         if (resLive.ok) {
           const raw = await resLive.text();
           const match = raw.match(/setResponse\(([\s\S]*)\);?/);
@@ -2356,7 +2381,7 @@
       // 1. Fetch Bulk Declarations from baseline sheet (CSV stream first - 100% immune to UI filters)
       let fetchedBulk = [];
       try {
-        const csvRes = await fetch(CSV_DECL_URL);
+        const csvRes = await fetch(getLiveUrl(CSV_DECL_URL), { cache: 'no-store' });
         if (csvRes.ok) {
           const csvText = await csvRes.text();
           const parsed = parseCSV(csvText);
@@ -2400,7 +2425,7 @@
       // Fallback to GViz if CSV stream returned nothing
       if (fetchedBulk.length === 0) {
         try {
-          const res = await fetch(GVIZ_BULK_DECL_URL);
+          const res = await fetch(getLiveUrl(GVIZ_BULK_DECL_URL), { cache: 'no-store' });
           if (res.ok) {
             const raw = await res.text();
             const match = raw.match(/setResponse\(([\s\S]*)\);?/);
@@ -2453,7 +2478,7 @@
 
       // 2. ALSO Fetch new Live Declarations from 'Live Declaration' sheet
       try {
-        const resLive = await fetch(GVIZ_LIVE_DECL_URL);
+        const resLive = await fetch(getLiveUrl(GVIZ_LIVE_DECL_URL), { cache: 'no-store' });
         if (resLive.ok) {
           const rawLive = await resLive.text();
           const matchLive = rawLive.match(/setResponse\(([\s\S]*)\);?/);
@@ -2697,22 +2722,28 @@
     }
 
     // Auto-refresh after a transaction has committed to Google Sheets
-    function autoRefreshAfterTransaction(delayMs = 2000) {
+    function autoRefreshAfterTransaction(delayMs = 1200) {
       if (backgroundSyncTimer) clearTimeout(backgroundSyncTimer);
       backgroundSyncTimer = setTimeout(() => {
         silentAutoRefresh();
+        broadcastSyncEvent();
       }, delayMs);
     }
 
-    // Auto-sync when user returns to app/tab on mobile
+    // Auto-sync when user returns to app/tab on mobile or desktop
     window.addEventListener('focus', () => {
       silentAutoRefresh();
     });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        silentAutoRefresh();
+      }
+    });
 
-    // Periodic background sync every 45 seconds to keep devices in sync
+    // Active background sync every 20 seconds for seamless multi-device parity
     setInterval(() => {
       silentAutoRefresh();
-    }, 45000);
+    }, 20000);
 
     function renderAllPortals() {
       try { populateVillageDropdowns(); } catch (e) { console.error("Error in populateVillageDropdowns:", e); }
