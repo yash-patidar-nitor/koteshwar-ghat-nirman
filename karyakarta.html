@@ -1624,8 +1624,8 @@
   </main>
 
   <!-- ==================== DIGITAL RECEIPT & WHATSAPP MODAL ==================== -->
-  <div class="modal-backdrop" id="receiptModalBackdrop" onclick="closeReceiptModal(event)">
-    <div class="modal-card">
+  <div class="modal-backdrop" id="receiptModalBackdrop">
+    <div class="modal-card" onclick="event.stopPropagation()">
       <div class="modal-head">
         <h4><i class="fa-solid fa-receipt" style="color:var(--gold-light);"></i> डिजिटल पावती / रसीद</h4>
         <button class="btn-modal-close" onclick="closeReceiptModal()">&times;</button>
@@ -1718,7 +1718,7 @@
   </div>
 
   <!-- ==================== MODAL: EDIT DECLARATION ==================== -->
-  <div class="modal-backdrop" id="editDeclModalBackdrop" onclick="closeEditDeclModal(event)">
+  <div class="modal-backdrop" id="editDeclModalBackdrop">
     <div class="modal-card" style="max-width:480px;" onclick="event.stopPropagation()">
       <div class="modal-head">
         <h4><i class="fa-solid fa-pen-to-square"></i> <span id="editDeclModalTitle">संकल्प विवरण संपादित करें</span></h4>
@@ -1785,7 +1785,7 @@
   </div>
 
   <!-- ==================== MODAL: EDIT COLLECTION ==================== -->
-  <div class="modal-backdrop" id="editCollModalBackdrop" onclick="closeEditCollModal(event)">
+  <div class="modal-backdrop" id="editCollModalBackdrop">
     <div class="modal-card" style="max-width:480px;" onclick="event.stopPropagation()">
       <div class="modal-head">
         <h4><i class="fa-solid fa-pen-to-square"></i> <span id="editCollModalTitle">रसीद विवरण संपादित करें</span></h4>
@@ -2307,22 +2307,41 @@
 
       const deletedColls = new Set((JSON.parse(localStorage.getItem('koteshwar_deleted_collections') || '[]')).map(String));
       const editedColls = JSON.parse(localStorage.getItem('koteshwar_edited_collections') || '{}');
+      const renames = JSON.parse(localStorage.getItem('koteshwar_receipt_renames') || '{}');
       let customColls = [];
       try {
         customColls = JSON.parse(localStorage.getItem('koteshwar_custom_collections') || '[]');
       } catch (e) {}
 
-      // Apply edits & filter deleted
-      fetchedColls = fetchedColls.filter(c => !deletedColls.has(String(c.receiptNo).trim()));
+      // Apply renames & edits to fetched rows from Google Sheets
       fetchedColls.forEach(c => {
-        const rKey = String(c.receiptNo).trim();
-        if (editedColls[rKey]) {
-          Object.assign(c, editedColls[rKey]);
+        const origR = String(c.receiptNo).trim();
+        if (renames[origR]) {
+          c.receiptNo = renames[origR];
         }
+        const curR = String(c.receiptNo).trim();
+        if (editedColls[curR]) {
+          Object.assign(c, editedColls[curR]);
+        } else if (editedColls[origR]) {
+          Object.assign(c, editedColls[origR]);
+        }
+      });
+
+      // Filter deleted / replaced collections
+      fetchedColls = fetchedColls.filter(c => !deletedColls.has(String(c.receiptNo).trim()));
+
+      // Deduplicate fetchedColls: ensure each receiptNo appears at most once
+      const seenRcpts = new Set();
+      fetchedColls = fetchedColls.filter(c => {
+        const rk = String(c.receiptNo).trim();
+        if (!rk || seenRcpts.has(rk)) return false;
+        seenRcpts.add(rk);
+        return true;
       });
 
       // Retain locally created/offline collections that are not yet in Google Sheet (and not deleted)
       const existingRcpts = new Set(fetchedColls.map(c => String(c.receiptNo).trim()));
+      Object.keys(renames).forEach(oldR => existingRcpts.add(String(oldR).trim()));
 
       if (Array.isArray(customColls)) {
         customColls.forEach(c => {
@@ -2344,17 +2363,24 @@
         });
       }
 
-      if (fetchedColls.length > 0) {
-        collectionsList = fetchedColls;
+      // Final deduplication pass on entire candidate list
+      const candidateList = fetchedColls.length > 0 ? fetchedColls : collectionsList;
+      const finalSeen = new Set();
+      const finalColls = [];
+      candidateList.forEach(c => {
+        const rk = String(c.receiptNo).trim();
+        if (!deletedColls.has(rk) && !finalSeen.has(rk)) {
+          finalSeen.add(rk);
+          finalColls.push(c);
+        }
+      });
+
+      // Self-healing: if donorSno 591 or name includes "विनोद जी मुकाती" has an edited receipt, purge placeholder receipt "500000"
+      const hasEditedMukati = finalColls.some(c => (c.donorSno === 591 || c.donorSno === "591" || (c.donorName && c.donorName.includes("विनोद जी मुकाती"))) && String(c.receiptNo).trim() !== "500000");
+      if (hasEditedMukati) {
+        collectionsList = finalColls.filter(c => !(String(c.receiptNo).trim() === "500000" && (c.donorSno === 591 || c.donorSno === "591" || (c.donorName && c.donorName.includes("विनोद जी मुकाती")))));
       } else {
-        // Offline fallback with deleted filter applied
-        collectionsList = collectionsList.filter(c => !deletedColls.has(String(c.receiptNo).trim()));
-        collectionsList.forEach(c => {
-          const rKey = String(c.receiptNo).trim();
-          if (editedColls[rKey]) {
-            Object.assign(c, editedColls[rKey]);
-          }
-        });
+        collectionsList = finalColls;
       }
       collectionsList.forEach(c => {
         c.city = normalizeVillage(c.city);
@@ -4065,8 +4091,7 @@
       });
     }
 
-    function closeReceiptModal(e) {
-      if (e && e.target !== e.currentTarget && !e.target.closest('.btn-modal-close')) return;
+    function closeReceiptModal() {
       document.getElementById('receiptModalBackdrop').classList.remove('open');
     }
 
@@ -4515,8 +4540,7 @@
       document.getElementById('editDeclModalBackdrop').classList.add('open');
     }
 
-    function closeEditDeclModal(e) {
-      if (e && e.target !== e.currentTarget && !e.target.closest('.btn-modal-close')) return;
+    function closeEditDeclModal() {
       document.getElementById('editDeclModalBackdrop').classList.remove('open');
     }
 
@@ -4654,15 +4678,14 @@
       document.getElementById('editCollModalBackdrop').classList.add('open');
     }
 
-    function closeEditCollModal(e) {
-      if (e && e.target !== e.currentTarget && !e.target.closest('.btn-modal-close')) return;
+    function closeEditCollModal() {
       document.getElementById('editCollModalBackdrop').classList.remove('open');
     }
 
     async function handleSaveEditCollection(e) {
       e.preventDefault();
-      const origReceiptNo = document.getElementById('editCollOrigReceiptNo').value;
-      const coll = collectionsList.find(c => String(c.receiptNo) === String(origReceiptNo));
+      const origReceiptNo = String(document.getElementById('editCollOrigReceiptNo').value || '').trim();
+      const coll = collectionsList.find(c => String(c.receiptNo).trim() === origReceiptNo);
       if (!coll) return;
 
       const newReceiptNo = document.getElementById('editCollReceiptNo').value.trim();
@@ -4690,10 +4713,26 @@
       try {
         let editedColls = JSON.parse(localStorage.getItem('koteshwar_edited_collections') || '{}');
         editedColls[newReceiptNo] = Object.assign({}, coll);
+
+        if (origReceiptNo && origReceiptNo !== newReceiptNo) {
+          // Store under both old and new receipt numbers so lookups always succeed
+          editedColls[origReceiptNo] = Object.assign({}, coll, { receiptNo: newReceiptNo });
+
+          let renames = JSON.parse(localStorage.getItem('koteshwar_receipt_renames') || '{}');
+          renames[origReceiptNo] = newReceiptNo;
+          localStorage.setItem('koteshwar_receipt_renames', JSON.stringify(renames));
+
+          // Blacklist old receipt number so background Google Sheet sync cannot duplicate it
+          let deletedColls = JSON.parse(localStorage.getItem('koteshwar_deleted_collections') || '[]');
+          if (!deletedColls.map(String).includes(origReceiptNo)) {
+            deletedColls.push(origReceiptNo);
+            localStorage.setItem('koteshwar_deleted_collections', JSON.stringify(deletedColls));
+          }
+        }
         localStorage.setItem('koteshwar_edited_collections', JSON.stringify(editedColls));
 
         let customColls = JSON.parse(localStorage.getItem('koteshwar_custom_collections') || '[]');
-        const cIdx = customColls.findIndex(c => String(c.receiptNo) === String(origReceiptNo));
+        const cIdx = customColls.findIndex(c => String(c.receiptNo).trim() === origReceiptNo);
         if (cIdx >= 0) {
           customColls[cIdx] = Object.assign({}, customColls[cIdx], coll);
           localStorage.setItem('koteshwar_custom_collections', JSON.stringify(customColls));

@@ -3170,6 +3170,7 @@
           // Apply local collections & edits
           const deletedColls = new Set((JSON.parse(localStorage.getItem('koteshwar_deleted_collections') || '[]')).map(String));
           const editedColls = JSON.parse(localStorage.getItem('koteshwar_edited_collections') || '{}');
+          const renames = JSON.parse(localStorage.getItem('koteshwar_receipt_renames') || '{}');
           const localColls = JSON.parse(localStorage.getItem('koteshwar_collections_ledger') || '[]');
           const customColls = JSON.parse(localStorage.getItem('koteshwar_custom_collections') || '[]');
 
@@ -3179,10 +3180,11 @@
           ];
           const processedRcpts = new Set();
           allLocalColls.forEach(lc => {
-            const rKey = String(lc.receiptNo || '').trim();
+            let rKey = String(lc.receiptNo || '').trim();
+            if (renames[rKey]) rKey = renames[rKey];
             if (!rKey || processedRcpts.has(rKey) || deletedColls.has(rKey)) return;
             processedRcpts.add(rKey);
-            const cItem = editedColls[rKey] ? Object.assign({}, lc, editedColls[rKey]) : lc;
+            const cItem = editedColls[rKey] ? Object.assign({}, lc, editedColls[rKey], { receiptNo: rKey }) : lc;
             applyCollectionRow(cItem.receiptNo, cItem.donorSno, cItem.donorName, cItem.city, Number(cItem.amount) || 0, cItem.date);
           });
 
