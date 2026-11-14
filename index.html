@@ -2264,12 +2264,10 @@
               <option value="all">📅 सभी तिथियां (All Dates)</option>
             </select>
 
-            <!-- Sort Select -->
-            <select id="dateSortOrder" onchange="handleDateFilterChange()" style="padding:7px 10px;border-radius:6px;border:1px solid var(--sandstone);background:#fff;font-size:12.5px;color:var(--teal);font-weight:600;outline:none;max-width:190px;">
-              <option value="date_desc" selected>📅 नवीनतम दिनांक पहले</option>
-              <option value="date_asc">⏳ पुरानी दिनांक पहले</option>
-              <option value="amt_desc">💰 सर्वाधिक राशि पहले</option>
-              <option value="count_desc">👥 अधिक दानदाता पहले</option>
+            <!-- Sort Select (Date Wise Only, Oldest First by Default) -->
+            <select id="dateSortOrder" onchange="handleDateFilterChange()" style="padding:7px 10px;border-radius:6px;border:1px solid var(--sandstone);background:#fff;font-size:12.5px;color:var(--teal);font-weight:600;outline:none;max-width:230px;">
+              <option value="date_asc" selected>⏳ पुरानी दिनांक पहले (प्रारंभ से)</option>
+              <option value="date_desc">📅 नवीनतम दिनांक पहले</option>
             </select>
           </div>
 
@@ -2524,11 +2522,18 @@
       return str;
     }
 
-    // Filter ghost/test rows
+    // Filter ghost/test rows and header rows
     function isDummyTestDeclaration(sno, name, city, amt) {
-      const s = String(sno || '').trim();
+      const s = String(sno || '').trim().toLowerCase();
       const n = String(name || '').trim().toLowerCase();
       const c = String(city || '').trim().toLowerCase();
+
+      // Filter out table headers from Google Sheet
+      if (s === 'क्र.' || s === 's.no.' || s === 'sno' || s === 'क्रमांक' || s === 'रैंक / क्र.') return true;
+      if (n.includes('दानदाता का शुभ नाम') || n.includes('दानदाता का नाम') || n.includes('शुभ नाम') || n === 'donor name') return true;
+      if (c.includes('स्थान / ग्राम') || c.includes('ग्राम/नगर') || c.includes('शहर') || c === 'city') return true;
+
+      // Filter test entries
       if ((s === '585' || s === '586') && (n === 'asd' || n === 'yash' || c.includes('nisarpur'))) return true;
       if (n === 'asd' || n === 'test' || n === 'testing') return true;
       if ((n === 'asd' || n === 'yash') && (Number(amt) <= 0 || !amt)) return true;
@@ -2546,7 +2551,7 @@
     }
 
     // Global App Cache Versioning (Immediate cache purge on all devices)
-    const APP_STORAGE_VERSION = '2026_11_13_v8';
+    const APP_STORAGE_VERSION = '2026_11_14_v2';
     try {
       if (localStorage.getItem('koteshwar_app_storage_version') !== APP_STORAGE_VERSION) {
         localStorage.removeItem('koteshwar_declarations_cache');
@@ -2896,6 +2901,7 @@
                 const lamt = parseFloat(String(lc[5] && lc[5].v !== null ? lc[5].v : "0").replace(/[^0-9.]/g, '')) || 0;
                 const lrcpt = lc[6] && lc[6].v !== null ? String(lc[6].v).trim() : "-";
                 const ldate = lc[7] ? (lc[7].f || lc[7].v || "") : "";
+                if (String(lsno).includes('क्र.') || lname.includes('शुभ नाम') || lname.includes('दानदाता') || String(ldate).includes('दिनांक') || String(lrcpt).includes('रसीद')) continue;
                 if (isDummyTestDeclaration(lsno, lname, lcity, lamt)) continue;
                 if (lname || lamt > 0) {
                   const existingIdx = fetchedDonors.findIndex(d => String(d.sno) === String(lsno));
@@ -3537,7 +3543,7 @@
        ============================================================ */
     let currentDateFilter = 'all';
     let dateViewMode = 'grouped'; // 'grouped' or 'flat'
-    let currentDateSort = 'date_desc';
+    let currentDateSort = 'date_asc'; // Default: sorted date-wise from oldest
     let currentDateSearch = '';
     let dateFlatPage = 1;
     const DATE_PAGE_SIZE = 50;
@@ -3545,7 +3551,7 @@
     let expandedDateGroups = new Set();
 
     function parseDateToTime(dStr, fallbackSno) {
-      if (!dStr || dStr === '-') return (Number(fallbackSno) || 0) * 1000;
+      if (!dStr || dStr === '-' || String(dStr).includes('दिनांक')) return (Number(fallbackSno) || 0) * 1000;
       const str = String(dStr).trim();
       const dateMatch = str.match(/Date\((\d+),\s*(\d+),\s*(\d+)/i);
       if (dateMatch) {
@@ -3577,7 +3583,7 @@
     }
 
     function formatDisplayDate(dateStr) {
-      if (!dateStr || dateStr === '-') return 'अनिर्धारित तिथि';
+      if (!dateStr || dateStr === '-' || String(dateStr).includes('दिनांक') || String(dateStr).toLowerCase().includes('date')) return 'अनिर्धारित तिथि';
       const str = String(dateStr).trim();
       const dateMatch = str.match(/Date\((\d+),\s*(\d+),\s*(\d+)/i);
       if (dateMatch) {
@@ -3618,6 +3624,12 @@
     function renderDateWiseTab() {
       const groupMap = {};
       declarations.forEach(d => {
+        if (isDummyTestDeclaration(d.sno, d.name, d.city, d.amount)) return;
+        const sName = String(d.name || '').trim().toLowerCase();
+        if (sName.includes('दानदाता का शुभ नाम') || sName.includes('दानदाता का नाम') || (sName.includes('दानदाता') && Number(d.amount) <= 0)) return;
+        const dStr = String(d.date || '').trim();
+        if (dStr.includes('घोषणा दिनांक') || (dStr.includes('दिनांक') && Number(d.amount) <= 0)) return;
+
         const dispDate = formatDisplayDate(d.date);
         const time = parseDateToTime(d.date, d.sno);
         if (!groupMap[dispDate]) {
@@ -3637,9 +3649,14 @@
 
       computedDateGroups = Object.values(groupMap);
 
+      // By default, expand the first (oldest) date group
       if (expandedDateGroups.size === 0 && computedDateGroups.length > 0) {
-        const peak = [...computedDateGroups].sort((a,b) => b.pledged - a.pledged)[0];
-        if (peak) expandedDateGroups.add(peak.dateKey);
+        const sortedOldest = [...computedDateGroups].sort((a,b) => {
+          if (a.dateKey === 'अनिर्धारित तिथि') return 1;
+          if (b.dateKey === 'अनिर्धारित तिथि') return -1;
+          return a.timestamp - b.timestamp;
+        });
+        if (sortedOldest[0]) expandedDateGroups.add(sortedOldest[0].dateKey);
       }
 
       // Update KPI Badges
@@ -3652,6 +3669,7 @@
 
       if (datedGroups.length > 0) {
         const peak = [...datedGroups].sort((a,b) => b.pledged - a.pledged)[0];
+        const oldest = [...datedGroups].sort((a,b) => a.timestamp - b.timestamp)[0];
         const latest = [...datedGroups].sort((a,b) => b.timestamp - a.timestamp)[0];
         const totalPledgedDated = datedGroups.reduce((s, g) => s + g.pledged, 0);
         const avgDaily = Math.round(totalPledgedDated / datedGroups.length);
@@ -3669,10 +3687,14 @@
         if (elAvgDay) elAvgDay.textContent = fmt(avgDaily);
       }
 
-      // Populate Date Dropdown
+      // Populate Date Dropdown sorted oldest first
       const dateSelect = document.getElementById('dateSelectFilter');
       if (dateSelect) {
-        const sortedForSelect = [...computedDateGroups].sort((a,b) => b.timestamp - a.timestamp);
+        const sortedForSelect = [...computedDateGroups].sort((a,b) => {
+          if (a.dateKey === 'अनिर्धारित तिथि') return 1;
+          if (b.dateKey === 'अनिर्धारित तिथि') return -1;
+          return a.timestamp - b.timestamp;
+        });
         const prevVal = dateSelect.value;
         dateSelect.innerHTML = `<option value="all">📅 सभी तिथियां (${totalDays} सक्रिय दिवस)</option>` +
           sortedForSelect.map(g => `<option value="${g.dateKey}">${g.dateKey} (${g.donors.length} परिवार • ${fmt(g.pledged)})</option>`).join('');
@@ -3700,7 +3722,7 @@
 
       currentDateSearch = searchInput ? searchInput.value.trim().toLowerCase() : '';
       currentDateFilter = selectFilter ? selectFilter.value : 'all';
-      currentDateSort = sortSelect ? sortSelect.value : 'date_desc';
+      currentDateSort = sortSelect ? sortSelect.value : 'date_asc';
       dateFlatPage = 1;
 
       if (currentDateFilter !== 'all') {
@@ -3744,14 +3766,20 @@
         return g.filteredDonors.length > 0;
       });
 
+      // Sort strictly by date (oldest first or newest first)
       if (currentDateSort === 'date_desc') {
-        filteredGroups.sort((a,b) => b.timestamp - a.timestamp);
-      } else if (currentDateSort === 'date_asc') {
-        filteredGroups.sort((a,b) => a.timestamp - b.timestamp);
-      } else if (currentDateSort === 'amt_desc') {
-        filteredGroups.sort((a,b) => b.pledged - a.pledged);
-      } else if (currentDateSort === 'count_desc') {
-        filteredGroups.sort((a,b) => b.donors.length - a.donors.length);
+        filteredGroups.sort((a,b) => {
+          if (a.dateKey === 'अनिर्धारित तिथि') return 1;
+          if (b.dateKey === 'अनिर्धारित तिथि') return -1;
+          return b.timestamp - a.timestamp;
+        });
+      } else {
+        // Default: date_asc (oldest date first)
+        filteredGroups.sort((a,b) => {
+          if (a.dateKey === 'अनिर्धारित तिथि') return 1;
+          if (b.dateKey === 'अनिर्धारित तिथि') return -1;
+          return a.timestamp - b.timestamp;
+        });
       }
 
       if (filteredGroups.length === 0) {
@@ -3836,6 +3864,14 @@
               groupTimestamp: g.timestamp
             });
           });
+        });
+
+        allDonorsFlat.sort((a, b) => {
+          if (a.dispDate === 'अनिर्धारित तिथि') return 1;
+          if (b.dispDate === 'अनिर्धारित तिथि') return -1;
+          return currentDateSort === 'date_desc' 
+            ? (b.groupTimestamp - a.groupTimestamp) || (Number(b.sno) - Number(a.sno))
+            : (a.groupTimestamp - b.groupTimestamp) || (Number(a.sno) - Number(b.sno));
         });
 
         const totalItems = allDonorsFlat.length;
