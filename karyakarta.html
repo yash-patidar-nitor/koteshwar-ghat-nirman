@@ -2534,6 +2534,8 @@
                 let finalSno = sno;
                 if (existingIdx >= 0) {
                   const existing = declarationsList[existingIdx];
+                  const hasReceipt = receipt && receipt !== '-' && receipt !== 'undefined' && receipt.trim() !== '';
+                  const initDep = hasReceipt ? amt : 0;
                   // If name does not match, it's a sequence collision from older client cache!
                   if (existing.name && existing.name.trim().toLowerCase() !== name.toLowerCase()) {
                     maxBulkSno++;
@@ -2546,9 +2548,9 @@
                       notes: notes,
                       mobile: mobile,
                       amount: amt,
-                      initialDeposited: 0,
-                      deposited: 0,
-                      balance: amt,
+                      initialDeposited: initDep,
+                      deposited: initDep,
+                      balance: Math.max(0, amt - initDep),
                       receipt: receipt,
                       date: String(dateVal).trim(),
                       collector: collector,
@@ -2574,6 +2576,8 @@
                   }
                 } else {
                   if (finalSno > maxBulkSno) maxBulkSno = finalSno;
+                  const hasReceipt = receipt && receipt !== '-' && receipt !== 'undefined' && receipt.trim() !== '';
+                  const initDep = hasReceipt ? amt : 0;
                   declarationsList.push({
                     sno: finalSno,
                     name: name,
@@ -2581,9 +2585,9 @@
                     notes: notes,
                     mobile: mobile,
                     amount: amt,
-                    initialDeposited: 0,
-                    deposited: 0,
-                    balance: amt,
+                    initialDeposited: initDep,
+                    deposited: initDep,
+                    balance: Math.max(0, amt - initDep),
                     receipt: receipt,
                     date: String(dateVal).trim(),
                     collector: collector,
@@ -2699,6 +2703,7 @@
 
       // 2. Attribute collections to declarations dynamically
       const matchedCollections = new Set();
+      const donorsWithCollections = new Set();
 
       collectionsList.forEach(c => {
         if (isDummyTestDeclaration(c.donorSno, c.donorName, c.city, c.amount)) return;
@@ -2758,6 +2763,10 @@
         }
 
         if (target) {
+          if (!donorsWithCollections.has(target)) {
+            donorsWithCollections.add(target);
+            target.deposited = 0; // reset deposited so collections determine actual deposit
+          }
           target.deposited = (Number(target.deposited) || 0) + amt;
           matchedCollections.add(c);
         }
@@ -2765,6 +2774,9 @@
 
       // 3. Re-calculate balance dynamically for EVERY declaration
       declarationsList.forEach(d => {
+        if (!donorsWithCollections.has(d)) {
+          d.deposited = Number(d.initialDeposited) || 0;
+        }
         const pledged = Number(d.amount) || 0;
         const dep = Number(d.deposited) || 0;
         d.balance = Math.max(0, pledged - dep);
@@ -3508,6 +3520,11 @@
       if (collRcpt && (!collRcpt.dataset.userEdited || collRcpt.value === '')) {
         collRcpt.value = val;
       }
+      const chk = document.getElementById('chkDeclReceiveNow');
+      if (val && val.trim() && chk && !chk.checked) {
+        chk.checked = true;
+        toggleDeclReceiveNow(true);
+      }
     }
 
     function toggleDeclReceiveNow(isChecked) {
@@ -3839,10 +3856,7 @@
         if (isWhatsApp) {
           const phone = mobile ? mobile.replace(/[^0-9]/g, '') : '';
           const text = buildWhatsAppReceiptText(rcptObj);
-          const waUrl = phone && phone.length === 10
-            ? `https://api.whatsapp.com/send?phone=91${phone}&text=${encodeURIComponent(text)}`
-            : `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
-          window.open(waUrl, '_blank');
+          shareToWhatsApp(phone, text);
         }
       }
     }
@@ -4144,13 +4158,40 @@
       btnWa.onclick = function() {
         const phone = document.getElementById('rcptModalPhone').value.replace(/[^0-9]/g, '');
         const text = buildWhatsAppReceiptText(rcpt);
-        const url = phone && phone.length === 10
-          ? `https://api.whatsapp.com/send?phone=91${phone}&text=${encodeURIComponent(text)}`
-          : `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
-        window.open(url, '_blank');
+        shareToWhatsApp(phone, text);
       };
 
       document.getElementById('receiptModalBackdrop').classList.add('open');
+    }
+
+    // Rock-solid WhatsApp Deep-Link handler (Keeps current tab 100% active on mobile)
+    function shareToWhatsApp(phone, text) {
+      const cleanPhone = phone ? String(phone).replace(/[^0-9]/g, '') : '';
+      const encodedText = encodeURIComponent(text);
+      const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
+
+      if (isMobile) {
+        // Deep-link intent directly invokes WhatsApp app WITHOUT opening a blank browser tab!
+        // When user sends receipt and presses Back, they return directly to this exact page!
+        const waAppUrl = cleanPhone && cleanPhone.length === 10
+          ? `whatsapp://send?phone=91${cleanPhone}&text=${encodedText}`
+          : `whatsapp://send?text=${encodedText}`;
+
+        const tempLink = document.createElement('a');
+        tempLink.href = waAppUrl;
+        tempLink.style.display = 'none';
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        setTimeout(() => {
+          if (document.body.contains(tempLink)) document.body.removeChild(tempLink);
+        }, 500);
+      } else {
+        // Desktop browser: open web.whatsapp.com / api.whatsapp.com in new window
+        const webUrl = cleanPhone && cleanPhone.length === 10
+          ? `https://api.whatsapp.com/send?phone=91${cleanPhone}&text=${encodedText}`
+          : `https://api.whatsapp.com/send?text=${encodedText}`;
+        window.open(webUrl, '_blank', 'noopener,noreferrer');
+      }
     }
 
     function buildWhatsAppReceiptText(rcpt) {

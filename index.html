@@ -2975,6 +2975,8 @@
                   if (existingIdx >= 0) {
                     const existing = fetchedDonors[existingIdx];
                     // If name does not match, it's a sequence collision from older client cache!
+                    const hasValidReceipt = lrcpt && lrcpt !== '-' && lrcpt !== 'undefined' && lrcpt.trim() !== '';
+                    const initDep = hasValidReceipt ? lamt : 0;
                     if (existing.name && existing.name.trim().toLowerCase() !== lname.toLowerCase()) {
                       maxBulkSno++;
                       finalSno = maxBulkSno;
@@ -2986,8 +2988,8 @@
                         notes: lnotes,
                         mobile: lmobile,
                         amount: lamt,
-                        deposited: 0,
-                        balance: lamt,
+                        deposited: initDep,
+                        balance: Math.max(0, lamt - initDep),
                         receipt: lrcpt,
                         date: String(ldate).trim(),
                         recordedAt: lrecordedAt || new Date().toISOString(),
@@ -3001,12 +3003,16 @@
                         notes: lnotes,
                         mobile: lmobile,
                         amount: lamt,
+                        deposited: initDep,
+                        balance: Math.max(0, lamt - initDep),
                         receipt: lrcpt,
                         date: String(ldate).trim()
                       });
                     }
                   } else {
                     if (finalSno > maxBulkSno) maxBulkSno = finalSno;
+                    const hasValidReceipt = lrcpt && lrcpt !== '-' && lrcpt !== 'undefined' && lrcpt.trim() !== '';
+                    const initDep = hasValidReceipt ? lamt : 0;
                     fetchedDonors.push({
                       sno: finalSno,
                       name: lname,
@@ -3014,8 +3020,8 @@
                       notes: lnotes,
                       mobile: lmobile,
                       amount: lamt,
-                      deposited: 0,
-                      balance: lamt,
+                      deposited: initDep,
+                      balance: Math.max(0, lamt - initDep),
                       receipt: lrcpt,
                       date: String(ldate).trim(),
                       recordedAt: lrecordedAt || new Date().toISOString(),
@@ -3031,6 +3037,7 @@
         }
 
         const appliedCollectionReceipts = new Set();
+        const donorsWithExplicitCollections = new Set();
         // Helper to reconcile collection rows (from either bulk Collections or Live Collection)
         const applyCollectionRow = (rcptNo, dsno, dname, dcity, camt, dateStr) => {
           if (camt <= 0) return;
@@ -3064,6 +3071,10 @@
           }
 
           if (target) {
+            if (!donorsWithExplicitCollections.has(target)) {
+              donorsWithExplicitCollections.add(target);
+              target.deposited = 0; // reset so collection rows determine actual deposits
+            }
             target.deposited = (Number(target.deposited) || 0) + camt;
             target.balance = Math.max(0, target.amount - target.deposited);
             if (rcptNo && (!target.receipt || target.receipt === '-')) {
