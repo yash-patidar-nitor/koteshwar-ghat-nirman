@@ -1799,35 +1799,47 @@
       </div>
     </section>
 
-    <!-- 2. SANKALP PROGRESS PANEL (RECEIVED VS YET TO RECEIVE) -->
+    <!-- 2. SANKALP PROGRESS PANEL (TARGET ₹4 CR PROGRESS) -->
     <section class="progress-panel">
       <div class="progress-top">
         <div>
-          <div class="progress-title"><i class="fa-solid fa-chart-line" style="color:var(--gold);"></i> पावन घाट निर्माण जनसहयोग संकल्प प्रगति</div>
-          <div class="progress-subtitle">कोटेश्वर तीर्थ (कोठड़ा) घाट निर्माण हेतु जनसहयोग का ऐतिहासिक कीर्तिमान</div>
+          <div class="progress-title"><i class="fa-solid fa-bullseye" style="color:var(--gold);"></i> पावन घाट निर्माण महाअभियान संकल्प प्रगति</div>
+          <div class="progress-subtitle">कोटेश्वर तीर्थ (कोठड़ा) घाट निर्माण हेतु ₹4 करोड़ के महासंकल्प की वर्तमान प्रगति</div>
         </div>
         <div style="font-size:13.5px;font-weight:700;color:var(--teal);" class="num" id="progSummaryText">
           डेटा लोड हो रहा है...
         </div>
       </div>
 
-      <div class="progress-bar-track">
-        <div class="p-fill-received" id="progFillReceived" style="width: 30.2%;" title="प्राप्त जनसहयोग"></div>
-        <div class="p-fill-pending" id="progFillPending" style="width: 69.8%;" title="प्राप्त होना शेष"></div>
+      <div class="progress-bar-track" style="margin-bottom:8px;">
+        <div class="p-fill-received" id="progFillReceived" style="width: 13.3%;" title="प्राप्त जनसहयोग"></div>
+        <div class="p-fill-pending" id="progFillPending" style="width: 21.8%;" title="घोषित शेष"></div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-bottom:12px;font-weight:600;">
+        <span>₹0</span>
+        <span>₹1 करोड़ (25%)</span>
+        <span>₹2 करोड़ (50%)</span>
+        <span>₹3 करोड़ (75%)</span>
+        <span style="color:var(--gold-dark);font-weight:700;"><i class="fa-solid fa-flag-checkered"></i> लक्ष्य: ₹4 करोड़</span>
       </div>
 
       <div class="progress-legend-row">
+        <div class="leg-item">
+          <span class="leg-dot" style="background:var(--teal);"></span>
+          <span>कुल घोषित संकल्प: <strong id="progLegPledged" style="color:var(--teal);">गणना जारी...</strong></span>
+        </div>
         <div class="leg-item">
           <span class="leg-dot" style="background:var(--sage);"></span>
           <span>प्राप्त जनसहयोग: <strong id="progLegReceived" style="color:var(--sage);">गणना जारी...</strong></span>
         </div>
         <div class="leg-item">
           <span class="leg-dot" style="background:var(--gold);"></span>
-          <span>प्राप्त होना शेष: <strong id="progLegPending" style="color:var(--gold-dark);">गणना जारी...</strong></span>
+          <span>घोषित शेष: <strong id="progLegPending" style="color:var(--gold-dark);">गणना जारी...</strong></span>
         </div>
         <div class="leg-item">
-          <span class="leg-dot" style="background:var(--teal);"></span>
-          <span>कुल घोषित संकल्प: <strong id="progLegPledged">गणना जारी...</strong></span>
+          <span class="leg-dot" style="background:#b59f84;"></span>
+          <span>लक्ष्य हेतु शेष: <strong id="progLegTargetRem" style="color:var(--text-secondary);">गणना जारी...</strong></span>
         </div>
         <div class="leg-item" style="margin-left:auto;color:var(--teal);font-weight:600;">
           <i class="fa-solid fa-users"></i> <span id="progLegFamilies">584 परिवार (283 जमा)</span>
@@ -3233,19 +3245,46 @@
       document.getElementById('tabVillageBadge').textContent = uniqueCities;
       document.getElementById('donorCountText').textContent = totalFamilies;
 
-      // Update Progress Summary & 2-Segment Bar
+      // Update Progress Summary against 4 Cr Target
+      const CAMPAIGN_TARGET = 40000000; // ₹4 करोड़ (4 Cr)
+      const crTarget = (CAMPAIGN_TARGET / 10000000).toFixed(2);
       const crPledged = (totalPledged / 10000000).toFixed(2);
       const crReceived = (totalReceived / 10000000).toFixed(2);
-      document.getElementById('progSummaryText').textContent = `घोषित: ${fmt(totalPledged)} (${crPledged} करोड़) | प्राप्त: ${fmt(totalReceived)} (${crReceived} करोड़ • ${pctReceived}%)`;
-      document.getElementById('progLegReceived').textContent = `${fmt(totalReceived)} (${pctReceived}%)`;
-      document.getElementById('progLegPending').textContent = `${fmt(totalPending)} (${pctPending}%)`;
-      document.getElementById('progLegPledged').textContent = fmt(totalPledged);
-      document.getElementById('progLegFamilies').textContent = `${totalFamilies} परिवार (${familiesDeposited} जमा)`;
+      const pctPledgedOfTarget = ((totalPledged / CAMPAIGN_TARGET) * 100).toFixed(1);
+      const pctReceivedOfTarget = ((totalReceived / CAMPAIGN_TARGET) * 100).toFixed(1);
+      const pendingPledged = Math.max(0, totalPledged - totalReceived);
+      const pctPendingOfTarget = ((pendingPledged / CAMPAIGN_TARGET) * 100).toFixed(1);
+      const targetRemaining = Math.max(0, CAMPAIGN_TARGET - totalPledged);
+      const pctRemainingOfTarget = Math.max(0, 100 - parseFloat(pctPledgedOfTarget)).toFixed(1);
+
+      document.getElementById('progSummaryText').innerHTML = 
+        `घोषित: ${fmt(totalPledged)} (${crPledged} करोड़ • <span style="color:var(--gold-dark);font-weight:800;">${pctPledgedOfTarget}%</span>) | लक्ष्य: <strong>₹${crTarget} करोड़</strong>`;
+      
+      const elLegPledged = document.getElementById('progLegPledged');
+      if (elLegPledged) elLegPledged.textContent = `${fmt(totalPledged)} (${pctPledgedOfTarget}%)`;
+
+      const elLegReceived = document.getElementById('progLegReceived');
+      if (elLegReceived) elLegReceived.textContent = `${fmt(totalReceived)} (${pctReceivedOfTarget}%)`;
+
+      const elLegPending = document.getElementById('progLegPending');
+      if (elLegPending) elLegPending.textContent = `${fmt(pendingPledged)} (${pctPendingOfTarget}%)`;
+
+      const elLegTargetRem = document.getElementById('progLegTargetRem');
+      if (elLegTargetRem) elLegTargetRem.textContent = `${fmt(targetRemaining)} (${pctRemainingOfTarget}%)`;
+
+      const elLegFamilies = document.getElementById('progLegFamilies');
+      if (elLegFamilies) elLegFamilies.textContent = `${totalFamilies} परिवार (${familiesDeposited} जमा)`;
 
       const barRec = document.getElementById('progFillReceived');
       const barPen = document.getElementById('progFillPending');
-      if (barRec) barRec.style.width = `${pctReceived}%`;
-      if (barPen) barPen.style.width = `${pctPending}%`;
+      if (barRec) {
+        barRec.style.width = `${pctReceivedOfTarget}%`;
+        barRec.title = `प्राप्त जनसहयोग: ${fmt(totalReceived)} (${pctReceivedOfTarget}% of 4 Cr लक्ष्य)`;
+      }
+      if (barPen) {
+        barPen.style.width = `${pctPendingOfTarget}%`;
+        barPen.title = `घोषित शेष संकल्प: ${fmt(pendingPledged)} (${pctPendingOfTarget}% of 4 Cr लक्ष्य)`;
+      }
 
       renderVillageTable(cityMap);
       renderFilterPills(cityMap);
