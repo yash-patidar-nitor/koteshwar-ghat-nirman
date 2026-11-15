@@ -2596,16 +2596,13 @@
     }
 
     // Global App Cache Versioning (Immediate cache purge on all devices)
-    const APP_STORAGE_VERSION = '2026_11_15_v1';
+    const APP_STORAGE_VERSION = '2026_11_15_v2';
     try {
       if (localStorage.getItem('koteshwar_app_storage_version') !== APP_STORAGE_VERSION) {
         localStorage.removeItem('koteshwar_declarations_cache');
         localStorage.removeItem('koteshwar_deleted_declarations');
-        let customDecls = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
-        if (Array.isArray(customDecls)) {
-          customDecls = customDecls.filter(d => !isDummyTestDeclaration(d.sno, d.name, d.city, d.amount));
-          localStorage.setItem('koteshwar_custom_declarations', JSON.stringify(customDecls));
-        }
+        localStorage.removeItem('koteshwar_custom_declarations');
+        localStorage.removeItem('koteshwar_custom_collections');
         localStorage.setItem('koteshwar_app_storage_version', APP_STORAGE_VERSION);
       }
     } catch (e) {}
@@ -3145,7 +3142,17 @@
             customDecls.forEach(cd => {
               if (isDeclarationDeleted(cd.sno, cd.name, deletedDecls)) return;
               if (isDummyTestDeclaration(cd.sno, cd.name, cd.city, cd.amount)) return;
-              const idx = fetchedDonors.findIndex(d => String(d.sno) === String(cd.sno));
+
+              const cdName = String(cd.name || '').trim().toLowerCase();
+              const idx = fetchedDonors.findIndex(d => {
+                const dName = String(d.name || '').trim().toLowerCase();
+                if (cdName && dName && cdName === dName) return true;
+                if (String(d.sno) === String(cd.sno)) {
+                  return !cdName || !dName || cdName === dName;
+                }
+                return false;
+              });
+
               const entry = {
                 sno: cd.sno,
                 name: cd.name,
@@ -3157,14 +3164,11 @@
                 receipt: cd.receipt || '-',
                 date: cd.date || ''
               };
+
               if (idx >= 0) {
-                fetchedDonors[idx].name = entry.name;
-                fetchedDonors[idx].city = entry.city;
-                fetchedDonors[idx].notes = entry.notes;
-                fetchedDonors[idx].amount = entry.amount;
-                fetchedDonors[idx].receipt = entry.receipt;
-                fetchedDonors[idx].date = entry.date;
-                fetchedDonors[idx].balance = Math.max(0, entry.amount - (fetchedDonors[idx].deposited || 0));
+                // Already present from Google Sheets - do not duplicate or overwrite different donors!
+                if (entry.notes) fetchedDonors[idx].notes = entry.notes;
+                if (entry.mobile) fetchedDonors[idx].mobile = entry.mobile;
               } else {
                 fetchedDonors.push(entry);
               }

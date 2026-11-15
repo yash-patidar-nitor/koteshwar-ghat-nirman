@@ -1958,7 +1958,7 @@
     }
 
     // Global App Cache Versioning (Immediate cache purge on all devices)
-    const APP_STORAGE_VERSION = '2026_11_15_v1';
+    const APP_STORAGE_VERSION = '2026_11_15_v2';
     try {
       if (localStorage.getItem('koteshwar_app_storage_version') !== APP_STORAGE_VERSION) {
         localStorage.removeItem('koteshwar_declarations_cache');
@@ -1966,16 +1966,8 @@
         localStorage.removeItem('koteshwar_collections_ledger');
         localStorage.removeItem('koteshwar_deleted_declarations');
         localStorage.removeItem('koteshwar_deleted_collections');
-        let custom = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
-        if (Array.isArray(custom)) {
-          custom = custom.filter(d => !isDummyTestDeclaration(d.sno, d.name, d.city, d.amount));
-          localStorage.setItem('koteshwar_custom_declarations', JSON.stringify(custom));
-        }
-        let customColls = JSON.parse(localStorage.getItem('koteshwar_custom_collections') || '[]');
-        if (Array.isArray(customColls)) {
-          customColls = customColls.filter(c => !isDummyTestDeclaration(c.donorSno, c.donorName, c.city, c.amount));
-          localStorage.setItem('koteshwar_custom_collections', JSON.stringify(customColls));
-        }
+        localStorage.removeItem('koteshwar_custom_declarations');
+        localStorage.removeItem('koteshwar_custom_collections');
         localStorage.setItem('koteshwar_app_storage_version', APP_STORAGE_VERSION);
       }
     } catch (e) {}
@@ -2621,7 +2613,15 @@
           custom.forEach(item => {
             if (isDeclarationDeleted(item.sno, item.name, deletedDecls)) return;
             if (isDummyTestDeclaration(item.sno, item.name, item.city, item.amount)) return;
-            const existing = declarationsList.find(d => String(d.sno) === String(item.sno));
+            const itemName = String(item.name || '').trim().toLowerCase();
+            const existing = declarationsList.find(d => {
+              const dName = String(d.name || '').trim().toLowerCase();
+              if (itemName && dName && itemName === dName) return true;
+              if (String(d.sno) === String(item.sno)) {
+                return !itemName || !dName || itemName === dName;
+              }
+              return false;
+            });
             if (!existing) {
               declarationsList.push(item);
               // NOTE: Do NOT auto-post unconfirmed local items to Google Sheets during load to prevent ghost resurrection
