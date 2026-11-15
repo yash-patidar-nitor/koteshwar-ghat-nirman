@@ -1958,7 +1958,7 @@
     }
 
     // Global App Cache Versioning (Immediate cache purge on all devices)
-    const APP_STORAGE_VERSION = '2026_11_15_v2';
+    const APP_STORAGE_VERSION = '2026_11_15_v3';
     try {
       if (localStorage.getItem('koteshwar_app_storage_version') !== APP_STORAGE_VERSION) {
         localStorage.removeItem('koteshwar_declarations_cache');
@@ -1966,8 +1966,12 @@
         localStorage.removeItem('koteshwar_collections_ledger');
         localStorage.removeItem('koteshwar_deleted_declarations');
         localStorage.removeItem('koteshwar_deleted_collections');
+        localStorage.removeItem('koteshwar_edited_declarations');
+        localStorage.removeItem('koteshwar_edited_collections');
         localStorage.removeItem('koteshwar_custom_declarations');
         localStorage.removeItem('koteshwar_custom_collections');
+        localStorage.removeItem('koteshwar_public_canonical_mirror');
+        localStorage.removeItem('koteshwar_receipt_renames');
         localStorage.setItem('koteshwar_app_storage_version', APP_STORAGE_VERSION);
       }
     } catch (e) {}
@@ -2610,6 +2614,7 @@
         });
 
         if (Array.isArray(custom)) {
+          const unconfirmedCustom = [];
           custom.forEach(item => {
             if (isDeclarationDeleted(item.sno, item.name, deletedDecls)) return;
             if (isDummyTestDeclaration(item.sno, item.name, item.city, item.amount)) return;
@@ -2624,11 +2629,17 @@
             });
             if (!existing) {
               declarationsList.push(item);
-              // NOTE: Do NOT auto-post unconfirmed local items to Google Sheets during load to prevent ghost resurrection
+              unconfirmedCustom.push(item);
             } else {
               Object.assign(existing, item);
+              // Confirmed in Google Sheets! Do not retain in local outbox
             }
           });
+          if (unconfirmedCustom.length !== custom.length) {
+            try {
+              localStorage.setItem('koteshwar_custom_declarations', JSON.stringify(unconfirmedCustom));
+            } catch (e) {}
+          }
         }
         if (deletedDecls.size > 0) {
           declarationsList = declarationsList.filter(d => !isDeclarationDeleted(d.sno, d.name, deletedDecls));
@@ -2696,24 +2707,8 @@
 
         let target = null;
 
-        // Priority 1: Match by donorSno (covers d.sno AND d.originalSno!)
-        if (c.donorSno) {
-          const sKey = String(c.donorSno).trim();
-          if (declById.has(sKey)) {
-            target = declById.get(sKey);
-          }
-        }
-
-        // Priority 2: Match by receipt number
-        if (!target && c.receiptNo) {
-          const rKey = String(c.receiptNo).trim();
-          if (declByReceipt.has(rKey)) {
-            target = declByReceipt.get(rKey);
-          }
-        }
-
-        // Priority 3: Match by normalized donor name
-        if (!target && c.donorName) {
+        // Priority 1: Match by normalized donor name
+        if (c.donorName) {
           const nk = getNormKey(c.donorName);
           const candidates = declByName.get(nk);
           if (candidates && candidates.length > 0) {
@@ -2725,13 +2720,41 @@
           }
         }
 
-        // Priority 4: Partial / substring name match
+        // Priority 2: Substring / fuzzy name match
         if (!target && c.donorName) {
           const cRaw = c.donorName.trim().toLowerCase();
+          const cNorm = getNormKey(c.donorName);
           target = declarationsList.find(d => {
             const dRaw = (d.name || '').trim().toLowerCase();
-            return dRaw && (dRaw === cRaw || dRaw.includes(cRaw) || cRaw.includes(dRaw));
+            const dNorm = getNormKey(d.name);
+            return (dRaw && (dRaw === cRaw || dRaw.includes(cRaw) || cRaw.includes(dRaw))) ||
+                   (cNorm && dNorm && (cNorm === dNorm || cNorm.includes(dNorm) || dNorm.includes(cNorm)));
           });
+        }
+
+        // Priority 3: Match by receipt number
+        if (!target && c.receiptNo) {
+          const rKey = String(c.receiptNo).trim();
+          if (declByReceipt.has(rKey)) {
+            target = declByReceipt.get(rKey);
+          }
+        }
+
+        // Priority 4: Match by donorSno ONLY IF donor name is compatible (prevents misattributions)
+        if (!target && c.donorSno) {
+          const sKey = String(c.donorSno).trim();
+          if (declById.has(sKey)) {
+            const candidate = declById.get(sKey);
+            if (!c.donorName || !candidate.name) {
+              target = candidate;
+            } else {
+              const cNorm = getNormKey(c.donorName);
+              const dNorm = getNormKey(candidate.name);
+              if (!cNorm || !dNorm || cNorm === dNorm || cNorm.includes(dNorm) || dNorm.includes(cNorm)) {
+                target = candidate;
+              }
+            }
+          }
         }
 
         if (target) {

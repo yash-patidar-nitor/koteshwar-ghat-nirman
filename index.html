@@ -1629,7 +1629,7 @@
     /* ==================== MOBILE ADAPTATIONS (<768px) ==================== */
     @media (max-width: 768px) {
       .desktop-only { display: none !important; }
-      .mobile-only-karyakarta { display: inline-flex !important; }
+      .mobile-header-tools { display: inline-flex !important; align-items: center; gap: 6px; }
       .header-inner {
         padding: 8px 14px;
         flex-direction: row;
@@ -1694,12 +1694,17 @@
         </div>
       </div>
 
-      <!-- Mobile Karyakarta Link (Discrete golden pill) -->
-      <a href="karyakarta.html" class="mobile-only-karyakarta" title="अधिकृत कार्यकर्ता पोर्टल" style="color:var(--gold-light);font-size:11.5px;padding:5px 9px;border-radius:18px;background:rgba(255,255,255,0.08);border:1px solid rgba(209,154,80,0.4);text-decoration:none;display:none;align-items:center;gap:5px;white-space:nowrap;font-weight:600;">
-        <i class="fa-solid fa-key" style="color:var(--gold);"></i> <span>कार्यकर्ता</span>
-      </a>
+      <!-- Mobile Header Actions (Refresh & Karyakarta Pill) -->
+      <div class="mobile-header-tools" style="display:none;">
+        <button class="btn btn-outline btn-sm" onclick="fetchGoogleSheetData(true)" title="लाइव डेटा रीफ्रेश करें" style="padding:4px 8px;font-size:11px;min-height:30px;border-radius:16px;background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.2);color:#FFFFFF;">
+          <i class="fa-solid fa-rotate" id="refreshIconMobile"></i>
+        </button>
+        <a href="karyakarta.html" class="mobile-only-karyakarta" title="अधिकृत कार्यकर्ता पोर्टल" style="color:var(--gold-light);font-size:11.5px;padding:5px 9px;border-radius:18px;background:rgba(255,255,255,0.08);border:1px solid rgba(209,154,80,0.4);text-decoration:none;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;font-weight:600;">
+          <i class="fa-solid fa-key" style="color:var(--gold);"></i> <span>कार्यकर्ता</span>
+        </a>
+      </div>
 
-      <!-- Desktop-only Header Actions: completely hidden on mobile to maximize viewport -->
+      <!-- Desktop-only Header Actions -->
       <div class="header-actions desktop-only">
         <span class="status-pill" id="syncStatusPillHeader">
           <span class="status-dot syncing" id="syncStatusDotHeader"></span>
@@ -2596,16 +2601,31 @@
     }
 
     // Global App Cache Versioning (Immediate cache purge on all devices)
-    const APP_STORAGE_VERSION = '2026_11_15_v2';
+    const APP_STORAGE_VERSION = '2026_11_15_v3';
     try {
       if (localStorage.getItem('koteshwar_app_storage_version') !== APP_STORAGE_VERSION) {
         localStorage.removeItem('koteshwar_declarations_cache');
         localStorage.removeItem('koteshwar_deleted_declarations');
+        localStorage.removeItem('koteshwar_deleted_collections');
+        localStorage.removeItem('koteshwar_edited_declarations');
+        localStorage.removeItem('koteshwar_edited_collections');
         localStorage.removeItem('koteshwar_custom_declarations');
         localStorage.removeItem('koteshwar_custom_collections');
+        localStorage.removeItem('koteshwar_public_canonical_mirror');
         localStorage.setItem('koteshwar_app_storage_version', APP_STORAGE_VERSION);
       }
     } catch (e) {}
+
+    // Normalized donor name helper (for robust matching)
+    function normDonorName(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/^(श्री|श्रीमती|सुश्री|डॉ\.|एडवोकेट|स्व\.|गं\.भा\.)\s+/gi, '')
+        .replace(/\s+(जी|एडवोकेट)\b/gi, '')
+        .replace(/[^a-zA-Z0-9\u0900-\u097F]/g, '')
+        .toLowerCase()
+        .trim();
+    }
 
     function parseCSV(text) {
       const lines = [];
@@ -2728,39 +2748,22 @@
     window.addEventListener('DOMContentLoaded', () => {
       renderStories();
 
-      // Check if browser has cached data & local custom declarations (instant display)
+      // 100% CANONICAL GOOGLE SHEETS MIRROR (Pure read-only, zero device-specific drift)
       try {
-        const cached = localStorage.getItem('koteshwar_declarations_cache');
+        const cached = localStorage.getItem('koteshwar_public_canonical_mirror_v3');
         if (cached) {
           const parsed = JSON.parse(cached);
           if (Array.isArray(parsed) && parsed.length > 0) {
             declarations = parsed.filter(d => !isDummyTestDeclaration(d.sno, d.name, d.city, d.amount));
+            if (declarations.length > 0) {
+              declarations.sort((a, b) => (b.amount - a.amount) || (a.sno - b.sno));
+              renderDashboardFromData();
+              updateSyncUI(false, `Google Sheet प्रामाणिक डेटा (${declarations.length} दानदाता)`, true);
+            }
           }
         }
-        // Immediately merge custom declarations created via Karyakarta portal
-        const customDecls = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
-        const deletedDecls = new Set((JSON.parse(localStorage.getItem('koteshwar_deleted_declarations') || '[]')).map(String));
-        if (Array.isArray(customDecls)) {
-          customDecls.forEach(cd => {
-            if (isDeclarationDeleted(cd.sno, cd.name, deletedDecls)) return;
-            if (isDummyTestDeclaration(cd.sno, cd.name, cd.city, cd.amount)) return;
-            const idx = declarations.findIndex(d => String(d.sno) === String(cd.sno));
-            if (idx >= 0) declarations[idx] = Object.assign({}, declarations[idx], cd);
-            else declarations.push(cd);
-          });
-        }
-        if (deletedDecls.size > 0) {
-          declarations = declarations.filter(d => !isDeclarationDeleted(d.sno, d.name, deletedDecls));
-        }
-        declarations = declarations.filter(d => !isDummyTestDeclaration(d.sno, d.name, d.city, d.amount));
-
-        if (declarations.length > 0) {
-          declarations.sort((a, b) => (b.amount - a.amount) || (a.sno - b.sno));
-          renderDashboardFromData();
-          updateSyncUI(false, `डेटा सक्रिय (${declarations.length} दानदाता)`, true);
-        }
       } catch (e) {
-        console.warn("Local storage cache read error", e);
+        console.warn("Public mirror cache read error", e);
       }
 
       // Immediately fetch live real-time data from Google Sheet
@@ -2818,7 +2821,7 @@
         if (el) el.textContent = message;
       });
 
-      ['refreshIcon', 'refreshIconHeader'].forEach(id => {
+      ['refreshIcon', 'refreshIconHeader', 'refreshIconMobile'].forEach(id => {
         const el = document.getElementById(id);
         if (el) {
           if (isSyncing) el.classList.add('fa-spin');
@@ -3028,7 +3031,7 @@
         }
 
         const appliedCollectionReceipts = new Set();
-        // Helper to reconcile collection rows (from either bulk Collections, Live Collection, or LocalStorage)
+        // Helper to reconcile collection rows (from either bulk Collections or Live Collection)
         const applyCollectionRow = (rcptNo, dsno, dname, dcity, camt, dateStr) => {
           if (camt <= 0) return;
           const rKey = rcptNo ? String(rcptNo).trim() : '';
@@ -3036,16 +3039,36 @@
           if (rKey) appliedCollectionReceipts.add(rKey);
 
           let target = null;
+          // Priority 1: Match by normalized donor name
           if (dname) {
-            const cleanDName = dname.trim().toLowerCase();
-            target = fetchedDonors.find(d => d.name && d.name.trim().toLowerCase() === cleanDName);
+            const cNorm = normDonorName(dname);
+            target = fetchedDonors.find(d => {
+              if (!d.name) return false;
+              if (d.name.trim().toLowerCase() === dname.trim().toLowerCase()) return true;
+              const dNorm = normDonorName(d.name);
+              return cNorm && dNorm && (cNorm === dNorm || cNorm.includes(dNorm) || dNorm.includes(cNorm));
+            });
           }
+
+          // Priority 2: Match by donor S.No with strict name compatibility check
           if (!target && dsno) {
-            target = fetchedDonors.find(d => String(d.sno) === String(dsno) || (d.originalSno && String(d.originalSno) === String(dsno)));
+            target = fetchedDonors.find(d => {
+              if (String(d.sno) === String(dsno) || (d.originalSno && String(d.originalSno) === String(dsno))) {
+                if (!dname || !d.name) return true;
+                const cNorm = normDonorName(dname);
+                const dNorm = normDonorName(d.name);
+                return !cNorm || !dNorm || cNorm === dNorm || cNorm.includes(dNorm) || dNorm.includes(cNorm);
+              }
+              return false;
+            });
           }
+
           if (target) {
-            target.deposited += camt;
+            target.deposited = (Number(target.deposited) || 0) + camt;
             target.balance = Math.max(0, target.amount - target.deposited);
+            if (rcptNo && (!target.receipt || target.receipt === '-')) {
+              target.receipt = rcptNo;
+            }
           } else if (dname) {
             // Direct collection without prior pledge
             fetchedDonors.push({
@@ -3117,97 +3140,7 @@
           }
         }
 
-        // 5. UNION WITH LOCAL STORAGE DECLARATIONS & COLLECTIONS (Instant reflection of Karyakarta entries)
-        try {
-          const deletedDecls = new Set((JSON.parse(localStorage.getItem('koteshwar_deleted_declarations') || '[]')).map(String));
-          const editedDecls = JSON.parse(localStorage.getItem('koteshwar_edited_declarations') || '{}');
-          const customDecls = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
-
-          // Apply edits to fetched donors
-          fetchedDonors.forEach(d => {
-            if (editedDecls[String(d.sno)]) {
-              const ed = editedDecls[String(d.sno)];
-              d.name = ed.name || d.name;
-              d.city = ed.city || d.city;
-              d.notes = ed.notes !== undefined ? ed.notes : d.notes;
-              d.amount = Number(ed.amount) || d.amount;
-              d.receipt = ed.receipt || d.receipt;
-              d.date = ed.date || d.date;
-              if (ed.mobile !== undefined) d.mobile = ed.mobile;
-              d.balance = Math.max(0, d.amount - (d.deposited || 0));
-            }
-          });
-
-          if (Array.isArray(customDecls)) {
-            customDecls.forEach(cd => {
-              if (isDeclarationDeleted(cd.sno, cd.name, deletedDecls)) return;
-              if (isDummyTestDeclaration(cd.sno, cd.name, cd.city, cd.amount)) return;
-
-              const cdName = String(cd.name || '').trim().toLowerCase();
-              const idx = fetchedDonors.findIndex(d => {
-                const dName = String(d.name || '').trim().toLowerCase();
-                if (cdName && dName && cdName === dName) return true;
-                if (String(d.sno) === String(cd.sno)) {
-                  return !cdName || !dName || cdName === dName;
-                }
-                return false;
-              });
-
-              const entry = {
-                sno: cd.sno,
-                name: cd.name,
-                city: cd.city || 'अन्य',
-                notes: cd.notes || '',
-                amount: Number(cd.amount) || 0,
-                deposited: Number(cd.deposited) || 0,
-                balance: Number(cd.balance !== undefined ? cd.balance : cd.amount),
-                receipt: cd.receipt || '-',
-                date: cd.date || ''
-              };
-
-              if (idx >= 0) {
-                // Already present from Google Sheets - do not duplicate or overwrite different donors!
-                if (entry.notes) fetchedDonors[idx].notes = entry.notes;
-                if (entry.mobile) fetchedDonors[idx].mobile = entry.mobile;
-              } else {
-                fetchedDonors.push(entry);
-              }
-            });
-          }
-
-          // Apply local collections & edits
-          const deletedColls = new Set((JSON.parse(localStorage.getItem('koteshwar_deleted_collections') || '[]')).map(String));
-          const editedColls = JSON.parse(localStorage.getItem('koteshwar_edited_collections') || '{}');
-          const renames = JSON.parse(localStorage.getItem('koteshwar_receipt_renames') || '{}');
-          const localColls = JSON.parse(localStorage.getItem('koteshwar_collections_ledger') || '[]');
-          const customColls = JSON.parse(localStorage.getItem('koteshwar_custom_collections') || '[]');
-
-          const allLocalColls = [
-            ...(Array.isArray(customColls) ? customColls : []),
-            ...(Array.isArray(localColls) ? localColls : [])
-          ];
-          const processedRcpts = new Set();
-          allLocalColls.forEach(lc => {
-            let rKey = String(lc.receiptNo || '').trim();
-            if (renames[rKey]) rKey = renames[rKey];
-            if (!rKey || processedRcpts.has(rKey) || deletedColls.has(rKey)) return;
-            processedRcpts.add(rKey);
-            const cItem = editedColls[rKey] ? Object.assign({}, lc, editedColls[rKey], { receiptNo: rKey }) : lc;
-            applyCollectionRow(cItem.receiptNo, cItem.donorSno, cItem.donorName, cItem.city, Number(cItem.amount) || 0, cItem.date);
-          });
-
-          // Filter out any locally deleted declarations
-          if (deletedDecls.size > 0) {
-            for (let i = fetchedDonors.length - 1; i >= 0; i--) {
-              if (isDeclarationDeleted(fetchedDonors[i].sno, fetchedDonors[i].name, deletedDecls)) {
-                fetchedDonors.splice(i, 1);
-              }
-            }
-          }
-        } catch (e) {
-          console.warn("Local storage union notice:", e);
-        }
-
+        // 5. PURE CANONICAL GOOGLE SHEETS RENDERING (Zero local storage contamination)
         if (fetchedDonors.length > 0) {
           fetchedDonors.forEach(d => {
             d.city = normalizeVillage(d.city);
@@ -3217,9 +3150,9 @@
           declarations = fetchedDonors;
           renderDashboardFromData();
 
-          // Save to local cache for instant future loads
+          // Save to authoritative public mirror for instant next load
           try {
-            localStorage.setItem('koteshwar_declarations_cache', JSON.stringify(declarations));
+            localStorage.setItem('koteshwar_public_canonical_mirror_v3', JSON.stringify(declarations));
           } catch (e) {}
 
           updateSyncUI(false, `Google Sheet Live (${declarations.length} दानदाता)`, true);

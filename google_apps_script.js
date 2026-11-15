@@ -282,8 +282,11 @@ function doPost(e) {
 
       if (liveCollSheet) {
         var data = liveCollSheet.getDataRange().getValues();
+        var searchName = item.donorName ? String(item.donorName).trim().toLowerCase() : "";
         for (var i = 1; i < data.length; i++) {
-          if (String(data[i][1]).trim() === searchReceipt) {
+          var rowReceipt = String(data[i][1]).trim();
+          var rowName = String(data[i][3]).trim().toLowerCase();
+          if ((searchReceipt && rowReceipt === searchReceipt) || (searchName && rowName === searchName)) {
             if (item.receiptNo) liveCollSheet.getRange(i + 1, 2).setValue(item.receiptNo);
             if (item.donorName) liveCollSheet.getRange(i + 1, 4).setValue(item.donorName);
             if (item.city) liveCollSheet.getRange(i + 1, 5).setValue(item.city);
@@ -304,7 +307,9 @@ function doPost(e) {
         if (collSheet) {
           var cData = collSheet.getDataRange().getValues();
           for (var j = 1; j < cData.length; j++) {
-            if (String(cData[j][1]).trim() === searchReceipt) {
+            var cRowReceipt = String(cData[j][1]).trim();
+            var cRowName = String(cData[j][3]).trim().toLowerCase();
+            if ((searchReceipt && cRowReceipt === searchReceipt) || (searchName && cRowName === searchName)) {
               if (item.receiptNo) collSheet.getRange(j + 1, 2).setValue(item.receiptNo);
               if (item.donorName) collSheet.getRange(j + 1, 4).setValue(item.donorName);
               if (item.city) collSheet.getRange(j + 1, 5).setValue(item.city);
