@@ -4,10 +4,10 @@ const { URL } = require('url');
 const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwS98khdbLX3wgfZWUgA5Qkb5OiKjbXOkB6g1uIGWGNWuDwP2WJp_K95wj5_TyE9wt9kw/exec';
 
 const GEMINI_MODELS = [
+  'gemini-3.8-flash',
   'gemini-3.5-flash-lite',
   'gemini-3-flash-preview',
-  'gemini-3.1-flash-lite',
-  'gemini-3.8-flash'
+  'gemini-3.1-flash-lite'
 ];
 
 const DEFAULT_KEY_STORE = 'QVEuQWI4Uk42SWhUM1AxSmtBODFJbkcwdzRCek9zY21uSVZzVFl4c1lJb3NJTHRaWkc5bmc=';

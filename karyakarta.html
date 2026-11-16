@@ -4177,6 +4177,7 @@
       ? atob('QVEuQWI4Uk42SWhUM1AxSmtBODFJbkcwdzRCek9zY21uSVZzVFl4c1lJb3NJTHRaWkc5bmc=')
       : '';
     const GEMINI_DIRECT_MODELS = [
+      'gemini-3.8-flash',
       'gemini-3.5-flash-lite',
       'gemini-3-flash-preview',
       'gemini-3.1-flash-lite'
@@ -4228,7 +4229,7 @@
       if (lbl) lbl.textContent = 'परीक्षण जारी...';
 
       try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${k}`;
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${k}`;
         const res = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
