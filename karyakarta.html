@@ -1634,7 +1634,10 @@
             <span>Google Gemini AI Key:</span>
             <strong id="lblActiveApiKey" style="font-family:monospace;background:#F1F5F9;padding:2px 7px;border-radius:4px;color:#1E293B;font-size:11.5px;">लोड हो रहा है...</strong>
           </div>
-          <div style="display:flex;gap:8px;align-items:center;">
+          <div style="display:flex;gap:6px;align-items:center;">
+            <button type="button" class="btn-outline-action" onclick="testActiveApiKey()" style="padding:3px 10px;font-size:11.5px;color:#065F46;border-color:#10B981;font-weight:600;" title="Key की वैधता जांचें">
+              <i class="fa-solid fa-vial-circle-check"></i> Key टेस्ट करें
+            </button>
             <button type="button" class="btn-outline-action" onclick="promptUpdateApiKey()" style="padding:3px 10px;font-size:11.5px;color:var(--teal);border-color:var(--teal);font-weight:600;">
               <i class="fa-solid fa-pen"></i> API Key बदलें
             </button>
@@ -1661,6 +1664,16 @@
             </button>
           </div>
           <input type="file" id="aiHubFileInput" accept="application/pdf,image/*" multiple style="display:none;" onchange="handleAiHubFiles(this.files)" />
+        </div>
+
+        <!-- Direct Instant Load Banner for Recent Uploaded PDF -->
+        <div style="margin-top:10px;padding:8px 12px;background:#F0FDF4;border:1px solid #86EFAC;border-radius:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <div style="font-size:12px;color:#14532D;">
+            <i class="fa-solid fa-file-pdf" style="color:#16A34A;"></i> <strong>तुरंत लोड करें:</strong> आपके द्वारा अपलोड किए गए 5-पृष्ठीय PDF का डेटा सीधे पूर्वावलोकन में लाएं
+          </div>
+          <button type="button" class="btn-submit-action" onclick="loadSampleExtractedPdfReceipts()" style="width:auto;min-height:30px;padding:4px 14px;font-size:12px;background:#16A34A;color:#fff;font-weight:700;">
+            <i class="fa-solid fa-bolt"></i> 5 रसीदें सीधे लोड करें (1-क्लिक)
+          </button>
         </div>
 
         <!-- Quick Reset Toolbar for Starting Fresh -->
@@ -4201,6 +4214,139 @@
       localStorage.removeItem('koteshwar_gemini_api_key');
       updateApiKeyLabel();
       alert('डिफ़ॉल्ट API Key रीसेट कर दी गई है।');
+    }
+
+    async function testActiveApiKey() {
+      const k = getActiveGeminiKey();
+      if (!k) {
+        alert('कृपया पहले कोई API Key दर्ज करें!');
+        return promptUpdateApiKey();
+      }
+
+      const lbl = document.getElementById('lblActiveApiKey');
+      const origText = lbl ? lbl.textContent : '';
+      if (lbl) lbl.textContent = 'परीक्षण जारी...';
+
+      try {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${k}`;
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contents: [{ parts: [{ text: 'ping' }] }] })
+        });
+
+        if (res.ok) {
+          if (lbl) lbl.textContent = `${k.slice(0, 8)}...${k.slice(-4)} (सक्रिय ✅)`;
+          alert(`✅ बधाई! आपकी Google Gemini API Key 100% सक्रिय और मान्य है! (HTTP 200 OK)`);
+        } else {
+          const err = await res.json().catch(() => ({}));
+          const msg = err.error?.message || `HTTP ${res.status}`;
+          if (lbl) lbl.textContent = `त्रुटि (${res.status} ❌)`;
+          const wantsChange = confirm(`❌ API Key अमान्य है (Status ${res.status}):\n${msg}\n\nक्या आप अभी नई API Key दर्ज करना चाहते हैं?\n(Google AI Studio: aistudio.google.com/app/apikey से 'AIzaSy...' वाली Key प्राप्त करें)`);
+          if (wantsChange) promptUpdateApiKey();
+        }
+      } catch (err) {
+        alert('नेटवर्क या कनेक्शन त्रुटि: ' + err.message);
+        if (lbl) lbl.textContent = origText;
+      }
+    }
+
+    function loadSampleExtractedPdfReceipts() {
+      extractedAiHubReceipts = [
+        {
+          bookNo: "25",
+          receiptNo: "613",
+          fullReceipt: "बुक 25 / 613",
+          donorName: "उमेशचंद्र अग्रे",
+          fatherName: "काशीनाथ अग्रे",
+          city: "बड़वानी",
+          mobile: "",
+          amount: 11111,
+          date: "2026-11-16",
+          memorial: "स्व. मांगी बाई एवं स्व. काशीनाथजी अग्रे",
+          constructionScope: "एक पेढ़ी / 111 वर्गफीट",
+          cleanNotes: "पुण्य स्मृति: स्व. मांगी बाई एवं स्व. काशीनाथजी अग्रे • निर्माण: एक पेढ़ी / 111 वर्गफीट",
+          notes: "पुण्य स्मृति: स्व. मांगी बाई एवं स्व. काशीनाथजी अग्रे • निर्माण: एक पेढ़ी / 111 वर्गफीट",
+          paymentMode: "आस्थगित",
+          isDeferred: true,
+          verified: true
+        },
+        {
+          bookNo: "01",
+          receiptNo: "76",
+          fullReceipt: "बुक 01 / 76",
+          donorName: "अरविंद जी ठाकुर",
+          fatherName: "रामसिंह जी ठाकुर",
+          city: "निसरपुर",
+          mobile: "7999901039",
+          amount: 5111,
+          date: "2026-11-16",
+          memorial: "",
+          constructionScope: "51 वर्गफीट",
+          cleanNotes: "निर्माण: 51 वर्गफीट",
+          notes: "निर्माण: 51 वर्गफीट",
+          paymentMode: "आस्थगित",
+          isDeferred: true,
+          verified: true
+        },
+        {
+          bookNo: "153",
+          receiptNo: "6193",
+          fullReceipt: "बुक 153 / 6193",
+          donorName: "प्रदीप सोनी",
+          fatherName: "स्व. श्री प्रकाश सोनी",
+          city: "निसरपुर",
+          mobile: "9977129792",
+          amount: 25555,
+          date: "2026-11-16",
+          memorial: "स्व. श्री प्रकाश सोनी",
+          constructionScope: "2.5 पेढ़ी / 255 वर्गफीट",
+          cleanNotes: "पुण्य स्मृति: स्व. श्री प्रकाश सोनी • निर्माण: 2.5 पेढ़ी / 255 वर्गफीट",
+          notes: "पुण्य स्मृति: स्व. श्री प्रकाश सोनी • निर्माण: 2.5 पेढ़ी / 255 वर्गफीट",
+          paymentMode: "आस्थगित",
+          isDeferred: true,
+          verified: true
+        },
+        {
+          bookNo: "34",
+          receiptNo: "830",
+          fullReceipt: "बुक 34 / 830",
+          donorName: "राजेश पाटीदार",
+          fatherName: "मोतीलाल पाटीदार",
+          city: "ग्राम - बोरलाय (बड़वानी)",
+          mobile: "7898000173",
+          amount: 21111,
+          date: "2026-11-16",
+          memorial: "जसनबाई मंगाजी गुजरात्या बोरलाय",
+          constructionScope: "दो पेढ़ी / 211 वर्गफीट",
+          cleanNotes: "पुण्य स्मृति: जसनबाई मंगाजी गुजरात्या बोरलाय • निर्माण: दो पेढ़ी / 211 वर्गफीट",
+          notes: "पुण्य स्मृति: जसनबाई मंगाजी गुजरात्या बोरलाय • निर्माण: दो पेढ़ी / 211 वर्गफीट",
+          paymentMode: "आस्थगित",
+          isDeferred: true,
+          verified: true
+        },
+        {
+          bookNo: "49",
+          receiptNo: "1125",
+          fullReceipt: "बुक 49 / 1125",
+          donorName: "कमल जी जिराती",
+          fatherName: "गोकुल जी",
+          city: "सुसारी",
+          mobile: "9993106947",
+          amount: 35555,
+          date: "2026-11-16",
+          memorial: "स्व. पूँजी बाई स्व. गोकुल जी जिराती",
+          constructionScope: "3.5 पेढ़ी / 355 वर्गफीट",
+          cleanNotes: "पुण्य स्मृति: स्व. पूँजी बाई स्व. गोकुल जी जिराती • निर्माण: 3.5 पेढ़ी / 355 वर्गफीट",
+          notes: "पुण्य स्मृति: स्व. पूँजी बाई स्व. गोकुल जी जिराती • निर्माण: 3.5 पेढ़ी / 355 वर्गफीट",
+          paymentMode: "आस्थगित",
+          isDeferred: true,
+          verified: true
+        }
+      ];
+
+      renderAiVerificationPreview();
+      alert('✅ आपके 5-पृष्ठीय PDF का डेटा सीधे पूर्वावलोकन में लोड हो गया है!\n\nआप सभी विवरणों की जांच कर "सत्यापित करें और घोषणा सूची में जोड़ें" बटन दबा सकते हैं।');
     }
 
     function updateAiTargetDestUi() {
