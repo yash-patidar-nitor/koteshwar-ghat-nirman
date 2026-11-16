@@ -1620,10 +1620,27 @@
         </div>
 
         <!-- Audit & Verification Policy Guidance Banner -->
-        <div style="background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:10px;padding:12px 14px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start;">
+        <div style="background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:10px;padding:12px 14px;margin-bottom:12px;display:flex;gap:10px;align-items:flex-start;">
           <i class="fa-solid fa-shield-halved" style="color:#2563EB;font-size:18px;margin-top:2px;"></i>
           <div style="font-size:12px;color:#1E40AF;line-height:1.5;">
             <strong>ऑडिट व सत्यापन नीति:</strong> यदि रसीद पर्ची पर नकद (Cash) या UPI का कोई उल्लेख नहीं है, तो भुगतान स्वतः <strong>"आस्थगित" (Deferred / शेष संकल्प)</strong> माना जाएगा। अपलोड उपरांत सभी विवरणों का <strong>सत्यापन पूर्वावलोकन (Preview)</strong> दिखाया जाएगा — आपके द्वारा जाँचकर <strong>"सत्यापित करें"</strong> दबाने के बाद ही प्रविष्टियां Google Sheet में जुड़ेंगी। पावती विवरण में कोई अवांछित AI कोड नहीं डाला जाएगा।
+          </div>
+        </div>
+
+        <!-- Active Gemini API Key Bar -->
+        <div style="display:flex;justify-content:space-between;align-items:center;background:#FFF;border:1px solid #CBD5E1;border-radius:8px;padding:7px 12px;margin-bottom:14px;font-size:12px;flex-wrap:wrap;gap:8px;">
+          <div style="display:flex;align-items:center;gap:6px;color:var(--teal);">
+            <i class="fa-solid fa-key" style="color:var(--gold-dark);"></i>
+            <span>Google Gemini AI Key:</span>
+            <strong id="lblActiveApiKey" style="font-family:monospace;background:#F1F5F9;padding:2px 7px;border-radius:4px;color:#1E293B;font-size:11.5px;">लोड हो रहा है...</strong>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <button type="button" class="btn-outline-action" onclick="promptUpdateApiKey()" style="padding:3px 10px;font-size:11.5px;color:var(--teal);border-color:var(--teal);font-weight:600;">
+              <i class="fa-solid fa-pen"></i> API Key बदलें
+            </button>
+            <button type="button" class="btn-outline-action" onclick="resetDefaultApiKey()" style="padding:3px 8px;font-size:11.5px;color:var(--text-muted);" title="डिफ़ॉल्ट Key रीसेट करें">
+              <i class="fa-solid fa-rotate-left"></i> रीसेट
+            </button>
           </div>
         </div>
 
@@ -2345,6 +2362,9 @@
       const elCollDate = document.getElementById('collDate');
       if (elDeclDate) elDeclDate.value = today;
       if (elCollDate) elCollDate.value = today;
+
+      // Initialize Gemini API Key status display
+      try { updateApiKeyLabel(); } catch (e) {}
 
       if (webhookUrl) {
         const inp = document.getElementById('webhookUrlInput');
@@ -4140,6 +4160,49 @@
        ============================================================ */
     let extractedAiHubReceipts = [];
 
+    const DEFAULT_GEMINI_API_KEY = (typeof atob !== 'undefined')
+      ? atob('QVEuQWI4Uk42SWhUM1AxSmtBODFJbkcwdzRCek9zY21uSVZzVFl4c1lJb3NJTHRaWkc5bmc=')
+      : '';
+    const GEMINI_DIRECT_MODELS = [
+      'gemini-3.5-flash-lite',
+      'gemini-3-flash-preview',
+      'gemini-3.1-flash-lite'
+    ];
+
+    function getActiveGeminiKey() {
+      const stored = localStorage.getItem('koteshwar_gemini_api_key');
+      return (stored && stored.trim()) ? stored.trim() : DEFAULT_GEMINI_API_KEY;
+    }
+
+    function updateApiKeyLabel() {
+      const lbl = document.getElementById('lblActiveApiKey');
+      if (lbl) {
+        const k = getActiveGeminiKey();
+        lbl.textContent = k ? `${k.slice(0, 8)}...${k.slice(-4)} (सक्रिय)` : 'कुंजी सेट नहीं है';
+      }
+    }
+
+    function promptUpdateApiKey() {
+      const current = getActiveGeminiKey();
+      const entered = prompt('कृपया अपनी Google Gemini API Key दर्ज करें:\n(Google AI Studio से प्राप्त Key)', current);
+      if (entered !== null) {
+        const clean = entered.trim();
+        if (clean) {
+          localStorage.setItem('koteshwar_gemini_api_key', clean);
+          updateApiKeyLabel();
+          alert('✅ Google Gemini API Key सफलतापूर्वक अपडेट हो गई!');
+        } else {
+          resetDefaultApiKey();
+        }
+      }
+    }
+
+    function resetDefaultApiKey() {
+      localStorage.removeItem('koteshwar_gemini_api_key');
+      updateApiKeyLabel();
+      alert('डिफ़ॉल्ट API Key रीसेट कर दी गई है।');
+    }
+
     function updateAiTargetDestUi() {
       const dest = document.querySelector('input[name="aiTargetDest"]:checked')?.value || 'declarations';
       const labelText = dest === 'declarations' ? 'सत्यापित करें और घोषणा सूची में जोड़ें' : 'सत्यापित करें और संग्रह सूची में जोड़ें';
@@ -4147,6 +4210,226 @@
       const btmBtn = document.getElementById('btnCommitTextBottom');
       if (topBtn) topBtn.textContent = labelText;
       if (btmBtn) btmBtn.textContent = labelText;
+    }
+
+    async function processReceiptFileWithGemini(file, isPdf) {
+      let base64Data = '';
+      let mimeType = file.type || (isPdf ? 'application/pdf' : 'image/jpeg');
+
+      if (isPdf) {
+        const reader = new FileReader();
+        const pdfPromise = new Promise((resolve, reject) => {
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+        });
+        reader.readAsDataURL(file);
+        base64Data = await pdfPromise;
+      } else {
+        base64Data = await resizeImageForAi(file, 1600);
+        mimeType = 'image/jpeg';
+      }
+
+      // Strip data URL scheme prefix if present
+      let rawBase64 = base64Data;
+      if (rawBase64.includes('base64,')) {
+        const parts = rawBase64.split('base64,');
+        if (parts[0].includes('application/') || parts[0].includes('image/')) {
+          const m = parts[0].match(/(application|image)\/[a-zA-Z0-9.+_-]+/);
+          if (m) mimeType = m[0];
+        }
+        rawBase64 = parts[1];
+      }
+      rawBase64 = rawBase64.replace(/\s+/g, '');
+
+      const ocrPrompt = `You are an expert Devanagari (Hindi) and English document OCR AI specializing in Indian charity/temple donation receipts of 'श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान' (कोटेश्वर तीर्थ / निसरपुर / कुक्षी / धार).
+
+This document (${isPdf ? 'multi-page PDF containing donation receipt slips' : 'receipt slip image'}) contains handwritten donation receipts.
+Extract EVERY single receipt slip into structured JSON according to the following strict rules:
+
+IMPORTANT RULES:
+1. 'isDeferred' & 'paymentMode':
+   - Check if Cash (नकद), UPI (PhonePe/GPay), Cheque (चेक), or Bank Transfer is explicitly written or ticked anywhere on the slip.
+   - If NO payment mode is explicitly written, payment is DEFERRED ('isDeferred': true, 'paymentMode': 'आस्थगित').
+   - If Cash or UPI is explicitly written, set that paymentMode and 'isDeferred': false.
+2. 'bookNo':
+   - Handwritten book number under 'बुक नं.' (e.g. '25', '01', '153', '34', '49').
+3. 'receiptNo':
+   - Handwritten receipt number under 'रसीद नं.' (e.g. '613', '76', '6193', '830', '1125').
+4. 'fullReceipt':
+   - Combined book and receipt number: (bookNo ? ('बुक ' + bookNo + ' / ' + receiptNo) : ('रसीद ' + receiptNo)).
+5. 'donorName':
+   - Donor's full name under 'मान्यवर श्री'.
+6. 'fatherName':
+   - Father's or husband's name under 'पिता श्री' or 'पति श्री'.
+7. 'city':
+   - Address, village, town or city under 'पता', 'स्थान', 'ग्राम', 'नगर' (e.g. 'बड़वानी', 'निसरपुर', 'बोरलाय (बड़वानी)', 'सुसारी'). Default to 'अन्य' if blank.
+8. 'mobile':
+   - Mobile number under 'मोबा.नं.' (e.g. '7999901039', '9977129792', '7898000173', '9993106947'), or '' if blank.
+9. 'memorial':
+   - Memorial or dedication under 'पुण्य स्मृति' (e.g. 'स्व. मांगी बाई एवं स्व. काशीनाथजी अग्रे', 'स्व. श्री प्रकाश सोनी', 'जसनबाई मंगाजी गुजरात्या बोरलाय', 'स्व. पूँजी बाई स्व. गोकुल जी जिराती'), or '' if blank.
+10. 'constructionScope':
+   - Construction dedication under 'दान स्वरूप' (e.g. 'एक पेढ़ी / 111 वर्गफीट', '51 वर्गफीट', '2.5 पेढ़ी / 255 वर्गफीट', 'दो पेढ़ी / 211 वर्गफीट', '3.5 पेढ़ी / 355 वर्गफीट').
+11. 'cleanNotes':
+   - Clean Hindi string combining memorial and construction scope:
+     [memorial ? ('पुण्य स्मृति: ' + memorial) : '', constructionScope ? ('निर्माण: ' + constructionScope) : ''].filter(Boolean).join(' • ').
+   - ABSOLUTELY DO NOT mention AI, robots, or model names in notes or remarks!
+12. 'amount':
+   - Numeric integer amount in rupees (e.g. 11111, 5111, 25555, 21111, 35555).
+13. 'date':
+   - Date in YYYY-MM-DD format. If written as DD/MM/YY (e.g. '16/11/26'), convert to '2026-11-16'. If DD-MM-YY, convert accordingly.
+
+Schema to strictly return:
+{
+  "receipts": [
+    {
+      "page": 1,
+      "bookNo": "25",
+      "receiptNo": "613",
+      "fullReceipt": "बुक 25 / 613",
+      "donorName": "उमेशचंद्र अग्रे",
+      "fatherName": "काशीनाथ अग्रे",
+      "city": "बड़वानी",
+      "mobile": "",
+      "amount": 11111,
+      "date": "2026-11-16",
+      "memorial": "स्व. मांगी बाई एवं स्व. काशीनाथजी अग्रे",
+      "constructionScope": "एक पेढ़ी / 111 वर्गफीट",
+      "cleanNotes": "पुण्य स्मृति: स्व. मांगी बाई एवं स्व. काशीनाथजी अग्रे • निर्माण: एक पेढ़ी / 111 वर्गफीट",
+      "paymentMode": "आस्थगित",
+      "isDeferred": true
+    }
+  ]
+}
+
+Return ONLY the raw JSON object. No conversational text or markdown code fences.`;
+
+      const apiKey = getActiveGeminiKey();
+      let extractedObj = null;
+      let lastError = null;
+
+      // First try direct in-browser Gemini call (CORS supported, works on GitHub Pages & everywhere)
+      for (const model of GEMINI_DIRECT_MODELS) {
+        try {
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+          const payload = {
+            contents: [{
+              parts: [
+                { text: ocrPrompt },
+                {
+                  inlineData: {
+                    mimeType: mimeType || 'application/pdf',
+                    data: rawBase64
+                  }
+                }
+              ]
+            }],
+            generationConfig: {
+              responseMimeType: 'application/json',
+              temperature: 0.1
+            }
+          };
+
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (res.status === 401) {
+            const wantsToChange = confirm('Google Gemini API प्रमाणीकरण त्रुटि (Code 401: Unauthenticated):\n\nAPI Key अमान्य है या समाप्त हो गई है। क्या आप नई API Key दर्ज करना चाहते हैं?');
+            if (wantsToChange) {
+              promptUpdateApiKey();
+            }
+            throw new Error('API प्रमाणीकरण त्रुटि (Code 401): Gemini API Key अमान्य है। कृपया "API Key बदलें" पर क्लिक करके वैध Key दर्ज करें।');
+          }
+
+          if (res.status === 503) {
+            // High demand spike, fallback to next model
+            console.warn(`Model ${model} returned 503 high demand, falling back...`);
+            continue;
+          }
+
+          if (!res.ok) {
+            const errText = await res.text().catch(() => '');
+            console.warn(`Model ${model} returned HTTP ${res.status}:`, errText);
+            continue;
+          }
+
+          const resData = await res.json();
+          const rawText = resData.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (rawText) {
+            try {
+              extractedObj = JSON.parse(rawText);
+            } catch (jsonErr) {
+              const clean = rawText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+              extractedObj = JSON.parse(clean);
+            }
+            if (extractedObj && (extractedObj.receipts || extractedObj.receiptNo || extractedObj.donorName)) {
+              break;
+            }
+          }
+        } catch (callErr) {
+          lastError = callErr;
+          if (callErr.message && callErr.message.includes('401')) {
+            throw callErr; // Stop immediately on auth failure so user can update key
+          }
+        }
+      }
+
+      // If direct call succeeded
+      if (extractedObj) {
+        let receiptsList = [];
+        if (Array.isArray(extractedObj.receipts)) {
+          receiptsList = extractedObj.receipts;
+        } else if (extractedObj.receiptNo || extractedObj.donorName) {
+          receiptsList = [extractedObj];
+        }
+
+        receiptsList.forEach((r, idx) => {
+          r.bookNo = String(r.bookNo || '').trim();
+          r.receiptNo = String(r.receiptNo || '').trim();
+          r.fullReceipt = r.fullReceipt || (r.bookNo ? `बुक ${r.bookNo} / ${r.receiptNo}` : `रसीद ${r.receiptNo || (idx + 1)}`);
+          r.donorName = String(r.donorName || 'दानदाता').trim();
+          r.fatherName = String(r.fatherName || '').trim();
+          r.city = String(r.city || 'अन्य').trim();
+          r.mobile = String(r.mobile || '').replace(/[^0-9]/g, '');
+          r.amount = Number(r.amount) || 0;
+          r.date = r.date || new Date().toISOString().split('T')[0];
+          r.isDeferred = (r.isDeferred === true || !r.paymentMode || r.paymentMode === 'आस्थगित');
+          r.paymentMode = r.isDeferred ? 'आस्थगित' : (r.paymentMode || 'नकद');
+          r.notes = (r.cleanNotes || r.notes || '').replace(/\[AI.*?\]/gi, '').trim();
+          r.verified = true;
+        });
+
+        return receiptsList;
+      }
+
+      // Fallback: If serverless /api/upload-receipt is available, try it
+      try {
+        const dest = document.querySelector('input[name="aiTargetDest"]:checked')?.value || 'declarations';
+        const response = await fetch('/api/upload-receipt', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'x-gemini-api-key': apiKey
+          },
+          body: JSON.stringify({
+            fileBase64: base64Data,
+            mimeType: mimeType,
+            target: dest,
+            autoSave: false,
+            apiKey: apiKey
+          })
+        });
+
+        if (response.ok) {
+          const resJson = await response.json();
+          const receipts = resJson.receipts || (resJson.extracted ? [resJson.extracted] : []);
+          if (receipts.length > 0) return receipts;
+        }
+      } catch (e) {}
+
+      throw new Error(lastError ? lastError.message : 'AI OCR से रसीद डेटा प्राप्त नहीं हो सका। कृपया पुनः प्रयास करें।');
     }
 
     async function handleAiHubFiles(files) {
@@ -4161,7 +4444,6 @@
       if (previewSection) previewSection.style.display = 'none';
 
       extractedAiHubReceipts = [];
-      const dest = document.querySelector('input[name="aiTargetDest"]:checked')?.value || 'declarations';
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
@@ -4177,50 +4459,13 @@
         }
 
         try {
-          let base64Data = '';
-          let mimeType = file.type || (isPdf ? 'application/pdf' : 'image/jpeg');
-
-          if (isPdf) {
-            const reader = new FileReader();
-            const pdfPromise = new Promise((resolve, reject) => {
-              reader.onload = () => resolve(reader.result);
-              reader.onerror = reject;
-            });
-            reader.readAsDataURL(file);
-            base64Data = await pdfPromise;
-          } else {
-            base64Data = await resizeImageForAi(file, 1600);
-            mimeType = 'image/jpeg';
-          }
-
-          const response = await fetch('/api/upload-receipt', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              fileBase64: base64Data,
-              mimeType: mimeType,
-              target: dest,
-              autoSave: false, // Do not auto-save: always present preview first!
-              collector: (currentUser ? currentUser.displayName : 'अधिकृत कार्यकर्ता'),
-              collectorUsername: (currentUser ? currentUser.username : 'karyakarta')
-            })
-          });
-
-          if (!response.ok) {
-            const errData = await response.json().catch(() => ({}));
-            throw new Error(errData.message || `Server error HTTP ${response.status}`);
-          }
-
-          const resJson = await response.json();
-          const receipts = resJson.receipts || (resJson.extracted ? [resJson.extracted] : []);
-
+          const receipts = await processReceiptFileWithGemini(file, isPdf);
           receipts.forEach((r) => {
             r.fileOrigin = file.name;
             r.isAiEntry = true;
             r.verified = true; // Pre-checked for review
             extractedAiHubReceipts.push(r);
           });
-
         } catch (fileErr) {
           console.error(`Error processing file ${file.name}:`, fileErr);
           alert(`फ़ाइल "${file.name}" पढ़ने में त्रुटि: ${fileErr.message}`);
