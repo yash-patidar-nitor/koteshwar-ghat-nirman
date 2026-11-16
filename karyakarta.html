@@ -996,6 +996,9 @@
       <button class="tab-btn" onclick="switchPortalTab('pending-list', this)">
         <i class="fa-solid fa-hourglass-half"></i> लंबित वसूली
       </button>
+      <button class="tab-btn" onclick="switchPortalTab('ai-receipt-hub', this)" style="border-left:1.5px solid var(--sandstone);">
+        <i class="fa-solid fa-wand-magic-sparkles" style="color:var(--gold);"></i> AI रसीद केंद्र (PDF / फोटो) <span class="tab-badge" id="tabBadgeAiPending" style="background:#EEF2FF;color:#4F46E5;">0</span>
+      </button>
       <button class="tab-btn" onclick="switchPortalTab('settings-sync', this)">
         <i class="fa-solid fa-cloud-arrow-up"></i> डेटा सिंक व सेटिंग्स
       </button>
@@ -1184,40 +1187,6 @@
         <div class="inline-success-box" id="collSuccessAlert">
           <i class="fa-solid fa-circle-check"></i>
           <span id="collSuccessText">रसीद सफलतापूर्वक कट गई!</span>
-        </div>
-
-        <!-- AI SMART RECEIPT SCANNER & AUTO-FILL CARD -->
-        <div class="ai-receipt-scanner-card" style="margin-bottom:18px;padding:12px 14px;border-radius:10px;background:linear-gradient(135deg, #F0FDF4 0%, #FEFCE8 100%);border:1.5px dashed var(--gold);display:flex;flex-direction:column;gap:8px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <span style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--teal);color:var(--gold);font-size:13px;"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
-              <div>
-                <strong style="color:var(--teal);font-size:13px;">AI रसीद ऑटो-स्कैनर (Smart OCR)</strong>
-                <div style="font-size:11px;color:var(--text-muted);">रसीद फोटो खींचें या WhatsApp से चुनें — AI सारे कॉलम स्वतः भर देगा</div>
-              </div>
-            </div>
-            <div style="display:flex;gap:6px;">
-              <label for="aiReceiptFileInput" class="btn btn-primary btn-sm" style="cursor:pointer;margin:0;display:inline-flex;align-items:center;gap:6px;background:var(--teal);color:#fff;padding:6px 11px;border-radius:7px;font-size:11.5px;font-weight:600;">
-                <i class="fa-solid fa-camera"></i> <span>रसीद फोटो चुनें / खींचें</span>
-              </label>
-              <input type="file" id="aiReceiptFileInput" accept="image/*" capture="environment" style="display:none;" onchange="handleAiReceiptUpload(this.files)" />
-            </div>
-          </div>
-
-          <!-- Scanning Status Indicator -->
-          <div id="aiScanProgress" style="display:none;padding:8px 12px;border-radius:7px;background:#fff;border:1px solid var(--sandstone);font-size:11.5px;color:var(--teal);align-items:center;gap:8px;">
-            <i class="fa-solid fa-circle-notch fa-spin" style="color:var(--gold-dark);font-size:15px;"></i>
-            <span id="aiScanStatusText">Gemini 3 AI द्वारा हस्तलिखित रसीद पढ़ी जा रही है...</span>
-          </div>
-
-          <!-- Scan Success Banner -->
-          <div id="aiScanSuccessBanner" style="display:none;padding:8px 12px;border-radius:7px;background:#ECFDF5;border:1px solid #10B981;font-size:11.5px;color:#065F46;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;">
-            <div style="display:flex;align-items:center;gap:6px;">
-              <i class="fa-solid fa-circle-check" style="color:#10B981;font-size:15px;"></i>
-              <span id="aiScanSuccessText">रसीद सफलतापूर्वक स्कैन हो गई! नीचे विवरण जांचें।</span>
-            </div>
-            <span class="badge" style="background:#D1FAE5;color:#065F46;font-size:10px;" id="aiModelBadge">Gemini AI</span>
-          </div>
         </div>
 
         <form id="newCollectionForm" onsubmit="handleSaveCollection(event)">
@@ -1617,6 +1586,143 @@
             <i class="fa-solid fa-trash-can"></i> लोकल कैश साफ़ करें (Clear Cache)
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 7: AI RECEIPT & PDF BATCH HUB (AI रसीद एवं PDF अपलोड केंद्र) ==================== -->
+    <div class="portal-pane" id="pane-ai-receipt-hub">
+      <div class="form-box-card">
+        <div class="form-box-head">
+          <div>
+            <h3><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--gold-dark);"></i> AI रसीद एवं PDF अपलोड केंद्र (AI Smart Ingestion &amp; Reconciliation Hub)</h3>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">
+              एकल रसीद, समूह फोटो या बहु-पृष्ठीय PDF (Multi-page PDF) अपलोड करें — Gemini 3 AI स्वतः रसीदें पढ़कर Google Sheet में दर्ज करेगा।
+            </div>
+          </div>
+          <span class="badge" style="background:#EEF2FF;color:#4F46E5;border:1px solid #C7D2FE;font-size:11.5px;padding:4px 10px;">
+            <i class="fa-solid fa-robot"></i> Gemini 3 Multimodal AI
+          </span>
+        </div>
+
+        <!-- Reconciliation Identity Guarantee Card -->
+        <div style="background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:10px;padding:12px 14px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start;">
+          <i class="fa-solid fa-shield-halved" style="color:#16A34A;font-size:18px;margin-top:2px;"></i>
+          <div style="font-size:12px;color:#14532D;line-height:1.5;">
+            <strong>समाधान एवं ऑडिट गारंटी (Reconciliation Guarantee):</strong> इस केंद्र द्वारा दर्ज प्रत्येक रसीद को Google Sheet में स्पष्ट रूप से 
+            <code>[AI_UNVERIFIED]</code> और <code>🤖 AI ऑटो-प्रविष्टि (सत्यापन लंबित)</code> के रूप में टैग किया जाता है। बाद में आप या समन्वयक भौतिक रसीद बुक से एक-क्लिक में इसका सत्यापन (Mark Verified) कर सकते हैं।
+          </div>
+        </div>
+
+        <!-- File Upload Dropzone -->
+        <div id="aiHubDropzone" style="border:2px dashed var(--gold);background:var(--sandstone-light);border-radius:12px;padding:24px 16px;text-align:center;cursor:pointer;transition:all 0.3s ease;" onclick="document.getElementById('aiHubFileInput').click()">
+          <div style="width:48px;height:48px;border-radius:50%;background:rgba(212,175,55,0.15);color:var(--gold-dark);display:inline-flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:10px;">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+          </div>
+          <div style="font-weight:700;color:var(--teal);font-size:14.5px;margin-bottom:4px;">
+            रसीद PDF या फोटो यहाँ ड्रैग करें अथवा चुनने के लिए क्लिक करें
+          </div>
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">
+            समर्थित प्रारूप: <strong>PDF (रसीदों का बंडल / समूह), JPG, PNG, WebP</strong> • एकल या एकाधिक फ़ाइलें
+          </div>
+          <div style="display:inline-flex;align-items:center;gap:8px;">
+            <button type="button" class="btn-submit-action" style="width:auto;min-height:36px;padding:6px 16px;font-size:12.5px;pointer-events:none;">
+              <i class="fa-solid fa-folder-open"></i> फ़ाइल चुनें (PDF / Photos)
+            </button>
+          </div>
+          <input type="file" id="aiHubFileInput" accept="application/pdf,image/*" multiple style="display:none;" onchange="handleAiHubFiles(this.files)" />
+        </div>
+
+        <!-- Upload Options Strip -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:8px 12px;background:#fff;border:1px solid var(--sandstone);border-radius:8px;font-size:12px;flex-wrap:wrap;gap:8px;">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;color:var(--teal);">
+            <input type="checkbox" id="chkAiAutoSync" checked style="accent-color:var(--teal);width:16px;height:16px;" />
+            <span>पहचान होते ही सीधे Google Sheet में जोड़ें (Auto-sync to Sheet)</span>
+          </label>
+          <span style="color:var(--text-muted);font-size:11px;">
+            <i class="fa-solid fa-lock" style="color:var(--sage);"></i> सुरक्षित एवं त्रुटिरहित एनक्रिप्शन
+          </span>
+        </div>
+
+        <!-- Processing Status Ribbon -->
+        <div id="aiHubProgressBox" style="display:none;margin-top:14px;padding:12px 14px;border-radius:8px;background:#fff;border:1.5px solid var(--teal);align-items:center;gap:12px;">
+          <i class="fa-solid fa-circle-notch fa-spin" style="color:var(--gold-dark);font-size:20px;"></i>
+          <div style="flex:1;">
+            <div style="font-weight:700;color:var(--teal);font-size:13px;" id="aiHubProgressTitle">रसीदें प्रोसेस हो रही हैं...</div>
+            <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;" id="aiHubProgressSub">Gemini 3 Multimodal AI हस्तलिखित पर्चियों का विश्लेषण कर रहा है...</div>
+          </div>
+        </div>
+
+        <!-- Extracted Receipts Results Table -->
+        <div id="aiHubResultsContainer" style="display:none;margin-top:20px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+            <div>
+              <strong style="color:var(--teal);font-size:14px;"><i class="fa-solid fa-list-check" style="color:var(--gold-dark);"></i> निष्कर्षित रसीदें (Extracted Receipts)</strong>
+              <span class="badge" style="background:var(--sandstone);color:var(--teal);margin-left:6px;" id="aiHubResultCount">0 रसीदें</span>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button type="button" class="btn-submit-action" id="btnSyncAllAiReceipts" onclick="syncAllExtractedAiReceipts()" style="display:none;width:auto;min-height:34px;padding:5px 14px;font-size:12px;background:var(--sage);">
+                <i class="fa-solid fa-cloud-arrow-up"></i> सभी रसीदें Google Sheet में दर्ज करें
+              </button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="portal-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>रसीद क्र.</th>
+                  <th>दानदाता का नाम</th>
+                  <th>स्थान / ग्राम</th>
+                  <th style="text-align:right;">राशि (₹)</th>
+                  <th>माध्यम</th>
+                  <th>दिनांक</th>
+                  <th>स्मृति / विवरण</th>
+                  <th>स्थिति व पहचान टैग</th>
+                </tr>
+              </thead>
+              <tbody id="aiHubTableBody">
+                <!-- Extracted rows injected here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Dedicated Section: Pending AI Reconciliation (समाधान सूची) -->
+        <div style="margin-top:28px;padding-top:20px;border-top:1.5px dashed var(--sandstone);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+            <div>
+              <strong style="color:var(--teal);font-size:14px;"><i class="fa-solid fa-code-compare" style="color:#4F46E5;"></i> समाधान सूची: AI द्वारा दर्ज रसीदें (Pending Reconciliation)</strong>
+              <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;">
+                Google Sheet में दर्ज वे रसीदें जिनका भौतिक रसीद बुक से अंतिम सत्यापन होना बाकी है
+              </div>
+            </div>
+            <button type="button" class="btn-outline-action" onclick="renderAiReconciliationTable()" style="padding:4px 10px;font-size:11.5px;">
+              <i class="fa-solid fa-arrows-rotate"></i> सूची ताज़ा करें
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="portal-table">
+              <thead>
+                <tr>
+                  <th>रसीद क्र.</th>
+                  <th>दानदाता</th>
+                  <th>ग्राम</th>
+                  <th style="text-align:right;">राशि (₹)</th>
+                  <th>दिनांक</th>
+                  <th>पहचान टैग</th>
+                  <th>विवरण / स्मृति</th>
+                  <th style="text-align:center;">सत्यापन कार्रवाई</th>
+                </tr>
+              </thead>
+              <tbody id="aiReconcileTableBody">
+                <tr><td colspan="8" style="text-align:center;padding:16px;color:var(--text-muted);">लोड हो रहा है...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -3505,6 +3611,7 @@
       if (tabId === 'declarations-ledger') renderDeclarationsTable();
       else if (tabId === 'collections-ledger') renderCollectionsTable();
       else if (tabId === 'pending-list') renderPendingTable();
+      else if (tabId === 'ai-receipt-hub') renderAiReconciliationTable();
     }
 
     /* ==================== FORM HELPERS ==================== */
@@ -4002,143 +4109,318 @@
       });
     }
 
-    async function handleAiReceiptUpload(files) {
+    /* ============================================================
+       AI RECEIPT & PDF BATCH INGESTION HUB
+       ============================================================ */
+    let extractedAiHubReceipts = [];
+
+    async function handleAiHubFiles(files) {
       if (!files || files.length === 0) return;
-      const file = files[0];
-      const progressBox = document.getElementById('aiScanProgress');
-      const statusText = document.getElementById('aiScanStatusText');
-      const successBanner = document.getElementById('aiScanSuccessBanner');
-      const modelBadge = document.getElementById('aiModelBadge');
+
+      const progressBox = document.getElementById('aiHubProgressBox');
+      const progressTitle = document.getElementById('aiHubProgressTitle');
+      const progressSub = document.getElementById('aiHubProgressSub');
+      const resultsContainer = document.getElementById('aiHubResultsContainer');
+      const tableBody = document.getElementById('aiHubTableBody');
+      const autoSync = document.getElementById('chkAiAutoSync')?.checked ?? true;
 
       if (progressBox) progressBox.style.display = 'flex';
-      if (statusText) statusText.textContent = `फोटो प्रोसेस हो रही है एवं Gemini 3 AI रसीद पढ़ रहा है...`;
-      if (successBanner) successBanner.style.display = 'none';
+      if (resultsContainer) resultsContainer.style.display = 'block';
 
-      try {
-        // Optimize image size for faster network transfer & OCR
-        const resizedDataUrl = await resizeImageForAi(file, 1600);
+      extractedAiHubReceipts = [];
+      if (tableBody) tableBody.innerHTML = '';
 
-        if (statusText) statusText.textContent = `हस्तलिखित देवनागरी अक्षरों का विश्लेषण हो रहा है...`;
+      let totalSuccessCount = 0;
 
-        const response = await fetch('/api/upload-receipt', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            imageBase64: resizedDataUrl,
-            mimeType: 'image/jpeg',
-            autoSave: false, // In UI, populate form for karyakarta verification
-            collector: currentUser ? currentUser.displayName : 'कार्यकर्ता',
-            collectorUsername: currentUser ? currentUser.username : 'karyakarta'
-          })
-        });
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
 
-        if (!response.ok) {
-          const errData = await response.json().catch(() => ({}));
-          throw new Error(errData.message || `Server error HTTP ${response.status}`);
+        if (progressTitle) {
+          progressTitle.textContent = `फ़ाइल ${i + 1} / ${files.length} प्रोसेस हो रही है (${file.name})...`;
+        }
+        if (progressSub) {
+          progressSub.textContent = isPdf
+            ? `Gemini 3 Multimodal AI बहु-पृष्ठीय PDF की सभी रसीदें निकाल रहा है...`
+            : `Gemini 3 Multimodal AI हस्तलिखित रसीद का विश्लेषण कर रहा है...`;
         }
 
-        const resJson = await response.json();
-        if (resJson.status !== 'success' || !resJson.extracted) {
-          throw new Error(resJson.message || 'रसीद डेटा पढ़ने में असमर्थ रहा।');
-        }
+        try {
+          let base64Data = '';
+          let mimeType = file.type || (isPdf ? 'application/pdf' : 'image/jpeg');
 
-        const ext = resJson.extracted;
-
-        // 1. Populate Receipt No
-        if (ext.receiptNo) {
-          const cleanR = ext.receiptNo.replace(/^R\s*/i, '').trim();
-          const rInput = document.getElementById('collReceiptNo');
-          if (rInput) rInput.value = cleanR;
-        }
-
-        // 2. Populate Amount
-        if (ext.amount && Number(ext.amount) > 0) {
-          const amtInput = document.getElementById('collAmount');
-          if (amtInput) {
-            amtInput.value = Number(ext.amount);
-            handleCollAmountChange(Number(ext.amount));
+          if (isPdf) {
+            // Read PDF directly as Base64 Data URL
+            const reader = new FileReader();
+            const pdfPromise = new Promise((resolve, reject) => {
+              reader.onload = () => resolve(reader.result);
+              reader.onerror = reject;
+            });
+            reader.readAsDataURL(file);
+            base64Data = await pdfPromise;
+          } else {
+            // Resize images for high-speed transfer & OCR accuracy
+            base64Data = await resizeImageForAi(file, 1600);
+            mimeType = 'image/jpeg';
           }
-        }
 
-        // 3. Populate Remarks / Notes
-        const remarksInput = document.getElementById('collRemarks');
-        if (remarksInput) {
-          const parts = [];
-          if (ext.notes) parts.push(ext.notes);
-          if (ext.amountInWords) parts.push(`(${ext.amountInWords})`);
-          if (parts.length > 0) remarksInput.value = parts.join(' ');
-        }
-
-        // 4. Try matching existing donor in declarations
-        let matched = false;
-        if (ext.donorName && declarationsList && declarationsList.length > 0) {
-          const dNameNorm = normalizeHindiText(ext.donorName);
-          const dCityNorm = ext.city ? normalizeHindiText(ext.city) : '';
-
-          // Look for match by name + city
-          const candidate = declarationsList.find(d => {
-            const declName = normalizeHindiText(d.name || '');
-            const declCity = normalizeHindiText(d.city || '');
-            const nameMatch = declName.includes(dNameNorm) || dNameNorm.includes(declName);
-            const cityMatch = !dCityNorm || declCity.includes(dCityNorm) || dCityNorm.includes(declCity);
-            return nameMatch && cityMatch;
-          }) || declarationsList.find(d => {
-            const declName = normalizeHindiText(d.name || '');
-            return declName.includes(dNameNorm) || dNameNorm.includes(declName);
+          const response = await fetch('/api/upload-receipt', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              fileBase64: base64Data,
+              mimeType: mimeType,
+              autoSave: autoSync,
+              collector: '🤖 AI ऑटो-प्रविष्टि (सत्यापन लंबित)',
+              collectorUsername: 'ai_auto_entry'
+            })
           });
 
-          if (candidate) {
-            selectDonor(candidate);
-            matched = true;
+          if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            throw new Error(errData.message || `Server error HTTP ${response.status}`);
           }
+
+          const resJson = await response.json();
+          const receipts = resJson.receipts || (resJson.extracted ? [resJson.extracted] : []);
+
+          receipts.forEach((r, idx) => {
+            r.fileOrigin = file.name;
+            r.isAiEntry = true;
+            r.synced = autoSync && (resJson.syncedToSheet || (resJson.syncResults && resJson.syncResults[idx]?.sync?.status === 'success'));
+            extractedAiHubReceipts.push(r);
+            totalSuccessCount++;
+          });
+
+        } catch (fileErr) {
+          console.error(`Error processing file ${file.name}:`, fileErr);
+          alert(`फ़ाइल "${file.name}" पढ़ने में त्रुटि: ${fileErr.message}`);
         }
+      }
 
-        if (!matched && ext.donorName) {
-          // Switch to Direct Donor mode and fill name & city
-          const chkDirect = document.getElementById('chkDirectDonor');
-          if (chkDirect) {
-            chkDirect.checked = true;
-            toggleDirectDonorMode(true);
-          }
-          const dNameInput = document.getElementById('directDonorName');
-          if (dNameInput) dNameInput.value = ext.donorName;
-          
-          if (ext.city) {
-            const dCitySel = document.getElementById('directDonorVillageSelect');
-            if (dCitySel) dCitySel.value = ext.city;
-          }
+      if (progressBox) progressBox.style.display = 'none';
+
+      // Render extracted receipts in table
+      renderExtractedAiHubTable();
+
+      // If autoSync was on, refresh portal collections list so they appear immediately in the ledger
+      if (autoSync && totalSuccessCount > 0) {
+        setTimeout(() => {
+          refreshPortalData(false);
+          renderAiReconciliationTable();
+        }, 1200);
+      }
+    }
+
+    function renderExtractedAiHubTable() {
+      const tableBody = document.getElementById('aiHubTableBody');
+      const resultCountBadge = document.getElementById('aiHubResultCount');
+      const btnSyncAll = document.getElementById('btnSyncAllAiReceipts');
+
+      if (!tableBody) return;
+
+      if (resultCountBadge) resultCountBadge.textContent = `${extractedAiHubReceipts.length} रसीदें निष्कर्षित`;
+
+      const hasUnsynced = extractedAiHubReceipts.some(r => !r.synced);
+      if (btnSyncAll) {
+        btnSyncAll.style.display = hasUnsynced ? 'inline-flex' : 'none';
+      }
+
+      if (extractedAiHubReceipts.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:20px;color:var(--text-muted);">कोई रसीद प्राप्त नहीं हुई।</td></tr>`;
+        return;
+      }
+
+      tableBody.innerHTML = extractedAiHubReceipts.map((r, i) => `
+        <tr>
+          <td><span style="font-weight:700;color:var(--text-muted);">${i + 1}</span></td>
+          <td><strong style="color:var(--teal);font-size:13px;">${r.receiptNo || '-'}</strong></td>
+          <td><strong>${r.donorName || 'अज्ञात दानदाता'}</strong></td>
+          <td><span style="color:var(--teal);">${r.city || 'अन्य'}</span></td>
+          <td style="text-align:right;"><strong style="color:var(--sage);">${fmt(r.amount || 0)}</strong></td>
+          <td><span style="font-size:11px;background:var(--sandstone-light);padding:2px 6px;border-radius:4px;">${r.paymentMode || 'नकद'}</span></td>
+          <td style="white-space:nowrap;font-size:11.5px;">${r.date || '-'}</td>
+          <td style="font-size:11.5px;max-width:200px;">${r.notes || '-'}</td>
+          <td>
+            ${r.synced
+              ? `<span class="badge" style="background:#ECFDF5;color:#065F46;border:1px solid #A7F3D0;font-size:11px;padding:3px 7px;">
+                   <i class="fa-solid fa-circle-check"></i> Sheet में दर्ज [AI_UNVERIFIED]
+                 </span>`
+              : `<button type="button" class="btn-submit-action" onclick="syncSingleExtractedAiReceipt(${i})" style="padding:4px 8px;font-size:11px;background:var(--teal);">
+                   <i class="fa-solid fa-cloud-arrow-up"></i> Sheet में जोड़ें
+                 </button>`
+            }
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function syncSingleExtractedAiReceipt(idx) {
+      const r = extractedAiHubReceipts[idx];
+      if (!r) return;
+
+      const payload = {
+        action: 'addCollection',
+        data: {
+          receiptNo: r.receiptNo,
+          donorName: r.donorName || 'दानदाता',
+          city: r.city || 'अन्य',
+          amount: Number(r.amount) || 0,
+          paymentMode: r.paymentMode || 'नकद',
+          paymentDate: r.date || new Date().toISOString().split('T')[0],
+          transactionRef: r.transactionRef || '',
+          remarks: [
+            '[AI_UNVERIFIED]',
+            r.notes ? `स्मृति: ${r.notes}` : '',
+            r.amountInWords ? `(${r.amountInWords})` : '',
+            `[AI Auto-Entry]`
+          ].filter(Boolean).join(' | '),
+          collector: '🤖 AI ऑटो-प्रविष्टि (सत्यापन लंबित)',
+          collectorUsername: 'ai_auto_entry'
         }
+      };
 
-        // 5. Payment mode
-        if (ext.paymentMode) {
-          const modeSelect = document.getElementById('collPaymentMode');
-          if (modeSelect) {
-            if (/upi|qr|phonepe|gpay|paytm/i.test(ext.paymentMode)) modeSelect.value = 'UPI / QR';
-            else if (/cheque|चेक/i.test(ext.paymentMode)) modeSelect.value = 'बैंक चेक';
-            else if (/neft|rtgs|imps|transfer/i.test(ext.paymentMode)) modeSelect.value = 'बैंक ट्रांसफर (NEFT/IMPS)';
-            else modeSelect.value = 'नकद';
-            toggleRefField(modeSelect.value);
-          }
-        }
-
-        if (progressBox) progressBox.style.display = 'none';
-        if (successBanner) {
-          successBanner.style.display = 'flex';
-          const successEl = document.getElementById('aiScanSuccessText');
-          if (successEl) {
-            successEl.textContent = `रसीद #${ext.receiptNo || ''} (${ext.donorName || 'दानदाता'}, ${ext.city || ''} • ₹${ext.amount || ''}) सफलतापूर्वक पढ़ी गई!`;
-          }
-          if (modelBadge) modelBadge.textContent = ext.modelUsed || 'Gemini 3 AI';
-        }
-
-        // Scroll smoothly to receipt form
-        const rEl = document.getElementById('collReceiptNo');
-        if (rEl) rEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
+      try {
+        await postWebhookData('addCollection', payload.data);
+        r.synced = true;
+        renderExtractedAiHubTable();
+        refreshPortalData(false);
+        renderAiReconciliationTable();
+        alert(`रसीद #${r.receiptNo} सफलतापूर्वक Google Sheet में जुड़ गई!`);
       } catch (err) {
-        console.error('AI Scan Error:', err);
-        if (progressBox) progressBox.style.display = 'none';
-        alert('AI रसीद स्कैन सूचना: ' + (err.message || 'कृपया फोटो पुनः खींचें या विवरण मैन्युअली भरें।'));
+        alert('त्रुटि: ' + err.message);
+      }
+    }
+
+    async function syncAllExtractedAiReceipts() {
+      const unsynced = extractedAiHubReceipts.filter(r => !r.synced);
+      if (unsynced.length === 0) return;
+
+      if (!confirm(`क्या आप सभी ${unsynced.length} रसीदें Google Sheet में दर्ज करना चाहते हैं?`)) return;
+
+      let successCount = 0;
+      for (const r of unsynced) {
+        try {
+          await postWebhookData('addCollection', {
+            receiptNo: r.receiptNo,
+            donorName: r.donorName || 'दानदाता',
+            city: r.city || 'अन्य',
+            amount: Number(r.amount) || 0,
+            paymentMode: r.paymentMode || 'नकद',
+            paymentDate: r.date || new Date().toISOString().split('T')[0],
+            transactionRef: r.transactionRef || '',
+            remarks: [
+              '[AI_UNVERIFIED]',
+              r.notes ? `स्मृति: ${r.notes}` : '',
+              r.amountInWords ? `(${r.amountInWords})` : '',
+              `[AI Auto-Entry]`
+            ].filter(Boolean).join(' | '),
+            collector: '🤖 AI ऑटो-प्रविष्टि (सत्यापन लंबित)',
+            collectorUsername: 'ai_auto_entry'
+          });
+          r.synced = true;
+          successCount++;
+        } catch (e) {
+          console.error('Failed to sync receipt', r.receiptNo, e);
+        }
+      }
+
+      renderExtractedAiHubTable();
+      refreshPortalData(false);
+      renderAiReconciliationTable();
+      alert(`सफलता! ${successCount} रसीदें Google Sheet में [AI_UNVERIFIED] टैग के साथ दर्ज हो गईं।`);
+    }
+
+    /* ============================================================
+       AI RECONCILIATION TABLE (समाधान सूची: भौतिक पर्ची से मिलान)
+       ============================================================ */
+    function renderAiReconciliationTable() {
+      const tbody = document.getElementById('aiReconcileTableBody');
+      const badgeNav = document.getElementById('tabBadgeAiPending');
+      if (!tbody) return;
+
+      // Find all collections that are AI entries
+      const aiCollections = collectionsList.filter(c => {
+        const u = String(c.collectorUsername || '').toLowerCase();
+        const r = String(c.remarks || '');
+        const col = String(c.collector || '');
+        return u === 'ai_auto_entry' || r.includes('[AI_UNVERIFIED]') || col.includes('AI');
+      });
+
+      const unverifiedCount = aiCollections.filter(c => !String(c.remarks || '').includes('[AI_VERIFIED]')).length;
+      if (badgeNav) {
+        badgeNav.textContent = unverifiedCount;
+        badgeNav.style.display = unverifiedCount > 0 ? 'inline-block' : 'none';
+      }
+
+      if (aiCollections.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text-muted);"><i class="fa-solid fa-circle-check" style="color:var(--sage);"></i> बहुत बढ़िया! कोई भी AI रसीद सत्यापन हेतु लंबित नहीं है। सभी रसीदें समाधानित हैं।</td></tr>`;
+        return;
+      }
+
+      // Sort latest first
+      aiCollections.sort((a, b) => String(b.receiptNo).localeCompare(String(a.receiptNo)));
+
+      tbody.innerHTML = aiCollections.map(c => {
+        const isVerified = String(c.remarks || '').includes('[AI_VERIFIED]');
+        const safeReceiptNo = String(c.receiptNo || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+
+        return `
+          <tr style="${isVerified ? 'background:#F9FAFB;opacity:0.85;' : ''}">
+            <td><strong style="color:var(--teal);">${c.receiptNo}</strong></td>
+            <td><strong>${c.donorName}</strong></td>
+            <td><span style="color:var(--teal);">${c.city || 'अन्य'}</span></td>
+            <td style="text-align:right;"><strong style="color:var(--sage);">${fmt(c.amount)}</strong></td>
+            <td style="font-size:11.5px;white-space:nowrap;">${formatDisplayDate(c.date)}</td>
+            <td>
+              ${isVerified
+                ? `<span class="badge" style="background:#ECFDF5;color:#065F46;border:1px solid #A7F3D0;font-size:10.5px;padding:2px 7px;">
+                     <i class="fa-solid fa-check-circle"></i> भौतिक रसीद से सत्यापित
+                   </span>`
+                : `<span class="badge" style="background:#EEF2FF;color:#4F46E5;border:1px solid #C7D2FE;font-size:10.5px;padding:2px 7px;">
+                     <i class="fa-solid fa-wand-magic-sparkles"></i> AI प्रविष्टि [सत्यापन शेष]
+                   </span>`
+              }
+            </td>
+            <td style="font-size:11.5px;max-width:220px;">${c.remarks || '-'}</td>
+            <td style="text-align:center;">
+              ${isVerified
+                ? `<span style="font-size:11px;color:var(--sage);font-weight:700;"><i class="fa-solid fa-circle-check"></i> समाधानित</span>`
+                : `<button type="button" class="btn-outline-action" onclick="reconcileAiReceipt('${safeReceiptNo}')" style="padding:4px 10px;font-size:11px;color:#065F46;background:#ECFDF5;border-color:#10B981;font-weight:700;">
+                     <i class="fa-solid fa-check-double"></i> भौतिक रसीद से सत्यापित करें
+                   </button>`
+              }
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function reconcileAiReceipt(receiptNo) {
+      if (!confirm(`क्या आपने रसीद #${receiptNo} का भौतिक पर्ची बुक से मिलान कर लिया है और इसे "सत्यापित" मार्क करना चाहते हैं?`)) {
+        return;
+      }
+
+      const coll = collectionsList.find(c => String(c.receiptNo) === String(receiptNo));
+      if (!coll) {
+        alert('रसीद रिकॉर्ड नहीं मिला।');
+        return;
+      }
+
+      const cleanRemarks = String(coll.remarks || '').replace(/\[AI_UNVERIFIED\]/g, '').trim();
+      const verifiedRemarks = `[AI_VERIFIED] • सत्यापित दिनांक: ${new Date().toLocaleDateString('en-GB')} • भौतिक पर्ची से मिलान पूर्ण | ${cleanRemarks}`.trim();
+
+      const origReceiptNo = coll.receiptNo;
+      coll.remarks = verifiedRemarks;
+      coll.collector = (currentUser ? currentUser.displayName : 'समन्वयक') + ' (सत्यापित)';
+
+      try {
+        await postWebhookData('editCollection', Object.assign({}, coll, { origReceiptNo }));
+        renderAiReconciliationTable();
+        renderCollectionsTable();
+        alert(`रसीद #${receiptNo} सफलतापूर्वक भौतिक बुक से सत्यापित (Reconciled) हो गई!`);
+      } catch (err) {
+        alert('सत्यापन अपडेट में त्रुटि: ' + err.message);
       }
     }
 
