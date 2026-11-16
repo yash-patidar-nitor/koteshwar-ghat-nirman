@@ -1646,6 +1646,16 @@
           <input type="file" id="aiHubFileInput" accept="application/pdf,image/*" multiple style="display:none;" onchange="handleAiHubFiles(this.files)" />
         </div>
 
+        <!-- Quick Reset Toolbar for Starting Fresh -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:8px 12px;background:#FFF;border:1px solid var(--sandstone);border-radius:8px;font-size:12px;flex-wrap:wrap;gap:8px;">
+          <div style="color:var(--text-muted);">
+            <i class="fa-solid fa-rotate-left"></i> यदि पुरानी रसीदें दिख रही हों या नया अपलोड करना हो:
+          </div>
+          <button type="button" class="btn-outline-action" onclick="resetAiHubCompletely()" style="padding:4px 12px;font-size:11.5px;color:#DC2626;border-color:#FCA5A5;background:#FEF2F2;font-weight:700;">
+            <i class="fa-solid fa-broom"></i> पूर्वावलोकन साफ़ करें (Clear &amp; Start Fresh)
+          </button>
+        </div>
+
         <!-- Processing Status Ribbon -->
         <div id="aiHubProgressBox" style="display:none;margin-top:14px;padding:12px 14px;border-radius:8px;background:#fff;border:1.5px solid var(--teal);align-items:center;gap:12px;">
           <i class="fa-solid fa-circle-notch fa-spin" style="color:var(--gold-dark);font-size:20px;"></i>
@@ -1707,9 +1717,14 @@
                 AI द्वारा दर्ज वे प्रविष्टियां जिनका भौतिक रसीद बुक से अंतिम सत्यापन होना बाकी है
               </div>
             </div>
-            <button type="button" class="btn-outline-action" onclick="renderAiReconciliationTable()" style="padding:4px 10px;font-size:11.5px;">
-              <i class="fa-solid fa-arrows-rotate"></i> सूची ताज़ा करें
-            </button>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <button type="button" class="btn-outline-action" onclick="clearUnverifiedAiQueue()" style="padding:4px 12px;font-size:11.5px;color:#DC2626;border-color:#FCA5A5;background:#FEF2F2;font-weight:600;">
+                <i class="fa-solid fa-trash-can"></i> पुराने AI रिकॉर्ड हटाएं (Clear Old AI Queue)
+              </button>
+              <button type="button" class="btn-outline-action" onclick="renderAiReconciliationTable()" style="padding:4px 10px;font-size:11.5px;">
+                <i class="fa-solid fa-arrows-rotate"></i> सूची ताज़ा करें
+              </button>
+            </div>
           </div>
 
           <div class="table-responsive">
@@ -4592,20 +4607,153 @@
             </td>
             <td style="font-size:11.5px;max-width:200px;">${item.notes}</td>
             <td style="text-align:center;">
-              ${item.isVerified
-                ? `<span style="font-size:11px;color:var(--sage);font-weight:700;"><i class="fa-solid fa-circle-check"></i> सत्यापित</span>`
-                : item.type.includes('घोषणा')
-                  ? `<button type="button" class="btn-outline-action" onclick="verifyDeclarationInline('${safeSno}')" style="padding:4px 10px;font-size:11px;color:#065F46;background:#ECFDF5;border-color:#10B981;font-weight:700;">
-                       <i class="fa-solid fa-check-double"></i> सत्यापित करें
-                     </button>`
-                  : `<button type="button" class="btn-outline-action" onclick="reconcileAiReceipt('${safeRef}')" style="padding:4px 10px;font-size:11px;color:#065F46;background:#ECFDF5;border-color:#10B981;font-weight:700;">
-                       <i class="fa-solid fa-check-double"></i> सत्यापित करें
-                     </button>`
-              }
+              <div style="display:inline-flex;gap:4px;align-items:center;">
+                ${item.isVerified
+                  ? `<span style="font-size:11px;color:var(--sage);font-weight:700;"><i class="fa-solid fa-circle-check"></i> सत्यापित</span>`
+                  : item.type.includes('घोषणा')
+                    ? `<button type="button" class="btn-outline-action" onclick="verifyDeclarationInline('${safeSno}')" style="padding:4px 8px;font-size:11px;color:#065F46;background:#ECFDF5;border-color:#10B981;font-weight:700;">
+                         <i class="fa-solid fa-check-double"></i> सत्यापित
+                       </button>`
+                    : `<button type="button" class="btn-outline-action" onclick="reconcileAiReceipt('${safeRef}')" style="padding:4px 8px;font-size:11px;color:#065F46;background:#ECFDF5;border-color:#10B981;font-weight:700;">
+                         <i class="fa-solid fa-check-double"></i> सत्यापित
+                       </button>`
+                }
+                <button type="button" class="btn-outline-action" onclick="deleteSingleAiRecord('${item.type.includes('घोषणा') ? 'decl' : 'coll'}', '${safeRef || safeSno}')" style="padding:4px 7px;font-size:11px;color:#DC2626;border-color:#FCA5A5;background:#FEF2F2;" title="हटाएं">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
             </td>
           </tr>
         `;
       }).join('');
+    }
+
+    function resetAiHubCompletely() {
+      extractedAiHubReceipts = [];
+      const fileInput = document.getElementById('aiHubFileInput');
+      if (fileInput) fileInput.value = '';
+
+      const progressBox = document.getElementById('aiHubProgressBox');
+      if (progressBox) progressBox.style.display = 'none';
+
+      const previewSection = document.getElementById('aiHubPreviewSection');
+      if (previewSection) previewSection.style.display = 'none';
+
+      const cardsGrid = document.getElementById('aiPreviewCardsGrid');
+      if (cardsGrid) cardsGrid.innerHTML = '';
+
+      const summaryText = document.getElementById('aiPreviewSummaryText');
+      if (summaryText) summaryText.textContent = '';
+
+      const dropzone = document.getElementById('aiHubDropzone');
+      if (dropzone) dropzone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      alert('AI पूर्वावलोकन साफ़ कर दिया गया है। आप अब नई फ़ाइल या PDF ताज़ा अपलोड कर सकते हैं।');
+    }
+
+    async function clearUnverifiedAiQueue() {
+      const verifiedDeclMap = JSON.parse(localStorage.getItem('koteshwar_verified_declarations') || '{}');
+
+      // Find unverified AI items from collections
+      const unverifiedColls = collectionsList.filter(c => {
+        const u = String(c.collectorUsername || '').toLowerCase();
+        const r = String(c.remarks || '');
+        const col = String(c.collector || '');
+        const isAi = (u === 'ai_auto_entry' || r.includes('[AI_UNVERIFIED]') || col.includes('AI'));
+        const isVerified = r.includes('[AI_VERIFIED]');
+        return isAi && !isVerified;
+      });
+
+      // Find unverified AI items from declarations
+      const unverifiedDecls = declarationsList.filter(d => {
+        const u = String(d.collectorUsername || '').toLowerCase();
+        const isAi = (d.source === 'ai_hub_verified' || u === 'ai_auto_entry');
+        const isVerified = !!(d.verified || verifiedDeclMap[String(d.sno)]);
+        return isAi && !isVerified;
+      });
+
+      const total = unverifiedColls.length + unverifiedDecls.length;
+      if (total === 0) {
+        return alert('हटाने हेतु कोई भी असत्यापित AI रिकॉर्ड लंबित नहीं है।');
+      }
+
+      if (!confirm(`क्या आप सभी ${total} पुराने असत्यापित AI रिकॉर्ड्स को हटाना चाहते हैं ताकि नई प्रविष्टि ताज़ा शुरू हो सके?`)) {
+        return;
+      }
+
+      // Remove unverified AI collections
+      if (unverifiedColls.length > 0) {
+        const collReceiptsToRemove = new Set(unverifiedColls.map(c => String(c.receiptNo)));
+        collectionsList = collectionsList.filter(c => !collReceiptsToRemove.has(String(c.receiptNo)));
+        try {
+          let customColls = JSON.parse(localStorage.getItem('koteshwar_custom_collections') || '[]');
+          customColls = customColls.filter(c => !collReceiptsToRemove.has(String(c.receiptNo)));
+          localStorage.setItem('koteshwar_custom_collections', JSON.stringify(customColls));
+
+          let deletedColls = JSON.parse(localStorage.getItem('koteshwar_deleted_collections') || '[]');
+          collReceiptsToRemove.forEach(r => {
+            if (!deletedColls.includes(r)) deletedColls.push(r);
+          });
+          localStorage.setItem('koteshwar_deleted_collections', JSON.stringify(deletedColls));
+        } catch (e) {}
+      }
+
+      // Remove unverified AI declarations
+      if (unverifiedDecls.length > 0) {
+        const declSnosToRemove = new Set(unverifiedDecls.map(d => String(d.sno)));
+        declarationsList = declarationsList.filter(d => !declSnosToRemove.has(String(d.sno)));
+        try {
+          let customDecls = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
+          customDecls = customDecls.filter(d => !declSnosToRemove.has(String(d.sno)));
+          localStorage.setItem('koteshwar_custom_declarations', JSON.stringify(customDecls));
+
+          let deletedDecls = JSON.parse(localStorage.getItem('koteshwar_deleted_declarations') || '[]');
+          declSnosToRemove.forEach(s => {
+            if (!deletedDecls.includes(s)) deletedDecls.push(s);
+          });
+          localStorage.setItem('koteshwar_deleted_declarations', JSON.stringify(deletedDecls));
+        } catch (e) {}
+      }
+
+      renderAiReconciliationTable();
+      renderDeclarationsTable();
+      renderCollectionsTable();
+      updateSummaryCards();
+
+      alert(`✅ ${total} पुराने AI रिकॉर्ड्स सफलतापूर्वक हटा दिए गए। सूची साफ़ कर दी गई है।`);
+    }
+
+    function deleteSingleAiRecord(type, ref) {
+      if (!confirm(`क्या आप रिकॉर्ड "${ref}" को हटाना चाहते हैं?`)) return;
+
+      if (type === 'coll') {
+        collectionsList = collectionsList.filter(c => String(c.receiptNo) !== String(ref));
+        try {
+          let custom = JSON.parse(localStorage.getItem('koteshwar_custom_collections') || '[]');
+          custom = custom.filter(c => String(c.receiptNo) !== String(ref));
+          localStorage.setItem('koteshwar_custom_collections', JSON.stringify(custom));
+
+          let deleted = JSON.parse(localStorage.getItem('koteshwar_deleted_collections') || '[]');
+          if (!deleted.includes(ref)) deleted.push(ref);
+          localStorage.setItem('koteshwar_deleted_collections', JSON.stringify(deleted));
+        } catch (e) {}
+      } else {
+        declarationsList = declarationsList.filter(d => String(d.receipt) !== String(ref) && String(d.sno) !== String(ref));
+        try {
+          let custom = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
+          custom = custom.filter(d => String(d.receipt) !== String(ref) && String(d.sno) !== String(ref));
+          localStorage.setItem('koteshwar_custom_declarations', JSON.stringify(custom));
+
+          let deleted = JSON.parse(localStorage.getItem('koteshwar_deleted_declarations') || '[]');
+          if (!deleted.includes(ref)) deleted.push(ref);
+          localStorage.setItem('koteshwar_deleted_declarations', JSON.stringify(deleted));
+        } catch (e) {}
+      }
+
+      renderAiReconciliationTable();
+      renderDeclarationsTable();
+      renderCollectionsTable();
+      updateSummaryCards();
     }
 
     async function reconcileAiReceipt(receiptNo) {
