@@ -1594,9 +1594,9 @@
       <div class="form-box-card">
         <div class="form-box-head">
           <div>
-            <h3><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--gold-dark);"></i> AI रसीद एवं PDF अपलोड केंद्र (AI Smart Ingestion &amp; Reconciliation Hub)</h3>
+            <h3><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--gold-dark);"></i> AI रसीद एवं PDF अपलोड केंद्र (AI Smart Ingestion &amp; Verification Hub)</h3>
             <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">
-              एकल रसीद, समूह फोटो या बहु-पृष्ठीय PDF (Multi-page PDF) अपलोड करें — Gemini 3 AI स्वतः रसीदें पढ़कर Google Sheet में दर्ज करेगा।
+              एकल रसीद, समूह फोटो या बहु-पृष्ठीय PDF (Multi-page PDF) अपलोड करें — Gemini 3 AI पर्चियों को पढ़कर पूर्वावलोकन प्रस्तुत करेगा।
             </div>
           </div>
           <span class="badge" style="background:#EEF2FF;color:#4F46E5;border:1px solid #C7D2FE;font-size:11.5px;padding:4px 10px;">
@@ -1604,87 +1604,97 @@
           </span>
         </div>
 
-        <!-- Reconciliation Identity Guarantee Card -->
-        <div style="background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:10px;padding:12px 14px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start;">
-          <i class="fa-solid fa-shield-halved" style="color:#16A34A;font-size:18px;margin-top:2px;"></i>
-          <div style="font-size:12px;color:#14532D;line-height:1.5;">
-            <strong>समाधान एवं ऑडिट गारंटी (Reconciliation Guarantee):</strong> इस केंद्र द्वारा दर्ज प्रत्येक रसीद को Google Sheet में स्पष्ट रूप से 
-            <code>[AI_UNVERIFIED]</code> और <code>🤖 AI ऑटो-प्रविष्टि (सत्यापन लंबित)</code> के रूप में टैग किया जाता है। बाद में आप या समन्वयक भौतिक रसीद बुक से एक-क्लिक में इसका सत्यापन (Mark Verified) कर सकते हैं।
+        <!-- Target Destination Selection Strip -->
+        <div style="background:#F8FAFC;border:1.5px solid #CBD5E1;border-radius:10px;padding:12px 14px;margin-bottom:14px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;">
+          <div style="font-weight:700;color:var(--teal);font-size:13px;display:flex;align-items:center;gap:6px;">
+            <i class="fa-solid fa-bullseye" style="color:var(--gold-dark);"></i> प्रविष्टि गंतव्य (Target Destination):
+          </div>
+          <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;font-weight:700;color:#065F46;background:#ECFDF5;padding:5px 12px;border-radius:6px;border:1px solid #A7F3D0;">
+            <input type="radio" name="aiTargetDest" value="declarations" checked onchange="updateAiTargetDestUi()" style="accent-color:#065F46;width:16px;height:16px;" />
+            <span>📋 संकल्प घोषणा सूची (Declarations) [अनुशंसित]</span>
+          </label>
+          <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-size:12.5px;font-weight:600;color:var(--teal);padding:5px 10px;">
+            <input type="radio" name="aiTargetDest" value="collections" onchange="updateAiTargetDestUi()" style="accent-color:var(--teal);width:16px;height:16px;" />
+            <span>💵 वास्तविक संग्रह सूची (Collections - नकद/UPI प्राप्ति)</span>
+          </label>
+        </div>
+
+        <!-- Audit & Verification Policy Guidance Banner -->
+        <div style="background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:10px;padding:12px 14px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start;">
+          <i class="fa-solid fa-shield-halved" style="color:#2563EB;font-size:18px;margin-top:2px;"></i>
+          <div style="font-size:12px;color:#1E40AF;line-height:1.5;">
+            <strong>ऑडिट व सत्यापन नीति:</strong> यदि रसीद पर्ची पर नकद (Cash) या UPI का कोई उल्लेख नहीं है, तो भुगतान स्वतः <strong>"आस्थगित" (Deferred / शेष संकल्प)</strong> माना जाएगा। अपलोड उपरांत सभी विवरणों का <strong>सत्यापन पूर्वावलोकन (Preview)</strong> दिखाया जाएगा — आपके द्वारा जाँचकर <strong>"सत्यापित करें"</strong> दबाने के बाद ही प्रविष्टियां Google Sheet में जुड़ेंगी। पावती विवरण में कोई अवांछित AI कोड नहीं डाला जाएगा।
           </div>
         </div>
 
         <!-- File Upload Dropzone -->
-        <div id="aiHubDropzone" style="border:2px dashed var(--gold);background:var(--sandstone-light);border-radius:12px;padding:24px 16px;text-align:center;cursor:pointer;transition:all 0.3s ease;" onclick="document.getElementById('aiHubFileInput').click()">
-          <div style="width:48px;height:48px;border-radius:50%;background:rgba(212,175,55,0.15);color:var(--gold-dark);display:inline-flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:10px;">
+        <div id="aiHubDropzone" style="border:2px dashed var(--gold);background:var(--sandstone-light);border-radius:12px;padding:26px 16px;text-align:center;cursor:pointer;transition:all 0.3s ease;" onclick="document.getElementById('aiHubFileInput').click()">
+          <div style="width:52px;height:52px;border-radius:50%;background:rgba(212,175,55,0.15);color:var(--gold-dark);display:inline-flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:10px;">
             <i class="fa-solid fa-cloud-arrow-up"></i>
           </div>
-          <div style="font-weight:700;color:var(--teal);font-size:14.5px;margin-bottom:4px;">
+          <div style="font-weight:700;color:var(--teal);font-size:15px;margin-bottom:4px;">
             रसीद PDF या फोटो यहाँ ड्रैग करें अथवा चुनने के लिए क्लिक करें
           </div>
           <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">
-            समर्थित प्रारूप: <strong>PDF (रसीदों का बंडल / समूह), JPG, PNG, WebP</strong> • एकल या एकाधिक फ़ाइलें
+            समर्थित प्रारूप: <strong>PDF (एक या एकाधिक पृष्ठों का बंडल), JPG, PNG, WebP</strong> • एकल या एकाधिक फ़ाइलें
           </div>
           <div style="display:inline-flex;align-items:center;gap:8px;">
-            <button type="button" class="btn-submit-action" style="width:auto;min-height:36px;padding:6px 16px;font-size:12.5px;pointer-events:none;">
+            <button type="button" class="btn-submit-action" style="width:auto;min-height:36px;padding:6px 18px;font-size:13px;pointer-events:none;background:var(--teal);">
               <i class="fa-solid fa-folder-open"></i> फ़ाइल चुनें (PDF / Photos)
             </button>
           </div>
           <input type="file" id="aiHubFileInput" accept="application/pdf,image/*" multiple style="display:none;" onchange="handleAiHubFiles(this.files)" />
         </div>
 
-        <!-- Upload Options Strip -->
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:8px 12px;background:#fff;border:1px solid var(--sandstone);border-radius:8px;font-size:12px;flex-wrap:wrap;gap:8px;">
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;color:var(--teal);">
-            <input type="checkbox" id="chkAiAutoSync" checked style="accent-color:var(--teal);width:16px;height:16px;" />
-            <span>पहचान होते ही सीधे Google Sheet में जोड़ें (Auto-sync to Sheet)</span>
-          </label>
-          <span style="color:var(--text-muted);font-size:11px;">
-            <i class="fa-solid fa-lock" style="color:var(--sage);"></i> सुरक्षित एवं त्रुटिरहित एनक्रिप्शन
-          </span>
-        </div>
-
         <!-- Processing Status Ribbon -->
         <div id="aiHubProgressBox" style="display:none;margin-top:14px;padding:12px 14px;border-radius:8px;background:#fff;border:1.5px solid var(--teal);align-items:center;gap:12px;">
           <i class="fa-solid fa-circle-notch fa-spin" style="color:var(--gold-dark);font-size:20px;"></i>
           <div style="flex:1;">
-            <div style="font-weight:700;color:var(--teal);font-size:13px;" id="aiHubProgressTitle">रसीदें प्रोसेस हो रही हैं...</div>
+            <div style="font-weight:700;color:var(--teal);font-size:13.5px;" id="aiHubProgressTitle">रसीदें प्रोसेस हो रही हैं...</div>
             <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;" id="aiHubProgressSub">Gemini 3 Multimodal AI हस्तलिखित पर्चियों का विश्लेषण कर रहा है...</div>
           </div>
         </div>
 
-        <!-- Extracted Receipts Results Table -->
-        <div id="aiHubResultsContainer" style="display:none;margin-top:20px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+        <!-- Interactive Preview & Verification Section (Shown after OCR) -->
+        <div id="aiHubPreviewSection" style="display:none;margin-top:22px;">
+          <div style="background:var(--sandstone-light);border:1.5px solid var(--gold);border-radius:10px;padding:14px 16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
             <div>
-              <strong style="color:var(--teal);font-size:14px;"><i class="fa-solid fa-list-check" style="color:var(--gold-dark);"></i> निष्कर्षित रसीदें (Extracted Receipts)</strong>
-              <span class="badge" style="background:var(--sandstone);color:var(--teal);margin-left:6px;" id="aiHubResultCount">0 रसीदें</span>
+              <h4 style="margin:0;color:var(--teal);font-size:15px;display:flex;align-items:center;gap:8px;">
+                <i class="fa-solid fa-list-check" style="color:var(--gold-dark);"></i>
+                <span>रसीद पूर्वावलोकन एवं सत्यापन (Receipt Preview &amp; Verification)</span>
+              </h4>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:3px;" id="aiPreviewSummaryText">
+                कुल 0 रसीदें निष्कर्षित | सभी विवरणों का भौतिक पर्ची से मिलान करें
+              </div>
             </div>
-            <div style="display:flex;gap:8px;">
-              <button type="button" class="btn-submit-action" id="btnSyncAllAiReceipts" onclick="syncAllExtractedAiReceipts()" style="display:none;width:auto;min-height:34px;padding:5px 14px;font-size:12px;background:var(--sage);">
-                <i class="fa-solid fa-cloud-arrow-up"></i> सभी रसीदें Google Sheet में दर्ज करें
+            <div style="display:flex;gap:10px;align-items:center;">
+              <button type="button" class="btn-submit-action" onclick="commitVerifiedAiReceipts()" style="background:#065F46;color:#fff;font-weight:700;padding:8px 18px;font-size:13px;width:auto;min-height:38px;box-shadow:0 3px 8px rgba(6,95,70,0.25);">
+                <i class="fa-solid fa-circle-check"></i> <span id="btnCommitTextTop">सत्यापित करें और घोषणा सूची में जोड़ें</span>
+              </button>
+              <button type="button" class="btn-outline-action" onclick="discardAiPreview()" style="padding:6px 12px;font-size:12px;color:#B91C1C;border-color:#FCA5A5;">
+                <i class="fa-solid fa-trash-can"></i> रद्द करें
               </button>
             </div>
           </div>
 
-          <div class="table-responsive">
-            <table class="portal-table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>रसीद क्र.</th>
-                  <th>दानदाता का नाम</th>
-                  <th>स्थान / ग्राम</th>
-                  <th style="text-align:right;">राशि (₹)</th>
-                  <th>माध्यम</th>
-                  <th>दिनांक</th>
-                  <th>स्मृति / विवरण</th>
-                  <th>स्थिति व पहचान टैग</th>
-                </tr>
-              </thead>
-              <tbody id="aiHubTableBody">
-                <!-- Extracted rows injected here -->
-              </tbody>
-            </table>
+          <!-- Cards Container for Extracted Receipts -->
+          <div id="aiPreviewCardsGrid" style="display:flex;flex-direction:column;gap:14px;">
+            <!-- Injected by renderAiVerificationPreview() -->
+          </div>
+
+          <!-- Bottom Action Strip -->
+          <div style="margin-top:18px;padding:14px;background:#fff;border:1.5px solid var(--sandstone);border-radius:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+            <div style="font-size:12px;color:var(--text-muted);">
+              <i class="fa-solid fa-circle-info" style="color:var(--teal);"></i> केवल चयनित (Checked) व सत्यापित रसीदें ही Google Sheet में भेजी जाएंगी।
+            </div>
+            <div style="display:flex;gap:10px;">
+              <button type="button" class="btn-submit-action" onclick="commitVerifiedAiReceipts()" style="background:#065F46;color:#fff;font-weight:700;padding:8px 20px;font-size:13.5px;width:auto;min-height:40px;">
+                <i class="fa-solid fa-circle-check"></i> <span id="btnCommitTextBottom">सत्यापित करें और घोषणा सूची में जोड़ें</span>
+              </button>
+              <button type="button" class="btn-outline-action" onclick="discardAiPreview()" style="padding:6px 14px;font-size:12.5px;">
+                रद्द करें
+              </button>
+            </div>
           </div>
         </div>
 
@@ -1692,9 +1702,9 @@
         <div style="margin-top:28px;padding-top:20px;border-top:1.5px dashed var(--sandstone);">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
             <div>
-              <strong style="color:var(--teal);font-size:14px;"><i class="fa-solid fa-code-compare" style="color:#4F46E5;"></i> समाधान सूची: AI द्वारा दर्ज रसीदें (Pending Reconciliation)</strong>
+              <strong style="color:var(--teal);font-size:14px;"><i class="fa-solid fa-code-compare" style="color:#4F46E5;"></i> AI समाधान सूची (AI Reconciliation Ledger)</strong>
               <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;">
-                Google Sheet में दर्ज वे रसीदें जिनका भौतिक रसीद बुक से अंतिम सत्यापन होना बाकी है
+                AI द्वारा दर्ज वे प्रविष्टियां जिनका भौतिक रसीद बुक से अंतिम सत्यापन होना बाकी है
               </div>
             </div>
             <button type="button" class="btn-outline-action" onclick="renderAiReconciliationTable()" style="padding:4px 10px;font-size:11.5px;">
@@ -1706,18 +1716,19 @@
             <table class="portal-table">
               <thead>
                 <tr>
-                  <th>रसीद क्र.</th>
-                  <th>दानदाता</th>
+                  <th>प्रकार</th>
+                  <th>रसीद / संदर्भ</th>
+                  <th>दानदाता का नाम</th>
                   <th>ग्राम</th>
                   <th style="text-align:right;">राशि (₹)</th>
                   <th>दिनांक</th>
-                  <th>पहचान टैग</th>
-                  <th>विवरण / स्मृति</th>
-                  <th style="text-align:center;">सत्यापन कार्रवाई</th>
+                  <th>भुगतान स्थिति</th>
+                  <th>स्मृति / विवरण</th>
+                  <th style="text-align:center;">सत्यापन</th>
                 </tr>
               </thead>
               <tbody id="aiReconcileTableBody">
-                <tr><td colspan="8" style="text-align:center;padding:16px;color:var(--text-muted);">लोड हो रहा है...</td></tr>
+                <tr><td colspan="9" style="text-align:center;padding:16px;color:var(--text-muted);">लोड हो रहा है...</td></tr>
               </tbody>
             </table>
           </div>
@@ -4110,9 +4121,18 @@
     }
 
     /* ============================================================
-       AI RECEIPT & PDF BATCH INGESTION HUB
+       AI RECEIPT & PDF BATCH INGESTION & VERIFICATION HUB
        ============================================================ */
     let extractedAiHubReceipts = [];
+
+    function updateAiTargetDestUi() {
+      const dest = document.querySelector('input[name="aiTargetDest"]:checked')?.value || 'declarations';
+      const labelText = dest === 'declarations' ? 'सत्यापित करें और घोषणा सूची में जोड़ें' : 'सत्यापित करें और संग्रह सूची में जोड़ें';
+      const topBtn = document.getElementById('btnCommitTextTop');
+      const btmBtn = document.getElementById('btnCommitTextBottom');
+      if (topBtn) topBtn.textContent = labelText;
+      if (btmBtn) btmBtn.textContent = labelText;
+    }
 
     async function handleAiHubFiles(files) {
       if (!files || files.length === 0) return;
@@ -4120,17 +4140,13 @@
       const progressBox = document.getElementById('aiHubProgressBox');
       const progressTitle = document.getElementById('aiHubProgressTitle');
       const progressSub = document.getElementById('aiHubProgressSub');
-      const resultsContainer = document.getElementById('aiHubResultsContainer');
-      const tableBody = document.getElementById('aiHubTableBody');
-      const autoSync = document.getElementById('chkAiAutoSync')?.checked ?? true;
+      const previewSection = document.getElementById('aiHubPreviewSection');
 
       if (progressBox) progressBox.style.display = 'flex';
-      if (resultsContainer) resultsContainer.style.display = 'block';
+      if (previewSection) previewSection.style.display = 'none';
 
       extractedAiHubReceipts = [];
-      if (tableBody) tableBody.innerHTML = '';
-
-      let totalSuccessCount = 0;
+      const dest = document.querySelector('input[name="aiTargetDest"]:checked')?.value || 'declarations';
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
@@ -4150,7 +4166,6 @@
           let mimeType = file.type || (isPdf ? 'application/pdf' : 'image/jpeg');
 
           if (isPdf) {
-            // Read PDF directly as Base64 Data URL
             const reader = new FileReader();
             const pdfPromise = new Promise((resolve, reject) => {
               reader.onload = () => resolve(reader.result);
@@ -4159,7 +4174,6 @@
             reader.readAsDataURL(file);
             base64Data = await pdfPromise;
           } else {
-            // Resize images for high-speed transfer & OCR accuracy
             base64Data = await resizeImageForAi(file, 1600);
             mimeType = 'image/jpeg';
           }
@@ -4170,9 +4184,10 @@
             body: JSON.stringify({
               fileBase64: base64Data,
               mimeType: mimeType,
-              autoSave: autoSync,
-              collector: '🤖 AI ऑटो-प्रविष्टि (सत्यापन लंबित)',
-              collectorUsername: 'ai_auto_entry'
+              target: dest,
+              autoSave: false, // Do not auto-save: always present preview first!
+              collector: (currentUser ? currentUser.displayName : 'अधिकृत कार्यकर्ता'),
+              collectorUsername: (currentUser ? currentUser.username : 'karyakarta')
             })
           });
 
@@ -4184,12 +4199,11 @@
           const resJson = await response.json();
           const receipts = resJson.receipts || (resJson.extracted ? [resJson.extracted] : []);
 
-          receipts.forEach((r, idx) => {
+          receipts.forEach((r) => {
             r.fileOrigin = file.name;
             r.isAiEntry = true;
-            r.synced = autoSync && (resJson.syncedToSheet || (resJson.syncResults && resJson.syncResults[idx]?.sync?.status === 'success'));
+            r.verified = true; // Pre-checked for review
             extractedAiHubReceipts.push(r);
-            totalSuccessCount++;
           });
 
         } catch (fileErr) {
@@ -4200,135 +4214,297 @@
 
       if (progressBox) progressBox.style.display = 'none';
 
-      // Render extracted receipts in table
-      renderExtractedAiHubTable();
-
-      // If autoSync was on, refresh portal collections list so they appear immediately in the ledger
-      if (autoSync && totalSuccessCount > 0) {
-        setTimeout(() => {
-          refreshPortalData(false);
-          renderAiReconciliationTable();
-        }, 1200);
-      }
+      // Render interactive preview for user verification
+      renderAiVerificationPreview();
     }
 
-    function renderExtractedAiHubTable() {
-      const tableBody = document.getElementById('aiHubTableBody');
-      const resultCountBadge = document.getElementById('aiHubResultCount');
-      const btnSyncAll = document.getElementById('btnSyncAllAiReceipts');
+    function renderAiVerificationPreview() {
+      const previewSection = document.getElementById('aiHubPreviewSection');
+      const cardsGrid = document.getElementById('aiPreviewCardsGrid');
+      const summaryText = document.getElementById('aiPreviewSummaryText');
 
-      if (!tableBody) return;
-
-      if (resultCountBadge) resultCountBadge.textContent = `${extractedAiHubReceipts.length} रसीदें निष्कर्षित`;
-
-      const hasUnsynced = extractedAiHubReceipts.some(r => !r.synced);
-      if (btnSyncAll) {
-        btnSyncAll.style.display = hasUnsynced ? 'inline-flex' : 'none';
-      }
+      if (!previewSection || !cardsGrid) return;
 
       if (extractedAiHubReceipts.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:20px;color:var(--text-muted);">कोई रसीद प्राप्त नहीं हुई।</td></tr>`;
+        previewSection.style.display = 'none';
         return;
       }
 
-      tableBody.innerHTML = extractedAiHubReceipts.map((r, i) => `
-        <tr>
-          <td><span style="font-weight:700;color:var(--text-muted);">${i + 1}</span></td>
-          <td><strong style="color:var(--teal);font-size:13px;">${r.receiptNo || '-'}</strong></td>
-          <td><strong>${r.donorName || 'अज्ञात दानदाता'}</strong></td>
-          <td><span style="color:var(--teal);">${r.city || 'अन्य'}</span></td>
-          <td style="text-align:right;"><strong style="color:var(--sage);">${fmt(r.amount || 0)}</strong></td>
-          <td><span style="font-size:11px;background:var(--sandstone-light);padding:2px 6px;border-radius:4px;">${r.paymentMode || 'नकद'}</span></td>
-          <td style="white-space:nowrap;font-size:11.5px;">${r.date || '-'}</td>
-          <td style="font-size:11.5px;max-width:200px;">${r.notes || '-'}</td>
-          <td>
-            ${r.synced
-              ? `<span class="badge" style="background:#ECFDF5;color:#065F46;border:1px solid #A7F3D0;font-size:11px;padding:3px 7px;">
-                   <i class="fa-solid fa-circle-check"></i> Sheet में दर्ज [AI_UNVERIFIED]
-                 </span>`
-              : `<button type="button" class="btn-submit-action" onclick="syncSingleExtractedAiReceipt(${i})" style="padding:4px 8px;font-size:11px;background:var(--teal);">
-                   <i class="fa-solid fa-cloud-arrow-up"></i> Sheet में जोड़ें
-                 </button>`
-            }
-          </td>
-        </tr>
-      `).join('');
+      updateAiTargetDestUi();
+
+      const totalAmount = extractedAiHubReceipts.reduce((sum, r) => sum + (Number(r.amount) || 0), 0);
+      const deferredCount = extractedAiHubReceipts.filter(r => r.isDeferred !== false).length;
+
+      if (summaryText) {
+        summaryText.innerHTML = `
+          <strong>कुल ${extractedAiHubReceipts.length} रसीदें निष्कर्षित</strong> • कुल संकल्प राशि: <strong style="color:var(--sage);">${fmt(totalAmount)}</strong>
+          ${deferredCount > 0 ? ` • <span style="color:#B45309;font-weight:600;"><i class="fa-solid fa-clock"></i> ${deferredCount} रसीदों पर नकद/UPI का उल्लेख नहीं है (आस्थगित भुगतान / शेष संकल्प)</span>` : ''}
+        `;
+      }
+
+      cardsGrid.innerHTML = extractedAiHubReceipts.map((r, i) => {
+        const fullReceiptVal = r.fullReceipt || (r.bookNo ? `बुक ${r.bookNo} / ${r.receiptNo}` : `रसीद ${r.receiptNo || (i + 1)}`);
+        const cleanNotesVal = (r.cleanNotes || r.notes || '').replace(/\[AI.*?\]/gi, '').trim();
+
+        return `
+          <div class="ai-preview-card" id="aiCard_${i}" style="background:#fff;border:1.5px solid ${r.verified ? '#86EFAC' : '#CBD5E1'};border-radius:10px;padding:16px;box-shadow:0 2px 6px rgba(0,0,0,0.04);transition:all 0.2s ease;">
+            <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #F1F5F9;padding-bottom:10px;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span style="font-weight:700;background:var(--teal);color:#fff;border-radius:50%;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;">${i + 1}</span>
+                <strong style="color:var(--teal);font-size:13.5px;"><i class="fa-solid fa-receipt"></i> बही / रसीद क्र.:</strong>
+                <input type="text" id="aiPrev_receipt_${i}" value="${fullReceiptVal}" style="width:140px;padding:4px 8px;font-size:12.5px;font-weight:700;border:1px solid #CBD5E1;border-radius:6px;color:var(--teal);background:#F8FAFC;" />
+              </div>
+
+              <div style="display:flex;align-items:center;gap:12px;">
+                <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-weight:700;font-size:12.5px;color:#065F46;background:#ECFDF5;padding:4px 10px;border-radius:6px;border:1px solid #A7F3D0;">
+                  <input type="checkbox" id="aiPrev_verified_${i}" ${r.verified ? 'checked' : ''} onchange="toggleAiCardVerified(${i})" style="accent-color:#065F46;width:17px;height:17px;" />
+                  <span>✅ भौतिक रसीद से सत्यापित</span>
+                </label>
+                <button type="button" onclick="removeAiPreviewCard(${i})" class="btn-outline-action" style="padding:3px 8px;font-size:11px;color:#DC2626;border-color:#FCA5A5;" title="इस रसीद को छोड़ें">
+                  <i class="fa-solid fa-xmark"></i> छोड़ें
+                </button>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px;">
+              <div>
+                <label style="font-size:11.5px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:3px;">दानदाता का शुभ नाम (मान्यवर श्री) *</label>
+                <input type="text" id="aiPrev_name_${i}" value="${escapeHtml(r.donorName || '')}" style="width:100%;padding:6px 10px;font-size:13px;font-weight:600;border:1px solid #CBD5E1;border-radius:6px;" />
+              </div>
+              <div>
+                <label style="font-size:11.5px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:3px;">पिता / पति श्री</label>
+                <input type="text" id="aiPrev_father_${i}" value="${escapeHtml(r.fatherName || '')}" style="width:100%;padding:6px 10px;font-size:13px;border:1px solid #CBD5E1;border-radius:6px;" />
+              </div>
+              <div>
+                <label style="font-size:11.5px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:3px;">स्थान / ग्राम / नगर *</label>
+                <input type="text" id="aiPrev_city_${i}" value="${escapeHtml(r.city || 'अन्य')}" style="width:100%;padding:6px 10px;font-size:13px;border:1px solid #CBD5E1;border-radius:6px;" />
+              </div>
+              <div>
+                <label style="font-size:11.5px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:3px;">मोबाइल नंबर</label>
+                <input type="tel" id="aiPrev_mobile_${i}" value="${escapeHtml(r.mobile || '')}" style="width:100%;padding:6px 10px;font-size:13px;border:1px solid #CBD5E1;border-radius:6px;" placeholder="उदा. 9826116072" />
+              </div>
+              <div>
+                <label style="font-size:11.5px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:3px;">संकल्पित राशि (₹) *</label>
+                <input type="number" id="aiPrev_amount_${i}" value="${r.amount || 0}" style="width:100%;padding:6px 10px;font-size:13.5px;font-weight:700;color:var(--sage);border:1px solid #CBD5E1;border-radius:6px;" />
+              </div>
+              <div>
+                <label style="font-size:11.5px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:3px;">दिनांक</label>
+                <input type="date" id="aiPrev_date_${i}" value="${r.date || new Date().toISOString().split('T')[0]}" style="width:100%;padding:6px 10px;font-size:12.5px;border:1px solid #CBD5E1;border-radius:6px;" />
+              </div>
+              <div>
+                <label style="font-size:11.5px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:3px;">भुगतान स्थिति (पर्ची अनुसार)</label>
+                <select id="aiPrev_mode_${i}" style="width:100%;padding:6px 10px;font-size:12.5px;border:1px solid #CBD5E1;border-radius:6px;background:#F8FAFC;">
+                  <option value="deferred" ${r.isDeferred ? 'selected' : ''}>⏳ आस्थगित (Deferred - कोई नकद/UPI उल्लेख नहीं)</option>
+                  <option value="Cash" ${!r.isDeferred && r.paymentMode === 'Cash' ? 'selected' : ''}>💵 नकद (Cash प्राप्त)</option>
+                  <option value="UPI" ${!r.isDeferred && r.paymentMode === 'UPI' ? 'selected' : ''}>📱 UPI (प्राप्त)</option>
+                  <option value="Cheque" ${!r.isDeferred && r.paymentMode === 'Cheque' ? 'selected' : ''}>🏦 चेक (प्राप्त)</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="margin-top:10px;">
+              <label style="font-size:11.5px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:3px;">
+                पुण्य स्मृति व निर्माण विवरण (पावती विवरण) - <em>साफ़ टिप्पणी</em>
+              </label>
+              <input type="text" id="aiPrev_notes_${i}" value="${escapeHtml(cleanNotesVal)}" style="width:100%;padding:6px 10px;font-size:12.5px;border:1px solid #CBD5E1;border-radius:6px;" placeholder="उदा. पुण्य स्मृति: ... • निर्माण: ..." />
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      previewSection.style.display = 'block';
+      previewSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    async function syncSingleExtractedAiReceipt(idx) {
-      const r = extractedAiHubReceipts[idx];
-      if (!r) return;
-
-      const payload = {
-        action: 'addCollection',
-        data: {
-          receiptNo: r.receiptNo,
-          donorName: r.donorName || 'दानदाता',
-          city: r.city || 'अन्य',
-          amount: Number(r.amount) || 0,
-          paymentMode: r.paymentMode || 'नकद',
-          paymentDate: r.date || new Date().toISOString().split('T')[0],
-          transactionRef: r.transactionRef || '',
-          remarks: [
-            '[AI_UNVERIFIED]',
-            r.notes ? `स्मृति: ${r.notes}` : '',
-            r.amountInWords ? `(${r.amountInWords})` : '',
-            `[AI Auto-Entry]`
-          ].filter(Boolean).join(' | '),
-          collector: '🤖 AI ऑटो-प्रविष्टि (सत्यापन लंबित)',
-          collectorUsername: 'ai_auto_entry'
+    function toggleAiCardVerified(idx) {
+      const chk = document.getElementById(`aiPrev_verified_${idx}`);
+      const card = document.getElementById(`aiCard_${idx}`);
+      if (chk && card) {
+        card.style.borderColor = chk.checked ? '#86EFAC' : '#CBD5E1';
+        if (extractedAiHubReceipts[idx]) {
+          extractedAiHubReceipts[idx].verified = chk.checked;
         }
-      };
-
-      try {
-        await postWebhookData('addCollection', payload.data);
-        r.synced = true;
-        renderExtractedAiHubTable();
-        refreshPortalData(false);
-        renderAiReconciliationTable();
-        alert(`रसीद #${r.receiptNo} सफलतापूर्वक Google Sheet में जुड़ गई!`);
-      } catch (err) {
-        alert('त्रुटि: ' + err.message);
       }
     }
 
-    async function syncAllExtractedAiReceipts() {
-      const unsynced = extractedAiHubReceipts.filter(r => !r.synced);
-      if (unsynced.length === 0) return;
+    function removeAiPreviewCard(idx) {
+      extractedAiHubReceipts.splice(idx, 1);
+      renderAiVerificationPreview();
+    }
 
-      if (!confirm(`क्या आप सभी ${unsynced.length} रसीदें Google Sheet में दर्ज करना चाहते हैं?`)) return;
+    function discardAiPreview() {
+      if (!confirm('क्या आप इस पूर्वावलोकन को रद्द करना चाहते हैं?')) return;
+      extractedAiHubReceipts = [];
+      const previewSection = document.getElementById('aiHubPreviewSection');
+      if (previewSection) previewSection.style.display = 'none';
+    }
+
+    async function commitVerifiedAiReceipts() {
+      const target = document.querySelector('input[name="aiTargetDest"]:checked')?.value || 'declarations';
+
+      const toSave = [];
+      extractedAiHubReceipts.forEach((r, idx) => {
+        const isChecked = document.getElementById(`aiPrev_verified_${idx}`)?.checked ?? true;
+        if (!isChecked) return; // Skip unverified/unchecked
+
+        const donorName = (document.getElementById(`aiPrev_name_${idx}`)?.value || r.donorName || '').trim();
+        const fatherName = (document.getElementById(`aiPrev_father_${idx}`)?.value || r.fatherName || '').trim();
+        const city = (document.getElementById(`aiPrev_city_${idx}`)?.value || r.city || 'अन्य').trim();
+        const mobile = (document.getElementById(`aiPrev_mobile_${idx}`)?.value || r.mobile || '').trim();
+        const amount = Number(document.getElementById(`aiPrev_amount_${idx}`)?.value || r.amount || 0);
+        const receipt = (document.getElementById(`aiPrev_receipt_${idx}`)?.value || r.fullReceipt || '').trim();
+        const date = document.getElementById(`aiPrev_date_${idx}`)?.value || r.date || new Date().toISOString().split('T')[0];
+        const notes = (document.getElementById(`aiPrev_notes_${idx}`)?.value || r.notes || '').replace(/\[AI.*?\]/gi, '').trim();
+        const modeVal = document.getElementById(`aiPrev_mode_${idx}`)?.value || 'deferred';
+        const isDeferred = (modeVal === 'deferred');
+        const paymentMode = isDeferred ? 'आस्थगित' : modeVal;
+
+        if (!donorName || amount <= 0) return;
+
+        const fullName = fatherName ? `${donorName} (पिता: ${fatherName})` : donorName;
+
+        toSave.push({
+          donorName,
+          fatherName,
+          fullName,
+          city,
+          mobile,
+          amount,
+          receipt,
+          date,
+          notes,
+          isDeferred,
+          paymentMode
+        });
+      });
+
+      if (toSave.length === 0) {
+        return alert('कोई भी सत्यापित रसीद चयनित नहीं है। कृपया कम से कम एक रसीद को चेक करें।');
+      }
+
+      const confirmMsg = target === 'declarations'
+        ? `क्या आप इन ${toSave.length} सत्यापित रसीदों को संकल्प घोषणा सूची (Declarations) में जोड़ना चाहते हैं?`
+        : `क्या आप इन ${toSave.length} सत्यापित रसीदों को वास्तविक संग्रह सूची (Collections) में जोड़ना चाहते हैं?`;
+
+      if (!confirm(confirmMsg)) return;
+
+      const progressBox = document.getElementById('aiHubProgressBox');
+      const progressTitle = document.getElementById('aiHubProgressTitle');
+      const progressSub = document.getElementById('aiHubProgressSub');
+      if (progressBox) progressBox.style.display = 'flex';
+      if (progressTitle) progressTitle.textContent = `Google Sheet में सहेजा जा रहा है...`;
+      if (progressSub) progressSub.textContent = `${toSave.length} रसीदें वेबहुक द्वारा दर्ज की जा रही हैं...`;
 
       let successCount = 0;
-      for (const r of unsynced) {
-        try {
-          await postWebhookData('addCollection', {
-            receiptNo: r.receiptNo,
-            donorName: r.donorName || 'दानदाता',
-            city: r.city || 'अन्य',
-            amount: Number(r.amount) || 0,
-            paymentMode: r.paymentMode || 'नकद',
-            paymentDate: r.date || new Date().toISOString().split('T')[0],
-            transactionRef: r.transactionRef || '',
-            remarks: [
-              '[AI_UNVERIFIED]',
-              r.notes ? `स्मृति: ${r.notes}` : '',
-              r.amountInWords ? `(${r.amountInWords})` : '',
-              `[AI Auto-Entry]`
-            ].filter(Boolean).join(' | '),
-            collector: '🤖 AI ऑटो-प्रविष्टि (सत्यापन लंबित)',
-            collectorUsername: 'ai_auto_entry'
-          });
-          r.synced = true;
-          successCount++;
-        } catch (e) {
-          console.error('Failed to sync receipt', r.receiptNo, e);
+
+      if (target === 'declarations') {
+        let highestSno = 0;
+        declarationsList.forEach(d => {
+          const v = parseInt(d.sno, 10);
+          if (!isNaN(v) && v > highestSno) highestSno = v;
+        });
+
+        const customDecls = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
+        const verifiedMap = JSON.parse(localStorage.getItem('koteshwar_verified_declarations') || '{}');
+
+        for (const item of toSave) {
+          highestSno++;
+          const nextSno = highestSno;
+
+          const newDecl = {
+            sno: nextSno,
+            name: item.fullName,
+            city: item.city,
+            notes: item.notes,
+            mobile: item.mobile,
+            amount: item.amount,
+            initialDeposited: 0,
+            deposited: item.isDeferred ? 0 : item.amount,
+            balance: item.isDeferred ? item.amount : 0,
+            receipt: item.receipt,
+            date: item.date,
+            collector: (currentUser ? currentUser.displayName : 'अधिकृत कार्यकर्ता'),
+            collectorUsername: (currentUser ? currentUser.username : 'karyakarta'),
+            verified: true,
+            verifiedBy: (currentUser ? currentUser.displayName : 'अधिकृत कार्यकर्ता'),
+            verifiedAt: new Date().toISOString(),
+            isDeferred: item.isDeferred,
+            paymentStatus: item.isDeferred ? 'आस्थगित' : 'प्राप्त',
+            recordedAt: new Date().toISOString(),
+            source: 'ai_hub_verified'
+          };
+
+          declarationsList.unshift(newDecl);
+          customDecls.push(newDecl);
+          verifiedMap[String(nextSno)] = { verifiedBy: newDecl.verifiedBy, verifiedAt: newDecl.verifiedAt };
+
+          try {
+            await postWebhookData('addDeclaration', newDecl);
+            successCount++;
+          } catch (err) {
+            console.error('Webhook error for declaration', nextSno, err);
+          }
         }
+
+        try {
+          localStorage.setItem('koteshwar_custom_declarations', JSON.stringify(customDecls));
+          localStorage.setItem('koteshwar_verified_declarations', JSON.stringify(verifiedMap));
+        } catch (e) {}
+
+      } else {
+        const customColls = JSON.parse(localStorage.getItem('koteshwar_custom_collections') || '[]');
+        for (const item of toSave) {
+          const newColl = {
+            receiptNo: item.receipt,
+            donorName: item.fullName,
+            city: item.city,
+            amount: item.amount,
+            paymentMode: item.paymentMode || 'नकद',
+            paymentDate: item.date,
+            date: item.date,
+            transactionRef: '',
+            remarks: item.notes,
+            collector: (currentUser ? currentUser.displayName : 'अधिकृत कार्यकर्ता'),
+            collectorUsername: (currentUser ? currentUser.username : 'karyakarta')
+          };
+
+          collectionsList.unshift(newColl);
+          customColls.push(newColl);
+
+          try {
+            await postWebhookData('addCollection', newColl);
+            successCount++;
+          } catch (err) {
+            console.error('Webhook error for collection', item.receipt, err);
+          }
+        }
+
+        try {
+          localStorage.setItem('koteshwar_custom_collections', JSON.stringify(customColls));
+        } catch (e) {}
       }
 
-      renderExtractedAiHubTable();
-      refreshPortalData(false);
+      if (progressBox) progressBox.style.display = 'none';
+
+      // Reset extracted & preview
+      extractedAiHubReceipts = [];
+      const previewSection = document.getElementById('aiHubPreviewSection');
+      if (previewSection) previewSection.style.display = 'none';
+
+      // Refresh data tables
+      renderDeclarationsTable();
+      renderCollectionsTable();
       renderAiReconciliationTable();
-      alert(`सफलता! ${successCount} रसीदें Google Sheet में [AI_UNVERIFIED] टैग के साथ दर्ज हो गईं।`);
+      updateSummaryCards();
+
+      alert(`✅ सफलतापूर्वक ${toSave.length} रसीदें सत्यापित होकर ${target === 'declarations' ? 'संकल्प घोषणा सूची (Declarations)' : 'वास्तविक संग्रह सूची (Collections)'} में दर्ज हो गईं!`);
+
+      // Switch to Declarations tab to view newly added declarations
+      if (target === 'declarations') {
+        switchPortalTab('declarations-ledger');
+      } else {
+        switchPortalTab('collections-ledger');
+      }
     }
 
     /* ============================================================
@@ -4339,56 +4515,92 @@
       const badgeNav = document.getElementById('tabBadgeAiPending');
       if (!tbody) return;
 
-      // Find all collections that are AI entries
-      const aiCollections = collectionsList.filter(c => {
+      const verifiedDeclMap = JSON.parse(localStorage.getItem('koteshwar_verified_declarations') || '{}');
+
+      // AI items from Declarations
+      const aiDecls = declarationsList.filter(d => {
+        const u = String(d.collectorUsername || '').toLowerCase();
+        const isAi = (d.source === 'ai_hub_verified' || u === 'ai_auto_entry' || u === 'ai_agent');
+        return isAi;
+      }).map(d => ({
+        type: 'घोषणा (संकल्प)',
+        sno: d.sno,
+        ref: d.receipt || `#${d.sno}`,
+        donorName: d.name,
+        city: d.city,
+        amount: d.amount,
+        date: d.date,
+        paymentStatus: d.paymentStatus || (d.balance > 0 ? 'आस्थगित' : 'प्राप्त'),
+        notes: d.notes || '-',
+        isVerified: !!(d.verified || verifiedDeclMap[String(d.sno)]),
+        raw: d
+      }));
+
+      // AI items from Collections
+      const aiColls = collectionsList.filter(c => {
         const u = String(c.collectorUsername || '').toLowerCase();
         const r = String(c.remarks || '');
         const col = String(c.collector || '');
-        return u === 'ai_auto_entry' || r.includes('[AI_UNVERIFIED]') || col.includes('AI');
-      });
+        return u === 'ai_auto_entry' || r.includes('[AI_') || col.includes('AI');
+      }).map(c => ({
+        type: 'संग्रह (रसीद)',
+        sno: c.receiptNo,
+        ref: c.receiptNo,
+        donorName: c.donorName,
+        city: c.city,
+        amount: c.amount,
+        date: c.date || c.paymentDate,
+        paymentStatus: c.paymentMode || 'नकद',
+        notes: c.remarks || '-',
+        isVerified: String(c.remarks || '').includes('[AI_VERIFIED]'),
+        raw: c
+      }));
 
-      const unverifiedCount = aiCollections.filter(c => !String(c.remarks || '').includes('[AI_VERIFIED]')).length;
+      const combined = [...aiDecls, ...aiColls];
+
+      const unverifiedCount = combined.filter(x => !x.isVerified).length;
       if (badgeNav) {
         badgeNav.textContent = unverifiedCount;
         badgeNav.style.display = unverifiedCount > 0 ? 'inline-block' : 'none';
       }
 
-      if (aiCollections.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text-muted);"><i class="fa-solid fa-circle-check" style="color:var(--sage);"></i> बहुत बढ़िया! कोई भी AI रसीद सत्यापन हेतु लंबित नहीं है। सभी रसीदें समाधानित हैं।</td></tr>`;
+      if (combined.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--text-muted);"><i class="fa-solid fa-circle-check" style="color:var(--sage);"></i> कोई भी AI रसीद सत्यापन हेतु लंबित नहीं है। सभी प्रविष्टियां सत्यापित हैं।</td></tr>`;
         return;
       }
 
-      // Sort latest first
-      aiCollections.sort((a, b) => String(b.receiptNo).localeCompare(String(a.receiptNo)));
-
-      tbody.innerHTML = aiCollections.map(c => {
-        const isVerified = String(c.remarks || '').includes('[AI_VERIFIED]');
-        const safeReceiptNo = String(c.receiptNo || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      tbody.innerHTML = combined.map(item => {
+        const safeRef = String(item.ref || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        const safeSno = String(item.sno || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
 
         return `
-          <tr style="${isVerified ? 'background:#F9FAFB;opacity:0.85;' : ''}">
-            <td><strong style="color:var(--teal);">${c.receiptNo}</strong></td>
-            <td><strong>${c.donorName}</strong></td>
-            <td><span style="color:var(--teal);">${c.city || 'अन्य'}</span></td>
-            <td style="text-align:right;"><strong style="color:var(--sage);">${fmt(c.amount)}</strong></td>
-            <td style="font-size:11.5px;white-space:nowrap;">${formatDisplayDate(c.date)}</td>
+          <tr style="${item.isVerified ? 'background:#F9FAFB;opacity:0.9;' : ''}">
             <td>
-              ${isVerified
-                ? `<span class="badge" style="background:#ECFDF5;color:#065F46;border:1px solid #A7F3D0;font-size:10.5px;padding:2px 7px;">
-                     <i class="fa-solid fa-check-circle"></i> भौतिक रसीद से सत्यापित
-                   </span>`
-                : `<span class="badge" style="background:#EEF2FF;color:#4F46E5;border:1px solid #C7D2FE;font-size:10.5px;padding:2px 7px;">
-                     <i class="fa-solid fa-wand-magic-sparkles"></i> AI प्रविष्टि [सत्यापन शेष]
-                   </span>`
-              }
+              <span class="badge" style="background:${item.type.includes('घोषणा') ? '#EFF6FF;color:#1E40AF' : '#ECFDF5;color:#065F46'};font-size:10.5px;">
+                ${item.type}
+              </span>
             </td>
-            <td style="font-size:11.5px;max-width:220px;">${c.remarks || '-'}</td>
+            <td><strong style="color:var(--teal);">${item.ref}</strong></td>
+            <td><strong>${item.donorName}</strong></td>
+            <td><span style="color:var(--teal);">${item.city || 'अन्य'}</span></td>
+            <td style="text-align:right;"><strong style="color:var(--sage);">${fmt(item.amount)}</strong></td>
+            <td style="font-size:11.5px;white-space:nowrap;">${formatDisplayDate(item.date)}</td>
+            <td>
+              <span style="font-size:11px;background:var(--sandstone-light);padding:2px 6px;border-radius:4px;color:${item.paymentStatus === 'आस्थगित' ? '#B45309' : '#065F46'};font-weight:600;">
+                ${item.paymentStatus}
+              </span>
+            </td>
+            <td style="font-size:11.5px;max-width:200px;">${item.notes}</td>
             <td style="text-align:center;">
-              ${isVerified
-                ? `<span style="font-size:11px;color:var(--sage);font-weight:700;"><i class="fa-solid fa-circle-check"></i> समाधानित</span>`
-                : `<button type="button" class="btn-outline-action" onclick="reconcileAiReceipt('${safeReceiptNo}')" style="padding:4px 10px;font-size:11px;color:#065F46;background:#ECFDF5;border-color:#10B981;font-weight:700;">
-                     <i class="fa-solid fa-check-double"></i> भौतिक रसीद से सत्यापित करें
-                   </button>`
+              ${item.isVerified
+                ? `<span style="font-size:11px;color:var(--sage);font-weight:700;"><i class="fa-solid fa-circle-check"></i> सत्यापित</span>`
+                : item.type.includes('घोषणा')
+                  ? `<button type="button" class="btn-outline-action" onclick="verifyDeclarationInline('${safeSno}')" style="padding:4px 10px;font-size:11px;color:#065F46;background:#ECFDF5;border-color:#10B981;font-weight:700;">
+                       <i class="fa-solid fa-check-double"></i> सत्यापित करें
+                     </button>`
+                  : `<button type="button" class="btn-outline-action" onclick="reconcileAiReceipt('${safeRef}')" style="padding:4px 10px;font-size:11px;color:#065F46;background:#ECFDF5;border-color:#10B981;font-weight:700;">
+                       <i class="fa-solid fa-check-double"></i> सत्यापित करें
+                     </button>`
               }
             </td>
           </tr>
@@ -4422,6 +4634,41 @@
       } catch (err) {
         alert('सत्यापन अपडेट में त्रुटि: ' + err.message);
       }
+    }
+
+    function verifyDeclarationInline(sno) {
+      const d = declarationsList.find(item => String(item.sno) === String(sno));
+      if (!d) return;
+
+      if (!confirm(`क्या आपने घोषणा #${d.sno} (${d.name}) का भौतिक पर्ची से मिलान कर लिया है और इसे "सत्यापित" मार्क करना चाहते हैं?`)) {
+        return;
+      }
+
+      d.verified = true;
+      d.verifiedBy = (currentUser ? currentUser.displayName : 'अधिकृत कार्यकर्ता') + ' (सत्यापित)';
+      d.verifiedAt = new Date().toISOString();
+
+      try {
+        const custom = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
+        const match = custom.find(c => String(c.sno) === String(sno));
+        if (match) {
+          match.verified = true;
+          match.verifiedBy = d.verifiedBy;
+          match.verifiedAt = d.verifiedAt;
+          localStorage.setItem('koteshwar_custom_declarations', JSON.stringify(custom));
+        }
+        const verifiedMap = JSON.parse(localStorage.getItem('koteshwar_verified_declarations') || '{}');
+        verifiedMap[String(sno)] = { verifiedBy: d.verifiedBy, verifiedAt: d.verifiedAt };
+        localStorage.setItem('koteshwar_verified_declarations', JSON.stringify(verifiedMap));
+      } catch (e) {}
+
+      postWebhookData('editDeclaration', Object.assign({}, d, {
+        notes: (d.notes ? d.notes + ' ' : '') + `[सत्यापित: ${new Date().toLocaleDateString('en-GB')}]`
+      }));
+
+      renderDeclarationsTable();
+      renderAiReconciliationTable();
+      alert(`घोषणा #${d.sno} (${d.name}) सफलतापूर्वक सत्यापित हो गई!`);
     }
 
     /* ============================================================
@@ -4763,7 +5010,13 @@
         return;
       }
 
-      tbody.innerHTML = filtered.slice(0, 150).map(d => `
+      const verifiedDeclMap = JSON.parse(localStorage.getItem('koteshwar_verified_declarations') || '{}');
+
+      tbody.innerHTML = filtered.slice(0, 150).map(d => {
+        const isVerified = !!(d.verified || verifiedDeclMap[String(d.sno)]);
+        const isAi = (d.source === 'ai_hub_verified' || String(d.collectorUsername || '').includes('ai_'));
+
+        return `
         <tr>
           <td style="font-weight:700;color:var(--text-muted);">#${d.sno}</td>
           <td style="white-space:nowrap;font-size:11.5px;color:var(--text-muted);">
@@ -4771,7 +5024,12 @@
           </td>
           <td>
             <strong>${d.name}</strong>
-            ${d.notes ? `<div style="font-size:10.5px;color:var(--text-muted);">${d.notes}</div>` : ''}
+            ${d.receipt ? `<span class="badge" style="background:#F1F5F9;color:#334155;font-size:10px;padding:2px 6px;margin-left:4px;display:inline-block;"><i class="fa-solid fa-receipt"></i> ${d.receipt}</span>` : ''}
+            ${isVerified
+              ? `<span class="badge" style="background:#ECFDF5;color:#065F46;border:1px solid #A7F3D0;font-size:10px;padding:1px 5px;margin-left:4px;" title="सत्यापितकर्ता: ${d.verifiedBy || 'अधिकृत कार्यकर्ता'}"><i class="fa-solid fa-circle-check"></i> सत्यापित</span>`
+              : (isAi ? `<span class="badge" style="background:#FFFBEB;color:#92400E;border:1px solid #FCD34D;font-size:10px;padding:1px 5px;margin-left:4px;"><i class="fa-solid fa-clock"></i> AI प्रविष्टि [सत्यापन शेष]</span>` : '')
+            }
+            ${d.notes ? `<div style="font-size:10.5px;color:var(--text-muted);margin-top:2px;">${d.notes}</div>` : ''}
             ${cleanMobileNumber(d.mobile) ? `
               <div style="font-size:10.5px;color:var(--teal);margin-top:2px;">
                 <a href="tel:${cleanMobileNumber(d.mobile)}" style="color:var(--teal);text-decoration:none;"><i class="fa-solid fa-phone" style="font-size:9px;"></i> ${cleanMobileNumber(d.mobile)}</a>
@@ -4785,6 +5043,12 @@
           <td style="text-align:right;font-weight:700;color:var(--saffron);">${fmt(d.balance)}</td>
           <td style="text-align:center;">
             <div style="display:inline-flex;gap:4px;align-items:center;">
+              ${!isVerified
+                ? `<button class="btn-outline-action" onclick="verifyDeclarationInline('${d.sno}')" title="भौतिक पर्ची से सत्यापित करें" style="padding:3px 6px;font-size:11px;color:#065F46;background:#ECFDF5;border-color:#10B981;">
+                     <i class="fa-solid fa-check-double"></i> सत्यापित
+                   </button>`
+                : ''
+              }
               <button class="btn-outline-action" onclick="jumpToCollection('${d.sno}')" title="रसीद काटें" style="padding:3px 7px;font-size:11px;">
                 <i class="fa-solid fa-plus"></i> रसीद
               </button>
@@ -4797,7 +5061,8 @@
             </div>
           </td>
         </tr>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function filterDeclarationsTable() {

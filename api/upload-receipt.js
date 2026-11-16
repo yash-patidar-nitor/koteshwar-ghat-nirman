@@ -1,6 +1,6 @@
 const https = require('https');
+const { URL } = require('url');
 
-const DEFAULT_KEY_STORE = 'QVEuQWI4Uk42SWhUM1AxSmtBODFJbkcwdzRCek9zY21uSVZzVFl4c1lJb3NJTHRaeEc5bmc=';
 const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwS98khdbLX3wgfZWUgA5Qkb5OiKjbXOkB6g1uIGWGNWuDwP2WJp_K95wj5_TyE9wt9kw/exec';
 
 const GEMINI_MODELS = [
@@ -9,6 +9,8 @@ const GEMINI_MODELS = [
   'gemini-3.5-flash-lite',
   'gemini-3.8-flash'
 ];
+
+const DEFAULT_KEY_STORE = 'QVEuQWI4Uk42SWhUM1AxSmtBODFJbkcwdzRCek9zY21uSVZzVFl4c1lJb3NJTHRaWkc5bmc=';
 
 function setCorsHeaders(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -22,46 +24,53 @@ function callGemini(model, apiKey, promptText, fileBase64, mimeType) {
     if (fileBase64) {
       parts.push({
         inlineData: {
-          mimeType: mimeType || 'image/jpeg',
+          mimeType: mimeType || 'application/pdf',
           data: fileBase64
         }
       });
     }
 
     const payload = JSON.stringify({
-      contents: [{ parts }],
+      contents: [{ parts: parts }],
       generationConfig: {
         responseMimeType: 'application/json',
         temperature: 0.1
       }
     });
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-    const req = https.request(url, {
+    const req = https.request({
+      hostname: 'generativelanguage.googleapis.com',
+      path: `/v1beta/models/${model}:generateContent?key=${apiKey}`,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(payload)
       },
-      timeout: 35000
+      timeout: 60000
     }, (res) => {
       let data = '';
       res.on('data', chunk => data += chunk);
       res.on('end', () => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           try {
-            const json = JSON.parse(data);
-            const candidate = json.candidates && json.candidates[0];
-            const text = candidate && candidate.content && candidate.content.parts && candidate.content.parts[0].text;
-            if (text) {
-              return resolve(JSON.parse(text));
+            const parsed = JSON.parse(data);
+            const text = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (!text) {
+              return reject(new Error('No text returned in Gemini candidate response'));
             }
-            return reject(new Error('No text part found in model response'));
+            try {
+              const obj = JSON.parse(text);
+              resolve(obj);
+            } catch (jsonErr) {
+              const clean = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+              const obj = JSON.parse(clean);
+              resolve(obj);
+            }
           } catch (e) {
-            return reject(new Error('Failed to parse model response JSON: ' + e.message + ' | Raw: ' + data.substring(0, 200)));
+            reject(new Error(`Failed to parse Gemini output: ${e.message}\nRaw: ${data.slice(0, 300)}`));
           }
         } else {
-          return reject(new Error(`Model ${model} returned HTTP ${res.statusCode}: ${data.substring(0, 300)}`));
+          reject(new Error(`Gemini API error (HTTP ${res.statusCode}): ${data.slice(0, 300)}`));
         }
       });
     });
@@ -69,7 +78,7 @@ function callGemini(model, apiKey, promptText, fileBase64, mimeType) {
     req.on('error', reject);
     req.on('timeout', () => {
       req.destroy();
-      reject(new Error(`Model ${model} request timed out after 35s`));
+      reject(new Error(`Model ${model} request timed out after 60s`));
     });
 
     req.write(payload);
@@ -131,8 +140,7 @@ module.exports = async function handler(req, res) {
       service: 'Koteshwar Ghat Nirman - AI Receipt Auto-Entry & PDF Batch Hub',
       status: 'active',
       models: GEMINI_MODELS,
-      reconciliationTag: '[AI_UNVERIFIED]',
-      collectorSignature: '🤖 AI ऑटो-प्रविष्टि (सत्यापन लंबित)',
+      defaultTarget: 'declarations',
       supportedFormats: ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'],
       usage: {
         method: 'POST',
@@ -140,8 +148,8 @@ module.exports = async function handler(req, res) {
         body: {
           fileBase64: '<Base64 encoded string of receipt image or multi-page PDF>',
           mimeType: 'application/pdf (or image/jpeg, image/png)',
-          autoSave: true,
-          reconcileTag: '[AI_UNVERIFIED]'
+          target: 'declarations (default) or collections',
+          autoSave: false
         }
       }
     });
@@ -160,10 +168,11 @@ module.exports = async function handler(req, res) {
     }
 
     let fileBase64 = (body && (body.fileBase64 || body.imageBase64)) || '';
-    let mimeType = (body && body.mimeType) || 'image/jpeg';
-    let autoSave = body && body.autoSave === true; // Default false for hub review, or true if requested
-    let collector = (body && body.collector) || '🤖 AI ऑटो-प्रविष्टि (सत्यापन लंबित)';
-    let collectorUsername = (body && body.collectorUsername) || 'ai_auto_entry';
+    let mimeType = (body && body.mimeType) || 'application/pdf';
+    let target = (body && body.target) || 'declarations'; // Default to declarations
+    let autoSave = body && body.autoSave === true; // Default false so UI gets preview first
+    let collector = (body && body.collector) || 'अधिकृत कार्यकर्ता';
+    let collectorUsername = (body && body.collectorUsername) || 'ai_verified';
 
     if (!fileBase64) {
       return res.status(400).json({
@@ -185,31 +194,67 @@ module.exports = async function handler(req, res) {
 
     const isPdf = mimeType.includes('pdf');
 
-    const ocrPrompt = `You are an expert Devanagari (Hindi) and English document OCR AI specializing in Indian charity/temple donation receipts (माँ नर्मदा घाट निर्माण सेवा महाअभियान / श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान or similar handwritten receipt slips).
+    const ocrPrompt = `You are an expert Devanagari (Hindi) and English document OCR AI specializing in Indian temple/charity donation receipts of 'श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान' (कोटेश्वर तीर्थ / निसरपुर / कुक्षी / धार).
 
-This document (${isPdf ? 'PDF file containing one or more receipts across its pages' : 'receipt image'}) contains donation receipt slips.
-Extract EVERY single receipt slip found into an array of objects.
+This document (${isPdf ? 'multi-page PDF containing donation receipt slips' : 'receipt slip image'}) contains handwritten donation receipts.
+Extract EVERY single receipt slip into structured JSON according to the following strict rules:
+
+IMPORTANT RULES:
+1. 'isDeferred' & 'paymentMode':
+   - Check if Cash (नकद), UPI (PhonePe/GPay), Cheque (चेक), or Bank Transfer is explicitly written or ticked anywhere on the slip.
+   - If NO payment mode is explicitly written, payment is DEFERRED ('isDeferred': true, 'paymentMode': 'आस्थगित').
+   - If Cash or UPI is explicitly written, set that paymentMode and 'isDeferred': false.
+2. 'bookNo':
+   - Handwritten book number under 'बुक नं.' (e.g. '25', '01', '153', '34', '49').
+3. 'receiptNo':
+   - Handwritten receipt number under 'रसीद नं.' (e.g. '613', '76', '6193', '830', '1125').
+4. 'fullReceipt':
+   - Combined book and receipt number: (bookNo ? ('बुक ' + bookNo + ' / ' + receiptNo) : ('रसीद ' + receiptNo)).
+5. 'donorName':
+   - Donor's full name under 'मान्यवर श्री'.
+6. 'fatherName':
+   - Father's or husband's name under 'पिता श्री' or 'पति श्री'.
+7. 'city':
+   - Address, village, town or city under 'पता', 'स्थान', 'ग्राम', 'नगर' (e.g. 'बड़वानी', 'निसरपुर', 'बोरलाय (बड़वानी)', 'सुसारी'). Default to 'अन्य' if blank.
+8. 'mobile':
+   - Mobile number under 'मोबा.नं.' (e.g. '7999901039', '9977129792', '7898000173', '9993106947'), or '' if blank.
+9. 'memorial':
+   - Memorial or dedication under 'पुण्य स्मृति' (e.g. 'स्व. मांगी बाई एवं स्व. काशीनाथजी अग्रे', 'स्व. श्री प्रकाश सोनी', 'जसनबाई मंगाजी गुजरात्या बोरलाय', 'स्व. पूँजी बाई स्व. गोकुल जी जिराती'), or '' if blank.
+10. 'constructionScope':
+   - Construction dedication under 'दान स्वरूप' (e.g. 'एक पेढ़ी / 111 वर्गफीट', '51 वर्गफीट', '2.5 पेढ़ी / 255 वर्गफीट', 'दो पेढ़ी / 211 वर्गफीट', '3.5 पेढ़ी / 355 वर्गफीट').
+11. 'cleanNotes':
+   - Clean Hindi string combining memorial and construction scope:
+     [memorial ? ('पुण्य स्मृति: ' + memorial) : '', constructionScope ? ('निर्माण: ' + constructionScope) : ''].filter(Boolean).join(' • ').
+   - ABSOLUTELY DO NOT mention AI, robots, or model names in notes or remarks!
+12. 'amount':
+   - Numeric integer amount in rupees (e.g. 11111, 5111, 25555, 21111, 35555).
+13. 'date':
+   - Date in YYYY-MM-DD format. If written as DD/MM/YY (e.g. '16/11/26'), convert to '2026-11-16'. If DD-MM-YY, convert accordingly.
 
 Schema to strictly return:
 {
   "receipts": [
     {
-      "receiptNo": "Handwritten receipt number (e.g. '19/460', 'R 49/1124', '48/1096', '148/6082'). Look for 'रसीद क्र.', 'क्रमांक', 'बुक क्र./रसीद क्र.'",
-      "donorName": "Full name of the donor, including father's/husband's name if written (e.g. 'हितेश जी अंकुश जी पिता सुरेशचन्द्र जी वाणी'). Do not abbreviate.",
-      "city": "Village, town or city name (e.g. 'नानपुर', 'कुक्षी', 'सुसारी', 'बड़वानी', 'कोटेश्वर / कोठड़ा', 'निसरपुर', etc.). Look for 'स्थान', 'ग्राम', 'नगर', 'निवासी'. Default to 'अन्य' if unreadable.",
-      "amount": 11111, // Numeric integer amount in rupees without symbols or commas. Cross-verify digits and Hindi words (e.g. 'ग्यारह हजार एक सौ ग्यारह').
-      "amountInWords": "Amount in Hindi/English words (e.g. 'ग्यारह हजार एक सौ ग्यारह रुपये मात्र')",
-      "notes": "Family memory, memorial or purpose (e.g. 'स्व. मोताबाई, स्व. मिश्रीलाल जी वाणी की स्मृति में'). Look for 'स्मृति', 'निमित्त'",
-      "paymentMode": "Payment mode: 'Cash' (नकद), 'UPI' (PhonePe/GPay), 'Cheque' (चेक), or 'Bank Deposit'",
-      "transactionRef": "Cheque number, UTR, or transaction reference if visible, or ''",
-      "date": "Receipt date in YYYY-MM-DD format (if written DD/MM/YYYY or DD.MM.YY, convert accurately). If year missing, assume 2026.",
-      "pageNumber": 1, // Page number where this receipt was found
-      "confidence": "high" // 'high', 'medium', or 'low'
+      "page": 1,
+      "bookNo": "25",
+      "receiptNo": "613",
+      "fullReceipt": "बुक 25 / 613",
+      "donorName": "उमेशचंद्र अग्रे",
+      "fatherName": "काशीनाथ अग्रे",
+      "city": "बड़वानी",
+      "mobile": "",
+      "amount": 11111,
+      "date": "2026-11-16",
+      "memorial": "स्व. मांगी बाई एवं स्व. काशीनाथजी अग्रे",
+      "constructionScope": "एक पेढ़ी / 111 वर्गफीट",
+      "cleanNotes": "पुण्य स्मृति: स्व. मांगी बाई एवं स्व. काशीनाथजी अग्रे • निर्माण: एक पेढ़ी / 111 वर्गफीट",
+      "paymentMode": "आस्थगित",
+      "isDeferred": true
     }
   ]
 }
 
-Return ONLY the raw JSON object. No conversational text or markdown.`;
+Return ONLY the raw JSON object. No conversational text or markdown code fences.`;
 
     let extractedObj = null;
     let lastError = null;
@@ -245,51 +290,69 @@ Return ONLY the raw JSON object. No conversational text or markdown.`;
       receiptsList = [extractedObj];
     }
 
-    // Sanitize receipt numbers and tag as AI entry
+    // Sanitize and ensure clean fields
     receiptsList.forEach((r, idx) => {
-      let rNo = String(r.receiptNo || '').trim();
-      if (rNo && !rNo.toUpperCase().startsWith('R')) {
-        rNo = 'R ' + rNo;
-      }
-      r.receiptNo = rNo || ('R-AI-' + Date.now().toString().slice(-4) + '-' + (idx + 1));
-      r.isAiEntry = true;
-      r.reconciliationStatus = 'PENDING_VERIFICATION';
-      r.reconciliationTag = '[AI_UNVERIFIED]';
-      r.collector = collector;
-      r.collectorUsername = collectorUsername;
+      r.bookNo = String(r.bookNo || '').trim();
+      r.receiptNo = String(r.receiptNo || '').trim();
+      r.fullReceipt = r.fullReceipt || (r.bookNo ? `बुक ${r.bookNo} / ${r.receiptNo}` : `रसीद ${r.receiptNo || (idx + 1)}`);
+      r.donorName = String(r.donorName || 'दानदाता').trim();
+      r.fatherName = String(r.fatherName || '').trim();
+      r.city = String(r.city || 'अन्य').trim();
+      r.mobile = String(r.mobile || '').replace(/[^0-9]/g, '');
+      r.amount = Number(r.amount) || 0;
+      r.date = r.date || new Date().toISOString().split('T')[0];
+      r.isDeferred = (r.isDeferred === true || !r.paymentMode || r.paymentMode === 'आस्थगित');
+      r.paymentMode = r.isDeferred ? 'आस्थगित' : (r.paymentMode || 'नकद');
+      r.notes = (r.cleanNotes || r.notes || '').replace(/\[AI.*?\]/gi, '').trim();
+      r.verified = false; // Pending human verification in preview
     });
 
     let syncResults = [];
 
-    // Automatically flow into Google Sheets if autoSave is requested
+    // Flow into Google Sheets only if explicitly requested (autoSave === true)
     if (autoSave && receiptsList.length > 0) {
       for (const rec of receiptsList) {
-        const sheetPayload = {
-          action: 'addCollection',
-          data: {
-            receiptNo: rec.receiptNo,
-            donorName: rec.donorName || 'दानदाता',
-            city: rec.city || 'अन्य',
-            amount: Number(rec.amount) || 0,
-            paymentMode: rec.paymentMode || 'नकद',
-            paymentDate: rec.date || new Date().toISOString().split('T')[0],
-            transactionRef: rec.transactionRef || '',
-            remarks: [
-              '[AI_UNVERIFIED]',
-              rec.notes ? `स्मृति: ${rec.notes}` : '',
-              rec.amountInWords ? `(${rec.amountInWords})` : '',
-              `[AI Auto-Entry via ${extractedObj.modelUsed}]`
-            ].filter(Boolean).join(' | '),
-            collector: collector,
-            collectorUsername: collectorUsername
-          }
-        };
+        let sheetPayload;
+
+        if (target === 'declarations') {
+          const fullName = rec.fatherName ? `${rec.donorName} (पिता: ${rec.fatherName})` : rec.donorName;
+          sheetPayload = {
+            action: 'addDeclaration',
+            data: {
+              name: fullName,
+              city: rec.city || 'अन्य',
+              notes: rec.notes || '',
+              mobile: rec.mobile || '',
+              amount: rec.amount,
+              receipt: rec.fullReceipt,
+              date: rec.date,
+              collector: collector,
+              collectorUsername: collectorUsername
+            }
+          };
+        } else {
+          sheetPayload = {
+            action: 'addCollection',
+            data: {
+              receiptNo: rec.fullReceipt || rec.receiptNo,
+              donorName: rec.fatherName ? `${rec.donorName} (पिता: ${rec.fatherName})` : rec.donorName,
+              city: rec.city || 'अन्य',
+              amount: rec.amount,
+              paymentMode: rec.paymentMode || 'नकद',
+              paymentDate: rec.date,
+              transactionRef: '',
+              remarks: rec.notes || '',
+              collector: collector,
+              collectorUsername: collectorUsername
+            }
+          };
+        }
 
         try {
           const resSync = await postToGoogleAppsScript(sheetPayload);
-          syncResults.push({ receiptNo: rec.receiptNo, sync: resSync });
+          syncResults.push({ receipt: rec.fullReceipt, sync: resSync });
         } catch (syncErr) {
-          syncResults.push({ receiptNo: rec.receiptNo, error: syncErr.message });
+          syncResults.push({ receipt: rec.fullReceipt, error: syncErr.message });
         }
       }
     }
@@ -297,6 +360,7 @@ Return ONLY the raw JSON object. No conversational text or markdown.`;
     return res.status(200).json({
       status: 'success',
       modelUsed: extractedObj.modelUsed,
+      target: target,
       count: receiptsList.length,
       receipts: receiptsList,
       syncedToSheet: autoSave,
