@@ -23,6 +23,28 @@
  */
 
 function doGet(e) {
+  var params = (e && e.parameter) ? e.parameter : {};
+  if (params && params.action === "getAiConfig") {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var props = PropertiesService.getScriptProperties();
+    var pProvider = props.getProperty("AI_PROVIDER") || "grok";
+    var pApiKey = props.getProperty("AI_API_KEY") || "";
+    if (!pApiKey) {
+      var cfgSheet = ss.getSheetByName("_Config");
+      if (cfgSheet && cfgSheet.getLastRow() > 1) {
+        var cData = cfgSheet.getDataRange().getValues();
+        for (var r = 1; r < cData.length; r++) {
+          if (String(cData[r][0]).trim() === "AI_API_KEY") pApiKey = String(cData[r][1]).trim();
+          if (String(cData[r][0]).trim() === "AI_PROVIDER") pProvider = String(cData[r][1]).trim();
+        }
+      }
+    }
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "success",
+      provider: pProvider,
+      apiKey: pApiKey
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
   return ContentService.createTextOutput(JSON.stringify({
     status: "ok",
     message: "कोटेश्वर नर्मदा सेवा महाअभियान (Live Declaration, Live Collection, Audit and Soft-Delete) वेबहुक सक्रिय है।"
@@ -402,6 +424,58 @@ function doPost(e) {
         status: "success",
         message: "रसीद प्रविष्टि सफलतापूर्वक हटा दी गई (सॉफ्ट डिलीट पुरालेख 'Deleted Archive' में सुरक्षित दर्ज)।",
         receiptNo: item.receiptNo
+      })).setMimeType(ContentService.MimeType.JSON);
+
+    } else if (action === "saveAiConfig") {
+      // 7. SAVE AI CONFIG (PERSISTED IN SCRIPT PROPERTIES & '_Config' SHEET ACROSS ALL SESSIONS)
+      var props = PropertiesService.getScriptProperties();
+      if (item.provider) props.setProperty("AI_PROVIDER", item.provider);
+      if (item.apiKey) props.setProperty("AI_API_KEY", item.apiKey);
+
+      var cfgSheet = getOrCreateSheet(ss, "_Config", ["Key", "Value", "Updated At", "Updated By"], "#334155");
+      var cData = cfgSheet.getDataRange().getValues();
+      var keyMap = { "AI_PROVIDER": item.provider, "AI_API_KEY": item.apiKey };
+      for (var k in keyMap) {
+        if (!keyMap[k]) continue;
+        var foundRow = 0;
+        for (var r = 1; r < cData.length; r++) {
+          if (String(cData[r][0]).trim() === k) { foundRow = r + 1; break; }
+        }
+        if (foundRow > 0) {
+          cfgSheet.getRange(foundRow, 2).setValue(keyMap[k]);
+          cfgSheet.getRange(foundRow, 3).setValue(new Date().toISOString());
+          cfgSheet.getRange(foundRow, 4).setValue(item.collectorUsername || "karyakarta");
+        } else {
+          cfgSheet.appendRow([k, keyMap[k], new Date().toISOString(), item.collectorUsername || "karyakarta"]);
+        }
+      }
+
+      return ContentService.createTextOutput(JSON.stringify({
+        status: "success",
+        message: "AI कुंजी सफलतापूर्वक क्लाउड में सुरक्षित हो गई और अब सभी कार्यकर्ताओं के लिए स्वतः सक्रिय है।"
+      })).setMimeType(ContentService.MimeType.JSON);
+
+    } else if (action === "getAiConfig") {
+      // 8. GET AI CONFIG FOR CROSS-SESSION SYNC
+      var props = PropertiesService.getScriptProperties();
+      var pProvider = props.getProperty("AI_PROVIDER") || "grok";
+      var pApiKey = props.getProperty("AI_API_KEY") || "";
+
+      if (!pApiKey) {
+        var cfgSheet = ss.getSheetByName("_Config");
+        if (cfgSheet && cfgSheet.getLastRow() > 1) {
+          var cData = cfgSheet.getDataRange().getValues();
+          for (var r = 1; r < cData.length; r++) {
+            if (String(cData[r][0]).trim() === "AI_API_KEY") pApiKey = String(cData[r][1]).trim();
+            if (String(cData[r][0]).trim() === "AI_PROVIDER") pProvider = String(cData[r][1]).trim();
+          }
+        }
+      }
+
+      return ContentService.createTextOutput(JSON.stringify({
+        status: "success",
+        provider: pProvider,
+        apiKey: pApiKey
       })).setMimeType(ContentService.MimeType.JSON);
 
     } else {

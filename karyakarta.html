@@ -2422,6 +2422,11 @@
       reconcileCollectionsWithDeclarations();
       renderAllPortals();
 
+      // Automatically sync cloud-saved AI configuration across all sessions and devices
+      setTimeout(() => {
+        try { syncAiConfigFromCloud(); } catch (e) {}
+      }, 300);
+
       // Automatically sync any pending offline entries to Google Sheet in the background
       setTimeout(() => {
         try { syncAllPendingToSheet(true); } catch (e) {}
@@ -4295,12 +4300,62 @@
       }
     }
 
+    async function broadcastAiKeyToCloud(provider, key) {
+      if (!webhookUrl || !key) return;
+      try {
+        const user = (typeof getLoggedInUser === 'function') ? getLoggedInUser() : null;
+        await fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'saveAiConfig',
+            data: {
+              provider: provider,
+              apiKey: key,
+              collectorUsername: user ? user.username : 'karyakarta'
+            }
+          })
+        });
+        console.log('✅ AI Key broadcasted to cloud for all sessions and devices.');
+      } catch (e) {
+        console.warn('Could not broadcast AI key to cloud:', e);
+      }
+    }
+
+    async function syncAiConfigFromCloud() {
+      if (!webhookUrl) return;
+      try {
+        const res = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'getAiConfig' })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.apiKey && data.apiKey.trim()) {
+            const cloudProv = data.provider || 'grok';
+            const cloudKey = data.apiKey.trim();
+            localStorage.setItem('koteshwar_ai_key_' + cloudProv, cloudKey);
+            localStorage.setItem('koteshwar_ai_key', cloudKey);
+            localStorage.setItem('koteshwar_ai_provider', cloudProv);
+            if (cloudProv === 'gemini') {
+              localStorage.setItem('koteshwar_gemini_api_key', cloudKey);
+            }
+            updateApiKeyLabel();
+            console.log('✅ Cloud AI Key synced successfully across sessions:', cloudProv, cloudKey.slice(0, 7) + '...');
+          }
+        }
+      } catch (err) {
+        // Silent fail if offline or webhook busy
+      }
+    }
+
     function promptUpdateApiKey() {
       const provider = getActiveAiProvider();
       const cfg = AI_PROVIDERS_CONFIG[provider] || AI_PROVIDERS_CONFIG.grok;
       const current = getActiveApiKey(provider);
 
-      const entered = prompt(`कृपया अपनी ${cfg.name} API Key दर्ज करें:\n(${cfg.help})`, current);
+      const entered = prompt(`कृपया अपनी ${cfg.name} API Key दर्ज करें:\n(यह Key सभी कार्यकर्ताओं एवं अन्य सभी सत्रों/फ़ोनों के लिए स्वतः सुरक्षित हो जाएगी)\n\n${cfg.help}`, current);
       if (entered !== null) {
         const clean = entered.trim();
         if (clean) {
@@ -4314,7 +4369,11 @@
             localStorage.setItem('koteshwar_gemini_api_key', clean);
           }
           updateApiKeyLabel();
-          alert(`✅ ${AI_PROVIDERS_CONFIG[targetProv].name} API Key सफलतापूर्वक अपडेट हो गई!`);
+
+          // Broadcast to Google Cloud / Apps Script so ALL sessions & devices get it!
+          broadcastAiKeyToCloud(targetProv, clean);
+
+          alert(`✅ ${AI_PROVIDERS_CONFIG[targetProv].name} API Key सफलतापूर्वक अपडेट हो गई!\n\nयह Key क्लाउड में सुरक्षित हो गई है और अब आपके सभी अन्य सत्रों (Sessions) और सभी कार्यकर्ताओं के फोन पर स्वतः लागू रहेगी।`);
         } else {
           resetDefaultApiKey();
         }
@@ -4326,6 +4385,7 @@
       localStorage.removeItem('koteshwar_ai_key_' + provider);
       localStorage.removeItem('koteshwar_ai_key');
       updateApiKeyLabel();
+      broadcastAiKeyToCloud(provider, '');
       alert(`API Key रीसेट कर दी गई है।`);
     }
 
