@@ -1627,23 +1627,39 @@
           </div>
         </div>
 
-        <!-- Active Gemini API Key Bar -->
-        <div style="display:flex;justify-content:space-between;align-items:center;background:#FFF;border:1px solid #CBD5E1;border-radius:8px;padding:7px 12px;margin-bottom:14px;font-size:12px;flex-wrap:wrap;gap:8px;">
-          <div style="display:flex;align-items:center;gap:6px;color:var(--teal);">
-            <i class="fa-solid fa-key" style="color:var(--gold-dark);"></i>
-            <span>Google Gemini AI Key:</span>
-            <strong id="lblActiveApiKey" style="font-family:monospace;background:#F1F5F9;padding:2px 7px;border-radius:4px;color:#1E293B;font-size:11.5px;">लोड हो रहा है...</strong>
+        <!-- Active Multi-Provider AI Engine Bar (xAI Grok, Groq, Gemini) -->
+        <div style="background:#FFF;border:1.5px solid #CBD5E1;border-radius:10px;padding:9px 13px;margin-bottom:14px;font-size:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-weight:700;color:var(--teal);"><i class="fa-solid fa-microchip" style="color:var(--gold-dark);"></i> AI इंजन:</span>
+              <select id="selAiProvider" onchange="changeAiProvider(this.value)" style="padding:4px 8px;border-radius:6px;border:1.5px solid var(--teal);font-weight:700;font-size:12px;color:var(--teal);background:#F0FDF4;cursor:pointer;">
+                <option value="grok" selected>🚀 xAI Grok (Grok 2 Vision - $25 मुफ़्त क्रेडिट्स)</option>
+                <option value="groq">⚡ Groq Cloud (Llama 3.2 Vision - 100% मुफ़्त)</option>
+                <option value="gemini">🤖 Google Gemini (3.8-Flash)</option>
+                <option value="openrouter">🌐 OpenRouter (फ्री मल्टीमॉडल)</option>
+              </select>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <button type="button" class="btn-outline-action" onclick="testActiveApiKey()" style="padding:4px 11px;font-size:11.5px;color:#065F46;border-color:#10B981;background:#F0FDF4;font-weight:700;" title="Key की वैधता जांचें">
+                <i class="fa-solid fa-vial-circle-check"></i> Key टेस्ट करें
+              </button>
+              <button type="button" class="btn-outline-action" onclick="promptUpdateApiKey()" style="padding:4px 11px;font-size:11.5px;color:var(--teal);border-color:var(--teal);font-weight:700;">
+                <i class="fa-solid fa-pen"></i> Key बदलें
+              </button>
+              <button type="button" class="btn-outline-action" onclick="resetDefaultApiKey()" style="padding:4px 8px;font-size:11.5px;color:var(--text-muted);" title="डिफ़ॉल्ट रीसेट करें">
+                <i class="fa-solid fa-rotate-left"></i> रीसेट
+              </button>
+            </div>
           </div>
-          <div style="display:flex;gap:6px;align-items:center;">
-            <button type="button" class="btn-outline-action" onclick="testActiveApiKey()" style="padding:3px 10px;font-size:11.5px;color:#065F46;border-color:#10B981;font-weight:600;" title="Key की वैधता जांचें">
-              <i class="fa-solid fa-vial-circle-check"></i> Key टेस्ट करें
-            </button>
-            <button type="button" class="btn-outline-action" onclick="promptUpdateApiKey()" style="padding:3px 10px;font-size:11.5px;color:var(--teal);border-color:var(--teal);font-weight:600;">
-              <i class="fa-solid fa-pen"></i> API Key बदलें
-            </button>
-            <button type="button" class="btn-outline-action" onclick="resetDefaultApiKey()" style="padding:3px 8px;font-size:11.5px;color:var(--text-muted);" title="डिफ़ॉल्ट Key रीसेट करें">
-              <i class="fa-solid fa-rotate-left"></i> रीसेट
-            </button>
+          <div style="display:flex;justify-content:space-between;align-items:center;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:6px;padding:5px 10px;font-size:11.5px;flex-wrap:wrap;gap:6px;">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <i class="fa-solid fa-key" style="color:var(--gold-dark);"></i>
+              <span id="lblProviderName">Grok API Key:</span>
+              <strong id="lblActiveApiKey" style="font-family:monospace;background:#FFF;padding:1px 6px;border-radius:4px;border:1px solid #CBD5E1;color:#1E293B;">सेट नहीं है</strong>
+            </div>
+            <div id="lblProviderHelpText" style="color:var(--text-muted);font-size:11px;">
+              xAI Console: <strong style="color:var(--teal);">console.x.ai</strong> (xai-... से शुरू होने वाली Key)
+            </div>
           </div>
         </div>
 
@@ -2045,6 +2061,13 @@
   </div>
 
   <!-- ==================== JAVASCRIPT ==================== -->
+  <!-- PDF.js for ultra-sharp client-side rendering of multi-page receipt PDFs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    if (typeof pdfjsLib !== 'undefined') {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+  </script>
   <script>
     /* ============================================================
        CONSTANTS & USERS
@@ -3670,7 +3693,10 @@
       if (tabId === 'declarations-ledger') renderDeclarationsTable();
       else if (tabId === 'collections-ledger') renderCollectionsTable();
       else if (tabId === 'pending-list') renderPendingTable();
-      else if (tabId === 'ai-receipt-hub') renderAiReconciliationTable();
+      else if (tabId === 'ai-receipt-hub') {
+        updateApiKeyLabel();
+        renderAiReconciliationTable();
+      }
     }
 
     /* ==================== FORM HELPERS ==================== */
@@ -4170,41 +4196,125 @@
 
     /* ============================================================
        AI RECEIPT & PDF BATCH INGESTION & VERIFICATION HUB
+       (Multi-Provider Engine: xAI Grok, Groq Cloud, Google Gemini, OpenRouter)
        ============================================================ */
     let extractedAiHubReceipts = [];
 
-    const DEFAULT_GEMINI_API_KEY = (typeof atob !== 'undefined')
-      ? atob('QVEuQWI4Uk42SWhUM1AxSmtBODFJbkcwdzRCek9zY21uSVZzVFl4c1lJb3NJTHRaWkc5bmc=')
-      : '';
-    const GEMINI_DIRECT_MODELS = [
-      'gemini-3.8-flash',
-      'gemini-3.5-flash-lite',
-      'gemini-3-flash-preview',
-      'gemini-3.1-flash-lite'
-    ];
+    const AI_PROVIDERS_CONFIG = {
+      grok: {
+        name: 'xAI Grok',
+        model: 'grok-2-vision-1212',
+        help: 'xAI Console: console.x.ai (xai-... से शुरू होने वाली Key • $25 मुफ़्त क्रेडिट्स)',
+        keyPrefix: 'xai-',
+        placeholder: 'xai-...'
+      },
+      groq: {
+        name: 'Groq Cloud',
+        model: 'llama-3.2-11b-vision-preview',
+        help: 'Groq Console: console.groq.com/keys (gsk_... से शुरू होने वाली Key • 100% मुफ़्त)',
+        keyPrefix: 'gsk_',
+        placeholder: 'gsk_...'
+      },
+      gemini: {
+        name: 'Google Gemini',
+        model: 'gemini-3.8-flash',
+        help: 'Google AI Studio: aistudio.google.com/app/apikey (AIzaSy... वाली Key)',
+        keyPrefix: 'AIza',
+        placeholder: 'AIzaSy...'
+      },
+      openrouter: {
+        name: 'OpenRouter',
+        model: 'meta-llama/llama-3.2-11b-vision-instruct:free',
+        help: 'OpenRouter: openrouter.ai/keys (sk-or-... वाली Key • मुफ़्त मॉडल्स)',
+        keyPrefix: 'sk-or-',
+        placeholder: 'sk-or-...'
+      }
+    };
 
-    function getActiveGeminiKey() {
-      const stored = localStorage.getItem('koteshwar_gemini_api_key');
-      return (stored && stored.trim()) ? stored.trim() : DEFAULT_GEMINI_API_KEY;
+    function getActiveAiProvider() {
+      const stored = localStorage.getItem('koteshwar_ai_provider');
+      return (stored && AI_PROVIDERS_CONFIG[stored]) ? stored : 'grok';
+    }
+
+    function setActiveAiProvider(provider) {
+      if (!AI_PROVIDERS_CONFIG[provider]) provider = 'grok';
+      localStorage.setItem('koteshwar_ai_provider', provider);
+      updateApiKeyLabel();
+    }
+
+    function changeAiProvider(provider) {
+      setActiveAiProvider(provider);
+    }
+
+    function getActiveApiKey(provider) {
+      provider = provider || getActiveAiProvider();
+      const pKey = localStorage.getItem('koteshwar_ai_key_' + provider);
+      if (pKey && pKey.trim()) return pKey.trim();
+      const genericKey = localStorage.getItem('koteshwar_ai_key');
+      if (genericKey && genericKey.trim()) return genericKey.trim();
+      if (provider === 'gemini') {
+        const gemKey = localStorage.getItem('koteshwar_gemini_api_key');
+        if (gemKey && gemKey.trim()) return gemKey.trim();
+      }
+      return '';
+    }
+
+    function detectProviderFromKey(key) {
+      if (!key) return null;
+      const k = key.trim();
+      if (k.startsWith('xai-')) return 'grok';
+      if (k.startsWith('gsk_')) return 'groq';
+      if (k.startsWith('AIza')) return 'gemini';
+      if (k.startsWith('sk-or-')) return 'openrouter';
+      return null;
     }
 
     function updateApiKeyLabel() {
+      const provider = getActiveAiProvider();
+      const cfg = AI_PROVIDERS_CONFIG[provider] || AI_PROVIDERS_CONFIG.grok;
+
+      const sel = document.getElementById('selAiProvider');
+      if (sel && sel.value !== provider) sel.value = provider;
+
+      const lblProv = document.getElementById('lblProviderName');
+      if (lblProv) lblProv.textContent = `${cfg.name} Key:`;
+
+      const lblHelp = document.getElementById('lblProviderHelpText');
+      if (lblHelp) lblHelp.textContent = cfg.help;
+
       const lbl = document.getElementById('lblActiveApiKey');
       if (lbl) {
-        const k = getActiveGeminiKey();
-        lbl.textContent = k ? `${k.slice(0, 8)}...${k.slice(-4)} (सक्रिय)` : 'कुंजी सेट नहीं है';
+        const k = getActiveApiKey(provider);
+        if (k) {
+          lbl.textContent = `${k.slice(0, 7)}...${k.slice(-4)} (सक्रिय)`;
+          lbl.style.color = '#065F46';
+        } else {
+          lbl.textContent = 'सेट नहीं है (यहाँ क्लिक करें)';
+          lbl.style.color = '#B91C1C';
+        }
       }
     }
 
     function promptUpdateApiKey() {
-      const current = getActiveGeminiKey();
-      const entered = prompt('कृपया अपनी Google Gemini API Key दर्ज करें:\n(Google AI Studio से प्राप्त Key)', current);
+      const provider = getActiveAiProvider();
+      const cfg = AI_PROVIDERS_CONFIG[provider] || AI_PROVIDERS_CONFIG.grok;
+      const current = getActiveApiKey(provider);
+
+      const entered = prompt(`कृपया अपनी ${cfg.name} API Key दर्ज करें:\n(${cfg.help})`, current);
       if (entered !== null) {
         const clean = entered.trim();
         if (clean) {
-          localStorage.setItem('koteshwar_gemini_api_key', clean);
+          // Check if user pasted a key belonging to another provider and auto-switch!
+          const detected = detectProviderFromKey(clean);
+          const targetProv = detected || provider;
+          localStorage.setItem('koteshwar_ai_key_' + targetProv, clean);
+          localStorage.setItem('koteshwar_ai_key', clean);
+          localStorage.setItem('koteshwar_ai_provider', targetProv);
+          if (targetProv === 'gemini') {
+            localStorage.setItem('koteshwar_gemini_api_key', clean);
+          }
           updateApiKeyLabel();
-          alert('✅ Google Gemini API Key सफलतापूर्वक अपडेट हो गई!');
+          alert(`✅ ${AI_PROVIDERS_CONFIG[targetProv].name} API Key सफलतापूर्वक अपडेट हो गई!`);
         } else {
           resetDefaultApiKey();
         }
@@ -4212,15 +4322,20 @@
     }
 
     function resetDefaultApiKey() {
-      localStorage.removeItem('koteshwar_gemini_api_key');
+      const provider = getActiveAiProvider();
+      localStorage.removeItem('koteshwar_ai_key_' + provider);
+      localStorage.removeItem('koteshwar_ai_key');
       updateApiKeyLabel();
-      alert('डिफ़ॉल्ट API Key रीसेट कर दी गई है।');
+      alert(`API Key रीसेट कर दी गई है।`);
     }
 
     async function testActiveApiKey() {
-      const k = getActiveGeminiKey();
+      const provider = getActiveAiProvider();
+      const cfg = AI_PROVIDERS_CONFIG[provider] || AI_PROVIDERS_CONFIG.grok;
+      const k = getActiveApiKey(provider);
+
       if (!k) {
-        alert('कृपया पहले कोई API Key दर्ज करें!');
+        alert(`कृपया पहले अपनी ${cfg.name} API Key दर्ज करें!\n(${cfg.help})`);
         return promptUpdateApiKey();
       }
 
@@ -4229,25 +4344,71 @@
       if (lbl) lbl.textContent = 'परीक्षण जारी...';
 
       try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${k}`;
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contents: [{ parts: [{ text: 'ping' }] }] })
-        });
-
-        if (res.ok) {
-          if (lbl) lbl.textContent = `${k.slice(0, 8)}...${k.slice(-4)} (सक्रिय ✅)`;
-          alert(`✅ बधाई! आपकी Google Gemini API Key 100% सक्रिय और मान्य है! (HTTP 200 OK)`);
+        if (provider === 'grok') {
+          // Test xAI Grok API Key
+          const res = await fetch('https://api.x.ai/v1/models', {
+            method: 'GET',
+            headers: { 'Authorization': `Bearer ${k}` }
+          });
+          if (res.ok) {
+            if (lbl) lbl.textContent = `${k.slice(0, 7)}...${k.slice(-4)} (सक्रिय ✅)`;
+            alert(`✅ बधाई! आपकी xAI Grok API Key 100% सक्रिय, वैध और तैयार है! (HTTP 200 OK)`);
+          } else {
+            const err = await res.json().catch(() => ({}));
+            const msg = err.error?.message || `HTTP ${res.status}`;
+            if (lbl) lbl.textContent = `त्रुटि (${res.status} ❌)`;
+            const wantsChange = confirm(`❌ xAI Grok API Key अमान्य है (Status ${res.status}):\n${msg}\n\nक्या आप अभी नई API Key दर्ज करना चाहते हैं?\n(console.x.ai से 'xai-...' वाली Key प्राप्त करें)`);
+            if (wantsChange) promptUpdateApiKey();
+          }
+        } else if (provider === 'groq') {
+          // Test Groq Cloud API Key
+          const res = await fetch('https://api.groq.com/openai/v1/models', {
+            method: 'GET',
+            headers: { 'Authorization': `Bearer ${k}` }
+          });
+          if (res.ok) {
+            if (lbl) lbl.textContent = `${k.slice(0, 7)}...${k.slice(-4)} (सक्रिय ✅)`;
+            alert(`✅ बधाई! आपकी Groq Cloud API Key 100% सक्रिय और मान्य है! (HTTP 200 OK)`);
+          } else {
+            const err = await res.json().catch(() => ({}));
+            const msg = err.error?.message || `HTTP ${res.status}`;
+            if (lbl) lbl.textContent = `त्रुटि (${res.status} ❌)`;
+            const wantsChange = confirm(`❌ Groq API Key अमान्य है (Status ${res.status}):\n${msg}\n\nक्या आप अभी नई API Key दर्ज करना चाहते हैं?`);
+            if (wantsChange) promptUpdateApiKey();
+          }
+        } else if (provider === 'openrouter') {
+          // Test OpenRouter API Key
+          const res = await fetch('https://openrouter.ai/api/v1/auth/key', {
+            method: 'GET',
+            headers: { 'Authorization': `Bearer ${k}` }
+          });
+          if (res.ok) {
+            if (lbl) lbl.textContent = `${k.slice(0, 7)}...${k.slice(-4)} (सक्रिय ✅)`;
+            alert(`✅ बधाई! आपकी OpenRouter API Key 100% सक्रिय और मान्य है! (HTTP 200 OK)`);
+          } else {
+            alert(`❌ OpenRouter Key अमान्य है (Status ${res.status})`);
+          }
         } else {
-          const err = await res.json().catch(() => ({}));
-          const msg = err.error?.message || `HTTP ${res.status}`;
-          if (lbl) lbl.textContent = `त्रुटि (${res.status} ❌)`;
-          const wantsChange = confirm(`❌ API Key अमान्य है (Status ${res.status}):\n${msg}\n\nक्या आप अभी नई API Key दर्ज करना चाहते हैं?\n(Google AI Studio: aistudio.google.com/app/apikey से 'AIzaSy...' वाली Key प्राप्त करें)`);
-          if (wantsChange) promptUpdateApiKey();
+          // Test Google Gemini API Key
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${k}`;
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ parts: [{ text: 'ping' }] }] })
+          });
+          if (res.ok) {
+            if (lbl) lbl.textContent = `${k.slice(0, 7)}...${k.slice(-4)} (सक्रिय ✅)`;
+            alert(`✅ बधाई! आपकी Google Gemini API Key 100% सक्रिय और मान्य है! (HTTP 200 OK)`);
+          } else {
+            const err = await res.json().catch(() => ({}));
+            const msg = err.error?.message || `HTTP ${res.status}`;
+            if (lbl) lbl.textContent = `त्रुटि (${res.status} ❌)`;
+            const wantsChange = confirm(`❌ Gemini API Key अमान्य है (Status ${res.status}):\n${msg}\n\nक्या आप अभी नई API Key दर्ज करना चाहते हैं?`);
+            if (wantsChange) promptUpdateApiKey();
+          }
         }
       } catch (err) {
-        alert('नेटवर्क या कनेक्शन त्रुटि: ' + err.message);
+        alert('परीक्षण में नेटवर्क या कनेक्शन त्रुटि: ' + err.message);
         if (lbl) lbl.textContent = origText;
       }
     }
@@ -4359,38 +4520,87 @@
       if (btmBtn) btmBtn.textContent = labelText;
     }
 
-    async function processReceiptFileWithGemini(file, isPdf) {
-      let base64Data = '';
-      let mimeType = file.type || (isPdf ? 'application/pdf' : 'image/jpeg');
+    function parseAiJsonOutput(rawText) {
+      if (!rawText) return null;
+      let clean = rawText.trim();
+      if (clean.includes('```')) {
+        clean = clean.replace(/```(?:json)?\n?/gi, '').replace(/```\n?/g, '').trim();
+      }
+      const startIdx = clean.indexOf('{');
+      const endIdx = clean.lastIndexOf('}');
+      if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
+        clean = clean.substring(startIdx, endIdx + 1);
+      }
+      return JSON.parse(clean);
+    }
 
-      if (isPdf) {
-        const reader = new FileReader();
-        const pdfPromise = new Promise((resolve, reject) => {
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = reject;
-        });
-        reader.readAsDataURL(file);
-        base64Data = await pdfPromise;
-      } else {
-        base64Data = await resizeImageForAi(file, 1600);
-        mimeType = 'image/jpeg';
+    async function convertUploadFileToImageItems(file, isPdf) {
+      if (!isPdf) {
+        const dataUrl = await resizeImageForAi(file, 1600);
+        return [{
+          pageNum: 1,
+          dataUrl: dataUrl,
+          rawBase64: dataUrl.split('base64,')[1] || '',
+          mimeType: 'image/jpeg'
+        }];
       }
 
-      // Strip data URL scheme prefix if present
-      let rawBase64 = base64Data;
-      if (rawBase64.includes('base64,')) {
-        const parts = rawBase64.split('base64,');
-        if (parts[0].includes('application/') || parts[0].includes('image/')) {
-          const m = parts[0].match(/(application|image)\/[a-zA-Z0-9.+_-]+/);
-          if (m) mimeType = m[0];
+      // If PDF, render each page via PDF.js for 100% sharpness and universal model compatibility
+      if (typeof pdfjsLib !== 'undefined') {
+        try {
+          const arrayBuffer = await file.arrayBuffer();
+          const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+          const pages = [];
+          for (let p = 1; p <= pdfDoc.numPages; p++) {
+            const page = await pdfDoc.getPage(p);
+            const viewport = page.getViewport({ scale: 2.0 }); // 2x sharp
+            const canvas = document.createElement('canvas');
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            const ctx = canvas.getContext('2d');
+            await page.render({ canvasContext: ctx, viewport }).promise;
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
+            pages.push({
+              pageNum: p,
+              dataUrl: dataUrl,
+              rawBase64: dataUrl.split('base64,')[1] || '',
+              mimeType: 'image/jpeg'
+            });
+          }
+          if (pages.length > 0) return pages;
+        } catch (pdfErr) {
+          console.warn('PDF.js rendering exception, falling back to raw PDF read:', pdfErr);
         }
-        rawBase64 = parts[1];
       }
-      rawBase64 = rawBase64.replace(/\s+/g, '');
+
+      // Fallback: read raw base64 if PDF.js is unavailable
+      const reader = new FileReader();
+      const p = new Promise((resolve, reject) => {
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+      });
+      reader.readAsDataURL(file);
+      const rawDataUrl = await p;
+      return [{
+        pageNum: 1,
+        dataUrl: rawDataUrl,
+        rawBase64: rawDataUrl.split('base64,')[1] || '',
+        mimeType: 'application/pdf'
+      }];
+    }
+
+    async function processReceiptFileWithAI(file, isPdf) {
+      const provider = getActiveAiProvider();
+      const cfg = AI_PROVIDERS_CONFIG[provider] || AI_PROVIDERS_CONFIG.grok;
+      const apiKey = getActiveApiKey(provider);
+
+      if (!apiKey) {
+        throw new Error(`कृपया पहले अपनी ${cfg.name} API Key दर्ज करें। (Key बदलें बटन का उपयोग करें)`);
+      }
 
       const ocrPrompt = `You are an expert Devanagari (Hindi) and English document OCR AI specializing in Indian charity/temple donation receipts of 'श्री कोटेश्वर नर्मदा बहुउद्देशीय सेवा संस्थान' (कोटेश्वर तीर्थ / निसरपुर / कुक्षी / धार).
 
-This document (${isPdf ? 'multi-page PDF containing donation receipt slips' : 'receipt slip image'}) contains handwritten donation receipts.
+This image/document contains handwritten donation receipts.
 Extract EVERY single receipt slip into structured JSON according to the following strict rules:
 
 IMPORTANT RULES:
@@ -4450,80 +4660,176 @@ Schema to strictly return:
 
 Return ONLY the raw JSON object. No conversational text or markdown code fences.`;
 
-      const apiKey = getActiveGeminiKey();
+      const images = await convertUploadFileToImageItems(file, isPdf);
       let extractedObj = null;
-      let lastError = null;
 
-      // First try direct in-browser Gemini call (CORS supported, works on GitHub Pages & everywhere)
-      for (const model of GEMINI_DIRECT_MODELS) {
-        try {
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-          const payload = {
-            contents: [{
-              parts: [
-                { text: ocrPrompt },
-                {
-                  inlineData: {
-                    mimeType: mimeType || 'application/pdf',
-                    data: rawBase64
-                  }
-                }
-              ]
-            }],
-            generationConfig: {
-              responseMimeType: 'application/json',
-              temperature: 0.1
+      if (provider === 'grok') {
+        // xAI Grok Vision (grok-2-vision-1212)
+        const content = [{ type: 'text', text: ocrPrompt }];
+        images.forEach(img => {
+          content.push({
+            type: 'image_url',
+            image_url: {
+              url: img.dataUrl,
+              detail: 'high'
             }
-          };
-
-          const res = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
           });
+        });
 
-          if (res.status === 401) {
-            const wantsToChange = confirm('Google Gemini API प्रमाणीकरण त्रुटि (Code 401: Unauthenticated):\n\nAPI Key अमान्य है या समाप्त हो गई है। क्या आप नई API Key दर्ज करना चाहते हैं?');
-            if (wantsToChange) {
-              promptUpdateApiKey();
-            }
-            throw new Error('API प्रमाणीकरण त्रुटि (Code 401): Gemini API Key अमान्य है। कृपया "API Key बदलें" पर क्लिक करके वैध Key दर्ज करें।');
-          }
+        const res = await fetch('https://api.x.ai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({
+            model: 'grok-2-vision-1212',
+            messages: [
+              {
+                role: 'system',
+                content: 'You are an expert Devanagari Hindi OCR data extractor. You strictly extract donation receipt data into JSON.'
+              },
+              {
+                role: 'user',
+                content: content
+              }
+            ],
+            temperature: 0.1
+          })
+        });
 
-          if (res.status === 503) {
-            // High demand spike, fallback to next model
-            console.warn(`Model ${model} returned 503 high demand, falling back...`);
-            continue;
-          }
-
-          if (!res.ok) {
-            const errText = await res.text().catch(() => '');
-            console.warn(`Model ${model} returned HTTP ${res.status}:`, errText);
-            continue;
-          }
-
-          const resData = await res.json();
-          const rawText = resData.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (rawText) {
-            try {
-              extractedObj = JSON.parse(rawText);
-            } catch (jsonErr) {
-              const clean = rawText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-              extractedObj = JSON.parse(clean);
-            }
-            if (extractedObj && (extractedObj.receipts || extractedObj.receiptNo || extractedObj.donorName)) {
-              break;
-            }
-          }
-        } catch (callErr) {
-          lastError = callErr;
-          if (callErr.message && callErr.message.includes('401')) {
-            throw callErr; // Stop immediately on auth failure so user can update key
-          }
+        if (res.status === 401) {
+          const wantsChange = confirm('xAI Grok प्रमाणीकरण त्रुटि (Code 401: Unauthenticated):\n\nAPI Key अमान्य है। क्या आप नई Key दर्ज करना चाहते हैं?');
+          if (wantsChange) promptUpdateApiKey();
+          throw new Error('xAI Grok API प्रमाणीकरण त्रुटि (Code 401): API Key अमान्य है।');
         }
+
+        if (!res.ok) {
+          const errText = await res.text().catch(() => '');
+          throw new Error(`xAI Grok त्रुटि (HTTP ${res.status}): ${errText}`);
+        }
+
+        const resData = await res.json();
+        const rawText = resData.choices?.[0]?.message?.content || '';
+        extractedObj = parseAiJsonOutput(rawText);
+
+      } else if (provider === 'groq') {
+        // Groq Cloud Llama 3.2 Vision
+        const content = [{ type: 'text', text: ocrPrompt }];
+        images.forEach(img => {
+          content.push({
+            type: 'image_url',
+            image_url: { url: img.dataUrl }
+          });
+        });
+
+        const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({
+            model: 'llama-3.2-11b-vision-preview',
+            messages: [
+              {
+                role: 'system',
+                content: 'You are an expert Devanagari Hindi OCR data extractor. Strictly extract all receipts into JSON matching schema.'
+              },
+              { role: 'user', content: content }
+            ],
+            temperature: 0.1,
+            response_format: { type: 'json_object' }
+          })
+        });
+
+        if (!res.ok) {
+          const errText = await res.text().catch(() => '');
+          throw new Error(`Groq Cloud त्रुटि (HTTP ${res.status}): ${errText}`);
+        }
+
+        const resData = await res.json();
+        const rawText = resData.choices?.[0]?.message?.content || '';
+        extractedObj = parseAiJsonOutput(rawText);
+
+      } else if (provider === 'openrouter') {
+        // OpenRouter Vision
+        const content = [{ type: 'text', text: ocrPrompt }];
+        images.forEach(img => {
+          content.push({
+            type: 'image_url',
+            image_url: { url: img.dataUrl }
+          });
+        });
+
+        const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`,
+            'HTTP-Referer': window.location.href,
+            'X-Title': 'Koteshwar Ghat AI Hub'
+          },
+          body: JSON.stringify({
+            model: 'meta-llama/llama-3.2-11b-vision-instruct:free',
+            messages: [{ role: 'user', content: content }],
+            temperature: 0.1
+          })
+        });
+
+        if (!res.ok) {
+          const errText = await res.text().catch(() => '');
+          throw new Error(`OpenRouter त्रुटि (HTTP ${res.status}): ${errText}`);
+        }
+
+        const resData = await res.json();
+        const rawText = resData.choices?.[0]?.message?.content || '';
+        extractedObj = parseAiJsonOutput(rawText);
+
+      } else {
+        // Google Gemini Direct Call
+        const firstImg = images[0] || {};
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`;
+        const payload = {
+          contents: [{
+            parts: [
+              { text: ocrPrompt },
+              {
+                inlineData: {
+                  mimeType: firstImg.mimeType || 'image/jpeg',
+                  data: firstImg.rawBase64
+                }
+              }
+            ]
+          }],
+          generationConfig: {
+            responseMimeType: 'application/json',
+            temperature: 0.1
+          }
+        };
+
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.status === 401) {
+          const wantsChange = confirm('Google Gemini API प्रमाणीकरण त्रुटि (Code 401: Unauthenticated):\n\nAPI Key अमान्य है। क्या आप नई Key दर्ज करना चाहते हैं?');
+          if (wantsChange) promptUpdateApiKey();
+          throw new Error('Gemini API प्रमाणीकरण त्रुटि (Code 401): API Key अमान्य है।');
+        }
+
+        if (!res.ok) {
+          const errText = await res.text().catch(() => '');
+          throw new Error(`Google Gemini त्रुटि (HTTP ${res.status}): ${errText}`);
+        }
+
+        const resData = await res.json();
+        const rawText = resData.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        extractedObj = parseAiJsonOutput(rawText);
       }
 
-      // If direct call succeeded
       if (extractedObj) {
         let receiptsList = [];
         if (Array.isArray(extractedObj.receipts)) {
@@ -4551,36 +4857,14 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
         return receiptsList;
       }
 
-      // Fallback: If serverless /api/upload-receipt is available, try it
-      try {
-        const dest = document.querySelector('input[name="aiTargetDest"]:checked')?.value || 'declarations';
-        const response = await fetch('/api/upload-receipt', {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'x-gemini-api-key': apiKey
-          },
-          body: JSON.stringify({
-            fileBase64: base64Data,
-            mimeType: mimeType,
-            target: dest,
-            autoSave: false,
-            apiKey: apiKey
-          })
-        });
-
-        if (response.ok) {
-          const resJson = await response.json();
-          const receipts = resJson.receipts || (resJson.extracted ? [resJson.extracted] : []);
-          if (receipts.length > 0) return receipts;
-        }
-      } catch (e) {}
-
-      throw new Error(lastError ? lastError.message : 'AI OCR से रसीद डेटा प्राप्त नहीं हो सका। कृपया पुनः प्रयास करें।');
+      throw new Error('AI OCR से रसीद डेटा प्राप्त नहीं हो सका। कृपया पुनः प्रयास करें।');
     }
 
     async function handleAiHubFiles(files) {
       if (!files || files.length === 0) return;
+
+      const provider = getActiveAiProvider();
+      const cfg = AI_PROVIDERS_CONFIG[provider] || AI_PROVIDERS_CONFIG.grok;
 
       const progressBox = document.getElementById('aiHubProgressBox');
       const progressTitle = document.getElementById('aiHubProgressTitle');
@@ -4601,12 +4885,12 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
         }
         if (progressSub) {
           progressSub.textContent = isPdf
-            ? `Gemini 3 Multimodal AI बहु-पृष्ठीय PDF की सभी रसीदें निकाल रहा है...`
-            : `Gemini 3 Multimodal AI हस्तलिखित रसीद का विश्लेषण कर रहा है...`;
+            ? `${cfg.name} (${cfg.model}) बहु-पृष्ठीय PDF की सभी रसीदें निकाल रहा है...`
+            : `${cfg.name} (${cfg.model}) हस्तलिखित रसीद का विश्लेषण कर रहा है...`;
         }
 
         try {
-          const receipts = await processReceiptFileWithGemini(file, isPdf);
+          const receipts = await processReceiptFileWithAI(file, isPdf);
           receipts.forEach((r) => {
             r.fileOrigin = file.name;
             r.isAiEntry = true;
