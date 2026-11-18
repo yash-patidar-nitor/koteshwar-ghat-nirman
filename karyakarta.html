@@ -1643,6 +1643,9 @@
               <button type="button" class="btn-outline-action" onclick="testActiveApiKey()" style="padding:4px 11px;font-size:11.5px;color:#065F46;border-color:#10B981;background:#F0FDF4;font-weight:700;" title="Key की वैधता जांचें">
                 <i class="fa-solid fa-vial-circle-check"></i> Key टेस्ट करें
               </button>
+              <button type="button" class="btn-outline-action" onclick="openMobileSyncModal()" style="padding:4px 11px;font-size:11.5px;color:#1E40AF;border-color:#3B82F6;background:#EFF6FF;font-weight:700;" title="इस Key को मोबाइल फोन पर सिंक करें">
+                <i class="fa-solid fa-mobile-screen-button"></i> मोबाइल पर सिंक / QR
+              </button>
               <button type="button" class="btn-outline-action" onclick="promptUpdateApiKey()" style="padding:4px 11px;font-size:11.5px;color:var(--teal);border-color:var(--teal);font-weight:700;">
                 <i class="fa-solid fa-pen"></i> Key बदलें
               </button>
@@ -2060,6 +2063,32 @@
     </div>
   </div>
 
+  <!-- Modal: Mobile Key Sync (QR Code & 1-Click Link) -->
+  <div class="modal-backdrop" id="modalMobileKeySync" style="display:none;" onclick="if(event.target===this) closeMobileSyncModal()">
+    <div class="modal-box" style="max-width:440px;text-align:center;padding:24px 20px;">
+      <div style="width:48px;height:48px;border-radius:50%;background:#EFF6FF;color:#2563EB;display:inline-flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px;">
+        <i class="fa-solid fa-qrcode"></i>
+      </div>
+      <h3 style="margin:0 0 6px 0;color:var(--teal);font-size:17px;font-weight:700;">मोबाइल पर AI Key सिंक करें</h3>
+      <p style="font-size:12.5px;color:var(--text-muted);margin:0 0 16px 0;line-height:1.4;">
+        इस QR कोड को अपने मोबाइल कैमरे या Google Lens से स्कैन करें, अथवा नीचे दिया गया लिंक कॉपी करके अपने फोन के ब्राउज़र में खोलें — Key तुरंत सक्रिय हो जाएगी!
+      </p>
+
+      <div style="background:#FFF;padding:12px;border-radius:12px;display:inline-block;box-shadow:0 2px 10px rgba(0,0,0,0.08);border:1.5px solid var(--sandstone);margin-bottom:16px;">
+        <img id="imgMobileSyncQr" src="" alt="Mobile Sync QR Code" style="width:200px;height:200px;display:block;margin:0 auto;" />
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button type="button" class="btn-submit-action" onclick="copyMobileSyncLink()" style="background:#2563EB;color:#fff;font-weight:700;font-size:13px;min-height:38px;box-shadow:0 3px 8px rgba(37,99,235,0.25);">
+          <i class="fa-solid fa-copy"></i> 1-क्लिक मोबाइल लिंक कॉपी करें (WhatsApp हेतु)
+        </button>
+        <button type="button" class="btn-outline-action" onclick="closeMobileSyncModal()" style="font-size:12.5px;padding:6px 14px;">
+          बंद करें
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ==================== JAVASCRIPT ==================== -->
   <!-- PDF.js for ultra-sharp client-side rendering of multi-page receipt PDFs -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -2399,7 +2428,10 @@
       if (elDeclDate) elDeclDate.value = today;
       if (elCollDate) elCollDate.value = today;
 
-      // Initialize Gemini API Key status display
+      // Check for incoming mobile key sync via URL hash (#ai_key=...)
+      try { checkUrlHashForAiKeySync(); } catch (e) {}
+
+      // Initialize AI API Key status display
       try { updateApiKeyLabel(); } catch (e) {}
 
       if (webhookUrl) {
@@ -4347,6 +4379,85 @@
         }
       } catch (err) {
         // Silent fail if offline or webhook busy
+      }
+    }
+
+    function checkUrlHashForAiKeySync() {
+      try {
+        const hash = window.location.hash;
+        if (hash && hash.includes('ai_key=')) {
+          const params = new URLSearchParams(hash.replace(/^#/, ''));
+          const key = params.get('ai_key');
+          const prov = params.get('ai_prov') || detectProviderFromKey(key) || 'grok';
+          if (key && key.trim()) {
+            const cleanKey = key.trim();
+            localStorage.setItem('koteshwar_ai_key_' + prov, cleanKey);
+            localStorage.setItem('koteshwar_ai_key', cleanKey);
+            localStorage.setItem('koteshwar_ai_provider', prov);
+            if (prov === 'gemini') {
+              localStorage.setItem('koteshwar_gemini_api_key', cleanKey);
+            }
+            updateApiKeyLabel();
+            // Clean URL hash immediately so key is not visible in address bar or history
+            if (window.history && window.history.replaceState) {
+              window.history.replaceState(null, '', window.location.pathname + window.location.search);
+            }
+            alert(`✅ बधाई! आपके मोबाइल पर ${AI_PROVIDERS_CONFIG[prov]?.name || 'Grok'} API Key सफलतापूर्वक सिंक हो गई है!`);
+            setTimeout(() => {
+              if (typeof switchPortalTab === 'function') {
+                switchPortalTab('ai-receipt-hub');
+              }
+            }, 300);
+          }
+        }
+      } catch (e) {
+        console.warn('Hash key sync notice:', e);
+      }
+    }
+
+    function openMobileSyncModal() {
+      const provider = getActiveAiProvider();
+      const key = getActiveApiKey(provider);
+      if (!key) {
+        alert('कृपया पहले अपने कंप्यूटर पर Key दर्ज करें!');
+        return promptUpdateApiKey();
+      }
+
+      const syncUrl = `${window.location.origin}${window.location.pathname}#ai_key=${encodeURIComponent(key)}&ai_prov=${encodeURIComponent(provider)}`;
+      const qrImg = document.getElementById('imgMobileSyncQr');
+      if (qrImg) {
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(syncUrl)}`;
+      }
+
+      const modal = document.getElementById('modalMobileKeySync');
+      if (modal) {
+        modal.style.display = 'flex';
+        modal.classList.add('open');
+      }
+    }
+
+    function closeMobileSyncModal() {
+      const modal = document.getElementById('modalMobileKeySync');
+      if (modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('open');
+      }
+    }
+
+    function copyMobileSyncLink() {
+      const provider = getActiveAiProvider();
+      const key = getActiveApiKey(provider);
+      if (!key) return;
+
+      const syncUrl = `${window.location.origin}${window.location.pathname}#ai_key=${encodeURIComponent(key)}&ai_prov=${encodeURIComponent(provider)}`;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(syncUrl).then(() => {
+          alert('✅ 1-क्लिक मोबाइल सिंक लिंक कॉपी हो गया!\n\nइस लिंक को WhatsApp या संदेश द्वारा अपने फोन पर भेजें और फोन में खोलें — Key तुरंत मोबाइल में सक्रिय हो जाएगी।');
+        }).catch(() => {
+          prompt('कृपया नीचे दिए गए लिंक को कॉपी करके अपने फोन में खोलें:', syncUrl);
+        });
+      } else {
+        prompt('कृपया नीचे दिए गए लिंक को कॉपी करके अपने फोन में खोलें:', syncUrl);
       }
     }
 
