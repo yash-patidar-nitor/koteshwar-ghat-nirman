@@ -170,10 +170,17 @@ function doPost(e) {
       var updated = false;
       var targetSheetName = "";
 
+      var targetSno = String(item.sno || "").trim();
+      var targetOrigSno = item.originalSno ? String(item.originalSno).trim() : "";
+      var targetName = item.name ? String(item.name).trim().toLowerCase() : "";
+
       if (liveDeclSheet) {
         var data = liveDeclSheet.getDataRange().getValues();
         for (var i = 1; i < data.length; i++) {
-          if (String(data[i][0]).trim() === String(item.sno).trim()) {
+          var rowSno = String(data[i][0]).trim();
+          var rowName = String(data[i][1]).trim().toLowerCase();
+
+          if (rowSno === targetSno || (targetOrigSno && rowSno === targetOrigSno) || (targetName && rowName === targetName)) {
             if (item.name) liveDeclSheet.getRange(i + 1, 2).setValue(item.name);
             if (item.city) liveDeclSheet.getRange(i + 1, 3).setValue(item.city);
             if (item.notes !== undefined) liveDeclSheet.getRange(i + 1, 4).setValue(item.notes);
@@ -193,7 +200,10 @@ function doPost(e) {
         if (declSheet) {
           var dData = declSheet.getDataRange().getValues();
           for (var j = 1; j < dData.length; j++) {
-            if (String(dData[j][0]).trim() === String(item.sno).trim()) {
+            var dRowSno = String(dData[j][0]).trim();
+            var dRowName = String(dData[j][1]).trim().toLowerCase();
+
+            if (dRowSno === targetSno || (targetOrigSno && dRowSno === targetOrigSno) || (targetName && dRowName === targetName)) {
               if (item.name) declSheet.getRange(j + 1, 2).setValue(item.name);
               if (item.city) declSheet.getRange(j + 1, 3).setValue(item.city);
               if (item.notes !== undefined) declSheet.getRange(j + 1, 4).setValue(item.notes);
@@ -210,6 +220,20 @@ function doPost(e) {
               targetSheetName = "Declarations";
               break;
             }
+          }
+        }
+      }
+
+      // Also sync village/name to Live Collection if present
+      var liveCollSheet = ss.getSheetByName("Live Collection");
+      if (liveCollSheet && item.name) {
+        var cData = liveCollSheet.getDataRange().getValues();
+        for (var k = 1; k < cData.length; k++) {
+          var cDonorName = String(cData[k][3]).trim().toLowerCase();
+          var cDonorSno = String(cData[k][2]).trim();
+          if ((cDonorSno && (cDonorSno === targetSno || cDonorSno === targetOrigSno)) || (targetName && cDonorName === targetName)) {
+            if (item.city) liveCollSheet.getRange(k + 1, 5).setValue(item.city);
+            if (item.name) liveCollSheet.getRange(k + 1, 4).setValue(item.name);
           }
         }
       }

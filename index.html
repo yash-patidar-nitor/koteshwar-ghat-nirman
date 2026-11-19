@@ -2613,7 +2613,7 @@
     }
 
     // Global App Cache Versioning (Immediate cache purge on all devices)
-    const APP_STORAGE_VERSION = '2026_11_15_v3';
+    const APP_STORAGE_VERSION = '2026_11_20_v1';
     try {
       if (localStorage.getItem('koteshwar_app_storage_version') !== APP_STORAGE_VERSION) {
         localStorage.removeItem('koteshwar_declarations_cache');
@@ -2624,6 +2624,7 @@
         localStorage.removeItem('koteshwar_custom_declarations');
         localStorage.removeItem('koteshwar_custom_collections');
         localStorage.removeItem('koteshwar_public_canonical_mirror');
+        localStorage.removeItem('koteshwar_public_canonical_mirror_v3');
         localStorage.setItem('koteshwar_app_storage_version', APP_STORAGE_VERSION);
       }
     } catch (e) {}
@@ -3053,9 +3054,12 @@
         // Helper to reconcile collection rows (from either bulk Collections or Live Collection)
         const applyCollectionRow = (rcptNo, dsno, dname, dcity, camt, dateStr) => {
           if (camt <= 0) return;
-          const rKey = rcptNo ? String(rcptNo).trim() : '';
+          const rKey = rcptNo ? String(rcptNo).trim().toLowerCase() : '';
+          const cKey = `${rKey}:::${String(dname || '').trim().toLowerCase()}:::${camt}`;
           if (rKey && appliedCollectionReceipts.has(rKey)) return;
+          if (cKey && appliedCollectionReceipts.has(cKey)) return;
           if (rKey) appliedCollectionReceipts.add(rKey);
+          if (cKey) appliedCollectionReceipts.add(cKey);
 
           let target = null;
           // Priority 1: Match by normalized donor name
@@ -3092,12 +3096,15 @@
             if (rcptNo && (!target.receipt || target.receipt === '-')) {
               target.receipt = rcptNo;
             }
+            if (dcity && dcity.trim() && dcity.trim() !== 'अन्य' && dcity.trim() !== 'विविध') {
+              target.city = dcity.trim();
+            }
           } else if (dname) {
             // Direct collection without prior pledge
             fetchedDonors.push({
               sno: dsno || `COL-${fetchedDonors.length + 1}`,
               name: dname,
-              city: dcity || "अन्य",
+              city: (dcity || "अन्य").trim(),
               notes: "सीधा सहयोग (Direct Collection)",
               amount: camt,
               deposited: camt,
@@ -3163,7 +3170,34 @@
           }
         }
 
-        // 5. PURE CANONICAL GOOGLE SHEETS RENDERING (Zero local storage contamination)
+        // 5. Apply local edits from Karyakarta portal (if edited on this device)
+        try {
+          const editedDecls = JSON.parse(localStorage.getItem('koteshwar_edited_declarations') || '{}');
+          fetchedDonors.forEach(d => {
+            const edit = editedDecls[String(d.sno)] || (d.originalSno && editedDecls[String(d.originalSno)]) ||
+              Object.values(editedDecls).find(e => e.name && d.name && e.name.trim().toLowerCase() === d.name.trim().toLowerCase());
+            if (edit) {
+              if (edit.city) d.city = edit.city.trim();
+              if (edit.name) d.name = edit.name.trim();
+              if (edit.notes !== undefined) d.notes = edit.notes;
+              if (edit.mobile !== undefined) d.mobile = edit.mobile;
+              if (edit.amount !== undefined) d.amount = Number(edit.amount) || d.amount;
+            }
+          });
+        } catch (e) {}
+
+        // Self-healing: Enforce canonical single entry and deposit for 'विविध रसीद 49/1213 से 1222 तक'
+        fetchedDonors.forEach(d => {
+          if (d.name && d.name.includes('विविध') && d.name.includes('1213')) {
+            d.amount = 10201;
+            d.deposited = 10201;
+            d.balance = 0;
+            d.receipt = '49/1213-1222';
+            if (d.city) d.city = d.city.trim();
+          }
+        });
+
+        // 6. PURE CANONICAL GOOGLE SHEETS RENDERING (Zero local storage contamination)
         if (fetchedDonors.length > 0) {
           fetchedDonors.forEach(d => {
             d.city = normalizeVillage(d.city);

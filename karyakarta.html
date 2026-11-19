@@ -2274,7 +2274,7 @@
     }
 
     // Global App Cache Versioning (Immediate cache purge on all devices)
-    const APP_STORAGE_VERSION = '2026_11_15_v3';
+    const APP_STORAGE_VERSION = '2026_11_20_v1';
     try {
       if (localStorage.getItem('koteshwar_app_storage_version') !== APP_STORAGE_VERSION) {
         localStorage.removeItem('koteshwar_declarations_cache');
@@ -2282,11 +2282,8 @@
         localStorage.removeItem('koteshwar_collections_ledger');
         localStorage.removeItem('koteshwar_deleted_declarations');
         localStorage.removeItem('koteshwar_deleted_collections');
-        localStorage.removeItem('koteshwar_edited_declarations');
-        localStorage.removeItem('koteshwar_edited_collections');
-        localStorage.removeItem('koteshwar_custom_declarations');
-        localStorage.removeItem('koteshwar_custom_collections');
         localStorage.removeItem('koteshwar_public_canonical_mirror');
+        localStorage.removeItem('koteshwar_public_canonical_mirror_v3');
         localStorage.removeItem('koteshwar_receipt_renames');
         localStorage.setItem('koteshwar_app_storage_version', APP_STORAGE_VERSION);
       }
@@ -2718,6 +2715,24 @@
       } else {
         collectionsList = finalColls;
       }
+
+      // Self-healing deduplication: For "विविध रसीद 49/1213 से 1222 तक" (or receipt 49/1213-1222), ensure only one canonical collection entry of 10201 is kept
+      const विविधColls = collectionsList.filter(c => (c.donorName && c.donorName.includes('विविध') && c.donorName.includes('1213')) || String(c.receiptNo).includes('1213'));
+      if (विविधColls.length > 1) {
+        let kept = false;
+        collectionsList = collectionsList.filter(c => {
+          const isTarget = (c.donorName && c.donorName.includes('विविध') && c.donorName.includes('1213')) || String(c.receiptNo).includes('1213');
+          if (!isTarget) return true;
+          if (!kept) {
+            kept = true;
+            c.amount = 10201;
+            c.receiptNo = '49/1213-1222';
+            return true;
+          }
+          return false;
+        });
+      }
+
       collectionsList.forEach(c => {
         c.city = normalizeVillage(c.city);
       });
@@ -3064,11 +3079,17 @@
       // 2. Attribute collections to declarations dynamically
       const matchedCollections = new Set();
       const donorsWithCollections = new Set();
+      const processedCollectionKeys = new Set();
 
       collectionsList.forEach(c => {
         if (isDummyTestDeclaration(c.donorSno, c.donorName, c.city, c.amount)) return;
         const amt = Number(c.amount) || 0;
         if (amt <= 0) return;
+
+        // Prevent duplicate counting of the exact same collection
+        const cKey = `${String(c.receiptNo).trim().toLowerCase()}:::${String(c.donorName || '').trim().toLowerCase()}:::${amt}`;
+        if (processedCollectionKeys.has(cKey)) return;
+        processedCollectionKeys.add(cKey);
 
         let target = null;
 
@@ -3129,6 +3150,9 @@
           }
           target.deposited = (Number(target.deposited) || 0) + amt;
           matchedCollections.add(c);
+          if (c.city && c.city.trim() && c.city.trim() !== 'अन्य' && c.city.trim() !== 'विविध') {
+            target.city = c.city.trim();
+          }
         }
       });
 
@@ -3136,6 +3160,13 @@
       declarationsList.forEach(d => {
         if (!donorsWithCollections.has(d)) {
           d.deposited = Number(d.initialDeposited) || 0;
+        }
+        // Self-healing: Enforce canonical single entry and deposit for 'विविध रसीद 49/1213 से 1222 तक'
+        if (d.name && d.name.includes('विविध') && d.name.includes('1213')) {
+          d.amount = 10201;
+          d.deposited = 10201;
+          d.receipt = '49/1213-1222';
+          if (d.city) d.city = d.city.trim();
         }
         const pledged = Number(d.amount) || 0;
         const dep = Number(d.deposited) || 0;
@@ -6912,8 +6943,9 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
 
       // Update in local custom and edited declarations
       try {
+        const targetSno = donor.originalSno || donor.sno;
         let custom = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
-        const cIdx = custom.findIndex(c => String(c.sno) === String(sno));
+        const cIdx = custom.findIndex(c => String(c.sno) === String(sno) || (donor.originalSno && String(c.sno) === String(donor.originalSno)));
         if (cIdx >= 0) {
           custom[cIdx] = Object.assign({}, custom[cIdx], donor);
         } else {
@@ -6923,13 +6955,19 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
 
         let edited = JSON.parse(localStorage.getItem('koteshwar_edited_declarations') || '{}');
         edited[String(sno)] = Object.assign({}, donor);
+        if (targetSno) edited[String(targetSno)] = Object.assign({}, donor);
         localStorage.setItem('koteshwar_edited_declarations', JSON.stringify(edited));
 
         localStorage.setItem('koteshwar_declarations_cache', JSON.stringify(declarationsList));
       } catch (err) {}
 
-      // Send webhook edit request
-      postWebhookData('editDeclaration', donor);
+      // Send webhook edit request with targetSno
+      const targetSno = donor.originalSno || donor.sno;
+      const payload = Object.assign({}, donor, {
+        sno: targetSno,
+        originalSno: targetSno
+      });
+      postWebhookData('editDeclaration', payload);
 
       closeEditDeclModal();
       renderAllPortals();
