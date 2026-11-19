@@ -2680,20 +2680,29 @@
       const existingRcpts = new Set(fetchedColls.map(c => String(c.receiptNo).trim()));
       Object.keys(renames).forEach(oldR => existingRcpts.add(String(oldR).trim()));
 
+      const purgedUnconfirmedReceipts = new Set(['25/613', '01/76', '153/6193', '31/830', '40/1125']);
+
       if (Array.isArray(customColls)) {
+        const unconfirmedColls = [];
         customColls.forEach(c => {
           const rKey = String(c.receiptNo).trim();
-          if (!deletedColls.has(rKey) && !existingRcpts.has(rKey)) {
+          if (!deletedColls.has(rKey) && !existingRcpts.has(rKey) && !purgedUnconfirmedReceipts.has(rKey)) {
             fetchedColls.unshift(c);
             existingRcpts.add(rKey);
+            unconfirmedColls.push(c);
           }
         });
+        if (unconfirmedColls.length !== customColls.length) {
+          try {
+            localStorage.setItem('koteshwar_custom_collections', JSON.stringify(unconfirmedColls));
+          } catch (e) {}
+        }
       }
 
       if (Array.isArray(collectionsList)) {
         collectionsList.forEach(localItem => {
           const rKey = String(localItem.receiptNo).trim();
-          if (!deletedColls.has(rKey) && !existingRcpts.has(rKey)) {
+          if (!deletedColls.has(rKey) && !existingRcpts.has(rKey) && !purgedUnconfirmedReceipts.has(rKey)) {
             fetchedColls.push(localItem);
             existingRcpts.add(rKey);
           }
@@ -2704,7 +2713,6 @@
       const candidateList = fetchedColls.length > 0 ? fetchedColls : collectionsList;
       const finalSeen = new Set();
       const finalColls = [];
-      const purgedUnconfirmedReceipts = new Set(['25/613', '01/76', '153/6193', '31/830', '40/1125']);
       candidateList.forEach(c => {
         const rk = String(c.receiptNo).trim();
         if (!deletedColls.has(rk) && !finalSeen.has(rk) && !purgedUnconfirmedReceipts.has(rk)) {
@@ -3119,53 +3127,43 @@
 
         let target = null;
 
-        // Priority 1: Match by normalized donor name
-        if (c.donorName) {
-          const nk = getNormKey(c.donorName);
-          const candidates = declByName.get(nk);
-          if (candidates && candidates.length > 0) {
-            if (candidates.length === 1) {
-              target = candidates[0];
-            } else {
-              target = candidates.find(cand => cand.city === c.city) || candidates[0];
-            }
+        // Priority 1: Match by explicit donor S.No. (100% deterministic link)
+        if (c.donorSno) {
+          const sKey = String(c.donorSno).trim();
+          if (declById.has(sKey)) {
+            target = declById.get(sKey);
           }
         }
 
-        // Priority 2: Substring / fuzzy name match
-        if (!target && c.donorName) {
-          const cRaw = c.donorName.trim().toLowerCase();
-          const cNorm = getNormKey(c.donorName);
-          target = declarationsList.find(d => {
-            const dRaw = (d.name || '').trim().toLowerCase();
-            const dNorm = getNormKey(d.name);
-            return (dRaw && (dRaw === cRaw || dRaw.includes(cRaw) || cRaw.includes(dRaw))) ||
-                   (cNorm && dNorm && (cNorm === dNorm || cNorm.includes(dNorm) || dNorm.includes(cNorm)));
-          });
-        }
-
-        // Priority 3: Match by receipt number
-        if (!target && c.receiptNo) {
+        // Priority 2: Match by explicit receipt number
+        if (!target && c.receiptNo && String(c.receiptNo).trim() !== '-') {
           const rKey = String(c.receiptNo).trim();
           if (declByReceipt.has(rKey)) {
             target = declByReceipt.get(rKey);
           }
         }
 
-        // Priority 4: Match by donorSno ONLY IF donor name is compatible (prevents misattributions)
-        if (!target && c.donorSno) {
-          const sKey = String(c.donorSno).trim();
-          if (declById.has(sKey)) {
-            const candidate = declById.get(sKey);
-            if (!c.donorName || !candidate.name) {
-              target = candidate;
-            } else {
-              const cNorm = getNormKey(c.donorName);
-              const dNorm = getNormKey(candidate.name);
-              if (!cNorm || !dNorm || cNorm === dNorm || cNorm.includes(dNorm) || dNorm.includes(cNorm)) {
-                target = candidate;
+        // Priority 3: Exact Normalized Name + Matching Village
+        if (!target && c.donorName) {
+          const nk = getNormKey(c.donorName);
+          const cCity = c.city ? normalizeVillage(c.city) : '';
+          const candidates = declByName.get(nk);
+          if (candidates && candidates.length > 0) {
+            target = candidates.find(cand => {
+              if (cCity && cCity !== 'अन्य' && cand.city && cand.city !== 'अन्य') {
+                return normalizeVillage(cand.city) === cCity;
               }
-            }
+              return true;
+            });
+          }
+        }
+
+        // Priority 4: Unique Exact Name across database (only if single candidate)
+        if (!target && c.donorName) {
+          const nk = getNormKey(c.donorName);
+          const candidates = declByName.get(nk);
+          if (candidates && candidates.length === 1) {
+            target = candidates[0];
           }
         }
 
@@ -7395,8 +7393,10 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
       }
 
       try {
-        localStorage.setItem('koteshwar_custom_collections', JSON.stringify(customColls));
-        localStorage.setItem('koteshwar_custom_declarations', JSON.stringify(customDecls));
+        const remainingColls = customColls.filter(c => !c.syncedToSheet);
+        const remainingDecls = customDecls.filter(d => !d.syncedToSheet);
+        localStorage.setItem('koteshwar_custom_collections', JSON.stringify(remainingColls));
+        localStorage.setItem('koteshwar_custom_declarations', JSON.stringify(remainingDecls));
       } catch (e) {}
 
       updateRibbon(false, `✅ ${successCount} प्रविष्टि(याँ) Google Sheet में सफलतापूर्वक सिंक हो गईं!`);

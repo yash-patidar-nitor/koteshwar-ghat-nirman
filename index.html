@@ -3055,35 +3055,46 @@
         const applyCollectionRow = (rcptNo, dsno, dname, dcity, camt, dateStr) => {
           if (camt <= 0) return;
           const rKey = rcptNo ? String(rcptNo).trim().toLowerCase() : '';
-          const cKey = `${rKey}:::${String(dname || '').trim().toLowerCase()}:::${camt}`;
-          if (rKey && appliedCollectionReceipts.has(rKey)) return;
+          const cKey = `${rKey}:::${String(dsno || '')}:::${String(dname || '').trim().toLowerCase()}:::${camt}`;
+          if (rKey && rKey !== '-' && appliedCollectionReceipts.has(rKey)) return;
           if (cKey && appliedCollectionReceipts.has(cKey)) return;
-          if (rKey) appliedCollectionReceipts.add(rKey);
-          if (cKey) appliedCollectionReceipts.add(cKey);
+          if (rKey && rKey !== '-') appliedCollectionReceipts.add(rKey);
+          appliedCollectionReceipts.add(cKey);
 
           let target = null;
-          // Priority 1: Match by normalized donor name
-          if (dname) {
+
+          // Priority 1: Deterministic Match by donor S.No.
+          if (dsno) {
+            target = fetchedDonors.find(d => String(d.sno) === String(dsno) || (d.originalSno && String(d.originalSno) === String(dsno)));
+          }
+
+          // Priority 2: Deterministic Match by explicit receipt number
+          if (!target && rKey && rKey !== '-') {
+            target = fetchedDonors.find(d => d.receipt && d.receipt !== '-' && String(d.receipt).trim().toLowerCase() === rKey);
+          }
+
+          // Priority 3: Exact Normalized Name + Matching Normalized Village
+          if (!target && dname) {
             const cNorm = normDonorName(dname);
+            const cCityNorm = dcity ? normalizeVillage(dcity) : '';
             target = fetchedDonors.find(d => {
               if (!d.name) return false;
-              if (d.name.trim().toLowerCase() === dname.trim().toLowerCase()) return true;
               const dNorm = normDonorName(d.name);
-              return cNorm && dNorm && (cNorm === dNorm || cNorm.includes(dNorm) || dNorm.includes(cNorm));
+              if (cNorm !== dNorm) return false;
+              if (cCityNorm && cCityNorm !== 'अन्य' && d.city && d.city !== 'अन्य') {
+                return normalizeVillage(d.city) === cCityNorm;
+              }
+              return true;
             });
           }
 
-          // Priority 2: Match by donor S.No with strict name compatibility check
-          if (!target && dsno) {
-            target = fetchedDonors.find(d => {
-              if (String(d.sno) === String(dsno) || (d.originalSno && String(d.originalSno) === String(dsno))) {
-                if (!dname || !d.name) return true;
-                const cNorm = normDonorName(dname);
-                const dNorm = normDonorName(d.name);
-                return !cNorm || !dNorm || cNorm === dNorm || cNorm.includes(dNorm) || dNorm.includes(cNorm);
-              }
-              return false;
-            });
+          // Priority 4: Unique Exact Name across database (only if single candidate)
+          if (!target && dname) {
+            const cNorm = normDonorName(dname);
+            const candidates = fetchedDonors.filter(d => d.name && normDonorName(d.name) === cNorm);
+            if (candidates.length === 1) {
+              target = candidates[0];
+            }
           }
 
           if (target) {
@@ -3093,7 +3104,7 @@
             }
             target.deposited = (Number(target.deposited) || 0) + camt;
             target.balance = Math.max(0, target.amount - target.deposited);
-            if (rcptNo && (!target.receipt || target.receipt === '-')) {
+            if (rcptNo && rcptNo !== '-' && (!target.receipt || target.receipt === '-')) {
               target.receipt = rcptNo;
             }
             if (dcity && dcity.trim() && dcity.trim() !== 'अन्य' && dcity.trim() !== 'विविध') {
