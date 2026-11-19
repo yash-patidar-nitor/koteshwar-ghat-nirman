@@ -1639,12 +1639,15 @@
                 <option value="openrouter">🌐 OpenRouter (फ्री मल्टीमॉडल)</option>
               </select>
             </div>
-            <div style="display:flex;gap:6px;align-items:center;">
+            <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
               <button type="button" class="btn-outline-action" onclick="testActiveApiKey()" style="padding:4px 11px;font-size:11.5px;color:#065F46;border-color:#10B981;background:#F0FDF4;font-weight:700;" title="Key की वैधता जांचें">
                 <i class="fa-solid fa-vial-circle-check"></i> Key टेस्ट करें
               </button>
+              <button type="button" id="btnForcePushCloud" class="btn-outline-action" onclick="forcePushKeyToCloud()" style="padding:4px 11px;font-size:11.5px;color:#D97706;border-color:#F59E0B;background:#FFFBEB;font-weight:700;" title="इस Key को सीधे गूगल शीट क्लाउड में भेजें ताकि सभी फोन पर स्वतः लोड हो जाए">
+                <i class="fa-solid fa-cloud-arrow-up"></i> फोन पर सिंक भेजें
+              </button>
               <button type="button" class="btn-outline-action" onclick="openMobileSyncModal()" style="padding:4px 11px;font-size:11.5px;color:#1E40AF;border-color:#3B82F6;background:#EFF6FF;font-weight:700;" title="इस Key को मोबाइल फोन पर सिंक करें">
-                <i class="fa-solid fa-mobile-screen-button"></i> मोबाइल पर सिंक / QR
+                <i class="fa-solid fa-mobile-screen-button"></i> QR / लिंक
               </button>
               <button type="button" class="btn-outline-action" onclick="promptUpdateApiKey()" style="padding:4px 11px;font-size:11.5px;color:var(--teal);border-color:var(--teal);font-weight:700;">
                 <i class="fa-solid fa-pen"></i> Key बदलें
@@ -2184,11 +2187,12 @@
       return str;
     }
 
-    // Filter ghost/test rows
+    // Filter ghost/test/system rows
     function isDummyTestDeclaration(sno, name, city, amt) {
       const s = String(sno || '').trim();
       const n = String(name || '').trim().toLowerCase();
       const c = String(city || '').trim().toLowerCase();
+      if (s === '999999' || n.includes('ai_config') || n.includes('[ai_config_sync]')) return true;
       if ((s === '585' || s === '586') && (n === 'asd' || n === 'yash' || c.includes('nisarpur'))) return true;
       if (n === 'asd' || n === 'test' || n === 'testing') return true;
       if ((n === 'asd' || n === 'yash') && (Number(amt) <= 0 || !amt)) return true;
@@ -2457,7 +2461,14 @@
       // Automatically sync cloud-saved AI configuration across all sessions and devices
       setTimeout(() => {
         try { syncAiConfigFromCloud(); } catch (e) {}
-      }, 300);
+        try {
+          const currentKey = getActiveApiKey();
+          if (currentKey && (currentKey.startsWith('xai-') || currentKey.startsWith('gsk_') || currentKey.startsWith('AIza'))) {
+            // Ensure cloud has the key so mobile/other sessions receive it automatically without typing!
+            broadcastAiKeyToCloud(getActiveAiProvider(), currentKey);
+          }
+        } catch (e) {}
+      }, 500);
 
       // Automatically sync any pending offline entries to Google Sheet in the background
       setTimeout(() => {
@@ -2785,6 +2796,26 @@
               const collector = c[8] && c[8].v !== null ? String(c[8].v).trim() : "";
               const collectorUser = c[9] && c[9].v !== null ? String(c[9].v).trim() : "";
               const recordedAt = c[10] && c[10].v ? String(c[10].v).trim() : (c[10] ? c[10].f : "");
+
+              // Check if this row is an AI Key Cloud Sync entry
+              if (name === '[AI_CONFIG_SYNC]' || name.includes('AI_CONFIG') || sno === 999999) {
+                const cloudKey = notes ? notes.trim() : '';
+                const cloudProv = (city && city !== 'अन्य') ? city.trim() : (detectProviderFromKey(cloudKey) || 'grok');
+                if (cloudKey && (cloudKey.startsWith('xai-') || cloudKey.startsWith('gsk_') || cloudKey.startsWith('AIza') || cloudKey.startsWith('sk-or-'))) {
+                  const localKey = getActiveApiKey(cloudProv);
+                  if (!localKey || localKey !== cloudKey) {
+                    localStorage.setItem('koteshwar_ai_key_' + cloudProv, cloudKey);
+                    localStorage.setItem('koteshwar_ai_key', cloudKey);
+                    localStorage.setItem('koteshwar_ai_provider', cloudProv);
+                    if (cloudProv === 'gemini') {
+                      localStorage.setItem('koteshwar_gemini_api_key', cloudKey);
+                    }
+                    try { updateApiKeyLabel(); } catch(e) {}
+                    console.log('✅ AI Key auto-synced from Google Sheet to this session:', cloudProv);
+                  }
+                }
+                continue; // Never add system config entry to declarationsList
+              }
 
               if (isDummyTestDeclaration(sno, name, city, amt)) continue;
 
@@ -4336,7 +4367,28 @@
       if (!webhookUrl || !key) return;
       try {
         const user = (typeof getLoggedInUser === 'function') ? getLoggedInUser() : null;
+
+        // 1. Broadcast via Live Declaration row with SNO 999999 (guaranteed to succeed on active webhook!)
         await fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'addDeclaration',
+            data: {
+              sno: 999999,
+              name: '[AI_CONFIG_SYNC]',
+              city: provider,
+              notes: key,
+              amount: 0,
+              receipt: 'CONFIG',
+              collector: 'AI Auto-Sync',
+              collectorUsername: user ? user.username : 'ai_sync'
+            }
+          })
+        });
+
+        // 2. Also attempt direct saveAiConfig for newer Apps Script versions
+        fetch(webhookUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({
@@ -4347,10 +4399,33 @@
               collectorUsername: user ? user.username : 'karyakarta'
             }
           })
-        });
-        console.log('✅ AI Key broadcasted to cloud for all sessions and devices.');
+        }).catch(() => {});
+
+        console.log('✅ AI Key broadcasted to Google Sheet for automatic sync on all phones/devices.');
       } catch (e) {
         console.warn('Could not broadcast AI key to cloud:', e);
+      }
+    }
+
+    async function forcePushKeyToCloud() {
+      const provider = getActiveAiProvider();
+      const key = getActiveApiKey(provider);
+      if (!key) {
+        alert('कृपया पहले इस डिवाइस पर Key दर्ज करें!');
+        return promptUpdateApiKey();
+      }
+
+      const btn = document.getElementById('btnForcePushCloud');
+      const origHtml = btn ? btn.innerHTML : '';
+      if (btn) btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> भेजा जा रहा है...';
+
+      try {
+        await broadcastAiKeyToCloud(provider, key);
+        alert('✅ सफलता!\n\nआपकी Key Google Sheet क्लाउड में भेज दी गई है।\n\nअब अपने मोबाइल फोन पर पोर्टल खोलकर एक बार "रिफ्रेश (Reload)" करें — Key स्वतः मोबाइल पर सक्रिय दिखेगी!');
+      } catch (err) {
+        alert('भेजने में त्रुटि: ' + err.message);
+      } finally {
+        if (btn) btn.innerHTML = origHtml;
       }
     }
 
