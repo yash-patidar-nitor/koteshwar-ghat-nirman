@@ -2613,7 +2613,7 @@
     }
 
     // Global App Cache Versioning (Immediate cache purge on all devices)
-    const APP_STORAGE_VERSION = '2026_11_20_v1';
+    const APP_STORAGE_VERSION = '2026_11_20_v2';
     try {
       if (localStorage.getItem('koteshwar_app_storage_version') !== APP_STORAGE_VERSION) {
         localStorage.removeItem('koteshwar_declarations_cache');
@@ -3194,6 +3194,12 @@
             d.balance = 0;
             d.receipt = '49/1213-1222';
             if (d.city) d.city = d.city.trim();
+          }
+          // Pure declarations without receipt (604-608): enforce 0 deposit & 100% balance
+          if (d.sno >= 604 && d.sno <= 608) {
+            d.receipt = '-';
+            d.deposited = 0;
+            d.balance = Number(d.amount) || 0;
           }
         });
 

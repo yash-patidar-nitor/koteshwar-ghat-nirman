@@ -2274,7 +2274,7 @@
     }
 
     // Global App Cache Versioning (Immediate cache purge on all devices)
-    const APP_STORAGE_VERSION = '2026_11_20_v1';
+    const APP_STORAGE_VERSION = '2026_11_20_v2';
     try {
       if (localStorage.getItem('koteshwar_app_storage_version') !== APP_STORAGE_VERSION) {
         localStorage.removeItem('koteshwar_declarations_cache');
@@ -2282,6 +2282,10 @@
         localStorage.removeItem('koteshwar_collections_ledger');
         localStorage.removeItem('koteshwar_deleted_declarations');
         localStorage.removeItem('koteshwar_deleted_collections');
+        localStorage.removeItem('koteshwar_custom_declarations');
+        localStorage.removeItem('koteshwar_custom_collections');
+        localStorage.removeItem('koteshwar_edited_declarations');
+        localStorage.removeItem('koteshwar_edited_collections');
         localStorage.removeItem('koteshwar_public_canonical_mirror');
         localStorage.removeItem('koteshwar_public_canonical_mirror_v3');
         localStorage.removeItem('koteshwar_receipt_renames');
@@ -2700,9 +2704,10 @@
       const candidateList = fetchedColls.length > 0 ? fetchedColls : collectionsList;
       const finalSeen = new Set();
       const finalColls = [];
+      const purgedUnconfirmedReceipts = new Set(['25/613', '01/76', '153/6193', '31/830', '40/1125']);
       candidateList.forEach(c => {
         const rk = String(c.receiptNo).trim();
-        if (!deletedColls.has(rk) && !finalSeen.has(rk)) {
+        if (!deletedColls.has(rk) && !finalSeen.has(rk) && !purgedUnconfirmedReceipts.has(rk)) {
           finalSeen.add(rk);
           finalColls.push(c);
         }
@@ -2935,12 +2940,17 @@
                     });
                   } else {
                     // Genuine edit
+                    const hasReceipt = receipt && receipt !== '-' && receipt !== 'undefined' && receipt.trim() !== '';
+                    const initDep = hasReceipt ? amt : 0;
                     Object.assign(existing, {
                       name: name,
                       city: city,
                       notes: notes,
                       mobile: mobile,
                       amount: amt,
+                      initialDeposited: initDep,
+                      deposited: initDep,
+                      balance: Math.max(0, amt - initDep),
                       receipt: receipt,
                       date: String(dateVal).trim(),
                       collector: collector,
@@ -3010,8 +3020,7 @@
               declarationsList.push(item);
               unconfirmedCustom.push(item);
             } else {
-              Object.assign(existing, item);
-              // Confirmed in Google Sheets! Do not retain in local outbox
+              // Confirmed in Google Sheets! Do not overwrite sheet data with stale local custom fields
             }
           });
           if (unconfirmedCustom.length !== custom.length) {
@@ -3029,6 +3038,15 @@
 
       declarationsList.forEach(d => {
         d.city = normalizeVillage(d.city);
+        // Pure declarations without receipt (such as 604-608): enforce 0 deposit & 100% balance
+        const hasReceipt = d.receipt && d.receipt !== '-' && d.receipt !== 'undefined' && d.receipt.trim() !== '';
+        if (!hasReceipt || (d.sno >= 604 && d.sno <= 608)) {
+          d.receipt = '-';
+          d.initialDeposited = 0;
+          d.deposited = 0;
+          d.balance = Number(d.amount) || 0;
+          d.paymentStatus = 'आस्थगित';
+        }
       });
 
       // Reconcile collections with declarations
@@ -3057,10 +3075,18 @@
 
       declarationsList.forEach(d => {
         // Reset deposited to initialDeposited (or 0) before recalculating from live collections
-        if (d.initialDeposited === undefined) {
-          d.initialDeposited = Number(d.deposited) || 0;
+        const hasReceipt = d.receipt && d.receipt !== '-' && d.receipt !== 'undefined' && d.receipt.trim() !== '';
+        if (!hasReceipt || (d.sno >= 604 && d.sno <= 608)) {
+          d.receipt = '-';
+          d.initialDeposited = 0;
+          d.deposited = 0;
+          d.balance = Number(d.amount) || 0;
+        } else {
+          if (d.initialDeposited === undefined) {
+            d.initialDeposited = Number(d.deposited) || 0;
+          }
+          d.deposited = Number(d.initialDeposited) || 0;
         }
-        d.deposited = Number(d.initialDeposited) || 0;
 
         if (d.sno) declById.set(String(d.sno).trim(), d);
         if (d.originalSno) declById.set(String(d.originalSno).trim(), d);
@@ -3167,6 +3193,13 @@
           d.deposited = 10201;
           d.receipt = '49/1213-1222';
           if (d.city) d.city = d.city.trim();
+        }
+        // Enforce 604-608 pure pledge declarations without receipt
+        if (d.sno >= 604 && d.sno <= 608) {
+          d.receipt = '-';
+          d.deposited = 0;
+          d.balance = Number(d.amount) || 0;
+          d.paymentStatus = 'आस्थगित';
         }
         const pledged = Number(d.amount) || 0;
         const dep = Number(d.deposited) || 0;
