@@ -4794,18 +4794,18 @@ JSON Schema:
     "amount": 11000,
     "date": "YYYY-MM-DD (रसीद पर लिखी दिनांक, जैसे 2026-11-16)",
     "memorial": "पुण्य स्मृति / किसके निमित्त (यदि लिखा हो)",
-    "constructionScope": "निर्माण संकल्प (उदा. एक पेढ़ी / 111 वर्गफीट)",
-    "notes": "पुण्य स्मृति व निर्माण विवरण को मिलाकर साफ़ विवरण",
+    "notes": "पुण्य स्मृति विवरण (उदा. पुण्य स्मृति: स्व. ...) या अन्य साफ़ टिप्पणी",
     "paymentMode": "आस्थगित",
     "isDeferred": true
   }
 ]
 
 महत्वपूर्ण नियम:
-1. यदि रसीद पर नकद (Cash) या UPI का स्पष्ट उल्लेख न हो, तो paymentMode में "आस्थगित" और isDeferred में true रखें।
-2. amount केवल शुद्ध संख्या (Number) हो, कोई कॉमा या ₹ का चिन्ह न जोड़ें।
-3. दानदाता का नाम व स्थान शुद्ध देवनागरी (हिंदी) में ही रखें।
-4. आउटपुट केवल शुद्ध JSON Array होना चाहिए।`;
+1. निर्माण संकल्प (Construction Scope / पेढ़ी / वर्गफीट) दर्ज करने की आवश्यकता नहीं है।
+2. यदि रसीद पर नकद (Cash) या UPI का स्पष्ट उल्लेख न हो, तो paymentMode में "आस्थगित" और isDeferred में true रखें।
+3. amount केवल शुद्ध संख्या (Number) हो, कोई कॉमा या ₹ का चिन्ह न जोड़ें।
+4. दानदाता का नाम व स्थान शुद्ध देवनागरी (हिंदी) में ही रखें।
+5. आउटपुट केवल शुद्ध JSON Array होना चाहिए।`;
 
       try {
         if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -4908,7 +4908,7 @@ JSON Schema:
               } catch (e3) {
                 // Regex field extractor inside individual card block
                 const item = {};
-                const keys = ['bookNo', 'receiptNo', 'donorName', 'fatherName', 'city', 'mobile', 'amount', 'date', 'memorial', 'constructionScope', 'notes', 'paymentMode', 'isDeferred'];
+                const keys = ['bookNo', 'receiptNo', 'donorName', 'fatherName', 'city', 'mobile', 'amount', 'date', 'memorial', 'notes', 'paymentMode', 'isDeferred'];
                 keys.forEach(k => {
                   const regex = new RegExp(`["']?${k}["']?\\s*:\\s*(?:"([^"]*)"|'([^']*)'|(\\d+(?:\\.\\d+)?)|(true|false)|null)`, 'i');
                   const m = block.match(regex);
@@ -4966,14 +4966,12 @@ JSON Schema:
 
         const date = (r.date || new Date().toISOString().split('T')[0]).toString().trim();
         const memorial = (r.memorial || r.smriti || '').toString().trim();
-        const constructionScope = (r.constructionScope || r.scope || r.pedhi || '').toString().trim();
 
         let cleanNotes = (r.cleanNotes || r.notes || r.remark || '').toString().trim();
-        if (!cleanNotes && (memorial || constructionScope)) {
-          const parts = [];
-          if (memorial) parts.push(`पुण्य स्मृति: ${memorial}`);
-          if (constructionScope) parts.push(`निर्माण: ${constructionScope}`);
-          cleanNotes = parts.join(' • ');
+        // Remove construction scope clauses if any
+        cleanNotes = cleanNotes.replace(/\s*•\s*निर्माण:\s*[^•]+/gi, '').trim();
+        if (!cleanNotes && memorial) {
+          cleanNotes = `पुण्य स्मृति: ${memorial}`;
         }
         cleanNotes = cleanNotes.replace(/\[AI.*?\]/gi, '').trim();
 
@@ -5003,7 +5001,6 @@ JSON Schema:
           amount,
           date,
           memorial,
-          constructionScope,
           cleanNotes,
           notes: cleanNotes,
           paymentMode: mode,
@@ -5030,9 +5027,8 @@ JSON Schema:
           amount: 11111,
           date: "2026-11-16",
           memorial: "स्व. मांगी बाई एवं स्व. काशीनाथजी अग्रे",
-          constructionScope: "एक पेढ़ी / 111 वर्गफीट",
-          cleanNotes: "पुण्य स्मृति: स्व. मांगी बाई एवं स्व. काशीनाथजी अग्रे • निर्माण: एक पेढ़ी / 111 वर्गफीट",
-          notes: "पुण्य स्मृति: स्व. मांगी बाई एवं स्व. काशीनाथजी अग्रे • निर्माण: एक पेढ़ी / 111 वर्गफीट",
+          cleanNotes: "पुण्य स्मृति: स्व. मांगी बाई एवं स्व. काशीनाथजी अग्रे",
+          notes: "पुण्य स्मृति: स्व. मांगी बाई एवं स्व. काशीनाथजी अग्रे",
           paymentMode: "आस्थगित",
           isDeferred: true,
           verified: true
@@ -5048,9 +5044,8 @@ JSON Schema:
           amount: 5111,
           date: "2026-11-16",
           memorial: "",
-          constructionScope: "51 वर्गफीट",
-          cleanNotes: "निर्माण: 51 वर्गफीट",
-          notes: "निर्माण: 51 वर्गफीट",
+          cleanNotes: "",
+          notes: "",
           paymentMode: "आस्थगित",
           isDeferred: true,
           verified: true
@@ -5066,9 +5061,8 @@ JSON Schema:
           amount: 25555,
           date: "2026-11-16",
           memorial: "स्व. श्री प्रकाश सोनी",
-          constructionScope: "2.5 पेढ़ी / 255 वर्गफीट",
-          cleanNotes: "पुण्य स्मृति: स्व. श्री प्रकाश सोनी • निर्माण: 2.5 पेढ़ी / 255 वर्गफीट",
-          notes: "पुण्य स्मृति: स्व. श्री प्रकाश सोनी • निर्माण: 2.5 पेढ़ी / 255 वर्गफीट",
+          cleanNotes: "पुण्य स्मृति: स्व. श्री प्रकाश सोनी",
+          notes: "पुण्य स्मृति: स्व. श्री प्रकाश सोनी",
           paymentMode: "आस्थगित",
           isDeferred: true,
           verified: true
@@ -5084,9 +5078,8 @@ JSON Schema:
           amount: 21111,
           date: "2026-11-16",
           memorial: "जसनबाई मंगाजी गुजरात्या बोरलाय",
-          constructionScope: "दो पेढ़ी / 211 वर्गफीट",
-          cleanNotes: "पुण्य स्मृति: जसनबाई मंगाजी गुजरात्या बोरलाय • निर्माण: दो पेढ़ी / 211 वर्गफीट",
-          notes: "पुण्य स्मृति: जसनबाई मंगाजी गुजरात्या बोरलाय • निर्माण: दो पेढ़ी / 211 वर्गफीट",
+          cleanNotes: "पुण्य स्मृति: जसनबाई मंगाजी गुजरात्या बोरलाय",
+          notes: "पुण्य स्मृति: जसनबाई मंगाजी गुजरात्या बोरलाय",
           paymentMode: "आस्थगित",
           isDeferred: true,
           verified: true
@@ -5102,9 +5095,8 @@ JSON Schema:
           amount: 35555,
           date: "2026-11-16",
           memorial: "स्व. पूँजी बाई स्व. गोकुल जी जिराती",
-          constructionScope: "3.5 पेढ़ी / 355 वर्गफीट",
-          cleanNotes: "पुण्य स्मृति: स्व. पूँजी बाई स्व. गोकुल जी जिराती • निर्माण: 3.5 पेढ़ी / 355 वर्गफीट",
-          notes: "पुण्य स्मृति: स्व. पूँजी बाई स्व. गोकुल जी जिराती • निर्माण: 3.5 पेढ़ी / 355 वर्गफीट",
+          cleanNotes: "पुण्य स्मृति: स्व. पूँजी बाई स्व. गोकुल जी जिराती",
+          notes: "पुण्य स्मृति: स्व. पूँजी बाई स्व. गोकुल जी जिराती",
           paymentMode: "आस्थगित",
           isDeferred: true,
           verified: true
@@ -5228,15 +5220,12 @@ IMPORTANT RULES:
    - Mobile number under 'मोबा.नं.' (e.g. '7999901039', '9977129792', '7898000173', '9993106947'), or '' if blank.
 9. 'memorial':
    - Memorial or dedication under 'पुण्य स्मृति' (e.g. 'स्व. मांगी बाई एवं स्व. काशीनाथजी अग्रे', 'स्व. श्री प्रकाश सोनी', 'जसनबाई मंगाजी गुजरात्या बोरलाय', 'स्व. पूँजी बाई स्व. गोकुल जी जिराती'), or '' if blank.
-10. 'constructionScope':
-   - Construction dedication under 'दान स्वरूप' (e.g. 'एक पेढ़ी / 111 वर्गफीट', '51 वर्गफीट', '2.5 पेढ़ी / 255 वर्गफीट', 'दो पेढ़ी / 211 वर्गफीट', '3.5 पेढ़ी / 355 वर्गफीट').
-11. 'cleanNotes':
-   - Clean Hindi string combining memorial and construction scope:
-     [memorial ? ('पुण्य स्मृति: ' + memorial) : '', constructionScope ? ('निर्माण: ' + constructionScope) : ''].filter(Boolean).join(' • ').
+10. 'cleanNotes':
+   - Clean Hindi string based on memorial: memorial ? ('पुण्य स्मृति: ' + memorial) : ''.
    - ABSOLUTELY DO NOT mention AI, robots, or model names in notes or remarks!
-12. 'amount':
+11. 'amount':
    - Numeric integer amount in rupees (e.g. 11111, 5111, 25555, 21111, 35555).
-13. 'date':
+12. 'date':
    - Date in YYYY-MM-DD format. If written as DD/MM/YY (e.g. '16/11/26'), convert to '2026-11-16'. If DD-MM-YY, convert accordingly.
 
 Schema to strictly return:
@@ -5254,8 +5243,7 @@ Schema to strictly return:
       "amount": 11111,
       "date": "2026-11-16",
       "memorial": "स्व. मांगी बाई एवं स्व. काशीनाथजी अग्रे",
-      "constructionScope": "एक पेढ़ी / 111 वर्गफीट",
-      "cleanNotes": "पुण्य स्मृति: स्व. मांगी बाई एवं स्व. काशीनाथजी अग्रे • निर्माण: एक पेढ़ी / 111 वर्गफीट",
+      "cleanNotes": "पुण्य स्मृति: स्व. मांगी बाई एवं स्व. काशीनाथजी अग्रे",
       "paymentMode": "आस्थगित",
       "isDeferred": true
     }
@@ -5626,9 +5614,9 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
 
             <div style="margin-top:10px;">
               <label style="font-size:11.5px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:3px;">
-                पुण्य स्मृति व निर्माण विवरण (पावती विवरण) - <em>साफ़ टिप्पणी</em>
+                पुण्य स्मृति / पावती टिप्पणी - <em>साफ़ विवरण</em>
               </label>
-              <input type="text" id="aiPrev_notes_${i}" value="${escapeHtml(cleanNotesVal)}" style="width:100%;padding:6px 10px;font-size:12.5px;border:1px solid #CBD5E1;border-radius:6px;" placeholder="उदा. पुण्य स्मृति: ... • निर्माण: ..." />
+              <input type="text" id="aiPrev_notes_${i}" value="${escapeHtml(cleanNotesVal)}" style="width:100%;padding:6px 10px;font-size:12.5px;border:1px solid #CBD5E1;border-radius:6px;" placeholder="उदा. पुण्य स्मृति: ..." />
             </div>
           </div>
         `;
