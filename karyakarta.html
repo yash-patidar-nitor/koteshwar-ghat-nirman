@@ -1627,85 +1627,149 @@
           </div>
         </div>
 
-        <!-- Active Multi-Provider AI Engine Bar (xAI Grok, Groq, Gemini) -->
-        <div style="background:#FFF;border:1.5px solid #CBD5E1;border-radius:10px;padding:9px 13px;margin-bottom:14px;font-size:12px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-weight:700;color:var(--teal);"><i class="fa-solid fa-microchip" style="color:var(--gold-dark);"></i> AI इंजन:</span>
-              <select id="selAiProvider" onchange="changeAiProvider(this.value)" style="padding:4px 8px;border-radius:6px;border:1.5px solid var(--teal);font-weight:700;font-size:12px;color:var(--teal);background:#F0FDF4;cursor:pointer;">
-                <option value="grok" selected>🚀 xAI Grok (Grok 2 Vision - $25 मुफ़्त क्रेडिट्स)</option>
-                <option value="groq">⚡ Groq Cloud (Llama 3.2 Vision - 100% मुफ़्त)</option>
-                <option value="gemini">🤖 Google Gemini (3.8-Flash)</option>
-                <option value="openrouter">🌐 OpenRouter (फ्री मल्टीमॉडल)</option>
-              </select>
+        <!-- Ingestion Mode Selector Tabs -->
+        <div style="display:flex;gap:10px;margin-bottom:16px;border-bottom:2px solid var(--sandstone);padding-bottom:12px;flex-wrap:wrap;">
+          <button type="button" id="tabBtnAiPaste" class="tab-btn active" onclick="switchAiMode('paste')" style="padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;background:var(--teal);color:#fff;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:7px;box-shadow:0 2px 6px rgba(18,63,66,0.2);">
+            <i class="fa-solid fa-paste"></i> 📋 ChatGPT / Gemini से सीधा पेस्ट (बिना किसी API Key के • सबसे सरल)
+          </button>
+          <button type="button" id="tabBtnAiUpload" class="tab-btn" onclick="switchAiMode('upload')" style="padding:9px 18px;border-radius:8px;font-size:13px;font-weight:600;background:#F1F5F9;color:var(--text-primary);border:1px solid #CBD5E1;cursor:pointer;display:inline-flex;align-items:center;gap:7px;">
+            <i class="fa-solid fa-cloud-arrow-up"></i> 📁 सीधे फाइल / PDF अपलोड (API इंजन द्वारा)
+          </button>
+        </div>
+
+        <!-- ==================== MODE 1: CHATGPT / GEMINI DIRECT PASTE (100% RELIABLE) ==================== -->
+        <div id="aiModePasteSection" style="display:block;">
+          <!-- 3-Step Guidance Box -->
+          <div style="background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:10px;padding:14px 16px;margin-bottom:14px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px;">
+              <div style="font-weight:700;color:#14532D;font-size:14px;display:flex;align-items:center;gap:6px;">
+                <i class="fa-solid fa-wand-magic-sparkles" style="color:#16A34A;"></i> 3 आसान चरणों में थोक प्रविष्टि (Bulk Receipt Entry):
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <button type="button" class="btn-submit-action" onclick="copyPromptForAiChat()" style="background:#16A34A;color:#fff;font-weight:700;padding:6px 14px;font-size:12px;width:auto;min-height:34px;box-shadow:0 2px 6px rgba(22,163,74,0.3);">
+                  <i class="fa-solid fa-copy"></i> 📋 प्रॉम्प्ट कॉपी करें (ChatGPT / Gemini हेतु)
+                </button>
+                <a href="https://chatgpt.com" target="_blank" class="btn-outline-action" style="padding:5px 12px;font-size:12px;color:#10A37F;border-color:#10A37F;background:#FFF;display:inline-flex;align-items:center;gap:5px;font-weight:600;" title="ChatGPT खोलें">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i> ChatGPT खोलें
+                </a>
+                <a href="https://gemini.google.com" target="_blank" class="btn-outline-action" style="padding:5px 12px;font-size:12px;color:#2563EB;border-color:#2563EB;background:#FFF;display:inline-flex;align-items:center;gap:5px;font-weight:600;" title="Gemini Web खोलें">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i> Gemini खोलें
+                </a>
+              </div>
             </div>
-            <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
-              <button type="button" class="btn-outline-action" onclick="testActiveApiKey()" style="padding:4px 11px;font-size:11.5px;color:#065F46;border-color:#10B981;background:#F0FDF4;font-weight:700;" title="Key की वैधता जांचें">
-                <i class="fa-solid fa-vial-circle-check"></i> Key टेस्ट करें
-              </button>
-              <button type="button" id="btnForcePushCloud" class="btn-outline-action" onclick="forcePushKeyToCloud()" style="padding:4px 11px;font-size:11.5px;color:#D97706;border-color:#F59E0B;background:#FFFBEB;font-weight:700;" title="इस Key को सीधे गूगल शीट क्लाउड में भेजें ताकि सभी फोन पर स्वतः लोड हो जाए">
-                <i class="fa-solid fa-cloud-arrow-up"></i> फोन पर सिंक भेजें
-              </button>
-              <button type="button" class="btn-outline-action" onclick="openMobileSyncModal()" style="padding:4px 11px;font-size:11.5px;color:#1E40AF;border-color:#3B82F6;background:#EFF6FF;font-weight:700;" title="इस Key को मोबाइल फोन पर सिंक करें">
-                <i class="fa-solid fa-mobile-screen-button"></i> QR / लिंक
-              </button>
-              <button type="button" class="btn-outline-action" onclick="promptUpdateApiKey()" style="padding:4px 11px;font-size:11.5px;color:var(--teal);border-color:var(--teal);font-weight:700;">
-                <i class="fa-solid fa-pen"></i> Key बदलें
-              </button>
-              <button type="button" class="btn-outline-action" onclick="resetDefaultApiKey()" style="padding:4px 8px;font-size:11.5px;color:var(--text-muted);" title="डिफ़ॉल्ट रीसेट करें">
-                <i class="fa-solid fa-rotate-left"></i> रीसेट
-              </button>
-            </div>
+            <ol style="margin:0;padding-left:18px;font-size:12.5px;color:#166534;line-height:1.6;">
+              <li>ऊपर <strong>"📋 प्रॉम्प्ट कॉपी करें"</strong> बटन दबाएं।</li>
+              <li><strong>ChatGPT</strong> या <strong>Gemini</strong> में जाकर अपनी रसीद पर्चियों की फोटो या PDF अटैच करें और यह प्रॉम्प्ट पेस्ट करके Enter दबाएं।</li>
+              <li>ChatGPT/Gemini जो JSON उत्तर दे, उसे कॉपी करके नीचे दिए गए बड़े बॉक्स में पेस्ट करें और <strong>"⚡ पूर्वावलोकन में लाएं"</strong> दबाएं!</li>
+            </ol>
           </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:6px;padding:5px 10px;font-size:11.5px;flex-wrap:wrap;gap:6px;">
-            <div style="display:flex;align-items:center;gap:6px;">
-              <i class="fa-solid fa-key" style="color:var(--gold-dark);"></i>
-              <span id="lblProviderName">Grok API Key:</span>
-              <strong id="lblActiveApiKey" style="font-family:monospace;background:#FFF;padding:1px 6px;border-radius:4px;border:1px solid #CBD5E1;color:#1E293B;">सेट नहीं है</strong>
-            </div>
-            <div id="lblProviderHelpText" style="color:var(--text-muted);font-size:11px;">
-              xAI Console: <strong style="color:var(--teal);">console.x.ai</strong> (xai-... से शुरू होने वाली Key)
+
+          <!-- Paste Textarea Box -->
+          <div style="background:#FFF;border:1.5px solid #CBD5E1;border-radius:10px;padding:14px;margin-bottom:14px;">
+            <label style="display:flex;justify-content:space-between;align-items:center;font-weight:700;color:var(--teal);font-size:13px;margin-bottom:6px;">
+              <span><i class="fa-solid fa-file-code" style="color:var(--gold-dark);"></i> ChatGPT या Gemini का JSON / टेक्स्ट उत्तर यहाँ पेस्ट करें:</span>
+              <span style="font-size:11.5px;color:var(--text-muted);font-weight:normal;">JSON कोड, कोड ब्लॉक (```) या सारणी स्वतः पहचानी जाएगी</span>
+            </label>
+            <textarea id="txtAiManualJson" rows="8" class="form-input" style="width:100%;font-family:monospace;font-size:12.5px;line-height:1.4;background:#F8FAFC;border:1.5px solid #CBD5E1;border-radius:8px;padding:10px;resize:vertical;" placeholder='ChatGPT या Gemini से प्राप्त पूरा JSON यहाँ पेस्ट करें... (उदा. [ { "donorName": "...", "amount": 11111, "city": "बड़वानी" } ])'></textarea>
+
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;flex-wrap:wrap;gap:8px;">
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <button type="button" class="btn-submit-action" onclick="parseAndPreviewManualAiText()" style="background:var(--teal);color:#fff;font-weight:700;font-size:13px;padding:8px 20px;width:auto;min-height:38px;box-shadow:0 3px 8px rgba(18,63,66,0.25);">
+                  <i class="fa-solid fa-bolt"></i> ⚡ पूर्वावलोकन में लाएं एवं सत्यापन करें (Import &amp; Preview)
+                </button>
+                <button type="button" class="btn-outline-action" onclick="loadSampleExtractedPdfReceipts()" style="padding:6px 14px;font-size:12px;color:#16A34A;border-color:#86EFAC;background:#F0FDF4;font-weight:600;">
+                  <i class="fa-solid fa-file-pdf"></i> वर्तमान 5 रसीदें लोड करें (1-क्लिक)
+                </button>
+              </div>
+              <button type="button" class="btn-outline-action" onclick="clearAiManualText()" style="padding:5px 12px;font-size:12px;color:var(--text-muted);">
+                <i class="fa-solid fa-eraser"></i> टेक्स्ट साफ़ करें
+              </button>
             </div>
           </div>
         </div>
 
-        <!-- File Upload Dropzone -->
-        <div id="aiHubDropzone" style="border:2px dashed var(--gold);background:var(--sandstone-light);border-radius:12px;padding:26px 16px;text-align:center;cursor:pointer;transition:all 0.3s ease;" onclick="document.getElementById('aiHubFileInput').click()">
-          <div style="width:52px;height:52px;border-radius:50%;background:rgba(212,175,55,0.15);color:var(--gold-dark);display:inline-flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:10px;">
-            <i class="fa-solid fa-cloud-arrow-up"></i>
+        <!-- ==================== MODE 2: DIRECT FILE / PDF UPLOAD (VIA API ENGINE) ==================== -->
+        <div id="aiModeUploadSection" style="display:none;">
+          <!-- Active Multi-Provider AI Engine Bar (xAI Grok, Groq, Gemini) -->
+          <div style="background:#FFF;border:1.5px solid #CBD5E1;border-radius:10px;padding:9px 13px;margin-bottom:14px;font-size:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="font-weight:700;color:var(--teal);"><i class="fa-solid fa-microchip" style="color:var(--gold-dark);"></i> AI इंजन:</span>
+                <select id="selAiProvider" onchange="changeAiProvider(this.value)" style="padding:4px 8px;border-radius:6px;border:1.5px solid var(--teal);font-weight:700;font-size:12px;color:var(--teal);background:#F0FDF4;cursor:pointer;">
+                  <option value="grok" selected>🚀 xAI Grok (Grok 2 Vision - $25 मुफ़्त क्रेडिट्स)</option>
+                  <option value="groq">⚡ Groq Cloud (Llama 3.2 Vision - 100% मुफ़्त)</option>
+                  <option value="gemini">🤖 Google Gemini (3.8-Flash)</option>
+                  <option value="openrouter">🌐 OpenRouter (फ्री मल्टीमॉडल)</option>
+                </select>
+              </div>
+              <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+                <button type="button" class="btn-outline-action" onclick="testActiveApiKey()" style="padding:4px 11px;font-size:11.5px;color:#065F46;border-color:#10B981;background:#F0FDF4;font-weight:700;" title="Key की वैधता जांचें">
+                  <i class="fa-solid fa-vial-circle-check"></i> Key टेस्ट करें
+                </button>
+                <button type="button" id="btnForcePushCloud" class="btn-outline-action" onclick="forcePushKeyToCloud()" style="padding:4px 11px;font-size:11.5px;color:#D97706;border-color:#F59E0B;background:#FFFBEB;font-weight:700;" title="इस Key को सीधे गूगल शीट क्लाउड में भेजें ताकि सभी फोन पर स्वतः लोड हो जाए">
+                  <i class="fa-solid fa-cloud-arrow-up"></i> फोन पर सिंक भेजें
+                </button>
+                <button type="button" class="btn-outline-action" onclick="openMobileSyncModal()" style="padding:4px 11px;font-size:11.5px;color:#1E40AF;border-color:#3B82F6;background:#EFF6FF;font-weight:700;" title="इस Key को मोबाइल फोन पर सिंक करें">
+                  <i class="fa-solid fa-mobile-screen-button"></i> QR / लिंक
+                </button>
+                <button type="button" class="btn-outline-action" onclick="promptUpdateApiKey()" style="padding:4px 11px;font-size:11.5px;color:var(--teal);border-color:var(--teal);font-weight:700;">
+                  <i class="fa-solid fa-pen"></i> Key बदलें
+                </button>
+                <button type="button" class="btn-outline-action" onclick="resetDefaultApiKey()" style="padding:4px 8px;font-size:11.5px;color:var(--text-muted);" title="डिफ़ॉल्ट रीसेट करें">
+                  <i class="fa-solid fa-rotate-left"></i> रीसेट
+                </button>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:6px;padding:5px 10px;font-size:11.5px;flex-wrap:wrap;gap:6px;">
+              <div style="display:flex;align-items:center;gap:6px;">
+                <i class="fa-solid fa-key" style="color:var(--gold-dark);"></i>
+                <span id="lblProviderName">Grok API Key:</span>
+                <strong id="lblActiveApiKey" style="font-family:monospace;background:#FFF;padding:1px 6px;border-radius:4px;border:1px solid #CBD5E1;color:#1E293B;">सेट नहीं है</strong>
+              </div>
+              <div id="lblProviderHelpText" style="color:var(--text-muted);font-size:11px;">
+                xAI Console: <strong style="color:var(--teal);">console.x.ai</strong> (xai-... से शुरू होने वाली Key)
+              </div>
+            </div>
           </div>
-          <div style="font-weight:700;color:var(--teal);font-size:15px;margin-bottom:4px;">
-            रसीद PDF या फोटो यहाँ ड्रैग करें अथवा चुनने के लिए क्लिक करें
+
+          <!-- File Upload Dropzone -->
+          <div id="aiHubDropzone" style="border:2px dashed var(--gold);background:var(--sandstone-light);border-radius:12px;padding:26px 16px;text-align:center;cursor:pointer;transition:all 0.3s ease;" onclick="document.getElementById('aiHubFileInput').click()">
+            <div style="width:52px;height:52px;border-radius:50%;background:rgba(212,175,55,0.15);color:var(--gold-dark);display:inline-flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:10px;">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+            </div>
+            <div style="font-weight:700;color:var(--teal);font-size:15px;margin-bottom:4px;">
+              रसीद PDF या फोटो यहाँ ड्रैग करें अथवा चुनने के लिए क्लिक करें
+            </div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">
+              समर्थित प्रारूप: <strong>PDF (एक या एकाधिक पृष्ठों का बंडल), JPG, PNG, WebP</strong> • एकल या एकाधिक फ़ाइलें
+            </div>
+            <div style="display:inline-flex;align-items:center;gap:8px;">
+              <button type="button" class="btn-submit-action" style="width:auto;min-height:36px;padding:6px 18px;font-size:13px;pointer-events:none;background:var(--teal);">
+                <i class="fa-solid fa-folder-open"></i> फ़ाइल चुनें (PDF / Photos)
+              </button>
+            </div>
+            <input type="file" id="aiHubFileInput" accept="application/pdf,image/*" multiple style="display:none;" onchange="handleAiHubFiles(this.files)" />
           </div>
-          <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">
-            समर्थित प्रारूप: <strong>PDF (एक या एकाधिक पृष्ठों का बंडल), JPG, PNG, WebP</strong> • एकल या एकाधिक फ़ाइलें
-          </div>
-          <div style="display:inline-flex;align-items:center;gap:8px;">
-            <button type="button" class="btn-submit-action" style="width:auto;min-height:36px;padding:6px 18px;font-size:13px;pointer-events:none;background:var(--teal);">
-              <i class="fa-solid fa-folder-open"></i> फ़ाइल चुनें (PDF / Photos)
+
+          <!-- Direct Instant Load Banner for Recent Uploaded PDF -->
+          <div style="margin-top:10px;padding:8px 12px;background:#F0FDF4;border:1px solid #86EFAC;border-radius:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+            <div style="font-size:12px;color:#14532D;">
+              <i class="fa-solid fa-file-pdf" style="color:#16A34A;"></i> <strong>तुरंत लोड करें:</strong> आपके द्वारा अपलोड किए गए 5-पृष्ठीय PDF का डेटा सीधे पूर्वावलोकन में लाएं
+            </div>
+            <button type="button" class="btn-submit-action" onclick="loadSampleExtractedPdfReceipts()" style="width:auto;min-height:30px;padding:4px 14px;font-size:12px;background:#16A34A;color:#fff;font-weight:700;">
+              <i class="fa-solid fa-bolt"></i> 5 रसीदें सीधे लोड करें (1-क्लिक)
             </button>
           </div>
-          <input type="file" id="aiHubFileInput" accept="application/pdf,image/*" multiple style="display:none;" onchange="handleAiHubFiles(this.files)" />
-        </div>
 
-        <!-- Direct Instant Load Banner for Recent Uploaded PDF -->
-        <div style="margin-top:10px;padding:8px 12px;background:#F0FDF4;border:1px solid #86EFAC;border-radius:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-          <div style="font-size:12px;color:#14532D;">
-            <i class="fa-solid fa-file-pdf" style="color:#16A34A;"></i> <strong>तुरंत लोड करें:</strong> आपके द्वारा अपलोड किए गए 5-पृष्ठीय PDF का डेटा सीधे पूर्वावलोकन में लाएं
+          <!-- Quick Reset Toolbar for Starting Fresh -->
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:8px 12px;background:#FFF;border:1px solid var(--sandstone);border-radius:8px;font-size:12px;flex-wrap:wrap;gap:8px;">
+            <div style="color:var(--text-muted);">
+              <i class="fa-solid fa-rotate-left"></i> यदि पुरानी रसीदें दिख रही हों या नया अपलोड करना हो:
+            </div>
+            <button type="button" class="btn-outline-action" onclick="resetAiHubCompletely()" style="padding:4px 12px;font-size:11.5px;color:#DC2626;border-color:#FCA5A5;background:#FEF2F2;font-weight:700;">
+              <i class="fa-solid fa-broom"></i> पूर्वावलोकन साफ़ करें (Clear &amp; Start Fresh)
+            </button>
           </div>
-          <button type="button" class="btn-submit-action" onclick="loadSampleExtractedPdfReceipts()" style="width:auto;min-height:30px;padding:4px 14px;font-size:12px;background:#16A34A;color:#fff;font-weight:700;">
-            <i class="fa-solid fa-bolt"></i> 5 रसीदें सीधे लोड करें (1-क्लिक)
-          </button>
-        </div>
-
-        <!-- Quick Reset Toolbar for Starting Fresh -->
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:8px 12px;background:#FFF;border:1px solid var(--sandstone);border-radius:8px;font-size:12px;flex-wrap:wrap;gap:8px;">
-          <div style="color:var(--text-muted);">
-            <i class="fa-solid fa-rotate-left"></i> यदि पुरानी रसीदें दिख रही हों या नया अपलोड करना हो:
-          </div>
-          <button type="button" class="btn-outline-action" onclick="resetAiHubCompletely()" style="padding:4px 12px;font-size:11.5px;color:#DC2626;border-color:#FCA5A5;background:#FEF2F2;font-weight:700;">
-            <i class="fa-solid fa-broom"></i> पूर्वावलोकन साफ़ करें (Clear &amp; Start Fresh)
-          </button>
         </div>
 
         <!-- Processing Status Ribbon -->
@@ -2437,6 +2501,12 @@
 
       // Initialize AI API Key status display
       try { updateApiKeyLabel(); } catch (e) {}
+
+      // Restore preferred AI Ingest Mode (Direct Paste vs File Upload)
+      try {
+        const savedIngestMode = localStorage.getItem('koteshwar_ai_ingest_mode');
+        if (savedIngestMode === 'upload') switchAiMode('upload');
+      } catch (e) {}
 
       if (webhookUrl) {
         const inp = document.getElementById('webhookUrlInput');
@@ -4658,6 +4728,245 @@
         alert('परीक्षण में नेटवर्क या कनेक्शन त्रुटि: ' + err.message);
         if (lbl) lbl.textContent = origText;
       }
+    }
+
+    /* ============================================================
+       CHATGPT / GEMINI BULK PASTE & PROMPT ENGINE
+       ============================================================ */
+    function switchAiMode(mode) {
+      const tabPaste = document.getElementById('tabBtnAiPaste');
+      const tabUpload = document.getElementById('tabBtnAiUpload');
+      const secPaste = document.getElementById('aiModePasteSection');
+      const secUpload = document.getElementById('aiModeUploadSection');
+
+      if (mode === 'upload') {
+        if (secPaste) secPaste.style.display = 'none';
+        if (secUpload) secUpload.style.display = 'block';
+        if (tabUpload) {
+          tabUpload.classList.add('active');
+          tabUpload.style.background = 'var(--teal)';
+          tabUpload.style.color = '#fff';
+          tabUpload.style.border = 'none';
+          tabUpload.style.boxShadow = '0 2px 6px rgba(18,63,66,0.2)';
+        }
+        if (tabPaste) {
+          tabPaste.classList.remove('active');
+          tabPaste.style.background = '#F1F5F9';
+          tabPaste.style.color = 'var(--text-primary)';
+          tabPaste.style.border = '1px solid #CBD5E1';
+          tabPaste.style.boxShadow = 'none';
+        }
+      } else {
+        if (secPaste) secPaste.style.display = 'block';
+        if (secUpload) secUpload.style.display = 'none';
+        if (tabPaste) {
+          tabPaste.classList.add('active');
+          tabPaste.style.background = 'var(--teal)';
+          tabPaste.style.color = '#fff';
+          tabPaste.style.border = 'none';
+          tabPaste.style.boxShadow = '0 2px 6px rgba(18,63,66,0.2)';
+        }
+        if (tabUpload) {
+          tabUpload.classList.remove('active');
+          tabUpload.style.background = '#F1F5F9';
+          tabUpload.style.color = 'var(--text-primary)';
+          tabUpload.style.border = '1px solid #CBD5E1';
+          tabUpload.style.boxShadow = 'none';
+        }
+      }
+      try {
+        localStorage.setItem('koteshwar_ai_ingest_mode', mode);
+      } catch (e) {}
+    }
+
+    async function copyPromptForAiChat() {
+      const promptText = `कृपया संलग्न रसीद (Donation Receipts / Slips) का डेटा पढ़कर केवल और केवल एक वैध JSON Array के रूप में दें। कोई अतिरिक्त भूमिका, शीर्षक, अभिवादन या व्याख्या न लिखें।
+
+JSON Schema:
+[
+  {
+    "bookNo": "बही या बुक नंबर (यदि रसीद पर हो, अन्यथा खाली छोड़ें)",
+    "receiptNo": "रसीद क्रमांक",
+    "donorName": "दानदाता का नाम (हिंदी में)",
+    "fatherName": "पिता / पति का नाम (यदि उपलब्ध हो)",
+    "city": "गांव / नगर / शहर (उदा. बड़वानी, निसरपुर, सुसारी)",
+    "mobile": "मोबाइल नंबर (10 अंक, यदि रसीद पर लिखा हो)",
+    "amount": 11000,
+    "date": "YYYY-MM-DD (रसीद पर लिखी दिनांक, जैसे 2026-11-16)",
+    "memorial": "पुण्य स्मृति / किसके निमित्त (यदि लिखा हो)",
+    "constructionScope": "निर्माण संकल्प (उदा. एक पेढ़ी / 111 वर्गफीट)",
+    "notes": "पुण्य स्मृति व निर्माण विवरण को मिलाकर साफ़ विवरण",
+    "paymentMode": "आस्थगित",
+    "isDeferred": true
+  }
+]
+
+महत्वपूर्ण नियम:
+1. यदि रसीद पर नकद (Cash) या UPI का स्पष्ट उल्लेख न हो, तो paymentMode में "आस्थगित" और isDeferred में true रखें।
+2. amount केवल शुद्ध संख्या (Number) हो, कोई कॉमा या ₹ का चिन्ह न जोड़ें।
+3. दानदाता का नाम व स्थान शुद्ध देवनागरी (हिंदी) में ही रखें।
+4. आउटपुट केवल शुद्ध JSON Array होना चाहिए।`;
+
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(promptText);
+        } else {
+          const ta = document.createElement('textarea');
+          ta.value = promptText;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+        }
+        alert('📋 प्रॉम्प्ट क्लिपबोर्ड पर सफलतापूर्वक कॉपी हो गया है!\n\nअब ChatGPT या Gemini खोलें, अपनी रसीद पर्चियां अटैच करें और यह प्रॉम्प्ट पेस्ट करके Enter दबाएं।');
+      } catch (e) {
+        prompt('कृपया नीचे दिए गए प्रॉम्प्ट को कॉपी करें:', promptText);
+      }
+    }
+
+    function clearAiManualText() {
+      const ta = document.getElementById('txtAiManualJson');
+      if (ta) {
+        ta.value = '';
+        ta.focus();
+      }
+    }
+
+    function parseAndPreviewManualAiText() {
+      const ta = document.getElementById('txtAiManualJson');
+      if (!ta || !ta.value.trim()) {
+        alert('⚠️ कृपया पहले ChatGPT या Gemini से प्राप्त JSON या टेक्स्ट यहाँ पेस्ट करें।');
+        if (ta) ta.focus();
+        return;
+      }
+
+      let raw = ta.value.trim();
+
+      // Remove markdown code fences
+      if (raw.includes('```')) {
+        raw = raw.replace(/```(?:json)?/gi, '').replace(/```/g, '').trim();
+      }
+
+      const firstBracket = raw.indexOf('[');
+      const firstBrace = raw.indexOf('{');
+      let parsed = null;
+
+      try {
+        parsed = JSON.parse(raw);
+      } catch (e1) {
+        // Try extracting array [...]
+        if (firstBracket !== -1) {
+          const lastBracket = raw.lastIndexOf(']');
+          if (lastBracket > firstBracket) {
+            try {
+              parsed = JSON.parse(raw.substring(firstBracket, lastBracket + 1));
+            } catch (e2) {}
+          }
+        }
+
+        // Try extracting object {...}
+        if (!parsed && firstBrace !== -1) {
+          const lastBrace = raw.lastIndexOf('}');
+          if (lastBrace > firstBrace) {
+            try {
+              parsed = JSON.parse(raw.substring(firstBrace, lastBrace + 1));
+            } catch (e3) {}
+          }
+        }
+
+        // If still failing, try fixing trailing commas
+        if (!parsed) {
+          try {
+            let fixed = raw.replace(/,\s*([\]}])/g, '$1');
+            parsed = JSON.parse(fixed);
+          } catch (e4) {
+            alert('❌ JSON पार्स करने में त्रुटि:\n' + e1.message + '\n\nकृपया सुनिश्चित करें कि ChatGPT / Gemini का संपूर्ण उत्तर कॉपी किया गया है।');
+            return;
+          }
+        }
+      }
+
+      // Normalize into array of items
+      let items = [];
+      if (Array.isArray(parsed)) {
+        items = parsed;
+      } else if (parsed && typeof parsed === 'object') {
+        if (Array.isArray(parsed.receipts)) items = parsed.receipts;
+        else if (Array.isArray(parsed.data)) items = parsed.data;
+        else if (Array.isArray(parsed.entries)) items = parsed.entries;
+        else if (Array.isArray(parsed.items)) items = parsed.items;
+        else items = [parsed];
+      }
+
+      if (!items || items.length === 0) {
+        alert('⚠️ कोई रसीद प्रविष्टि नहीं मिली। कृपया JSON प्रारूप की जांच करें।');
+        return;
+      }
+
+      const normalized = items.map((r, i) => {
+        const bookNo = (r.bookNo || r.book_no || r.book || '').toString().trim();
+        const receiptNo = (r.receiptNo || r.receipt_no || r.receipt || r.sno || '').toString().trim();
+        const fullReceipt = (bookNo && receiptNo) ? `बुक ${bookNo} / ${receiptNo}` : (receiptNo ? `रसीद ${receiptNo}` : (bookNo ? `बुक ${bookNo}` : `रसीद ${i + 1}`));
+        const donorName = (r.donorName || r.donor_name || r.name || '').toString().trim();
+        const fatherName = (r.fatherName || r.father_name || r.relative || '').toString().trim();
+        const city = (r.city || r.village || r.address || '').toString().trim();
+        const mobile = (r.mobile || r.phone || r.contact || '').toString().trim();
+
+        let amount = 0;
+        if (typeof r.amount === 'number') amount = r.amount;
+        else if (typeof r.amount === 'string') amount = parseFloat(r.amount.replace(/[^0-9.]/g, '')) || 0;
+
+        const date = (r.date || new Date().toISOString().split('T')[0]).toString().trim();
+        const memorial = (r.memorial || r.smriti || '').toString().trim();
+        const constructionScope = (r.constructionScope || r.scope || r.pedhi || '').toString().trim();
+
+        let cleanNotes = (r.cleanNotes || r.notes || r.remark || '').toString().trim();
+        if (!cleanNotes && (memorial || constructionScope)) {
+          const parts = [];
+          if (memorial) parts.push(`पुण्य स्मृति: ${memorial}`);
+          if (constructionScope) parts.push(`निर्माण: ${constructionScope}`);
+          cleanNotes = parts.join(' • ');
+        }
+        cleanNotes = cleanNotes.replace(/\[AI.*?\]/gi, '').trim();
+
+        let isDeferred = true;
+        let mode = 'आस्थगित';
+        const rawMode = (r.paymentMode || r.payment_mode || r.mode || '').toString().toLowerCase();
+
+        if (r.isDeferred === false || rawMode.includes('cash') || rawMode.includes('नकद')) {
+          isDeferred = false;
+          mode = 'Cash';
+        } else if (rawMode.includes('upi') || rawMode.includes('online') || rawMode.includes('ऑनलाइन')) {
+          isDeferred = false;
+          mode = 'UPI';
+        } else if (rawMode.includes('cheque') || rawMode.includes('चेक')) {
+          isDeferred = false;
+          mode = 'Cheque';
+        }
+
+        return {
+          bookNo,
+          receiptNo,
+          fullReceipt,
+          donorName,
+          fatherName,
+          city,
+          mobile,
+          amount,
+          date,
+          memorial,
+          constructionScope,
+          cleanNotes,
+          notes: cleanNotes,
+          paymentMode: mode,
+          isDeferred,
+          verified: true
+        };
+      });
+
+      extractedAiHubReceipts = normalized;
+      renderAiVerificationPreview();
+      alert(`✅ सफलता! ${normalized.length} रसीदें सफलतापूर्वक पूर्वावलोकन में आ गईं।\n\nकृपया नीचे कार्ड्स में विवरण देखकर "सत्यापित करें और घोषणा सूची में जोड़ें" बटन दबाएं।`);
     }
 
     function loadSampleExtractedPdfReceipts() {
