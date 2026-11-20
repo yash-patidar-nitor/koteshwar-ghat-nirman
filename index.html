@@ -3045,6 +3045,11 @@
     window.addEventListener('DOMContentLoaded', () => {
       renderStories();
 
+      const initialHash = (window.location.hash || '').replace('#', '').trim();
+      if (initialHash && document.getElementById('pane-' + initialHash)) {
+        switchTab(initialHash);
+      }
+
       // 100% CANONICAL GOOGLE SHEETS MIRROR (Pure read-only, zero device-specific drift)
       try {
         const cached = localStorage.getItem('koteshwar_public_canonical_mirror_v3');
@@ -4673,6 +4678,11 @@
       }
       const target = document.getElementById('pane-' + tabId);
       if (target) target.classList.add('active');
+      try {
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState(null, '', '#' + tabId);
+        }
+      } catch (e) {}
     }
 
     /* ============================================================
