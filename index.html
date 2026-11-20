@@ -453,6 +453,207 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* ---------- SLABS HORIZONTAL BAR GRAPH ---------- */
+    .slab-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .slab-kpi-card {
+      background: #fff;
+      border: 1px solid var(--sandstone);
+      border-radius: 10px;
+      padding: 14px 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .slab-kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+    .slab-kpi-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .slab-kpi-val {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--teal);
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+    .slab-kpi-sub {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .slab-sort-btn {
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .slab-sort-btn:hover {
+      color: var(--teal);
+    }
+    .slab-sort-btn.active {
+      background: var(--teal);
+      color: #fff;
+      box-shadow: 0 1px 4px rgba(18,63,66,0.2);
+    }
+    .slab-chart-table-wrap {
+      border: 1px solid var(--sandstone);
+      border-radius: 10px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+    .slab-chart-header-row {
+      display: flex;
+      align-items: center;
+      background: var(--sandstone-light);
+      border-bottom: 2px solid var(--sandstone);
+      padding: 10px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .slab-col-name {
+      width: 140px;
+      flex-shrink: 0;
+    }
+    .slab-col-bar {
+      flex: 1;
+      padding: 0 16px;
+    }
+    .slab-col-count {
+      width: 130px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .slab-row-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--sandstone-light);
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.15s ease;
+    }
+    .slab-row-item:last-child {
+      border-bottom: none;
+    }
+    .slab-row-item:hover {
+      background: rgba(18, 63, 66, 0.04);
+    }
+    .slab-row-item.active-slab-row {
+      background: rgba(209, 154, 80, 0.12);
+      border-left: 3px solid var(--gold);
+    }
+    .slab-name-badge {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--teal);
+      letter-spacing: -0.2px;
+      display: flex;
+      flex-direction: column;
+    }
+    .slab-name-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-top: 1px;
+    }
+    .slab-bar-track {
+      background: #EFECE6;
+      height: 24px;
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+    .slab-bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      background: linear-gradient(90deg, #1B4D3E 0%, #2E7D5A 60%, #D4AF37 100%);
+      transition: width 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+    .slab-bar-label {
+      position: absolute;
+      left: 10px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .slab-bar-label.outside {
+      color: var(--text-secondary);
+      text-shadow: none;
+      left: auto;
+      right: 10px;
+    }
+    .slab-count-box {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .slab-count-num {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--teal);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .slab-count-pct {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    @media (max-width: 600px) {
+      .slab-col-name {
+        width: 105px;
+      }
+      .slab-name-badge {
+        font-size: 13px;
+      }
+      .slab-col-count {
+        width: 80px;
+      }
+      .slab-count-num {
+        font-size: 14px;
+      }
+      .slab-col-bar {
+        padding: 0 8px;
+      }
+      .slab-row-item {
+        padding: 10px 10px;
+      }
+    }
+
     .section-card {
       background: var(--white);
       border: 1px solid var(--sandstone);
@@ -2100,14 +2301,18 @@
       </div>
     </div>
 
-    <!-- PRESTIGIOUS SEGMENTED NAVIGATION CONTROLS (1. VILLAGES, 2. DONORS, 3. STORIES, 4. WORKS) -->
+    <!-- PRESTIGIOUS SEGMENTED NAVIGATION CONTROLS (1. VILLAGES, 2. SLABS, 3. DONORS, 4. DATES, 5. STORIES, 6. WORKS) -->
     <nav class="segmented-tabs-wrapper">
       <div class="segmented-tabs">
         <!-- 1st Tab: Nagar/Gramwar Sahbhagita (Active by default) -->
         <button class="seg-tab active" onclick="switchTab('villages', this)">
           <i class="fa-solid fa-city"></i> <span>नगर / ग्रामवार सहभागिता</span> <span class="seg-badge" id="tabVillageBadge">-</span>
         </button>
-        <!-- 2nd Tab: Dandata Nirdeshika (Sorted Decreasing by Amount) -->
+        <!-- 2nd Tab: Slabs Bar Graph (Visual Distribution) -->
+        <button class="seg-tab" onclick="switchTab('slabs', this)">
+          <i class="fa-solid fa-chart-simple"></i> <span>राशि स्लैब ग्राफ़</span> <span class="seg-badge" id="tabSlabsBadge">12 स्लैब्स</span>
+        </button>
+        <!-- 3rd Tab: Dandata Nirdeshika (Sorted Decreasing by Amount) -->
         <button class="seg-tab" onclick="switchTab('donors', this)">
           <i class="fa-solid fa-users"></i> <span>दानदाता निर्देशिका</span> <span class="seg-badge" id="tabDonorBadge">-</span>
         </button>
@@ -2170,7 +2375,71 @@
       </div>
     </div>
 
-    <!-- ==================== TAB 2 (SECOND): DANDATA NIRDESHIKA ==================== -->
+    <!-- ==================== TAB: AMOUNT SLABS DISTRIBUTION (VISUAL HORIZONTAL BAR GRAPH) ==================== -->
+    <div id="pane-slabs" class="tab-pane">
+      <div class="section-card">
+        <div class="section-header-box">
+          <div>
+            <h2><i class="fa-solid fa-chart-simple" style="color:var(--gold);"></i> दान राशि स्लैब वार विज़ुअल वितरण</h2>
+            <p>दानदाताओं के संकल्पों का राशि स्लैब अनुसार सांख्यिकीय ग्राफ़ (दानदाता संख्या व प्रतिशत अनुपात)</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <span style="font-size:12.5px;color:var(--text-muted);background:var(--sandstone-light);padding:5px 12px;border-radius:6px;border:1px solid var(--sandstone);">
+              कुल वर्गीकृत दानदाता: <strong id="slabTotalCountBadge" style="color:var(--teal); font-weight:700;">-</strong>
+            </span>
+          </div>
+        </div>
+
+        <!-- Slabs Highlight Cards -->
+        <div class="slab-kpi-grid">
+          <div class="slab-kpi-card">
+            <div class="slab-kpi-title"><i class="fa-solid fa-crown" style="color:var(--gold);"></i> सर्वाधिक लोकप्रिय स्लैब</div>
+            <div class="slab-kpi-val" id="slabKpiTopSlab">₹11,111</div>
+            <div class="slab-kpi-sub" id="slabKpiTopCount">-</div>
+          </div>
+          <div class="slab-kpi-card">
+            <div class="slab-kpi-title"><i class="fa-solid fa-award" style="color:var(--teal);"></i> द्वितीय सर्वाधिक स्लैब</div>
+            <div class="slab-kpi-val" id="slabKpiSecondSlab">₹25,555</div>
+            <div class="slab-kpi-sub" id="slabKpiSecondCount">-</div>
+          </div>
+          <div class="slab-kpi-card">
+            <div class="slab-kpi-title"><i class="fa-solid fa-gem" style="color:var(--gold-dark);"></i> उच्चतम सहयोग स्लैब</div>
+            <div class="slab-kpi-val" id="slabKpiMaxSlab">₹1,51,000+</div>
+            <div class="slab-kpi-sub" id="slabKpiMaxCount">-</div>
+          </div>
+        </div>
+
+        <!-- Slabs Filter / Sort Toolbar -->
+        <div class="directory-toolbar" style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <div style="display:inline-flex;gap:6px;background:var(--sandstone-light);padding:3px;border-radius:8px;border:1px solid var(--sandstone);">
+            <button id="btnSortSlabsCount" class="slab-sort-btn active" onclick="setSlabSortOrder('count')">
+              <i class="fa-solid fa-arrow-down-wide-short"></i> दानदाता संख्या अनुसार
+            </button>
+            <button id="btnSortSlabsAmount" class="slab-sort-btn" onclick="setSlabSortOrder('amount')">
+              <i class="fa-solid fa-arrow-up-1-9"></i> राशि स्लैब अनुसार
+            </button>
+          </div>
+          <div style="font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:6px;">
+            <i class="fa-regular fa-lightbulb" style="color:var(--gold);"></i>
+            <span>किसी भी स्लैब पर क्लिक करके उस राशि के दानदाताओं की सूची देखें</span>
+          </div>
+        </div>
+
+        <!-- Slabs Horizontal Bar Container -->
+        <div class="slab-chart-table-wrap">
+          <div class="slab-chart-header-row">
+            <div class="slab-col-name">राशि स्लैब</div>
+            <div class="slab-col-bar">विज़ुअल बार ग्राफ़ (अनुपात व प्रतिशत)</div>
+            <div class="slab-col-count">दानदाता संख्या</div>
+          </div>
+          <div id="slabsChartList" class="slab-chart-rows-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 3 (THIRD): DANDATA NIRDESHIKA ==================== -->
     <div id="pane-donors" class="tab-pane">
       <div class="section-card">
         <div class="section-header-box">
@@ -2192,6 +2461,21 @@
           <div class="sort-indicator-badge">
             <i class="fa-solid fa-arrow-down-wide-short" style="color:var(--gold-dark);"></i>
             <span>सहयोग राशि अनुसार अवरोही क्रम (उच्चतम से न्यूनतम)</span>
+          </div>
+        </div>
+
+        <!-- Dedicated Slab Summary Header (Active when a specific slab is clicked/filtered) -->
+        <div id="slabSummaryBanner" class="slab-summary-banner" style="display:none;margin-bottom:16px;background:linear-gradient(135deg, rgba(18,63,66,0.06) 0%, rgba(201,154,71,0.12) 100%);border:1.5px solid var(--gold);border-radius:12px;padding:14px 18px;box-shadow:0 2px 8px rgba(18,63,66,0.05);">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+              <span style="background:var(--teal);color:#fff;padding:4px 12px;border-radius:6px;font-size:13.5px;font-weight:700;display:inline-flex;align-items:center;gap:6px;">
+                <i class="fa-solid fa-chart-simple"></i> राशि स्लैब फ़िल्टर: <span id="sBannerName">-</span>
+              </span>
+              <span style="font-size:13px;color:var(--text-secondary);font-weight:600;" id="sBannerCount">-</span>
+            </div>
+            <button type="button" class="btn btn-white btn-sm" onclick="clearSlabFilter()" style="font-size:11.5px;padding:5px 12px;border:1px solid var(--sandstone);border-radius:6px;cursor:pointer;">
+              <i class="fa-solid fa-xmark" style="color:#C45A38;"></i> फ़िल्टर हटाएं (सभी दानदाता देखें)
+            </button>
           </div>
         </div>
 
@@ -3341,6 +3625,7 @@
       renderFilterPills(cityMap);
       renderDonorTable();
       renderDateWiseTab();
+      renderSlabsDistribution();
     }
 
     /* ============================================================
@@ -3632,7 +3917,9 @@
       const filtered = declarations.filter(d => {
         const matchesVillage = (currentVillageFilter === 'all') || d.city === currentVillageFilter || d.city.includes(currentVillageFilter);
         const matchesSearch = !search || matchDonorSearch(d, search);
-        return matchesVillage && matchesSearch;
+        const amt = Number(d.amount) || 0;
+        const matchesSlab = !currentSlabFilter || (amt >= currentSlabFilter.min && amt <= currentSlabFilter.max);
+        return matchesVillage && matchesSearch && matchesSlab;
       });
 
       // Maintain strict decreasing order of amount
@@ -3651,6 +3938,18 @@
       document.getElementById('pageCurrentText').textContent = `पेज ${currentPage} / ${totalPages}`;
       document.getElementById('btnPrevPage').disabled = currentPage <= 1;
       document.getElementById('btnNextPage').disabled = currentPage >= totalPages;
+
+      // Update donor count badge/text
+      const elDonorCount = document.getElementById('donorCountText');
+      if (elDonorCount) {
+        if (currentSlabFilter) {
+          elDonorCount.textContent = `${totalItems} (स्लैब: ${currentSlabFilter.label})`;
+        } else if (currentVillageFilter !== 'all') {
+          elDonorCount.textContent = `${totalItems} (${currentVillageFilter})`;
+        } else {
+          elDonorCount.textContent = totalItems;
+        }
+      }
 
       if (paginated.length === 0) {
         tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--text-muted);">कोई दानदाता प्रविष्टि नहीं मिली।</td></tr>`;
@@ -3713,6 +4012,9 @@
 
     function setVillageFilter(villageName, btn) {
       currentVillageFilter = villageName;
+      currentSlabFilter = null;
+      const sBanner = document.getElementById('slabSummaryBanner');
+      if (sBanner) sBanner.style.display = 'none';
       document.querySelectorAll('#villageFilterPills .v-filter-btn').forEach(b => b.classList.remove('active'));
       if (btn) btn.classList.add('active');
       currentPage = 1;
@@ -3727,6 +4029,9 @@
 
     function filterDonorsByVillage(villageName) {
       currentVillageFilter = villageName;
+      currentSlabFilter = null;
+      const sBanner = document.getElementById('slabSummaryBanner');
+      if (sBanner) sBanner.style.display = 'none';
       currentPage = 1;
       renderDonorTable();
       switchTab('donors');
@@ -3739,6 +4044,170 @@
           banner.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 120);
       }
+    }
+
+    /* ============================================================
+       DYNAMIC AMOUNT SLABS DISTRIBUTION (VISUAL HORIZONTAL BAR GRAPH)
+       ============================================================ */
+    const SLAB_CONFIGS = [
+      { id: 's_500_1500', label: '₹500 - ₹1,500', min: 0, max: 1799, desc: 'सांकेतिक / अल्प सहयोग' },
+      { id: 's_2100', label: '₹2,100', min: 1800, max: 3499, desc: '₹1,800 से ₹3,499 तक' },
+      { id: 's_5111', label: '₹5,111', min: 3500, max: 7999, desc: '₹3,500 से ₹7,999 तक' },
+      { id: 's_11111', label: '₹11,111', min: 8000, max: 13500, desc: '₹8,000 से ₹13,500 (1 बेड़ी / 111 वर्गफीट)' },
+      { id: 's_15111', label: '₹15,111', min: 13501, max: 18000, desc: '₹13,501 से ₹18,000 तक' },
+      { id: 's_21111', label: '₹21,111', min: 18001, max: 23000, desc: '₹18,001 से ₹23,000 (2 बेड़ी)' },
+      { id: 's_25555', label: '₹25,555', min: 23001, max: 30000, desc: '₹23,001 से ₹30,000 (2.5 बेड़ी)' },
+      { id: 's_35555', label: '₹35,555', min: 30001, max: 40000, desc: '₹30,001 से ₹40,000 (3.5 बेड़ी)' },
+      { id: 's_51111', label: '₹51,111', min: 40001, max: 80000, desc: '₹40,001 से ₹80,000 (5 बेड़ी)' },
+      { id: 's_100000', label: '₹1,00,000', min: 80001, max: 135000, desc: '₹80,001 से ₹1,35,000 तक' },
+      { id: 's_151000', label: '₹1,51,000', min: 135001, max: 180000, desc: '₹1,35,001 से ₹1,80,000 (15 बेड़ी)' },
+      { id: 's_151000_plus', label: '₹1,51,000+', min: 180001, max: Infinity, desc: '₹1,80,001 से अधिक (महादानदाता)' }
+    ];
+
+    let currentSlabSortOrder = 'count'; // 'count' or 'amount'
+    let currentSlabFilter = null; // null or { min, max, label }
+
+    function setSlabSortOrder(order) {
+      currentSlabSortOrder = order;
+      const btnCount = document.getElementById('btnSortSlabsCount');
+      const btnAmt = document.getElementById('btnSortSlabsAmount');
+      if (btnCount) btnCount.classList.toggle('active', order === 'count');
+      if (btnAmt) btnAmt.classList.toggle('active', order === 'amount');
+      renderSlabsDistribution();
+    }
+
+    function renderSlabsDistribution() {
+      const container = document.getElementById('slabsChartList');
+      if (!container) return;
+
+      const totalDonors = declarations.length;
+      if (totalDonors === 0) {
+        container.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text-muted);">डेटा लोड हो रहा है...</div>';
+        return;
+      }
+
+      // Group declarations by slab dynamically
+      const slabStats = SLAB_CONFIGS.map(cfg => {
+        const matches = declarations.filter(d => {
+          const amt = Number(d.amount) || 0;
+          return amt >= cfg.min && amt <= cfg.max;
+        });
+        const count = matches.length;
+        const totalPledged = matches.reduce((s, d) => s + (Number(d.amount) || 0), 0);
+        const pct = totalDonors > 0 ? ((count / totalDonors) * 100).toFixed(1) : "0.0";
+        return {
+          ...cfg,
+          count,
+          totalPledged,
+          pct: parseFloat(pct)
+        };
+      });
+
+      // Update badge
+      const badge = document.getElementById('slabTotalCountBadge');
+      if (badge) badge.textContent = `${totalDonors} परिवार`;
+      const tabBadge = document.getElementById('tabSlabsBadge');
+      if (tabBadge) tabBadge.textContent = `${SLAB_CONFIGS.length} स्लैब्स`;
+
+      // Update Highlight KPI Cards
+      const byCount = [...slabStats].sort((a, b) => b.count - a.count);
+      if (byCount.length > 0) {
+        const top1 = byCount[0];
+        const top2 = byCount[1];
+
+        const elTopSlab = document.getElementById('slabKpiTopSlab');
+        const elTopCount = document.getElementById('slabKpiTopCount');
+        if (elTopSlab) elTopSlab.textContent = top1.label;
+        if (elTopCount) elTopCount.textContent = `${top1.count} परिवार (${top1.pct}%)`;
+
+        const elSecSlab = document.getElementById('slabKpiSecondSlab');
+        const elSecCount = document.getElementById('slabKpiSecondCount');
+        if (elSecSlab) elSecSlab.textContent = top2.label;
+        if (elSecCount) elSecCount.textContent = `${top2.count} परिवार (${top2.pct}%)`;
+
+        const elMaxSlab = document.getElementById('slabKpiMaxSlab');
+        const elMaxCount = document.getElementById('slabKpiMaxCount');
+        const highTierDonors = declarations.filter(d => Number(d.amount) > 180000).length;
+        if (elMaxSlab) elMaxSlab.textContent = '₹1,51,000+';
+        if (elMaxCount) elMaxCount.textContent = `${highTierDonors} परिवार (महादानदाता)`;
+      }
+
+      // Sort items based on active preference
+      let displayList = [...slabStats];
+      if (currentSlabSortOrder === 'count') {
+        displayList.sort((a, b) => b.count - a.count);
+      } else {
+        displayList.sort((a, b) => a.min - b.min);
+      }
+
+      // Max count for scale
+      const maxCount = Math.max(...slabStats.map(s => s.count), 1);
+
+      let html = '';
+      displayList.forEach(item => {
+        const barWidthPct = Math.max(3, (item.count / maxCount) * 100).toFixed(1);
+        const isSelected = currentSlabFilter && currentSlabFilter.label === item.label;
+
+        html += `
+          <div class="slab-row-item ${isSelected ? 'active-slab-row' : ''}" onclick="filterDonorsBySlab(${item.min}, ${item.max === Infinity ? 999999999 : item.max}, '${item.label}')" title="क्लिक करें: ${item.label} के सभी ${item.count} दानदाता देखें">
+            <div class="slab-col-name">
+              <span class="slab-name-badge">${item.label}</span>
+              <span class="slab-name-sub">${item.desc}</span>
+            </div>
+            <div class="slab-col-bar">
+              <div class="slab-bar-track">
+                <div class="slab-bar-fill" style="width: ${barWidthPct}%;">
+                  ${barWidthPct >= 18 ? `<span class="slab-bar-label">${item.pct}%</span>` : ''}
+                </div>
+                ${barWidthPct < 18 ? `<span class="slab-bar-label outside">${item.pct}%</span>` : ''}
+              </div>
+            </div>
+            <div class="slab-col-count">
+              <div class="slab-count-box">
+                <span class="slab-count-num">${item.count} <i class="fa-solid fa-chevron-right" style="font-size:10px;opacity:0.4;"></i></span>
+                <span class="slab-count-pct">${item.pct}% अनुपात</span>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function filterDonorsBySlab(min, max, label) {
+      currentSlabFilter = { min, max, label };
+      currentVillageFilter = 'all';
+      currentPage = 1;
+      document.querySelectorAll('#villageFilterPills .v-filter-btn').forEach(b => {
+        b.classList.toggle('active', b.textContent.includes('सभी क्षेत्र'));
+      });
+      const vBanner = document.getElementById('villageSummaryBanner');
+      if (vBanner) vBanner.style.display = 'none';
+
+      renderDonorTable();
+      switchTab('donors');
+
+      const banner = document.getElementById('slabSummaryBanner');
+      if (banner) {
+        document.getElementById('sBannerName').textContent = label;
+        const matches = declarations.filter(d => {
+          const amt = Number(d.amount) || 0;
+          return amt >= min && amt <= max;
+        });
+        document.getElementById('sBannerCount').textContent = `(कुल ${matches.length} दानदाता परिवार)`;
+        banner.style.display = 'block';
+        setTimeout(() => banner.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+      }
+    }
+
+    function clearSlabFilter() {
+      currentSlabFilter = null;
+      currentPage = 1;
+      const banner = document.getElementById('slabSummaryBanner');
+      if (banner) banner.style.display = 'none';
+      renderDonorTable();
+      renderSlabsDistribution();
     }
 
     /* ============================================================
