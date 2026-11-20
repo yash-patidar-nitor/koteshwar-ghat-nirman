@@ -4055,18 +4055,18 @@
        DYNAMIC AMOUNT SLABS DISTRIBUTION (VISUAL HORIZONTAL BAR GRAPH)
        ============================================================ */
     const SLAB_CONFIGS = [
-      { id: 's_500_1500', label: '₹500 - ₹1,500', min: 0, max: 1799, desc: 'सांकेतिक / अल्प सहयोग' },
-      { id: 's_2100', label: '₹2,100', min: 1800, max: 3499, desc: '₹1,800 से ₹3,499 तक' },
-      { id: 's_5111', label: '₹5,111', min: 3500, max: 7999, desc: '₹3,500 से ₹7,999 तक' },
-      { id: 's_11111', label: '₹11,111', min: 8000, max: 13500, desc: '₹8,000 से ₹13,500 (1 बेड़ी / 111 वर्गफीट)' },
-      { id: 's_15111', label: '₹15,111', min: 13501, max: 18000, desc: '₹13,501 से ₹18,000 तक' },
-      { id: 's_21111', label: '₹21,111', min: 18001, max: 23000, desc: '₹18,001 से ₹23,000 (2 बेड़ी)' },
-      { id: 's_25555', label: '₹25,555', min: 23001, max: 30000, desc: '₹23,001 से ₹30,000 (2.5 बेड़ी)' },
-      { id: 's_35555', label: '₹35,555', min: 30001, max: 40000, desc: '₹30,001 से ₹40,000 (3.5 बेड़ी)' },
-      { id: 's_51111', label: '₹51,111', min: 40001, max: 80000, desc: '₹40,001 से ₹80,000 (5 बेड़ी)' },
-      { id: 's_100000', label: '₹1,00,000', min: 80001, max: 135000, desc: '₹80,001 से ₹1,35,000 तक' },
-      { id: 's_151000', label: '₹1,51,000', min: 135001, max: 180000, desc: '₹1,35,001 से ₹1,80,000 (15 बेड़ी)' },
-      { id: 's_151000_plus', label: '₹1,51,000+', min: 180001, max: Infinity, desc: '₹1,80,001 से अधिक (महादानदाता)' }
+      { id: 's_500_1500', label: '₹500 - ₹1,500', min: 0, max: 1799 },
+      { id: 's_2100', label: '₹2,100', min: 1800, max: 3499 },
+      { id: 's_5111', label: '₹5,111', min: 3500, max: 7999 },
+      { id: 's_11111', label: '₹11,111', min: 8000, max: 13500 },
+      { id: 's_15111', label: '₹15,111', min: 13501, max: 18000 },
+      { id: 's_21111', label: '₹21,111', min: 18001, max: 23000 },
+      { id: 's_25555', label: '₹25,555', min: 23001, max: 30000 },
+      { id: 's_35555', label: '₹35,555', min: 30001, max: 40000 },
+      { id: 's_51111', label: '₹51,111', min: 40001, max: 80000 },
+      { id: 's_100000', label: '₹1,00,000', min: 80001, max: 135000 },
+      { id: 's_151000', label: '₹1,51,000', min: 135001, max: 180000 },
+      { id: 's_151000_plus', label: '₹1,51,000+', min: 180001, max: Infinity }
     ];
 
     let currentSlabSortOrder = 'count'; // 'count' or 'amount'
@@ -4134,7 +4134,7 @@
         const elMaxCount = document.getElementById('slabKpiMaxCount');
         const highTierDonors = declarations.filter(d => Number(d.amount) > 180000).length;
         if (elMaxSlab) elMaxSlab.textContent = '₹1,51,000+';
-        if (elMaxCount) elMaxCount.textContent = `${highTierDonors} परिवार (महादानदाता)`;
+        if (elMaxCount) elMaxCount.textContent = `${highTierDonors} परिवार`;
       }
 
       // Sort items based on active preference
@@ -4157,7 +4157,6 @@
           <div class="slab-row-item ${isSelected ? 'active-slab-row' : ''}" onclick="filterDonorsBySlab(${item.min}, ${item.max === Infinity ? 999999999 : item.max}, '${item.label}')" title="क्लिक करें: ${item.label} के सभी ${item.count} दानदाता देखें">
             <div class="slab-col-name">
               <span class="slab-name-badge">${item.label}</span>
-              <span class="slab-name-sub">${item.desc}</span>
             </div>
             <div class="slab-col-bar">
               <div class="slab-bar-track">
