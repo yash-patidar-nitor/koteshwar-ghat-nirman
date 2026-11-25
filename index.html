@@ -3757,7 +3757,8 @@
                 if (!eDesc && !ePayee && !eItemName && eBillTotal <= 0 && eItemAmt <= 0) continue;
 
                 // Group by voucher number (or fallback to payee + date or row index)
-                const vKey = (eVouch !== "-" ? eVouch : (ePayee + "_" + eDate) || ("EXP_" + eSno)).toLowerCase();
+                const cleanVKey = (v) => String(v || "").replace(/^बिल\s*क्र\.?\s*/i, "").replace(/[^a-zA-Z0-9_\-\/]/g, "").toLowerCase();
+                const vKey = cleanVKey(eVouch) || (ePayee + "_" + eDate).toLowerCase() || ("exp_" + eSno);
 
                 if (!vouchersMap.has(vKey)) {
                   vouchersMap.set(vKey, {
@@ -4564,34 +4565,1591 @@
        DYNAMIC EXPENSES & FINANCIAL ACCOUNTS (VOUCHERS & AUDIT)
        ============================================================ */
     let expenses = [
+  {
+    "sno": 1,
+    "payee": "बुरहानी बिल्डिंग मटेरियल, निसरपुर",
+    "date": "2026-07-29",
+    "voucherNo": "बिल क्र. 1070",
+    "itemDescription": "नल-जल पाइपलाइन सामग्री",
+    "category": "जल-व्यवस्था एवं नल-जल",
+    "amount": 14285,
+    "taxableAmount": 12106,
+    "taxAmount": 2179,
+    "gstin": "23BBWPA9809F1ZH",
+    "phone": "9179152421",
+    "address": "कोटेश्वर फाटा, निसरपुर, तहसील कुक्षी, धार (म.प्र.)",
+    "status": "सत्यापित",
+    "items": [
       {
-        sno: 1,
-        payee: "बुरहानी बिल्डिंग मटेरियल, निसरपुर",
-        date: "2026-07-29",
-        voucherNo: "बिल क्र. 1070",
-        itemDescription: "नल-जल पाइपलाइन सामग्री",
-        category: "जल-व्यवस्था एवं नल-जल",
-        amount: 14285,
-        taxableAmount: 12106,
-        taxAmount: 2179,
-        gstin: "23BBWPA9809F1ZH",
-        phone: "9179152421",
-        address: "कोटेश्वर फाटा, निसरपुर, तहसील कुक्षी, धार (म.प्र.)",
-        status: "सत्यापित",
-        items: [
-          { description: "Coupler 110mm", quantity: 12, unit: "pcs", amount: 610.17 },
-          { description: "Coupler 140mm", quantity: 11, unit: "pcs", amount: 1728.65 },
-          { description: "Solvent 500ml", quantity: 4, unit: "pcs", amount: 949.76 },
-          { description: "HDPE Pipe 1 inch", quantity: 650, unit: "ft", amount: 6885.60 },
-          { description: "Brass Valve 1 inch", quantity: 2, unit: "pcs", amount: 677.97 },
-          { description: "Connector 1 inch", quantity: 2, unit: "pcs", amount: 33.90 },
-          { description: "GI Nipple 1 inch", quantity: 2, unit: "pcs", amount: 186.45 },
-          { description: "Garden Pipe 1 inch", quantity: 2, unit: "bundle", amount: 1525.43 },
-          { description: "Teflon Tape", quantity: 3, unit: "pcs", amount: 33.90 },
-          { description: "Unidentified item - handwritten चुंडी", quantity: 6, unit: "pcs", amount: 84.75 }
-        ]
+        "description": "Coupler 110mm",
+        "quantity": 12,
+        "unit": "pcs",
+        "amount": 610.17
+      },
+      {
+        "description": "Coupler 140mm",
+        "quantity": 11,
+        "unit": "pcs",
+        "amount": 1728.65
+      },
+      {
+        "description": "Solvent 500ml",
+        "quantity": 4,
+        "unit": "pcs",
+        "amount": 949.76
+      },
+      {
+        "description": "HDPE Pipe 1 inch",
+        "quantity": 650,
+        "unit": "ft",
+        "amount": 6885.6
+      },
+      {
+        "description": "Brass Valve 1 inch",
+        "quantity": 2,
+        "unit": "pcs",
+        "amount": 677.97
+      },
+      {
+        "description": "Connector 1 inch",
+        "quantity": 2,
+        "unit": "pcs",
+        "amount": 33.9
+      },
+      {
+        "description": "GI Nipple 1 inch",
+        "quantity": 2,
+        "unit": "pcs",
+        "amount": 186.45
+      },
+      {
+        "description": "Garden Pipe 1 inch",
+        "quantity": 2,
+        "unit": "bundle",
+        "amount": 1525.43
+      },
+      {
+        "description": "Teflon Tape",
+        "quantity": 3,
+        "unit": "pcs",
+        "amount": 33.9
+      },
+      {
+        "description": "Unidentified item - handwritten चुंडी",
+        "quantity": 6,
+        "unit": "pcs",
+        "amount": 84.75
       }
-    ];
+    ]
+  },
+  {
+    "sno": 2,
+    "payee": "Dev Enterprises",
+    "date": "2026-08-16",
+    "voucherNo": "बिल क्र. DEK/26-27/32",
+    "itemDescription": "निर्माण सामग्री (सीमेंट)",
+    "category": "Construction",
+    "amount": 252000,
+    "taxableAmount": 213559.22,
+    "taxAmount": 38440.66,
+    "gstin": "23AQTPS9805N1ZV",
+    "phone": "",
+    "address": "Alirajpur Road Kukshi Dist. Dhar",
+    "status": "सत्यापित",
+    "items": [
+      {
+        "description": "PPC Cement",
+        "quantity": 900,
+        "unit": "bag",
+        "amount": 213559.22
+      }
+    ]
+  },
+  {
+    "sno": 3,
+    "payee": "Dev Enterprises",
+    "date": "2026-08-17",
+    "voucherNo": "बिल क्र. DEK/26-27/33",
+    "itemDescription": "निर्माण सामग्री (सीमेंट)",
+    "category": "Construction",
+    "amount": 61000,
+    "taxableAmount": 51695,
+    "taxAmount": 9305.1,
+    "gstin": "23AQTPS9805N1ZV",
+    "phone": "",
+    "address": "Alirajpur Road Kukshi Dist. Dhar",
+    "status": "सत्यापित",
+    "items": [
+      {
+        "description": "Plus Cement",
+        "quantity": 100,
+        "unit": "bag",
+        "amount": 27966
+      },
+      {
+        "description": "PPC Cement",
+        "quantity": 100,
+        "unit": "bag",
+        "amount": 23729
+      }
+    ]
+  },
+  {
+    "sno": 4,
+    "payee": "विमल रावत पेंटर",
+    "date": "2026-09-09",
+    "voucherNo": "बिल क्र. 02",
+    "itemDescription": "रंग-रोगन एवं पुताई",
+    "category": "Painting & Maintenance",
+    "amount": 9980,
+    "taxableAmount": 9980,
+    "taxAmount": 0,
+    "gstin": "",
+    "phone": "7498054502",
+    "address": "ग्राम - हेलादर",
+    "status": "सत्यापित",
+    "items": [
+      {
+        "description": "Color Painting Labor",
+        "quantity": 6,
+        "unit": "दिन",
+        "amount": 3480
+      },
+      {
+        "description": "Color Painting Labor",
+        "quantity": 13,
+        "unit": "दिन",
+        "amount": 6500
+      }
+    ]
+  },
+  {
+    "sno": 5,
+    "payee": "मंगलम इलेक्ट्रीक एंड लाईट डेकोरेशन",
+    "date": "2026-08-12",
+    "voucherNo": "बिल क्र. 5416",
+    "itemDescription": "विद्युत एवं ध्वनि व्यवस्था",
+    "category": "Electrical & Event Services",
+    "amount": 5500,
+    "taxableAmount": 5500,
+    "taxAmount": 0,
+    "gstin": "",
+    "phone": "",
+    "address": "मेन रोड़, टावर के सामने, गणपुर, जिला धार",
+    "status": "सत्यापित",
+    "items": [
+      {
+        "description": "Sound System",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 3500
+      },
+      {
+        "description": "Generator",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 2000
+      }
+    ]
+  },
+  {
+    "sno": 6,
+    "payee": "माँ नर्मदा एक्जॉटिक नर्सरी",
+    "date": "2026-09-01",
+    "voucherNo": "बिल क्र. 720",
+    "itemDescription": "वृक्षारोपण एवं उद्यान विकास",
+    "category": "Horticulture & Landscaping",
+    "amount": 208960,
+    "taxableAmount": 208960,
+    "taxAmount": 0,
+    "gstin": "23DUSPP0231F1ZR",
+    "phone": "6265002014, 7354782970",
+    "address": "ग्राम पोस्ट-करोली, तह. मनावर, जिला-धार (म.प्र.) 454446",
+    "status": "समीक्षा अपेक्षित",
+    "items": [
+      {
+        "description": "Grafted Mango Plant (30x30)",
+        "quantity": 10,
+        "unit": "नग",
+        "amount": 62000
+      },
+      {
+        "description": "Grafted Mango Plant (30x30)",
+        "quantity": 16,
+        "unit": "नग",
+        "amount": 108800
+      },
+      {
+        "description": "Paras Peepal Plant",
+        "quantity": 24,
+        "unit": "नग",
+        "amount": 25200
+      },
+      {
+        "description": "Red Machira Plant (13x13)",
+        "quantity": 96,
+        "unit": "नग",
+        "amount": 12960
+      }
+    ]
+  },
+  {
+    "sno": 7,
+    "payee": "Dev Enterprises",
+    "date": "2026-08-15",
+    "voucherNo": "बिल क्र. DEK/26-27/31",
+    "itemDescription": "निर्माण सामग्री (सीमेंट)",
+    "category": "Construction",
+    "amount": 252000,
+    "taxableAmount": 213559.32,
+    "taxAmount": 38440.68,
+    "gstin": "23AQTPS9805N1ZV",
+    "phone": "",
+    "address": "Alirajpur Road Kukshi Dist. Dhar",
+    "status": "सत्यापित",
+    "items": [
+      {
+        "description": "PPC Cement",
+        "quantity": 900,
+        "unit": "bag",
+        "amount": 213559.32
+      }
+    ]
+  },
+  {
+    "sno": 8,
+    "payee": "SHIV SAI STONE CRUSHER",
+    "date": "2026-08-02",
+    "voucherNo": "बिल क्र. 2627/129",
+    "itemDescription": "निर्माण सामग्री (गिट्टी एवं क्रशर)",
+    "category": "Construction",
+    "amount": 175000,
+    "taxableAmount": 166667,
+    "taxAmount": 8333.36,
+    "gstin": "23AZXPP0237E1ZB",
+    "phone": "",
+    "address": "VILLAGE TANA, LOHARI, TEHSIL KUKSHI, DHAR",
+    "status": "समीक्षा अपेक्षित",
+    "items": [
+      {
+        "description": "Crushed Stone Aggregate (Gitti)",
+        "quantity": 166.667,
+        "unit": "CBM",
+        "amount": 166667
+      }
+    ]
+  },
+  {
+    "sno": 9,
+    "payee": "गर्व ईट उद्योग",
+    "date": "2026-08-20",
+    "voucherNo": "बिल क्र. 5",
+    "itemDescription": "जेसीबी एवं मिट्टी भराव कार्य",
+    "category": "Earthwork & Excavation",
+    "amount": 56000,
+    "taxableAmount": 56000,
+    "taxAmount": 0,
+    "gstin": "",
+    "phone": "9977712572",
+    "address": "ग्राम निसरपुर तह. कुक्षी जिला-धार (म.प्र.)",
+    "status": "सत्यापित",
+    "items": [
+      {
+        "description": "JCB Excavation Work (15/07/2026)",
+        "quantity": 7.7,
+        "unit": "घंटे",
+        "amount": 7700
+      },
+      {
+        "description": "JCB Excavation Work (16/07/2026)",
+        "quantity": 9.8,
+        "unit": "घंटे",
+        "amount": 9800
+      },
+      {
+        "description": "JCB Excavation Work (17/07/2026)",
+        "quantity": 9.6,
+        "unit": "घंटे",
+        "amount": 9600
+      },
+      {
+        "description": "JCB Excavation Work (18/07/2026)",
+        "quantity": 9.5,
+        "unit": "घंटे",
+        "amount": 9500
+      },
+      {
+        "description": "JCB Excavation Work (19/07/2026)",
+        "quantity": 1,
+        "unit": "घंटे",
+        "amount": 1000
+      },
+      {
+        "description": "Tractor & Machine Soil Filling (19/07/2026)",
+        "quantity": 62,
+        "unit": "ट्रिप",
+        "amount": 12400
+      },
+      {
+        "description": "Tractor & Machine Soil Filling (20/07/2026)",
+        "quantity": 30,
+        "unit": "ट्रिप",
+        "amount": 6000
+      }
+    ]
+  },
+  {
+    "sno": 10,
+    "payee": "गंगामाता कंस्ट्रक्शन",
+    "date": "2026-08-20",
+    "voucherNo": "बिल क्र. 211",
+    "itemDescription": "निर्माण कार्य एवं किराया",
+    "category": "Construction",
+    "amount": 40500,
+    "taxableAmount": 40500,
+    "taxAmount": 0,
+    "gstin": "23CGTPR3405B1ZK",
+    "phone": "6260132063, 9754819264",
+    "address": "प्लॉट नं. 1325 बसाहट, निसरपुर, तह. कुक्षी, जिला धार (म.प्र.)",
+    "status": "सत्यापित",
+    "items": [
+      {
+        "description": "Construction Work / Machinery Charges (28/07/2026 to 03/08/2026)",
+        "quantity": 7,
+        "unit": "दिन",
+        "amount": 31500
+      },
+      {
+        "description": "Construction Work / Machinery Charges (19/08/2026 to 20/08/2026)",
+        "quantity": 2,
+        "unit": "दिन",
+        "amount": 9000
+      }
+    ]
+  },
+  {
+    "sno": 11,
+    "payee": "अग्रवाल सेल्स एजेन्सी",
+    "date": "2026-08-31",
+    "voucherNo": "बिल क्र. 867",
+    "itemDescription": "पंप एवं सिंचाई उपकरण",
+    "category": "Plumbing & Water Supply",
+    "amount": 96500,
+    "taxableAmount": 91905,
+    "taxAmount": 4595,
+    "gstin": "",
+    "phone": "8319211523",
+    "address": "सदर बाजार, सिंघाना, जिला-धार (म.प्र.)",
+    "status": "समीक्षा अपेक्षित",
+    "items": [
+      {
+        "description": "Taro Pump / Submersible Motor Equipment",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 91905
+      }
+    ]
+  },
+  {
+    "sno": 12,
+    "payee": "SHRI BALAJI SALES AGENCY",
+    "date": "2026-08-04",
+    "voucherNo": "बिल क्र. 2496",
+    "itemDescription": "नल-जल एवं प्लंबिंग",
+    "category": "Plumbing",
+    "amount": 79900,
+    "taxableAmount": 79900,
+    "taxAmount": 0,
+    "gstin": "23AIFPG1972J2ZC",
+    "phone": "094259 56970, 9755908111",
+    "address": "KRISHI UPAJ MANDI, KUKSHI DIST DHAR (M.P.)",
+    "status": "सत्यापित",
+    "items": [
+      {
+        "description": "Star PVC Pipe 110mm 4kg",
+        "quantity": 85,
+        "unit": "नग",
+        "amount": 79900
+      }
+    ]
+  },
+  {
+    "sno": 13,
+    "payee": "माँ नर्मदा ट्रेडर्स",
+    "date": "2026-09-19",
+    "voucherNo": "बिल क्र. 964",
+    "itemDescription": "लोहा, सरिया एवं हार्डवेयर सामग्री",
+    "category": "Construction",
+    "amount": 53836.2,
+    "taxableAmount": 53836.2,
+    "taxAmount": 0,
+    "gstin": "23AZEPP6225B1ZS",
+    "phone": "8770653960, 9977790333",
+    "address": "कोटेश्वर चौराहा, निसरपुर (जि.-धार) म.प्र.",
+    "status": "समीक्षा अपेक्षित",
+    "items": [
+      {
+        "description": "MS Pipe / Steel Section (8+8)",
+        "quantity": 28.6,
+        "unit": "kg",
+        "amount": 1802
+      },
+      {
+        "description": "Steel / Hardware Item (38.3kg)",
+        "quantity": 38.3,
+        "unit": "kg",
+        "amount": 2873
+      },
+      {
+        "description": "Steel / Hardware Item (362.8kg)",
+        "quantity": 362.8,
+        "unit": "kg",
+        "amount": 29024
+      },
+      {
+        "description": "MS Flat / Angle (343)",
+        "quantity": 77.6,
+        "unit": "kg",
+        "amount": 6053
+      },
+      {
+        "description": "MS Pipe (4x4)",
+        "quantity": 141.6,
+        "unit": "kg",
+        "amount": 10620
+      },
+      {
+        "description": "Steel / Hardware Item (37.2kg)",
+        "quantity": 37.21,
+        "unit": "kg",
+        "amount": 2902
+      },
+      {
+        "description": "Welding / Hardware Consumables",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 262
+      },
+      {
+        "description": "Miscellaneous Hardware",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 300
+      }
+    ]
+  },
+  {
+    "sno": 14,
+    "payee": "माँ नर्मदा ट्रेडर्स",
+    "date": "2026-09-19",
+    "voucherNo": "बिल क्र. 963",
+    "itemDescription": "लोहा, सरिया एवं हार्डवेयर सामग्री",
+    "category": "Construction",
+    "amount": 74103.1,
+    "taxableAmount": 74103.1,
+    "taxAmount": 0,
+    "gstin": "23AZEPP6225B1ZS",
+    "phone": "9977790333",
+    "address": "कोटेश्वर चौराहा, निसरपुर (जि.-धार) म.प्र.",
+    "status": "समीक्षा अपेक्षित",
+    "items": [
+      {
+        "description": "Level Pipe",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 1460
+      },
+      {
+        "description": "Shovel (फावड़ा)",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 340
+      },
+      {
+        "description": "18mm Spanner (पाना)",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 350
+      },
+      {
+        "description": "Hardware Tool (व्यापली)",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 100
+      },
+      {
+        "description": "Hardware Item (झाई)",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 330
+      },
+      {
+        "description": "Steel / Iron Material (368.9kg)",
+        "quantity": 368.93,
+        "unit": "kg",
+        "amount": 33204
+      },
+      {
+        "description": "Hardware Item (पट्टी)",
+        "quantity": 2,
+        "unit": "नग",
+        "amount": 280
+      },
+      {
+        "description": "MS Pipe / Steel Section (528.8kg)",
+        "quantity": 528.86,
+        "unit": "kg",
+        "amount": 35963
+      },
+      {
+        "description": "Welding / Cutting Consumables",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 1306
+      },
+      {
+        "description": "Miscellaneous Hardware",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 770.2
+      }
+    ]
+  },
+  {
+    "sno": 15,
+    "payee": "माँ नर्मदा ट्रेडर्स",
+    "date": "2026-09-19",
+    "voucherNo": "बिल क्र. 952",
+    "itemDescription": "लोहा, सरिया एवं हार्डवेयर सामग्री",
+    "category": "Construction",
+    "amount": 453441,
+    "taxableAmount": 453441,
+    "taxAmount": 0,
+    "gstin": "23AZEPP6225B1ZS",
+    "phone": "8770653960, 9977790333",
+    "address": "कोटेश्वर चौराहा, निसरपुर (जि.-धार) म.प्र.",
+    "status": "समीक्षा अपेक्षित",
+    "items": [
+      {
+        "description": "MS Pipe",
+        "quantity": 87.21,
+        "unit": "kg",
+        "amount": 7414
+      },
+      {
+        "description": "MS Pipe (4x4)",
+        "quantity": 600,
+        "unit": "kg",
+        "amount": 50220
+      },
+      {
+        "description": "MS Pipe / Structural Steel (3745)",
+        "quantity": 755,
+        "unit": "kg",
+        "amount": 57908
+      },
+      {
+        "description": "MS Pipe / Structural Steel (33)",
+        "quantity": 1959.4,
+        "unit": "kg",
+        "amount": 148327
+      },
+      {
+        "description": "MS Pipe / Structural Steel (37)",
+        "quantity": 1199,
+        "unit": "kg",
+        "amount": 90764
+      },
+      {
+        "description": "Hardware / Welding Consumables",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 480
+      },
+      {
+        "description": "MS Flat / Steel Strip",
+        "quantity": 17.4,
+        "unit": "kg",
+        "amount": 1131
+      },
+      {
+        "description": "MS Pipe (3x3)",
+        "quantity": 165.5,
+        "unit": "kg",
+        "amount": 12413
+      },
+      {
+        "description": "MS Pipe / Structural Steel",
+        "quantity": 912.6,
+        "unit": "kg",
+        "amount": 69996
+      },
+      {
+        "description": "MS Pipe / Structural Steel",
+        "quantity": 177.5,
+        "unit": "kg",
+        "amount": 13437
+      },
+      {
+        "description": "Welding / Miscellaneous Hardware",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 1353
+      }
+    ]
+  },
+  {
+    "sno": 16,
+    "payee": "आनंद रमेशचन्द्र शर्मा",
+    "date": "2026-07-29",
+    "voucherNo": "बिल क्र. 24",
+    "itemDescription": "जेसीबी, मुरूम एवं मिट्टी भराव कार्य",
+    "category": "Earthwork & Excavation",
+    "amount": 143250,
+    "taxableAmount": 160250,
+    "taxAmount": 0,
+    "gstin": "",
+    "phone": "9617502420",
+    "address": "सुसारी",
+    "status": "सत्यापित",
+    "items": [
+      {
+        "description": "JCB Excavation Work (16-19 July)",
+        "quantity": 32.5,
+        "unit": "घंटे",
+        "amount": 32500
+      },
+      {
+        "description": "Tractor Soil Filling (20/07/2026)",
+        "quantity": 35,
+        "unit": "ट्रिप",
+        "amount": 7000
+      },
+      {
+        "description": "Tractor Murum Filling (21-24 July 2026)",
+        "quantity": 254,
+        "unit": "ट्रिप",
+        "amount": 63500
+      },
+      {
+        "description": "Dumper/Tractor Murum Filling (25/07/2026)",
+        "quantity": 85,
+        "unit": "ट्रिप",
+        "amount": 21250
+      },
+      {
+        "description": "Murum Filling (26/07/2026)",
+        "quantity": 88,
+        "unit": "ट्रिप",
+        "amount": 22000
+      },
+      {
+        "description": "Murum Filling (27/07/2026)",
+        "quantity": 56,
+        "unit": "ट्रिप",
+        "amount": 14000
+      }
+    ]
+  },
+  {
+    "sno": 17,
+    "payee": "किसान मशीनरी पार्ट्स",
+    "date": "2026-08-23",
+    "voucherNo": "बिल क्र. 2025-818",
+    "itemDescription": "नल-जल एवं प्लंबिंग",
+    "category": "Plumbing",
+    "amount": 120855,
+    "taxableAmount": 120855,
+    "taxAmount": 0,
+    "gstin": "23BMIPP6003K1Z2",
+    "phone": "99818 26937",
+    "address": "दुकान नं. C/44, निसरपुर, तह. कुक्षी, जि. धार (म.प्र.) 454 335",
+    "status": "समीक्षा अपेक्षित",
+    "items": [
+      {
+        "description": "Plumbing Pipe / Fitting (10 नग)",
+        "quantity": 10,
+        "unit": "नग",
+        "amount": 14400
+      },
+      {
+        "description": "Plumbing Pipe / Fitting (12 नग)",
+        "quantity": 12,
+        "unit": "नग",
+        "amount": 12000
+      },
+      {
+        "description": "Plumbing Pipe (100m)",
+        "quantity": 100,
+        "unit": "m",
+        "amount": 0
+      },
+      {
+        "description": "Plumbing Fitting (10x10)",
+        "quantity": 10,
+        "unit": "नग",
+        "amount": 100
+      },
+      {
+        "description": "Plumbing Fitting (160)",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 1600
+      },
+      {
+        "description": "Plumbing Fitting (1-120)",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 120
+      },
+      {
+        "description": "Plumbing Fitting (150x5)",
+        "quantity": 5,
+        "unit": "नग",
+        "amount": 750
+      },
+      {
+        "description": "Plumbing Fitting (150x21)",
+        "quantity": 21,
+        "unit": "नग",
+        "amount": 3150
+      },
+      {
+        "description": "Plumbing Fitting (3-10)",
+        "quantity": 3,
+        "unit": "नग",
+        "amount": 30
+      },
+      {
+        "description": "Plumbing Pipe / Fitting (400m)",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 4800
+      }
+    ]
+  },
+  {
+    "sno": 18,
+    "payee": "किसान मशीनरी पार्ट्स",
+    "date": "2026-07-30",
+    "voucherNo": "बिल क्र. 2025-792",
+    "itemDescription": "पंप, मोटर एवं प्लंबिंग",
+    "category": "Plumbing & Water Supply",
+    "amount": 14770,
+    "taxableAmount": 14770,
+    "taxAmount": 0,
+    "gstin": "23BMIPP6003K1Z2",
+    "phone": "99818 26937",
+    "address": "दुकान नं. C/44, निसरपुर, तह. कुक्षी, जि. धार (म.प्र.) 454 335",
+    "status": "समीक्षा अपेक्षित",
+    "items": [
+      {
+        "description": "Texmo Submersible Pump / Motor",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 11280
+      },
+      {
+        "description": "Plumbing Accessories",
+        "quantity": 4,
+        "unit": "नग",
+        "amount": 1700
+      },
+      {
+        "description": "Plumbing Fittings",
+        "quantity": 2,
+        "unit": "नग",
+        "amount": 170
+      }
+    ]
+  },
+  {
+    "sno": 19,
+    "payee": "किसान मशीनरी पार्ट्स",
+    "date": "2026-07-27",
+    "voucherNo": "बिल क्र. 2025-788",
+    "itemDescription": "विद्युत एवं मोटर सामग्री",
+    "category": "Electrical & Plumbing",
+    "amount": 22529,
+    "taxableAmount": 22529,
+    "taxAmount": 0,
+    "gstin": "23BMIPP6003K1Z2",
+    "phone": "99818 26937",
+    "address": "दुकान नं. C/44, निसरपुर, तह. कुक्षी, जि. धार (म.प्र.) 454 335",
+    "status": "समीक्षा अपेक्षित",
+    "items": [
+      {
+        "description": "Electrical Cable (6x910)",
+        "quantity": 6,
+        "unit": "नग",
+        "amount": 5460
+      },
+      {
+        "description": "10mm Pipe / Cable",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 5410
+      },
+      {
+        "description": "Motor Starter Panel Box",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 6000
+      },
+      {
+        "description": "Electrical / Plumbing Fittings",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 1200
+      },
+      {
+        "description": "Motor / Pump Parts",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 4000
+      },
+      {
+        "description": "Double Nipple / Coupler",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 300
+      },
+      {
+        "description": "Pliers & Insulation Tape",
+        "quantity": 2,
+        "unit": "नग",
+        "amount": 159
+      }
+    ]
+  },
+  {
+    "sno": 20,
+    "payee": "किसान मशीनरी पार्ट्स",
+    "date": "2026-07-19",
+    "voucherNo": "बिल क्र. 20257",
+    "itemDescription": "नल-जल एवं प्लंबिंग",
+    "category": "Plumbing",
+    "amount": 8430,
+    "taxableAmount": 8430,
+    "taxAmount": 0,
+    "gstin": "23BMIPP6003K1Z2",
+    "phone": "99818 26937",
+    "address": "दुकान नं. C/44, निसरपुर, तह. कुक्षी, जि. धार (म.प्र.) 454 335",
+    "status": "समीक्षा अपेक्षित",
+    "items": [
+      {
+        "description": "Plumbing Fitting (20x60)",
+        "quantity": 20,
+        "unit": "नग",
+        "amount": 1200
+      },
+      {
+        "description": "Plumbing Fitting (25x120)",
+        "quantity": 25,
+        "unit": "नग",
+        "amount": 3000
+      },
+      {
+        "description": "Plumbing Fitting (2x10)",
+        "quantity": 2,
+        "unit": "नग",
+        "amount": 20
+      },
+      {
+        "description": "PVC Pipe / Fitting (2x1640)",
+        "quantity": 2,
+        "unit": "नग",
+        "amount": 3280
+      },
+      {
+        "description": "Plumbing Fitting (2x102.5)",
+        "quantity": 2,
+        "unit": "नग",
+        "amount": 205
+      },
+      {
+        "description": "Plumbing Fitting (2x80)",
+        "quantity": 2,
+        "unit": "नग",
+        "amount": 160
+      }
+    ]
+  },
+  {
+    "sno": 21,
+    "payee": "किसान मशीनरी पार्ट्स",
+    "date": "2026-07-16",
+    "voucherNo": "बिल क्र. 2025-781",
+    "itemDescription": "नल-जल एवं प्लंबिंग",
+    "category": "Plumbing",
+    "amount": 45220,
+    "taxableAmount": 45220,
+    "taxAmount": 0,
+    "gstin": "23BMIPP6003K1Z2",
+    "phone": "99818 26937",
+    "address": "दुकान नं. C/44, निसरपुर, तह. कुक्षी, जि. धार (म.प्र.) 454 335",
+    "status": "समीक्षा अपेक्षित",
+    "items": [
+      {
+        "description": "110mm Pipe (36x935)",
+        "quantity": 36,
+        "unit": "नग",
+        "amount": 33660
+      },
+      {
+        "description": "110mm Coupler",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 1100
+      },
+      {
+        "description": "140mm Pipe / Fitting",
+        "quantity": 30,
+        "unit": "नग",
+        "amount": 3600
+      },
+      {
+        "description": "Plumbing Fitting 250m",
+        "quantity": 8,
+        "unit": "नग",
+        "amount": 1000
+      },
+      {
+        "description": "Plumbing Fitting (10x10)",
+        "quantity": 10,
+        "unit": "नग",
+        "amount": 100
+      },
+      {
+        "description": "140mm Tee / Fitting",
+        "quantity": 10,
+        "unit": "नग",
+        "amount": 1200
+      },
+      {
+        "description": "110mm Tee",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 320
+      },
+      {
+        "description": "Miscellaneous Plumbing Fittings",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 4240
+      }
+    ]
+  },
+  {
+    "sno": 22,
+    "payee": "Patidar Fuels",
+    "date": "2026-08-13",
+    "voucherNo": "बिल क्र. 218/2026",
+    "itemDescription": "ईंधन (डीजल एवं पेट्रोल)",
+    "category": "Fuel",
+    "amount": 1261710,
+    "taxableAmount": 1261710,
+    "taxAmount": 0,
+    "gstin": "23CQBPP2023D1ZJ",
+    "phone": "9425479421, 9981299460",
+    "address": "172/2/1 Vill. Lingwa, Teh. Kukshi, Dist. Dhar (M.P.)",
+    "status": "सत्यापित",
+    "items": [
+      {
+        "description": "Diesel (Slip 14299 - मोहनलाल जी)",
+        "quantity": 415.84,
+        "unit": "Ltr",
+        "amount": 42000
+      },
+      {
+        "description": "Diesel (Slip 14309 - सोनू राजाजी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14310 - मोहनलाल जी)",
+        "quantity": 186.73,
+        "unit": "Ltr",
+        "amount": 18860
+      },
+      {
+        "description": "Diesel (Slip 14311 - मोहनलाल जी)",
+        "quantity": 346.53,
+        "unit": "Ltr",
+        "amount": 35000
+      },
+      {
+        "description": "Diesel (Slip 14312 - सोनू राजाजी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14315 - सोनू राजाजी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14316 - मोहनलाल जी)",
+        "quantity": 199.01,
+        "unit": "Ltr",
+        "amount": 20100
+      },
+      {
+        "description": "Diesel (Slip 14319 - सोनू राजाजी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14323 - सोनू राजाजी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14324 - मोहनलाल जी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14327 - सोनू राजाजी)",
+        "quantity": 99.01,
+        "unit": "Ltr",
+        "amount": 10000
+      },
+      {
+        "description": "Diesel (Slip 14329 - सोनू राजाजी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14330 - मोहनलाल जी)",
+        "quantity": 156.44,
+        "unit": "Ltr",
+        "amount": 15800
+      },
+      {
+        "description": "Diesel (Slip 14331 - सोनू राजाजी)",
+        "quantity": 297.03,
+        "unit": "Ltr",
+        "amount": 30000
+      },
+      {
+        "description": "Diesel (Slip 14333 - सोनू राजाजी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14334 - मोहनलाल जी)",
+        "quantity": 209.9,
+        "unit": "Ltr",
+        "amount": 21200
+      },
+      {
+        "description": "Diesel (Slip 14336 - मोहनलाल जी)",
+        "quantity": 275.25,
+        "unit": "Ltr",
+        "amount": 27800
+      },
+      {
+        "description": "Diesel (Slip 14341 - सोनू राजाजी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14342 - मोहनलाल जी)",
+        "quantity": 232.67,
+        "unit": "Ltr",
+        "amount": 23500
+      },
+      {
+        "description": "Diesel (Slip 14343 - सोनू राजाजी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14344 - मोहनलाल जी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14345 - दुर्गेश पाटीदार)",
+        "quantity": 663.37,
+        "unit": "Ltr",
+        "amount": 67000
+      },
+      {
+        "description": "Diesel (Slip 14346 - सोनू राजाजी)",
+        "quantity": 396.04,
+        "unit": "Ltr",
+        "amount": 40000
+      },
+      {
+        "description": "Diesel (Slip 14347 - मोहनलाल जी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14351 - सोनू राजाजी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14352 - मोहनलाल जी)",
+        "quantity": 480.2,
+        "unit": "Ltr",
+        "amount": 48500
+      },
+      {
+        "description": "Diesel (Slip 14353 - सोनू राजाजी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14355 - दुर्गेश पाटीदार)",
+        "quantity": 618.81,
+        "unit": "Ltr",
+        "amount": 62500
+      },
+      {
+        "description": "Diesel (Slip 14357 - सोनू राजाजी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14359 - मोहनलाल जी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14362 - सोनू राजाजी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14363 - मोहनलाल जी)",
+        "quantity": 376.24,
+        "unit": "Ltr",
+        "amount": 38000
+      },
+      {
+        "description": "Diesel (Slip 14368 - मोहनलाल जी)",
+        "quantity": 79.21,
+        "unit": "Ltr",
+        "amount": 8000
+      },
+      {
+        "description": "Diesel (Slip 14371 - सोनू राजाजी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14372 - दुर्गेश पाटीदार)",
+        "quantity": 638.61,
+        "unit": "Ltr",
+        "amount": 64500
+      },
+      {
+        "description": "Diesel (Slip 14373 - मोहनलाल जी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14375 - मोहनलाल जी)",
+        "quantity": 486.14,
+        "unit": "Ltr",
+        "amount": 49100
+      },
+      {
+        "description": "Diesel (Slip 14377 - सोनू राजाजी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14378 - मोहनलाल जी)",
+        "quantity": 39.6,
+        "unit": "Ltr",
+        "amount": 4000
+      },
+      {
+        "description": "Diesel (Slip 14380 - सोनू राजाजी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14382 - मोहनलाल जी)",
+        "quantity": 127.23,
+        "unit": "Ltr",
+        "amount": 12850
+      },
+      {
+        "description": "Diesel (Slip 14384 - सोनू राजाजी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14387 - दुर्गेश पाटीदार)",
+        "quantity": 613.86,
+        "unit": "Ltr",
+        "amount": 62000
+      },
+      {
+        "description": "Diesel (Slip 14388 - मोहनलाल जी)",
+        "quantity": 108.91,
+        "unit": "Ltr",
+        "amount": 11000
+      },
+      {
+        "description": "Diesel (Slip 14401 - सोनू राजाजी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14402 - मोहनलाल जी)",
+        "quantity": 396.04,
+        "unit": "Ltr",
+        "amount": 40000
+      },
+      {
+        "description": "Diesel (Slip 14403 - मोहनलाल जी)",
+        "quantity": 99.01,
+        "unit": "Ltr",
+        "amount": 10000
+      },
+      {
+        "description": "Diesel (Slip 14405 - सोनू राजाजी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 14407 - मोहनलाल जी)",
+        "quantity": 198.02,
+        "unit": "Ltr",
+        "amount": 20000
+      }
+    ]
+  },
+  {
+    "sno": 23,
+    "payee": "LEADER GRAPHICS & PRINTERS",
+    "date": "2026-07-09",
+    "voucherNo": "बिल क्र. A-53",
+    "itemDescription": "छपाई एवं प्रचार सामग्री",
+    "category": "Printing & Publicity",
+    "amount": 15000,
+    "taxableAmount": 12720,
+    "taxAmount": 2289.6,
+    "gstin": "23ADOPH5605F1ZT",
+    "phone": "9669822331, 9993115752",
+    "address": "12, Jawahar Marg, Nagar Palica Complex, BARWANI (M.P.) 451 551",
+    "status": "सत्यापित",
+    "items": [
+      {
+        "description": "A4 Multicolour Pamphlet / Brochure (130 GSM)",
+        "quantity": 10000,
+        "unit": "नग",
+        "amount": 12720
+      }
+    ]
+  },
+  {
+    "sno": 24,
+    "payee": "SARVOTTAM FUEL STATION",
+    "date": "2026-11-15",
+    "voucherNo": "बिल क्र. LEDGER-01-07-2026-TO-15-11-2026",
+    "itemDescription": "ईंधन (डीजल एवं पेट्रोल)",
+    "category": "Fuel",
+    "amount": 1092392.55,
+    "taxableAmount": 1092392.55,
+    "taxAmount": 0,
+    "gstin": "23AEEFS6553E1Z4",
+    "phone": "9893480039, 9926099609",
+    "address": "KUKSHI - BARWANI ROAD, NISARPUR (KUKSHI), DISTT - DHAR (MADHYA PRADESH)",
+    "status": "सत्यापित",
+    "items": [
+      {
+        "description": "Diesel (Slip 3840 - शर्माजी आनंद)",
+        "quantity": 70,
+        "unit": "Ltr",
+        "amount": 7080
+      },
+      {
+        "description": "Diesel (Slip 3869 - शर्माजी आनंद)",
+        "quantity": 25,
+        "unit": "Ltr",
+        "amount": 2528.75
+      },
+      {
+        "description": "Diesel (Slip 3874 - शर्माजी)",
+        "quantity": 75,
+        "unit": "Ltr",
+        "amount": 7586.25
+      },
+      {
+        "description": "Diesel (Slip 3905 - फियोरी)",
+        "quantity": 70.29,
+        "unit": "Ltr",
+        "amount": 7110
+      },
+      {
+        "description": "Diesel (Slip 3902 - फियोरी)",
+        "quantity": 40.73,
+        "unit": "Ltr",
+        "amount": 4120
+      },
+      {
+        "description": "Diesel (Slip 3914 - फियोरी)",
+        "quantity": 103.81,
+        "unit": "Ltr",
+        "amount": 10500
+      },
+      {
+        "description": "Diesel (Slip 3925 - अस्पताल)",
+        "quantity": 39.55,
+        "unit": "Ltr",
+        "amount": 4000
+      },
+      {
+        "description": "Diesel (Slip 3931 - उपेन्द्र)",
+        "quantity": 100,
+        "unit": "Ltr",
+        "amount": 10115
+      },
+      {
+        "description": "Diesel (Slip 3945 - फियोरी)",
+        "quantity": 57.83,
+        "unit": "Ltr",
+        "amount": 5850
+      },
+      {
+        "description": "Diesel (Slip 3952 - राजाजी)",
+        "quantity": 464.66,
+        "unit": "Ltr",
+        "amount": 47000
+      },
+      {
+        "description": "Diesel (Slip 3943 - जनरेटर)",
+        "quantity": 1.48,
+        "unit": "Ltr",
+        "amount": 150
+      },
+      {
+        "description": "Diesel (Slip 3962 - फियोरी)",
+        "quantity": 98.86,
+        "unit": "Ltr",
+        "amount": 10000
+      },
+      {
+        "description": "Diesel (Slip 3958 - अस्पताल)",
+        "quantity": 39.55,
+        "unit": "Ltr",
+        "amount": 4000
+      },
+      {
+        "description": "Diesel (Slip 3955 - राजाजी)",
+        "quantity": 227.39,
+        "unit": "Ltr",
+        "amount": 23000
+      },
+      {
+        "description": "Diesel (Slip 3968 - फियोरी)",
+        "quantity": 63.27,
+        "unit": "Ltr",
+        "amount": 6400
+      },
+      {
+        "description": "Diesel (Slip 3973 - राजाजी)",
+        "quantity": 197.73,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 3989 - लकड़ी वाला)",
+        "quantity": 10,
+        "unit": "Ltr",
+        "amount": 1011.5
+      },
+      {
+        "description": "Diesel (Slip 3998 - राजाजी)",
+        "quantity": 197.73,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 4044 - राजाजी)",
+        "quantity": 296.59,
+        "unit": "Ltr",
+        "amount": 30000
+      },
+      {
+        "description": "Diesel (Slip 4059 - राजाजी)",
+        "quantity": 197.73,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 4084 - राजाजी)",
+        "quantity": 593.18,
+        "unit": "Ltr",
+        "amount": 60000
+      },
+      {
+        "description": "Diesel (Slip 4082 - घाट)",
+        "quantity": 19.77,
+        "unit": "Ltr",
+        "amount": 2000
+      },
+      {
+        "description": "Petrol (Slip 4091 - उमेर लोहार)",
+        "quantity": 5,
+        "unit": "Ltr",
+        "amount": 580.05
+      },
+      {
+        "description": "Diesel (Slip 4104 - रोलर)",
+        "quantity": 28.37,
+        "unit": "Ltr",
+        "amount": 2870
+      },
+      {
+        "description": "Diesel (Slip 4100 - राजाजी)",
+        "quantity": 98.86,
+        "unit": "Ltr",
+        "amount": 10000
+      },
+      {
+        "description": "Diesel (Slip 4133 - राजाजी)",
+        "quantity": 593.18,
+        "unit": "Ltr",
+        "amount": 60000
+      },
+      {
+        "description": "Diesel (Slip 4143 - राजाजी)",
+        "quantity": 197.73,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 4162 - राजाजी)",
+        "quantity": 247.16,
+        "unit": "Ltr",
+        "amount": 25000
+      },
+      {
+        "description": "Diesel (Slip 4181 - राजाजी)",
+        "quantity": 494.32,
+        "unit": "Ltr",
+        "amount": 50000
+      },
+      {
+        "description": "Diesel (Slip 4185 - फियोरी)",
+        "quantity": 60.32,
+        "unit": "Ltr",
+        "amount": 6101
+      },
+      {
+        "description": "Petrol (Slip 4207 - राजाजी)",
+        "quantity": 137.92,
+        "unit": "Ltr",
+        "amount": 16000
+      },
+      {
+        "description": "Diesel (Slip 4235 - राजाजी)",
+        "quantity": 692.04,
+        "unit": "Ltr",
+        "amount": 70000
+      },
+      {
+        "description": "Diesel (Slip 4252 - OP)",
+        "quantity": 197.73,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 4261 - राजाजी)",
+        "quantity": 197.73,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 4277 - राजाजी)",
+        "quantity": 197.73,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 4294 - उमेर लोहार)",
+        "quantity": 45.87,
+        "unit": "Ltr",
+        "amount": 4640
+      },
+      {
+        "description": "Diesel (Slip 4291 - राजाजी)",
+        "quantity": 197.73,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 4298 - राजाजी)",
+        "quantity": 197.73,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 4318 - राजाजी)",
+        "quantity": 197.73,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 4330 - राजाजी)",
+        "quantity": 395.45,
+        "unit": "Ltr",
+        "amount": 40000
+      },
+      {
+        "description": "Diesel (Slip 4336 - राजाजी)",
+        "quantity": 197.73,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel (Slip 4352 - राजाजी)",
+        "quantity": 197.73,
+        "unit": "Ltr",
+        "amount": 20000
+      },
+      {
+        "description": "Diesel Transfer - लखन कुमावत कोटड़ा",
+        "quantity": 1,
+        "unit": "नग",
+        "amount": 324750
+      }
+    ]
+  }
+];
 
     let currentExpenseCategoryFilter = 'all';
     let currentExpenseSearch = '';
