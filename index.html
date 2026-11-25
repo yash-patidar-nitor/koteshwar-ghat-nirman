@@ -2607,7 +2607,7 @@
     <!-- ==================== QUICK JUMP NAVIGATION BAR ==================== -->
     <div class="top-nav-anchors" style="display:flex;justify-content:center;gap:14px;margin:24px 0 20px;flex-wrap:wrap;">
       <a href="#section-campaign" onclick="scrollToSection('section-campaign', event)" class="top-anchor-pill active" style="text-decoration:none;background:#ffffff;border:1.5px solid var(--sandstone);padding:10px 22px;border-radius:25px;font-size:13.5px;font-weight:700;color:var(--teal);box-shadow:0 3px 10px rgba(0,0,0,0.05);display:inline-flex;align-items:center;gap:8px;transition:all 0.2s;">
-        <i class="fa-solid fa-hands-praying" style="color:var(--gold);font-size:16px;"></i> <span>जनसहयोग महाअभियान</span>
+        <i class="fa-solid fa-hands-praying" style="color:var(--gold);font-size:16px;"></i> <span>दानदाताओ का संपूर्ण विवरण</span>
         <span style="font-size:11px;background:rgba(13,79,79,0.08);color:var(--teal);padding:2px 8px;border-radius:12px;font-weight:700;">608 श्रद्धालु</span>
       </a>
       <a href="#section-accounting" onclick="scrollToSection('section-accounting', event)" class="top-anchor-pill" style="text-decoration:none;background:#ffffff;border:1.5px solid var(--teal);padding:10px 22px;border-radius:25px;font-size:13.5px;font-weight:700;color:var(--teal);box-shadow:0 3px 10px rgba(13,79,79,0.1);display:inline-flex;align-items:center;gap:8px;transition:all 0.2s;">
@@ -2622,7 +2622,7 @@
     <div class="detailed-tables-header" style="margin-top:28px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
       <div>
         <h3 style="margin:0;font-size:18px;font-weight:800;color:var(--teal);display:flex;align-items:center;gap:8px;">
-          <i class="fa-solid fa-table-cells" style="color:var(--gold);"></i> जनसहयोग एवं सहभागी परिवारों का संपूर्ण विवरण
+          <i class="fa-solid fa-table-cells" style="color:var(--gold);"></i> दानदाताओ का संपूर्ण विवरण
         </h3>
         <p style="margin:2px 0 0;font-size:12.5px;color:var(--text-secondary);">Google Sheet से लाइव संकलित: नगर एवं ग्रामवार सहभागिता, दानदाता निर्देशिका व प्रेरक प्रसंग</p>
       </div>
@@ -2631,13 +2631,13 @@
     <!-- PRESTIGIOUS SEGMENTED NAVIGATION CONTROLS (1. VILLAGES, 2. SLABS, 3. DONORS, 4. DATES, 5. STORIES, 6. WORKS) -->
     <nav class="segmented-tabs-wrapper">
       <div class="segmented-tabs">
-        <!-- 1st Tab: Nagar/Gramwar Sahbhagita (Active by default) -->
-        <button class="seg-tab active" onclick="switchTab('villages', this)">
-          <i class="fa-solid fa-city"></i> <span>नगर / ग्रामवार सहभागिता</span> <span class="seg-badge" id="tabVillageBadge">-</span>
-        </button>
-        <!-- 2nd Tab: Slabs Bar Graph (Visual Distribution) -->
-        <button class="seg-tab" onclick="switchTab('slabs', this)">
+        <!-- 1st Tab (Leftmost & Active by default): Slabs Bar Graph -->
+        <button class="seg-tab active" onclick="switchTab('slabs', this)">
           <i class="fa-solid fa-chart-simple"></i> <span>राशि स्लैब ग्राफ़</span> <span class="seg-badge" id="tabSlabsBadge">12 स्लैब्स</span>
+        </button>
+        <!-- 2nd Tab: Nagar/Gramwar Sahbhagita -->
+        <button class="seg-tab" onclick="switchTab('villages', this)">
+          <i class="fa-solid fa-city"></i> <span>नगर / ग्रामवार सहभागिता</span> <span class="seg-badge" id="tabVillageBadge">-</span>
         </button>
         <!-- 3rd Tab: Dandata Nirdeshika (Sorted Decreasing by Amount) -->
         <button class="seg-tab" onclick="switchTab('donors', this)">
@@ -2647,12 +2647,11 @@
         <button class="seg-tab" onclick="switchTab('dates', this)">
           <i class="fa-solid fa-calendar-days"></i> <span>दिनांक वार दान विवरण</span> <span class="seg-badge" id="tabDateBadge">-</span>
         </button>
-        <!-- 5th Tab: Expenses & Accounts -->
-        <!-- 6th Tab: Prerna dai Prasang -->
+        <!-- 5th Tab: Prerna dai Prasang -->
         <button class="seg-tab" onclick="switchTab('stories', this)">
           <i class="fa-solid fa-star"></i> <span>प्रेरणादायी प्रसंग</span> <span class="seg-badge">8</span>
         </button>
-        <!-- 4th Tab: Works & Budget -->
+        <!-- 6th Tab: Works & Budget -->
         <button class="seg-tab" onclick="switchTab('works', this)">
           <i class="fa-solid fa-compass-drafting"></i> <span>निर्माण कार्य व बजट</span>
         </button>
@@ -2660,7 +2659,7 @@
     </nav>
 
     <!-- ==================== TAB 1 (FIRST): VILLAGE TABLE (DEFAULT ACTIVE) ==================== -->
-    <div id="pane-villages" class="tab-pane active">
+    <div id="pane-villages" class="tab-pane">
       <div class="section-card">
         <div class="section-header-box">
           <div>
@@ -2704,7 +2703,7 @@
     </div>
 
     <!-- ==================== TAB: AMOUNT SLABS DISTRIBUTION (VISUAL HORIZONTAL BAR GRAPH) ==================== -->
-    <div id="pane-slabs" class="tab-pane">
+    <div id="pane-slabs" class="tab-pane active">
       <div class="section-card">
         <div class="section-header-box">
           <div>
@@ -3132,7 +3131,7 @@
           <div>
             <div style="font-size:12px;font-weight:700;color:var(--gold-dark);text-transform:uppercase;letter-spacing:0.5px;">॥ सत्यं शिवं सुन्दरम् • आधिकारिक वित्तीय लेखा ॥</div>
             <h2 style="font-size:22px;color:var(--teal);margin:4px 0 2px;display:flex;align-items:center;gap:10px;">
-              <i class="fa-solid fa-scale-balanced" style="color:var(--gold);"></i> निर्माण लेखा, बीजक एवं वित्तीय बहीखाता
+              <i class="fa-solid fa-scale-balanced" style="color:var(--gold);"></i> निर्माण लेखा, बिल एवं वित्तीय बहीखाता
             </h2>
             <p style="margin:0;font-size:13px;color:var(--text-secondary);">
               माँ नर्मदा कोटेश्वर तीर्थ घाट निर्माण के सभी प्रमाणित क्रय बिल, विक्रेता खाता-बही (Ledgers), चेक भुगतान एवं उपलब्ध वित्तीय कोष
@@ -5981,7 +5980,7 @@
       if (elSurp) elSurp.textContent = fmt(netSurplus);
 
       const elBilledSub = document.getElementById('accKpiBilledSub');
-      if (elBilledSub) elBilledSub.textContent = `${accountingInvoices.length} बीजक • 17 वेंडर`;
+      if (elBilledSub) elBilledSub.textContent = `${accountingInvoices.length} बिल • 17 वेंडर`;
 
       const elPaidSub = document.getElementById('accKpiPaidSub');
       if (elPaidSub) elPaidSub.textContent = `${accountingPayments.length} चेक व बैंक प्रविष्टियां`;
@@ -6219,7 +6218,7 @@
               <tr>
                 <th style="width:40px;">क्र.</th>
                 <th>दिनांक</th>
-                <th>संदर्भ क्र. (बीजक / चेक)</th>
+                <th>संदर्भ क्र. (बिल / चेक)</th>
                 <th>विवरण (Particulars)</th>
                 <th style="text-align:center;">प्रविष्टि प्रकार</th>
                 <th style="text-align:right;">बिल राशि (Cr)</th>
@@ -6329,7 +6328,7 @@
               <span style="font-size:14px;font-weight:800;color:var(--teal);display:flex;align-items:center;gap:7px;">
                 <i class="${icon}" style="color:var(--gold);"></i> ${h.name}
               </span>
-              <span class="badge" style="background:rgba(13,79,79,0.08);color:var(--teal);font-size:11px;font-weight:700;">${h.count} बीजक</span>
+              <span class="badge" style="background:rgba(13,79,79,0.08);color:var(--teal);font-size:11px;font-weight:700;">${h.count} बिल</span>
             </div>
             <div style="font-size:22px;font-weight:800;color:#C45A38;margin:12px 0 6px;">${fmt(h.total)}</div>
             <div style="display:flex;align-items:center;gap:8px;">
