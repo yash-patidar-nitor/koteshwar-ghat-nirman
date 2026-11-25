@@ -968,9 +968,15 @@
     }
     .search-input-wrap {
       position: relative;
-      flex: 1;
-      max-width: 380px;
-      min-width: 240px;
+      flex: 1.6;
+      min-width: 320px;
+      max-width: 100%;
+    }
+    .search-input-wrap input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px 14px 10px 38px !important;
+      font-size: 13.5px !important;
     }
     .search-input-wrap i {
       position: absolute;
@@ -2652,7 +2658,7 @@
 
         <!-- Village Search Toolbar -->
         <div class="directory-toolbar" style="margin-bottom:14px;">
-          <div class="search-input-wrap" style="flex:1;min-width:240px;">
+          <div class="search-input-wrap" style="flex:1.8;min-width:320px;">
             <i class="fa-solid fa-magnifying-glass"></i>
             <input type="text" id="villageSearchInput" class="search-field" placeholder="नगर या ग्राम का नाम खोजें (उदा. निसरपुर, कुक्षी, सिलकुआ...)" oninput="handleVillageSearch(this.value)">
           </div>
@@ -3017,7 +3023,7 @@
 
         <!-- Expenses Toolbar & Search -->
         <div class="directory-toolbar" style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-          <div class="search-input-wrap" style="flex:1;min-width:240px;">
+          <div class="search-input-wrap" style="flex:1.8;min-width:320px;">
             <i class="fa-solid fa-magnifying-glass"></i>
             <input type="text" id="expenseSearchInput" class="search-field" placeholder="वाउचर क्र., फर्म, मद या सामग्री से खोजें..." oninput="handleExpenseSearch(this.value)">
           </div>
@@ -3115,7 +3121,7 @@
               <i class="fa-solid fa-scale-balanced" style="color:var(--gold);"></i> निर्माण लेखा, बीजक एवं वित्तीय बहीखाता
             </h2>
             <p style="margin:0;font-size:13px;color:var(--text-secondary);">
-              माँ नर्मदा कोटेश्वर तीर्थ घाट निर्माण के सभी प्रमाणित क्रय बीजक, विक्रेता खाता-बही (Ledgers), चेक भुगतान एवं उपलब्ध वित्तीय कोष
+              माँ नर्मदा कोटेश्वर तीर्थ घाट निर्माण के सभी प्रमाणित क्रय बिल, विक्रेता खाता-बही (Ledgers), चेक भुगतान एवं उपलब्ध वित्तीय कोष
             </p>
           </div>
           <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
@@ -3131,9 +3137,9 @@
         <!-- 5-Card Financial Overview Strip -->
         <div class="acc-kpi-grid">
           <div class="acc-kpi-card" style="border-left:4px solid #C45A38;">
-            <div class="acc-kpi-title"><i class="fa-solid fa-file-invoice-dollar" style="color:#C45A38;"></i> कुल प्रमाणित व्यय बीजक</div>
+            <div class="acc-kpi-title"><i class="fa-solid fa-file-invoice-dollar" style="color:#C45A38;"></i> कुल प्रमाणित व्यय बिल</div>
             <div class="acc-kpi-val" id="accKpiTotalBilled" style="color:#C45A38;">₹49,57,298.85</div>
-            <div class="acc-kpi-sub" id="accKpiBilledSub">25 बीजक • 17 वेंडर</div>
+            <div class="acc-kpi-sub" id="accKpiBilledSub">25 बिल • 17 वेंडर</div>
           </div>
           <div class="acc-kpi-card" style="border-left:4px solid #2E7D32;">
             <div class="acc-kpi-title"><i class="fa-solid fa-money-bill-transfer" style="color:#2E7D32;"></i> कुल भुगतान चुकता (Paid)</div>
@@ -3159,27 +3165,31 @@
 
         <!-- Accounting Sub-Tabs Navigation -->
         <nav class="acc-tabs-wrapper">
-          <button class="acc-tab active" id="btnAccInvoices" onclick="switchAccountingTab('invoices', this)">
-            <i class="fa-solid fa-file-invoice"></i> <span>बीजक पंजी (Invoices Register)</span> <span class="acc-tab-badge" id="accTabInvoicesCount">25</span>
+          <!-- 1st Tab (Leftmost): Account Heads -->
+          <button class="acc-tab active" id="btnAccHeads" onclick="switchAccountingTab('heads', this)">
+            <i class="fa-solid fa-sitemap"></i> <span>मदवार व्यय खाता (Account Heads)</span> <span class="acc-tab-badge">8 मदें</span>
           </button>
+          <!-- 2nd Tab: Bills Register -->
+          <button class="acc-tab" id="btnAccInvoices" onclick="switchAccountingTab('invoices', this)">
+            <i class="fa-solid fa-file-invoice"></i> <span>बिल पंजी (Bills Register)</span> <span class="acc-tab-badge" id="accTabInvoicesCount">25 बिल</span>
+          </button>
+          <!-- 3rd Tab: Vendor Ledgers -->
           <button class="acc-tab" id="btnAccLedgers" onclick="switchAccountingTab('ledgers', this)">
             <i class="fa-solid fa-book-journal-whills"></i> <span>विक्रेता खाता बही (Vendor Ledgers)</span> <span class="acc-tab-badge">17 वेंडर</span>
           </button>
+          <!-- 4th Tab: Payments Register -->
           <button class="acc-tab" id="btnAccPayments" onclick="switchAccountingTab('payments', this)">
             <i class="fa-solid fa-money-check-dollar"></i> <span>भुगतान पंजी (Payments Book)</span> <span class="acc-tab-badge" id="accTabPaymentsCount">26 चेक</span>
-          </button>
-          <button class="acc-tab" id="btnAccHeads" onclick="switchAccountingTab('heads', this)">
-            <i class="fa-solid fa-sitemap"></i> <span>मदवार व्यय खाता (Account Heads)</span> <span class="acc-tab-badge">8 मदें</span>
           </button>
         </nav>
 
         <!-- SUB-PANE 1: INVOICES REGISTER -->
-        <div id="acc-pane-invoices" class="acc-sub-pane">
+        <div id="acc-pane-invoices" class="acc-sub-pane" style="display:none;">
           <!-- Invoices Toolbar -->
           <div class="directory-toolbar" style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-            <div class="search-input-wrap" style="flex:1;min-width:240px;">
+            <div class="search-input-wrap" style="flex:1.8;min-width:320px;">
               <i class="fa-solid fa-magnifying-glass search-icon"></i>
-              <input type="text" id="accInvoiceSearch" placeholder="बीजक क्र., विक्रेता (फर्म), मद या दिनांक खोजें..." oninput="handleAccountingSearch(this.value)" class="search-input" />
+              <input type="text" id="accInvoiceSearch" placeholder="बिल क्र., विक्रेता (फर्म), मद या दिनांक खोजें..." oninput="handleAccountingSearch(this.value)" class="search-input" />
             </div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
               <select id="accCategorySelect" onchange="handleAccountingCategoryFilter(this.value)" style="padding:8px 12px;border:1px solid var(--sandstone);border-radius:8px;font-family:inherit;font-size:12.5px;color:var(--text-primary);background:#fff;cursor:pointer;">
@@ -3213,7 +3223,7 @@
                   <th style="width:40px;">क्र.</th>
                   <th>भुगतान प्राप्तकर्ता (फर्म / वेंडर)</th>
                   <th>बिल दिनांक</th>
-                  <th>बीजक / वाउचर क्र.</th>
+                  <th>बिल / वाउचर क्र.</th>
                   <th>लेखा मद</th>
                   <th style="text-align:right;">कुल बिल राशि</th>
                   <th style="text-align:right;">भुगतान राशि</th>
@@ -3231,11 +3241,18 @@
 
         <!-- SUB-PANE 2: VENDOR LEDGERS -->
         <div id="acc-pane-ledgers" class="acc-sub-pane" style="display:none;">
-          <div style="margin-bottom:12px;">
-            <div style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:8px;">
-              <i class="fa-solid fa-users-viewfinder" style="color:var(--gold);"></i> विक्रेता / फर्म खाता बही चुनें:
+          <div style="background:var(--sandstone-light);border:1px solid var(--sandstone);border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;">
+            <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:300px;">
+              <label for="accVendorDropdownSelect" style="font-size:13.5px;font-weight:700;color:var(--teal);white-space:nowrap;display:flex;align-items:center;gap:7px;">
+                <i class="fa-solid fa-building-user" style="color:var(--gold-dark);font-size:16px;"></i> विक्रेता / फर्म खाता बही चुनें:
+              </label>
+              <div style="position:relative;flex:1;min-width:260px;max-width:540px;">
+                <select id="accVendorDropdownSelect" onchange="selectVendorLedger(this.value)" style="width:100%;padding:9px 14px;border:2px solid var(--teal);border-radius:8px;font-family:inherit;font-size:13.5px;font-weight:700;color:var(--teal);background:#ffffff;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.06);outline:none;">
+                  <!-- Options populated via JS -->
+                </select>
+              </div>
             </div>
-            <div class="vendor-selector-strip" id="accVendorSelectorStrip">
+            <div id="accVendorDropdownBalanceBadge">
               <!-- Injected via JS -->
             </div>
           </div>
@@ -3248,7 +3265,7 @@
         <!-- SUB-PANE 3: PAYMENTS REGISTER (BANK & CASH BOOK) -->
         <div id="acc-pane-payments" class="acc-sub-pane" style="display:none;">
           <div class="directory-toolbar" style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-            <div class="search-input-wrap" style="flex:1;min-width:240px;">
+            <div class="search-input-wrap" style="flex:1.8;min-width:320px;">
               <i class="fa-solid fa-magnifying-glass search-icon"></i>
               <input type="text" id="accPaymentSearch" placeholder="वेंडर, चेक क्र., माध्यम या दिनांक खोजें..." oninput="handlePaymentSearch(this.value)" class="search-input" />
             </div>
@@ -3268,7 +3285,7 @@
                   <th>प्राप्तकर्ता फर्म (वेंडर)</th>
                   <th>माध्यम</th>
                   <th>चेक / संदर्भ क्र.</th>
-                  <th>संबंधित बीजक</th>
+                  <th>संबंधित बिल</th>
                   <th>लेखा मद</th>
                   <th style="text-align:right;">भुगतान राशि</th>
                   <th style="text-align:center;">निकासी स्थिति</th>
@@ -3282,7 +3299,7 @@
         </div>
 
         <!-- SUB-PANE 4: ACCOUNT HEADS (TRIAL BALANCE BREAKDOWN) -->
-        <div id="acc-pane-heads" class="acc-sub-pane" style="display:none;">
+        <div id="acc-pane-heads" class="acc-sub-pane" style="display:block;">
           <div id="accHeadsContainer" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:16px;">
             <!-- Injected via JS -->
           </div>
@@ -5857,7 +5874,7 @@
 ];
 
     let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
-    let currentAccountingTab = 'invoices'; // 'invoices', 'ledgers', 'payments', 'heads'
+    let currentAccountingTab = 'heads'; // 'invoices', 'ledgers', 'payments', 'heads'
     let currentAccInvoiceSearch = '';
     let currentAccCategoryFilter = 'all';
     let currentAccStatusFilter = 'all';
@@ -5912,6 +5929,7 @@
       else if (tabId === 'ledgers') renderVendorLedgersView(selectedVendorName);
       else if (tabId === 'payments') renderPaymentsTable();
       else if (tabId === 'heads') renderAccountHeadsView();
+      else if (tabId === 'invoices') renderAccountingInvoicesTable();
     }
 
     function renderAccountingSection() {
@@ -5990,7 +6008,7 @@
       if (elBadge) elBadge.textContent = fmt(filteredSum);
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:28px;color:var(--text-muted);">कोई बीजक प्रविष्टि नहीं मिली।</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:28px;color:var(--text-muted);">कोई बिल प्रविष्टि नहीं मिली।</td></tr>`;
         return;
       }
 
@@ -6058,8 +6076,8 @@
         vendorMap[v].transactions.push({
           date: inv.date,
           ref: inv.voucherNo,
-          particulars: `सामग्री आपूर्ति / बीजक (${inv.category})`,
-          type: 'बीजक (Cr)',
+          particulars: `सामग्री आपूर्ति / बिल (${inv.category})`,
+          type: 'बिल (Cr)',
           billAmt: inv.amount,
           paidAmt: 0
         });
@@ -6094,20 +6112,29 @@
       }
       selectedVendorName = targetVendor;
 
-      // Render vendor pills
-      selectorBox.innerHTML = vendorNames.map(name => {
-        const v = vendorMap[name];
-        const isActive = name === targetVendor;
-        const badgeClass = v.due > 0 ? 'vendor-pill-due' : 'vendor-pill-paid';
-        const badgeText = v.due > 0 ? `देय: ${fmt(v.due)}` : 'पूर्ण चुकता';
+            // Render vendor dropdown options
+      const dropdownSelect = document.getElementById('accVendorDropdownSelect');
+      const balanceBadge = document.getElementById('accVendorDropdownBalanceBadge');
 
-        return `
-          <button class="vendor-pill ${isActive ? 'active' : ''}" onclick="selectVendorLedger('${name}')">
-            <span>${name}</span>
-            <span class="${badgeClass}">${badgeText}</span>
-          </button>
+      if (dropdownSelect) {
+        dropdownSelect.innerHTML = vendorNames.map(name => {
+          const v = vendorMap[name];
+          const isSel = name === targetVendor ? 'selected' : '';
+          const dueStatus = v.due > 0 ? `देय शेष: ${fmt(v.due)}` : 'पूर्ण चुकता';
+          return `<option value="${name}" ${isSel}>${name} (${dueStatus})</option>`;
+        }).join('');
+        dropdownSelect.value = targetVendor;
+      }
+
+      if (balanceBadge && cur) {
+        const isDue = cur.due > 0;
+        balanceBadge.innerHTML = `
+          <div style="background:${isDue ? 'rgba(217,119,6,0.12)' : 'rgba(46,125,50,0.12)'};border:1px solid ${isDue ? 'rgba(217,119,6,0.3)' : 'rgba(46,125,50,0.3)'};padding:6px 14px;border-radius:8px;display:inline-flex;align-items:center;gap:8px;">
+            <span style="font-size:12px;color:var(--text-muted);font-weight:600;">खाता स्थिति:</span>
+            <strong style="color:${isDue ? '#D97706' : '#2E7D32'};font-size:13.5px;">${isDue ? 'देय शेष: ' + fmt(cur.due) : '✓ खाता पूर्ण चुकता'}</strong>
+          </div>
         `;
-      }).join('');
+      }
 
       // Render Selected Vendor Ledger
       const cur = vendorMap[targetVendor];
@@ -6145,7 +6172,7 @@
           </div>
           <div style="display:flex;gap:12px;flex-wrap:wrap;">
             <div style="background:#fff;padding:8px 14px;border-radius:8px;border:1px solid var(--sandstone);text-align:right;">
-              <div style="font-size:11px;color:var(--text-muted);font-weight:700;">कुल बीजक राशि</div>
+              <div style="font-size:11px;color:var(--text-muted);font-weight:700;">कुल बिल राशि</div>
               <div style="font-size:15px;font-weight:800;color:#C45A38;">${fmt(cur.billed)}</div>
             </div>
             <div style="background:#fff;padding:8px 14px;border-radius:8px;border:1px solid var(--sandstone);text-align:right;">
@@ -6167,7 +6194,7 @@
                 <th>संदर्भ क्र. (बीजक / चेक)</th>
                 <th>विवरण (Particulars)</th>
                 <th style="text-align:center;">प्रविष्टि प्रकार</th>
-                <th style="text-align:right;">बीजक राशि (Cr)</th>
+                <th style="text-align:right;">बिल राशि (Cr)</th>
                 <th style="text-align:right;">भुगतान राशि (Dr)</th>
                 <th style="text-align:right;">संचयी देय शेष (Balance)</th>
               </tr>
@@ -6342,7 +6369,7 @@
 
       if (tbody) {
         if (items.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-muted);">इस बीजक के लिए विस्तृत सामग्री सूची दर्ज नहीं है।</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-muted);">इस बिल के लिए विस्तृत सामग्री सूची दर्ज नहीं है।</td></tr>`;
         } else {
           tbody.innerHTML = items.map((itm, i) => {
             const desc = itm.description || itm.name || '-';
