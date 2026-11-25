@@ -2316,11 +2316,15 @@
         <button class="seg-tab" onclick="switchTab('donors', this)">
           <i class="fa-solid fa-users"></i> <span>दानदाता निर्देशिका</span> <span class="seg-badge" id="tabDonorBadge">-</span>
         </button>
-        <!-- 3rd Tab: Date-wise Donations -->
+        <!-- 4th Tab: Date-wise Donations -->
         <button class="seg-tab" onclick="switchTab('dates', this)">
           <i class="fa-solid fa-calendar-days"></i> <span>दिनांक वार दान विवरण</span> <span class="seg-badge" id="tabDateBadge">-</span>
         </button>
-        <!-- 4th Tab: Prerna dai Prasang -->
+        <!-- 5th Tab: Expenses & Accounts -->
+        <button class="seg-tab" onclick="switchTab('expenses', this)">
+          <i class="fa-solid fa-receipt"></i> <span>व्यय एवं वित्तीय लेखा</span> <span class="seg-badge" id="tabExpensesBadge" style="background:rgba(196, 90, 56, 0.15);color:#C45A38;">1 वाउचर</span>
+        </button>
+        <!-- 6th Tab: Prerna dai Prasang -->
         <button class="seg-tab" onclick="switchTab('stories', this)">
           <i class="fa-solid fa-star"></i> <span>प्रेरणादायी प्रसंग</span> <span class="seg-badge">8</span>
         </button>
@@ -2663,6 +2667,79 @@
 
         <div class="stories-grid" id="storiesGridContainer">
           <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 5: EXPENSES & FINANCIAL ACCOUNTS ==================== -->
+    <div id="pane-expenses" class="tab-pane">
+      <div class="section-card">
+        <div class="section-header-box">
+          <div>
+            <h2><i class="fa-solid fa-receipt" style="color:var(--gold);"></i> निर्माण व्यय एवं वित्तीय लेखा</h2>
+            <p>माँ नर्मदा कोटेश्वर तीर्थ घाट निर्माण के सभी प्रमाणित वाउचर, सामग्री बिल एवं वित्तीय स्थिति का आधिकारिक ब्यौरा</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <span style="font-size:12.5px;color:var(--text-muted);background:var(--sandstone-light);padding:5px 12px;border-radius:6px;border:1px solid var(--sandstone);">
+              कुल व्यय वाउचर: <strong id="expVoucherCountBadge" style="color:var(--teal); font-weight:700;">1</strong>
+            </span>
+          </div>
+        </div>
+
+        <!-- Financial Balance Summary Strip -->
+        <div class="slab-kpi-grid" style="margin-bottom:20px;">
+          <div class="slab-kpi-card" style="border-left:4px solid var(--sage);">
+            <div class="slab-kpi-title"><i class="fa-solid fa-circle-check" style="color:var(--sage);"></i> कुल प्राप्त जनसहयोग</div>
+            <div class="slab-kpi-val" id="expTotalReceivedCard" style="color:var(--teal);">₹0</div>
+            <div class="slab-kpi-sub" id="expTotalReceivedSub">जमा जनसहयोग राशि</div>
+          </div>
+          <div class="slab-kpi-card" style="border-left:4px solid #C45A38;">
+            <div class="slab-kpi-title"><i class="fa-solid fa-arrow-trend-down" style="color:#C45A38;"></i> कुल निर्माण व्यय (खर्च)</div>
+            <div class="slab-kpi-val" id="expTotalExpensesCard" style="color:#C45A38;">₹14,285</div>
+            <div class="slab-kpi-sub" id="expTotalExpensesSub">1 सत्यापित वाउचर</div>
+          </div>
+          <div class="slab-kpi-card" style="border-left:4px solid var(--gold);">
+            <div class="slab-kpi-title"><i class="fa-solid fa-vault" style="color:var(--gold-dark);"></i> शुद्ध उपलब्ध कोष शेष (Net Balance)</div>
+            <div class="slab-kpi-val" id="expNetBalanceCard" style="color:var(--gold-dark);">₹0</div>
+            <div class="slab-kpi-sub">बैंक व नकद कोष में उपलब्ध</div>
+          </div>
+        </div>
+
+        <!-- Expenses Toolbar & Search -->
+        <div class="directory-toolbar" style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <div class="search-input-wrap" style="flex:1;min-width:240px;">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="expenseSearchInput" class="search-field" placeholder="वाउचर क्र., फर्म, मद या सामग्री से खोजें..." oninput="handleExpenseSearch(this.value)">
+          </div>
+          <div style="font-size:12px;color:var(--text-muted);white-space:nowrap;padding:4px 10px;background:var(--sandstone-light);border-radius:6px;border:1px solid var(--sandstone);">
+            फ़िल्टर व्यय राशि: <strong id="expFilteredSumBadge" style="color:#C45A38;">₹14,285</strong>
+          </div>
+        </div>
+
+        <!-- Category Filter Pills -->
+        <div class="pills-filter-row" id="expenseCategoryPills" style="margin-bottom:14px;">
+          <!-- Dynamically populated categories -->
+        </div>
+
+        <!-- Vouchers Data Table -->
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width:48px;">क्र.</th>
+                <th>दिनांक</th>
+                <th>वाउचर / बिल क्र.</th>
+                <th>मद / सामग्री / कार्य विवरण</th>
+                <th>व्यय श्रेणी</th>
+                <th>भुगतान प्राप्तकर्ता (फर्म / वेंडर)</th>
+                <th style="text-align:right;">व्यय राशि</th>
+                <th style="text-align:center;">स्थिति</th>
+              </tr>
+            </thead>
+            <tbody id="expenseTableBody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -3144,11 +3221,12 @@
         const getLiveGVizUrl = (tab) => `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(tab)}&_cb=${ts}`;
 
         // Concurrently fetch baseline CSV stream, Live Declaration, Collections, and Live Collection (Zero-Cache)
-        const [csvSettled, liveDeclSettled, bulkCollSettled, liveCollSettled] = await Promise.allSettled([
+        const [csvSettled, liveDeclSettled, bulkCollSettled, liveCollSettled, expensesSettled] = await Promise.allSettled([
           fetch(`${CSV_DECL_URL}&_cb=${ts}`, { cache: 'no-store' }),
           fetch(getLiveGVizUrl('Live Declaration'), { cache: 'no-store' }),
           fetch(getLiveGVizUrl('Collections'), { cache: 'no-store' }),
-          fetch(getLiveGVizUrl('Live Collection'), { cache: 'no-store' })
+          fetch(getLiveGVizUrl('Live Collection'), { cache: 'no-store' }),
+          fetch(getLiveGVizUrl('Expenses'), { cache: 'no-store' })
         ]);
 
         // 1. PRIMARY FETCH: Process Google Sheets Raw CSV Stream (100% immune to UI filters)
@@ -3470,6 +3548,50 @@
           }
         }
 
+        // 6. EXPENSES FETCH: Process Expenses tab from Google Sheet
+        if (expensesSettled.status === 'fulfilled' && expensesSettled.value.ok) {
+          try {
+            const rawExp = await expensesSettled.value.text();
+            const matchExp = rawExp.match(/setResponse\(([\s\S]*)\);?/);
+            if (matchExp) {
+              const expData = JSON.parse(matchExp[1]);
+              const expRows = expData.table && expData.table.rows ? expData.table.rows : [];
+              const parsedExp = [];
+              for (let i = 0; i < expRows.length; i++) {
+                const ec = expRows[i].c;
+                if (!ec || ec.length < 5) continue;
+                const eSno = ec[0] && ec[0].v !== null ? ec[0].v : (i + 1);
+                const eDate = ec[1] ? (ec[1].f || ec[1].v || "") : "";
+                const eDesc = ec[2] && ec[2].v !== null ? String(ec[2].v).trim() : "";
+                const eCat = ec[3] && ec[3].v !== null ? String(ec[3].v).trim() : "विविध";
+                const eAmt = parseFloat(String(ec[4] && ec[4].v !== null ? ec[4].v : "0").replace(/[^0-9.]/g, '')) || 0;
+                const ePayee = ec[5] && ec[5].v !== null ? String(ec[5].v).trim() : "";
+                const eVouch = ec[6] && ec[6].v !== null ? String(ec[6].v).trim() : "-";
+                const eStat = ec[7] && ec[7].v !== null ? String(ec[7].v).trim() : "सत्यापित";
+
+                if (String(eSno).includes('क्र.') || eDesc.includes('कार्य विवरण')) continue;
+                if (!eDesc && eAmt <= 0) continue;
+
+                parsedExp.push({
+                  sno: eSno,
+                  date: eDate,
+                  itemDescription: eDesc,
+                  category: eCat,
+                  amount: eAmt,
+                  payee: ePayee,
+                  voucherNo: eVouch,
+                  status: eStat
+                });
+              }
+              if (parsedExp.length > 0) {
+                expenses = parsedExp;
+              }
+            }
+          } catch (e) {
+            console.warn("Expenses process notice:", e);
+          }
+        }
+
         // 5. Apply local edits from Karyakarta portal (if edited on this device)
         try {
           const editedDecls = JSON.parse(localStorage.getItem('koteshwar_edited_declarations') || '{}');
@@ -3631,6 +3753,7 @@
       renderDonorTable();
       renderDateWiseTab();
       renderSlabsDistribution();
+      renderExpensesTab();
     }
 
     /* ============================================================
@@ -4212,6 +4335,122 @@
       if (banner) banner.style.display = 'none';
       renderDonorTable();
       renderSlabsDistribution();
+    }
+
+    /* ============================================================
+       DYNAMIC EXPENSES & FINANCIAL ACCOUNTS (VOUCHERS & AUDIT)
+       ============================================================ */
+    let expenses = [
+      {
+        sno: 1,
+        date: "2026-07-29",
+        itemDescription: "नल-जल पाइपलाइन सामग्री (HDPE पाइप 1\" 650 फीट, कपलर 110/140mm, ब्रास वाल्व, सॉल्वेंट, गार्डन पाइप, फिटिंग्स)",
+        category: "जल-व्यवस्था एवं नल-जल",
+        amount: 14285,
+        payee: "बुरहानी बिल्डिंग मटेरियल, निसरपुर",
+        voucherNo: "बिल क्र. 1070",
+        status: "सत्यापित",
+        gstin: "23BBWPA9809F1ZH",
+        taxableAmount: 12106,
+        taxAmount: 2179
+      }
+    ];
+
+    let currentExpenseCategoryFilter = 'all';
+    let currentExpenseSearch = '';
+
+    function handleExpenseSearch(val) {
+      currentExpenseSearch = (val || '').trim().toLowerCase();
+      renderExpenseTable();
+    }
+
+    function setExpenseCategoryFilter(cat, btn) {
+      currentExpenseCategoryFilter = cat;
+      document.querySelectorAll('#expenseCategoryPills .v-filter-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderExpenseTable();
+    }
+
+    function renderExpensesTab() {
+      const totalExp = expenses.reduce((s, e) => s + (Number(e.amount) || 0), 0);
+      const totalRec = declarations.reduce((s, d) => s + (Number(d.deposited) || 0), 0);
+      const netBal = Math.max(0, totalRec - totalExp);
+
+      const elRec = document.getElementById('expTotalReceivedCard');
+      const elExp = document.getElementById('expTotalExpensesCard');
+      const elBal = document.getElementById('expNetBalanceCard');
+      const elBadge = document.getElementById('tabExpensesBadge');
+      const elVBadge = document.getElementById('expVoucherCountBadge');
+
+      if (elRec) elRec.textContent = fmt(totalRec);
+      if (elExp) elExp.textContent = fmt(totalExp);
+      if (elBal) elBal.textContent = fmt(netBal);
+      if (elBadge) elBadge.textContent = `${expenses.length} वाउचर`;
+      if (elVBadge) elVBadge.textContent = `${expenses.length}`;
+
+      // Render category filter pills
+      const cats = {};
+      expenses.forEach(e => {
+        const c = e.category || 'विविध';
+        cats[c] = (cats[c] || 0) + 1;
+      });
+
+      const pillsBox = document.getElementById('expenseCategoryPills');
+      if (pillsBox) {
+        let phtml = `<button class="v-filter-btn ${currentExpenseCategoryFilter === 'all' ? 'active' : ''}" onclick="setExpenseCategoryFilter('all', this)"><i class="fa-solid fa-list"></i> सभी श्रेणियां (${expenses.length})</button>`;
+        Object.keys(cats).forEach(cat => {
+          phtml += `<button class="v-filter-btn ${currentExpenseCategoryFilter === cat ? 'active' : ''}" onclick="setExpenseCategoryFilter('${cat}', this)"><i class="fa-solid fa-tag"></i> ${cat} (${cats[cat]})</button>`;
+        });
+        pillsBox.innerHTML = phtml;
+      }
+
+      renderExpenseTable();
+    }
+
+    function renderExpenseTable() {
+      const tbody = document.getElementById('expenseTableBody');
+      if (!tbody) return;
+
+      const filtered = expenses.filter(e => {
+        const matchesCat = (currentExpenseCategoryFilter === 'all') || e.category === currentExpenseCategoryFilter;
+        const matchesSearch = !currentExpenseSearch ||
+          (e.itemDescription && e.itemDescription.toLowerCase().includes(currentExpenseSearch)) ||
+          (e.payee && e.payee.toLowerCase().includes(currentExpenseSearch)) ||
+          (e.voucherNo && e.voucherNo.toLowerCase().includes(currentExpenseSearch)) ||
+          (e.date && e.date.includes(currentExpenseSearch)) ||
+          (e.category && e.category.toLowerCase().includes(currentExpenseSearch));
+        return matchesCat && matchesSearch;
+      });
+
+      const filteredSum = filtered.reduce((s, e) => s + (Number(e.amount) || 0), 0);
+      const elSumBadge = document.getElementById('expFilteredSumBadge');
+      if (elSumBadge) elSumBadge.textContent = fmt(filteredSum);
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:28px;color:var(--text-muted);">कोई व्यय वाउचर प्रविष्टि नहीं मिली।</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map((e, idx) => {
+        return `
+          <tr>
+            <td style="font-weight:700;color:var(--text-secondary);">${e.sno || (idx + 1)}</td>
+            <td style="white-space:nowrap;font-size:12.5px;color:var(--text-secondary);"><i class="fa-regular fa-calendar" style="color:var(--gold);margin-right:4px;"></i>${e.date || '-'}</td>
+            <td style="white-space:nowrap;font-weight:600;color:var(--teal);"><i class="fa-solid fa-hashtag" style="font-size:11px;opacity:0.6;margin-right:3px;"></i>${e.voucherNo || '-'}</td>
+            <td>
+              <div style="font-weight:600;color:var(--text-primary);">${e.itemDescription}</div>
+              ${e.taxableAmount ? `<div style="font-size:11px;color:var(--text-muted);margin-top:2px;">कर योग्य: ${fmt(e.taxableAmount)} + GST: ${fmt(e.taxAmount)}</div>` : ''}
+            </td>
+            <td><span class="badge badge-village" style="background:rgba(209,154,80,0.12);color:var(--gold-dark);font-size:11.5px;font-weight:600;"><i class="fa-solid fa-tag" style="font-size:10px;margin-right:4px;"></i>${e.category}</span></td>
+            <td>
+              <div style="font-weight:600;color:var(--text-primary);">${e.payee}</div>
+              ${e.gstin ? `<div style="font-size:10.5px;color:var(--text-muted);font-family:monospace;">GSTIN: ${e.gstin}</div>` : ''}
+            </td>
+            <td style="text-align:right;font-weight:800;color:#C45A38;font-size:14.5px;">${fmt(e.amount)}</td>
+            <td style="text-align:center;"><span class="badge badge-received" style="font-size:11px;"><i class="fa-solid fa-check"></i> ${e.status || 'सत्यापित'}</span></td>
+          </tr>
+        `;
+      }).join('');
     }
 
     /* ============================================================

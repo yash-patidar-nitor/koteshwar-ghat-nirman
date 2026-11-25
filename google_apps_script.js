@@ -450,6 +450,49 @@ function doPost(e) {
         receiptNo: item.receiptNo
       })).setMimeType(ContentService.MimeType.JSON);
 
+    } else if (action === "addExpense") {
+      // 7. EXPENSES TAB (व्यय प्रविष्टि)
+      var expSheet = getOrCreateSheet(ss, "Expenses", [
+        "क्र.", "दिनांक", "मद / कार्य विवरण", "श्रेणी", "व्यय राशि", "भुगतान प्राप्तकर्ता", "वाउचर क्र.", "स्थिति"
+      ], "#8B263E");
+
+      var nextExpSno = 1;
+      if (expSheet.getLastRow() > 1) {
+        var expVals = expSheet.getRange(2, 1, expSheet.getLastRow() - 1, 1).getValues();
+        for (var eIdx = 0; eIdx < expVals.length; eIdx++) {
+          var ev = parseInt(expVals[eIdx][0], 10);
+          if (!isNaN(ev) && ev >= nextExpSno) nextExpSno = ev + 1;
+        }
+      }
+
+      var expRow = [
+        item.sno || nextExpSno,
+        item.date || Utilities.formatDate(new Date(), Session.getScriptTimeZone() || "GMT+5:30", "yyyy-MM-dd"),
+        item.itemDescription || item.description || "",
+        item.category || "विविध",
+        Number(item.amount) || 0,
+        item.payee || item.vendor || "",
+        item.voucherNo || item.invoiceNo || "-",
+        item.status || "सत्यापित"
+      ];
+
+      expSheet.appendRow(expRow);
+
+      recordAuditLog(
+        ss,
+        "नया व्यय",
+        "वाउचर क्र.: " + (item.voucherNo || "-") + " | " + (item.payee || "") + " | " + (item.itemDescription || ""),
+        Number(item.amount) || 0,
+        item.karyakarta || "अधिकृत व्यवस्थापक"
+      );
+
+      return ContentService.createTextOutput(JSON.stringify({
+        status: "success",
+        action: "addExpense",
+        sno: expRow[0],
+        message: "व्यय वाउचर सफलतापूर्वक दर्ज किया गया।"
+      })).setMimeType(ContentService.MimeType.JSON);
+
     } else if (action === "saveAiConfig") {
       // 7. SAVE AI CONFIG (PERSISTED IN SCRIPT PROPERTIES & '_Config' SHEET ACROSS ALL SESSIONS)
       var props = PropertiesService.getScriptProperties();
