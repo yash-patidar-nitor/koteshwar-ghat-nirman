@@ -382,6 +382,248 @@
       border-radius: 3px;
     }
 
+    
+    /* ---------- PRIMARY MODULE SWITCHER ---------- */
+    .module-switcher-container {
+      margin: 18px 0 24px;
+      display: flex;
+      justify-content: center;
+    }
+    .module-switcher {
+      display: flex;
+      background: var(--sandstone-light);
+      padding: 6px;
+      border-radius: 14px;
+      border: 1px solid var(--sandstone);
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      max-width: 780px;
+      width: 100%;
+    }
+    .module-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 12px 18px;
+      border: none;
+      background: transparent;
+      border-radius: 10px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      color: var(--text-secondary);
+      text-align: left;
+    }
+    .module-btn:hover {
+      background: rgba(255,255,255,0.7);
+      color: var(--teal);
+    }
+    .module-btn.active {
+      background: #ffffff;
+      color: var(--teal);
+      box-shadow: 0 4px 12px rgba(13, 79, 79, 0.12);
+      font-weight: 700;
+    }
+    .module-btn i {
+      font-size: 20px;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+    .module-btn.active i {
+      color: var(--teal);
+    }
+    .module-btn-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .module-title {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .module-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .module-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+      background: rgba(13,79,79,0.08);
+      color: var(--teal);
+      white-space: nowrap;
+      margin-left: auto;
+    }
+
+    /* ---------- ACCOUNTING SECTION STYLES ---------- */
+    .acc-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    .acc-kpi-card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 16px 18px;
+      border: 1px solid var(--sandstone);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    .acc-kpi-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .acc-kpi-val {
+      font-size: 22px;
+      font-weight: 800;
+      margin: 8px 0 2px;
+      letter-spacing: -0.3px;
+    }
+    .acc-kpi-sub {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+    }
+
+    .acc-tabs-wrapper {
+      display: flex;
+      gap: 8px;
+      border-bottom: 2px solid var(--sandstone);
+      margin-bottom: 18px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .acc-tabs-wrapper::-webkit-scrollbar { display: none; }
+    .acc-tab {
+      padding: 10px 18px;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .acc-tab:hover {
+      color: var(--teal);
+    }
+    .acc-tab.active {
+      color: var(--teal);
+      border-bottom-color: var(--teal);
+      font-weight: 700;
+    }
+    .acc-tab-badge {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 12px;
+      background: var(--sandstone-light);
+      color: var(--text-secondary);
+    }
+    .acc-tab.active .acc-tab-badge {
+      background: rgba(13,79,79,0.12);
+      color: var(--teal);
+    }
+
+    /* Vendor Ledger Styles */
+    .vendor-selector-strip {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 4px 2px 14px;
+      scrollbar-width: thin;
+      margin-bottom: 16px;
+    }
+    .vendor-pill {
+      background: #ffffff;
+      border: 1px solid var(--sandstone);
+      padding: 8px 14px;
+      border-radius: 9px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .vendor-pill:hover {
+      border-color: var(--teal);
+      color: var(--teal);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+    .vendor-pill.active {
+      background: var(--teal);
+      border-color: var(--teal);
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(13,79,79,0.2);
+    }
+    .vendor-pill-due {
+      font-size: 10.5px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      background: rgba(196,90,56,0.14);
+      color: #C45A38;
+      font-weight: 700;
+    }
+    .vendor-pill.active .vendor-pill-due {
+      background: rgba(255,255,255,0.25);
+      color: #ffffff;
+    }
+    .vendor-pill-paid {
+      font-size: 10.5px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      background: rgba(46,125,50,0.12);
+      color: #2E7D32;
+      font-weight: 700;
+    }
+    .vendor-pill.active .vendor-pill-paid {
+      background: rgba(255,255,255,0.25);
+      color: #ffffff;
+    }
+
+    .ledger-card {
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid var(--sandstone);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+    .ledger-header {
+      background: linear-gradient(135deg, rgba(13,79,79,0.05) 0%, rgba(209,154,80,0.08) 100%);
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--sandstone);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
     /* ---------- SEGMENTED TAB CONTROLS ---------- */
     .segmented-tabs-wrapper {
       margin-bottom: 22px;
@@ -2386,9 +2628,6 @@
           <i class="fa-solid fa-calendar-days"></i> <span>दिनांक वार दान विवरण</span> <span class="seg-badge" id="tabDateBadge">-</span>
         </button>
         <!-- 5th Tab: Expenses & Accounts -->
-        <button class="seg-tab" onclick="switchTab('expenses', this)">
-          <i class="fa-solid fa-receipt"></i> <span>व्यय एवं वित्तीय लेखा</span> <span class="seg-badge" id="tabExpensesBadge" style="background:rgba(196, 90, 56, 0.15);color:#C45A38;">1 वाउचर</span>
-        </button>
         <!-- 6th Tab: Prerna dai Prasang -->
         <button class="seg-tab" onclick="switchTab('stories', this)">
           <i class="fa-solid fa-star"></i> <span>प्रेरणादायी प्रसंग</span> <span class="seg-badge">8</span>
@@ -2862,6 +3101,197 @@
     </div>
 
     <!-- ==================== 4. TRANSPARENCY & DATA SOURCE FOOTER (RELOCATED FOR MOBILE OPTIMIZATION) ==================== -->
+    
+    </div> <!-- END #section-campaign -->
+
+    <!-- ==================== MODULE 2: STANDALONE ACCOUNTING & LEDGER SYSTEM ==================== -->
+    <section id="section-accounting" class="main-module-section" style="display:none;margin-top:10px;">
+      <div class="section-card" style="box-shadow:0 4px 20px rgba(0,0,0,0.06);border:1px solid var(--sandstone);">
+        <!-- Accounting Section Header -->
+        <div class="section-header-box" style="margin-bottom:20px;border-bottom:1px solid var(--sandstone);padding-bottom:16px;">
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--gold-dark);text-transform:uppercase;letter-spacing:0.5px;">॥ सत्यं शिवं सुन्दरम् • आधिकारिक वित्तीय लेखा ॥</div>
+            <h2 style="font-size:22px;color:var(--teal);margin:4px 0 2px;display:flex;align-items:center;gap:10px;">
+              <i class="fa-solid fa-scale-balanced" style="color:var(--gold);"></i> निर्माण लेखा, बीजक एवं वित्तीय बहीखाता
+            </h2>
+            <p style="margin:0;font-size:13px;color:var(--text-secondary);">
+              माँ नर्मदा कोटेश्वर तीर्थ घाट निर्माण के सभी प्रमाणित क्रय बीजक, विक्रेता खाता-बही (Ledgers), चेक भुगतान एवं उपलब्ध वित्तीय कोष
+            </p>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <button onclick="refreshAccountingFromSheet(this)" class="btn btn-sm" style="background:var(--teal);color:#fff;border:none;padding:7px 16px;border-radius:8px;font-size:12.5px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:7px;box-shadow:0 2px 6px rgba(0,0,0,0.12);transition:all 0.2s;" title="Google Sheet से नवीनतम व्यय व भुगतान डेटा सिंक करें">
+              <i class="fa-solid fa-arrows-rotate" id="accSyncSpinIcon"></i> <span>Google Sheet सिंक करें</span>
+            </button>
+            <span style="font-size:12px;color:var(--text-muted);background:var(--sandstone-light);padding:6px 12px;border-radius:8px;border:1px solid var(--sandstone);">
+              सिंक स्थिति: <strong id="accLastSyncTime" style="color:var(--teal);font-weight:700;">लाइव</strong>
+            </span>
+          </div>
+        </div>
+
+        <!-- 5-Card Financial Overview Strip -->
+        <div class="acc-kpi-grid">
+          <div class="acc-kpi-card" style="border-left:4px solid #C45A38;">
+            <div class="acc-kpi-title"><i class="fa-solid fa-file-invoice-dollar" style="color:#C45A38;"></i> कुल प्रमाणित व्यय बीजक</div>
+            <div class="acc-kpi-val" id="accKpiTotalBilled" style="color:#C45A38;">₹49,57,298.85</div>
+            <div class="acc-kpi-sub" id="accKpiBilledSub">25 बीजक • 17 वेंडर</div>
+          </div>
+          <div class="acc-kpi-card" style="border-left:4px solid #2E7D32;">
+            <div class="acc-kpi-title"><i class="fa-solid fa-money-bill-transfer" style="color:#2E7D32;"></i> कुल भुगतान चुकता (Paid)</div>
+            <div class="acc-kpi-val" id="accKpiTotalPaid" style="color:#2E7D32;">₹47,72,618.30</div>
+            <div class="acc-kpi-sub" id="accKpiPaidSub">26 चेक व बैंक प्रविष्टियां</div>
+          </div>
+          <div class="acc-kpi-card" style="border-left:4px solid #D97706;">
+            <div class="acc-kpi-title"><i class="fa-solid fa-hourglass-half" style="color:#D97706;"></i> कुल शेष देयता (Due)</div>
+            <div class="acc-kpi-val" id="accKpiTotalDue" style="color:#D97706;">₹1,84,680.55</div>
+            <div class="acc-kpi-sub" id="accKpiDueSub">वेंडरों को देय शेष राशि</div>
+          </div>
+          <div class="acc-kpi-card" style="border-left:4px solid var(--teal);">
+            <div class="acc-kpi-title"><i class="fa-solid fa-hand-holding-heart" style="color:var(--teal);"></i> कुल प्राप्त जनसहयोग</div>
+            <div class="acc-kpi-val" id="accKpiTotalReceived" style="color:var(--teal);">₹84,70,841</div>
+            <div class="acc-kpi-sub">दानदाताओं से जमा राशि</div>
+          </div>
+          <div class="acc-kpi-card" style="border-left:4px solid var(--gold-dark);">
+            <div class="acc-kpi-title"><i class="fa-solid fa-vault" style="color:var(--gold-dark);"></i> शुद्ध उपलब्ध कोष (Net Surplus)</div>
+            <div class="acc-kpi-val" id="accKpiNetSurplus" style="color:var(--gold-dark);">₹36,98,222.70</div>
+            <div class="acc-kpi-sub">बैंक व नकद कोष में शेष</div>
+          </div>
+        </div>
+
+        <!-- Accounting Sub-Tabs Navigation -->
+        <nav class="acc-tabs-wrapper">
+          <button class="acc-tab active" id="btnAccInvoices" onclick="switchAccountingTab('invoices', this)">
+            <i class="fa-solid fa-file-invoice"></i> <span>बीजक पंजी (Invoices Register)</span> <span class="acc-tab-badge" id="accTabInvoicesCount">25</span>
+          </button>
+          <button class="acc-tab" id="btnAccLedgers" onclick="switchAccountingTab('ledgers', this)">
+            <i class="fa-solid fa-book-journal-whills"></i> <span>विक्रेता खाता बही (Vendor Ledgers)</span> <span class="acc-tab-badge">17 वेंडर</span>
+          </button>
+          <button class="acc-tab" id="btnAccPayments" onclick="switchAccountingTab('payments', this)">
+            <i class="fa-solid fa-money-check-dollar"></i> <span>भुगतान पंजी (Payments Book)</span> <span class="acc-tab-badge" id="accTabPaymentsCount">26 चेक</span>
+          </button>
+          <button class="acc-tab" id="btnAccHeads" onclick="switchAccountingTab('heads', this)">
+            <i class="fa-solid fa-sitemap"></i> <span>मदवार व्यय खाता (Account Heads)</span> <span class="acc-tab-badge">8 मदें</span>
+          </button>
+        </nav>
+
+        <!-- SUB-PANE 1: INVOICES REGISTER -->
+        <div id="acc-pane-invoices" class="acc-sub-pane">
+          <!-- Invoices Toolbar -->
+          <div class="directory-toolbar" style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+            <div class="search-input-wrap" style="flex:1;min-width:240px;">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input type="text" id="accInvoiceSearch" placeholder="बीजक क्र., विक्रेता (फर्म), मद या दिनांक खोजें..." oninput="handleAccountingSearch(this.value)" class="search-input" />
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+              <select id="accCategorySelect" onchange="handleAccountingCategoryFilter(this.value)" style="padding:8px 12px;border:1px solid var(--sandstone);border-radius:8px;font-family:inherit;font-size:12.5px;color:var(--text-primary);background:#fff;cursor:pointer;">
+                <option value="all">सभी व्यय मदें (8)</option>
+                <option value="नल-जल">नल-जल</option>
+                <option value="निर्माण सामग्री एवं कार्य">निर्माण सामग्री एवं कार्य</option>
+                <option value="ईंधन (डीजल एवं पेट्रोल)">ईंधन (डीजल एवं पेट्रोल)</option>
+                <option value="रंग-रोगन एवं पुताई">रंग-रोगन एवं पुताई</option>
+                <option value="जेसीबी एवं मिट्टी भराव कार्य">जेसीबी एवं मिट्टी भराव कार्य</option>
+                <option value="विद्युत एवं प्रकाश व्यवस्था">विद्युत एवं प्रकाश व्यवस्था</option>
+                <option value="वृक्षारोपण एवं उद्यान विकास">वृक्षारोपण एवं उद्यान विकास</option>
+                <option value="छपाई एवं प्रचार-प्रसार">छपाई एवं प्रचार-प्रसार</option>
+              </select>
+              <select id="accStatusSelect" onchange="handleAccountingStatusFilter(this.value)" style="padding:8px 12px;border:1px solid var(--sandstone);border-radius:8px;font-family:inherit;font-size:12.5px;color:var(--text-primary);background:#fff;cursor:pointer;">
+                <option value="all">सभी भुगतान स्थितियां</option>
+                <option value="पूर्ण चुकता">पूर्ण चुकता (Paid)</option>
+                <option value="आंशिक चुकता">आंशिक चुकता (Partially Paid)</option>
+                <option value="लंबित">लंबित (Unpaid)</option>
+              </select>
+              <span style="font-size:12px;color:var(--text-secondary);background:var(--sandstone-light);padding:7px 12px;border-radius:8px;font-weight:600;">
+                कुल प्रदर्शित: <strong id="accFilteredSumBadge" style="color:#C45A38;">₹49,57,298.85</strong>
+              </span>
+            </div>
+          </div>
+
+          <!-- Invoices Table -->
+          <div class="table-responsive">
+            <table class="data-table" id="accInvoicesTable">
+              <thead>
+                <tr>
+                  <th style="width:40px;">क्र.</th>
+                  <th>भुगतान प्राप्तकर्ता (फर्म / वेंडर)</th>
+                  <th>बिल दिनांक</th>
+                  <th>बीजक / वाउचर क्र.</th>
+                  <th>लेखा मद</th>
+                  <th style="text-align:right;">कुल बिल राशि</th>
+                  <th style="text-align:right;">भुगतान राशि</th>
+                  <th style="text-align:right;">देय शेष</th>
+                  <th style="text-align:center;">भुगतान स्थिति</th>
+                  <th style="text-align:center;">सामग्री सूची</th>
+                </tr>
+              </thead>
+              <tbody id="accInvoicesTbody">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SUB-PANE 2: VENDOR LEDGERS -->
+        <div id="acc-pane-ledgers" class="acc-sub-pane" style="display:none;">
+          <div style="margin-bottom:12px;">
+            <div style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:8px;">
+              <i class="fa-solid fa-users-viewfinder" style="color:var(--gold);"></i> विक्रेता / फर्म खाता बही चुनें:
+            </div>
+            <div class="vendor-selector-strip" id="accVendorSelectorStrip">
+              <!-- Injected via JS -->
+            </div>
+          </div>
+
+          <div class="ledger-card" id="accVendorLedgerDisplay">
+            <!-- Injected via JS -->
+          </div>
+        </div>
+
+        <!-- SUB-PANE 3: PAYMENTS REGISTER (BANK & CASH BOOK) -->
+        <div id="acc-pane-payments" class="acc-sub-pane" style="display:none;">
+          <div class="directory-toolbar" style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+            <div class="search-input-wrap" style="flex:1;min-width:240px;">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input type="text" id="accPaymentSearch" placeholder="वेंडर, चेक क्र., माध्यम या दिनांक खोजें..." oninput="handlePaymentSearch(this.value)" class="search-input" />
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span style="font-size:12.5px;color:var(--text-secondary);background:var(--sandstone-light);padding:7px 14px;border-radius:8px;font-weight:600;">
+                कुल भुगतान: <strong id="accPaymentsTotalBadge" style="color:#2E7D32;">₹47,72,618.30</strong>
+              </span>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table" id="accPaymentsTable">
+              <thead>
+                <tr>
+                  <th style="width:40px;">क्र.</th>
+                  <th>भुगतान दिनांक</th>
+                  <th>प्राप्तकर्ता फर्म (वेंडर)</th>
+                  <th>माध्यम</th>
+                  <th>चेक / संदर्भ क्र.</th>
+                  <th>संबंधित बीजक</th>
+                  <th>लेखा मद</th>
+                  <th style="text-align:right;">भुगतान राशि</th>
+                  <th style="text-align:center;">निकासी स्थिति</th>
+                </tr>
+              </thead>
+              <tbody id="accPaymentsTbody">
+                <!-- Injected via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SUB-PANE 4: ACCOUNT HEADS (TRIAL BALANCE BREAKDOWN) -->
+        <div id="acc-pane-heads" class="acc-sub-pane" style="display:none;">
+          <div id="accHeadsContainer" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:16px;">
+            <!-- Injected via JS -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
     <footer class="transparency-footer-card">
       <div class="footer-card-inner">
         <div class="footer-brand-meta">
@@ -3248,12 +3678,2748 @@
     /* ============================================================
        APPLICATION INITIALIZATION
        ============================================================ */
+    
+    /* ============================================================
+       STANDALONE ACCOUNTING & FINANCIAL LEDGER SYSTEM
+       ============================================================ */
+    let accountingInvoices = [
+  {
+    "sno": 1,
+    "payee": "बुरहानी बिल्डिंग मटेरियल, निसरपुर",
+    "date": "2026-07-29",
+    "voucherNo": "बिल क्र. 1070",
+    "itemDescription": "नल-जल",
+    "category": "नल-जल",
+    "amount": 14285,
+    "taxableAmount": 12106,
+    "taxAmount": 2179,
+    "paidAmount": 14285,
+    "balanceAmount": 0,
+    "gstin": "23BBWPA9809F1ZH",
+    "status": "पूर्ण चुकता",
+    "cheques": [
+      {
+        "mode": "नकद / चेक",
+        "ref": "048995",
+        "date": "2026-07-29",
+        "amt": 14285,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "कपलर 110mm",
+        "quantity": "12",
+        "unit": "नग",
+        "amount": 610.17
+      },
+      {
+        "description": "कपलर 140mm",
+        "quantity": "11",
+        "unit": "नग",
+        "amount": 1728.65
+      },
+      {
+        "description": "सॉल्वेंट 500ml",
+        "quantity": "4",
+        "unit": "नग",
+        "amount": 949.76
+      },
+      {
+        "description": "एचडीपीई पाइप 1 इंच",
+        "quantity": "650",
+        "unit": "फीट",
+        "amount": 6885.6
+      },
+      {
+        "description": "ब्रास वाल्व 1 इंच",
+        "quantity": "2",
+        "unit": "नग",
+        "amount": 677.97
+      },
+      {
+        "description": "कनेक्टर 1 इंच",
+        "quantity": "2",
+        "unit": "नग",
+        "amount": 33.9
+      },
+      {
+        "description": "जीआई निप्पल 1 इंच",
+        "quantity": "2",
+        "unit": "नग",
+        "amount": 186.45
+      },
+      {
+        "description": "गार्डन पाइप 1 इंच",
+        "quantity": "2",
+        "unit": "बंडल",
+        "amount": 1525.43
+      },
+      {
+        "description": "टेफ्लॉन टेप",
+        "quantity": "3",
+        "unit": "नग",
+        "amount": 33.9
+      },
+      {
+        "description": "चुंडी (हस्तलिखित सामग्री)",
+        "quantity": "6",
+        "unit": "नग",
+        "amount": 84.75
+      }
+    ]
+  },
+  {
+    "sno": 2,
+    "payee": "सोना हार्डवेयर, अंजड़",
+    "date": "2026-09-07",
+    "voucherNo": "बिल क्र. 73",
+    "itemDescription": "निर्माण सामग्री एवं कार्य",
+    "category": "निर्माण सामग्री एवं कार्य",
+    "amount": 400137,
+    "taxableAmount": 339099.07,
+    "taxAmount": 61037.84,
+    "paidAmount": 400000,
+    "balanceAmount": 137,
+    "gstin": "",
+    "status": "आंशिक चुकता",
+    "cheques": [
+      {
+        "mode": "चेक",
+        "ref": "049020",
+        "date": "2026-09-09",
+        "amt": 300000,
+        "status": "सत्यापित"
+      },
+      {
+        "mode": "चेक",
+        "ref": "049025",
+        "date": "2026-09-23",
+        "amt": 100000,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "एचपी स्क्रू 55mm",
+        "quantity": "2000",
+        "unit": "किग्रा",
+        "amount": 6844
+      },
+      {
+        "description": "जेएसडब्ल्यू प्रगति प्लस शीट",
+        "quantity": "1683",
+        "unit": "किग्रा",
+        "amount": 190253.05
+      },
+      {
+        "description": "जेएसडब्ल्यू प्रगति प्लस प्रोफाइल शीट",
+        "quantity": "1683",
+        "unit": "किग्रा",
+        "amount": 193609.29
+      },
+      {
+        "description": "शीट एक्सेसरीज (कवर एवं फिटिंग)",
+        "quantity": "72",
+        "unit": "किग्रा",
+        "amount": 9430.56
+      }
+    ]
+  },
+  {
+    "sno": 3,
+    "payee": "देव एंटरप्राइजेस, कुक्षी",
+    "date": "2026-08-16",
+    "voucherNo": "बिल क्र. DEK/26-27/32",
+    "itemDescription": "निर्माण सामग्री एवं कार्य",
+    "category": "निर्माण सामग्री एवं कार्य",
+    "amount": 252000,
+    "taxableAmount": 213559.22,
+    "taxAmount": 38440.66,
+    "paidAmount": 125000,
+    "balanceAmount": 127000,
+    "gstin": "23AQTPS9805N1ZV",
+    "status": "आंशिक चुकता",
+    "cheques": [
+      {
+        "mode": "चेक",
+        "ref": "049030",
+        "date": "2026-09-25",
+        "amt": 125000,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "पीपीसी सीमेंट",
+        "quantity": "900",
+        "unit": "बोरी",
+        "amount": 213559.22
+      }
+    ]
+  },
+  {
+    "sno": 4,
+    "payee": "देव एंटरप्राइजेस, कुक्षी",
+    "date": "2026-08-17",
+    "voucherNo": "बिल क्र. DEK/26-27/33",
+    "itemDescription": "निर्माण सामग्री एवं कार्य",
+    "category": "निर्माण सामग्री एवं कार्य",
+    "amount": 61000,
+    "taxableAmount": 51695,
+    "taxAmount": 9305.1,
+    "paidAmount": 61000,
+    "balanceAmount": 0,
+    "gstin": "23AQTPS9805N1ZV",
+    "status": "पूर्ण चुकता",
+    "cheques": [
+      {
+        "mode": "चेक",
+        "ref": "049022",
+        "date": "2026-09-16",
+        "amt": 61000,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "प्लस सीमेंट",
+        "quantity": "100",
+        "unit": "बोरी",
+        "amount": 27966
+      },
+      {
+        "description": "पीपीसी सीमेंट",
+        "quantity": "100",
+        "unit": "बोरी",
+        "amount": 23729
+      }
+    ]
+  },
+  {
+    "sno": 5,
+    "payee": "विमल रावत पेंटर",
+    "date": "2026-09-09",
+    "voucherNo": "बिल क्र. 02",
+    "itemDescription": "रंग-रोगन एवं पुताई",
+    "category": "रंग-रोगन एवं पुताई",
+    "amount": 9980,
+    "taxableAmount": 9980,
+    "taxAmount": 0,
+    "paidAmount": 9980,
+    "balanceAmount": 0,
+    "gstin": "",
+    "status": "पूर्ण चुकता",
+    "cheques": [
+      {
+        "mode": "नकद",
+        "ref": "रोकड़ भुगतान",
+        "date": "2026-09-09",
+        "amt": 9980,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "कलर पुताई मजदूरी",
+        "quantity": "6",
+        "unit": "दिन",
+        "amount": 3480
+      },
+      {
+        "description": "कलर पुताई मजदूरी",
+        "quantity": "13",
+        "unit": "दिन",
+        "amount": 6500
+      }
+    ]
+  },
+  {
+    "sno": 6,
+    "payee": "मंगलम इलेक्ट्रीक एंड लाईट डेकोरेशन",
+    "date": "2026-08-12",
+    "voucherNo": "बिल क्र. 5416",
+    "itemDescription": "विद्युत एवं प्रकाश व्यवस्था",
+    "category": "विद्युत एवं प्रकाश व्यवस्था",
+    "amount": 5500,
+    "taxableAmount": 5500,
+    "taxAmount": 0,
+    "paidAmount": 5500,
+    "balanceAmount": 0,
+    "gstin": "",
+    "status": "पूर्ण चुकता",
+    "cheques": [
+      {
+        "mode": "नकद",
+        "ref": "रोकड़ भुगतान",
+        "date": "2026-08-12",
+        "amt": 5500,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "साउंड सिस्टम (ध्वनि विस्तारक)",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 3500
+      },
+      {
+        "description": "जनरेटर (विद्युत व्यवस्था)",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 2000
+      }
+    ]
+  },
+  {
+    "sno": 7,
+    "payee": "माँ नर्मदा एक्जॉटिक नर्सरी",
+    "date": "2026-09-01",
+    "voucherNo": "बिल क्र. 720",
+    "itemDescription": "वृक्षारोपण एवं उद्यान विकास",
+    "category": "वृक्षारोपण एवं उद्यान विकास",
+    "amount": 208960,
+    "taxableAmount": 208960,
+    "taxAmount": 0,
+    "paidAmount": 208960,
+    "balanceAmount": 0,
+    "gstin": "23DUSPP0231F1ZR",
+    "status": "पूर्ण चुकता",
+    "cheques": [
+      {
+        "mode": "चेक",
+        "ref": "049015",
+        "date": "2026-09-05",
+        "amt": 208960,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "आम कलमी पौधा (30x30)",
+        "quantity": "10",
+        "unit": "नग",
+        "amount": 62000
+      },
+      {
+        "description": "आम कलमी पौधा (30x30)",
+        "quantity": "16",
+        "unit": "नग",
+        "amount": 108800
+      },
+      {
+        "description": "पारस पीपल पौधा",
+        "quantity": "24",
+        "unit": "नग",
+        "amount": 25200
+      },
+      {
+        "description": "लाल मचीरा पौधा (13x13)",
+        "quantity": "96",
+        "unit": "नग",
+        "amount": 12960
+      }
+    ]
+  },
+  {
+    "sno": 8,
+    "payee": "देव एंटरप्राइजेस, कुक्षी",
+    "date": "2026-08-15",
+    "voucherNo": "बिल क्र. DEK/26-27/31",
+    "itemDescription": "निर्माण सामग्री एवं कार्य",
+    "category": "निर्माण सामग्री एवं कार्य",
+    "amount": 252000,
+    "taxableAmount": 213559.32,
+    "taxAmount": 38440.68,
+    "paidAmount": 252000,
+    "balanceAmount": 0,
+    "gstin": "23AQTPS9805N1ZV",
+    "status": "पूर्ण चुकता",
+    "cheques": [
+      {
+        "mode": "चेक",
+        "ref": "049010",
+        "date": "2026-08-20",
+        "amt": 252000,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "पीपीसी सीमेंट",
+        "quantity": "900",
+        "unit": "बोरी",
+        "amount": 213559.32
+      }
+    ]
+  },
+  {
+    "sno": 9,
+    "payee": "शिव साईं स्टोन क्रेशर",
+    "date": "2026-08-02",
+    "voucherNo": "बिल क्र. 2627/129",
+    "itemDescription": "निर्माण सामग्री एवं कार्य",
+    "category": "निर्माण सामग्री एवं कार्य",
+    "amount": 175000,
+    "taxableAmount": 166667,
+    "taxAmount": 8333.36,
+    "paidAmount": 175000,
+    "balanceAmount": 0,
+    "gstin": "23AZXPP0237E1ZB",
+    "status": "पूर्ण चुकता",
+    "cheques": [
+      {
+        "mode": "चेक",
+        "ref": "049012",
+        "date": "2026-08-10",
+        "amt": 175000,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "क्रेशर गिट्टी 10mm / 20mm",
+        "quantity": "166.667",
+        "unit": "घन मीटर (CBM)",
+        "amount": 166667
+      }
+    ]
+  },
+  {
+    "sno": 10,
+    "payee": "गर्व ईट उद्योग",
+    "date": "2026-08-20",
+    "voucherNo": "बिल क्र. 5",
+    "itemDescription": "जेसीबी एवं मिट्टी भराव कार्य",
+    "category": "जेसीबी एवं मिट्टी भराव कार्य",
+    "amount": 56000,
+    "taxableAmount": 56000,
+    "taxAmount": 0,
+    "paidAmount": 56000,
+    "balanceAmount": 0,
+    "gstin": "",
+    "status": "पूर्ण चुकता",
+    "cheques": [
+      {
+        "mode": "चेक",
+        "ref": "049016",
+        "date": "2026-08-22",
+        "amt": 56000,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "जेसीबी खुदाई एवं समतलीकरण कार्य (15/07/2026)",
+        "quantity": "7.7",
+        "unit": "घंटे",
+        "amount": 7700
+      },
+      {
+        "description": "जेसीबी खुदाई एवं समतलीकरण कार्य (16/07/2026)",
+        "quantity": "9.8",
+        "unit": "घंटे",
+        "amount": 9800
+      },
+      {
+        "description": "जेसीबी खुदाई एवं समतलीकरण कार्य (17/07/2026)",
+        "quantity": "9.6",
+        "unit": "घंटे",
+        "amount": 9600
+      },
+      {
+        "description": "जेसीबी खुदाई एवं समतलीकरण कार्य (18/07/2026)",
+        "quantity": "9.5",
+        "unit": "घंटे",
+        "amount": 9500
+      },
+      {
+        "description": "जेसीबी खुदाई एवं समतलीकरण कार्य (19/07/2026)",
+        "quantity": "1",
+        "unit": "घंटे",
+        "amount": 1000
+      },
+      {
+        "description": "ट्रैक्टर एवं मशीन द्वारा मिट्टी भराव कार्य (19/07/2026)",
+        "quantity": "62",
+        "unit": "ट्रिप",
+        "amount": 12400
+      },
+      {
+        "description": "ट्रैक्टर एवं मशीन द्वारा मिट्टी भराव कार्य (20/07/2026)",
+        "quantity": "30",
+        "unit": "ट्रिप",
+        "amount": 6000
+      }
+    ]
+  },
+  {
+    "sno": 11,
+    "payee": "गंगामाता कंस्ट्रक्शन",
+    "date": "2026-08-20",
+    "voucherNo": "बिल क्र. 211",
+    "itemDescription": "निर्माण सामग्री एवं कार्य",
+    "category": "निर्माण सामग्री एवं कार्य",
+    "amount": 40500,
+    "taxableAmount": 40500,
+    "taxAmount": 0,
+    "paidAmount": 40500,
+    "balanceAmount": 0,
+    "gstin": "23CGTPR3405B1ZK",
+    "status": "पूर्ण चुकता",
+    "cheques": [
+      {
+        "mode": "नकद / चेक",
+        "ref": "049011",
+        "date": "2026-08-20",
+        "amt": 40500,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "निर्माण कार्य / मशीनरी प्रभार (28/07/2026 से 03/08/2026)",
+        "quantity": "7",
+        "unit": "दिन",
+        "amount": 31500
+      },
+      {
+        "description": "निर्माण कार्य / मशीनरी प्रभार (19/08/2026 से 20/08/2026)",
+        "quantity": "2",
+        "unit": "दिन",
+        "amount": 9000
+      }
+    ]
+  },
+  {
+    "sno": 12,
+    "payee": "अग्रवाल सेल्स एजेन्सी",
+    "date": "2026-08-31",
+    "voucherNo": "बिल क्र. 867",
+    "itemDescription": "नल-जल",
+    "category": "नल-जल",
+    "amount": 96500,
+    "taxableAmount": 91905,
+    "taxAmount": 4595,
+    "paidAmount": 96500,
+    "balanceAmount": 0,
+    "gstin": "",
+    "status": "पूर्ण चुकता",
+    "cheques": [
+      {
+        "mode": "चेक",
+        "ref": "049018",
+        "date": "2026-09-02",
+        "amt": 96500,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "पीवीसी पाइप 110mm",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 91905
+      }
+    ]
+  },
+  {
+    "sno": 13,
+    "payee": "श्री बालाजी सेल्स एजेंसी",
+    "date": "2026-08-04",
+    "voucherNo": "बिल क्र. 2496",
+    "itemDescription": "नल-जल",
+    "category": "नल-जल",
+    "amount": 79900,
+    "taxableAmount": 79900,
+    "taxAmount": 0,
+    "paidAmount": 79900,
+    "balanceAmount": 0,
+    "gstin": "23AIFPG1972J2ZC",
+    "status": "पूर्ण चुकता",
+    "cheques": [
+      {
+        "mode": "चेक",
+        "ref": "049008",
+        "date": "2026-08-08",
+        "amt": 79900,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "जैन पीवीसी पाइप 110mm (4 किग्रा)",
+        "quantity": "85",
+        "unit": "नग",
+        "amount": 79900
+      }
+    ]
+  },
+  {
+    "sno": 14,
+    "payee": "माँ नर्मदा ट्रेडर्स",
+    "date": "2026-09-19",
+    "voucherNo": "बिल क्र. 964",
+    "itemDescription": "निर्माण सामग्री एवं कार्य",
+    "category": "निर्माण सामग्री एवं कार्य",
+    "amount": 53836.2,
+    "taxableAmount": 53836.2,
+    "taxAmount": 0,
+    "paidAmount": 53836.2,
+    "balanceAmount": 0,
+    "gstin": "23AZEPP6225B1ZS",
+    "status": "पूर्ण चुकता",
+    "cheques": [
+      {
+        "mode": "चेक",
+        "ref": "049028",
+        "date": "2026-09-22",
+        "amt": 53836.2,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "एमएस पाइप / स्टील सेक्शन (8+8)",
+        "quantity": "28.6",
+        "unit": "किग्रा",
+        "amount": 1802
+      },
+      {
+        "description": "स्टील / हार्डवेयर सामग्री (38.3 किग्रा)",
+        "quantity": "38.3",
+        "unit": "किग्रा",
+        "amount": 2873
+      },
+      {
+        "description": "स्टील / हार्डवेयर सामग्री (362.8 किग्रा)",
+        "quantity": "362.8",
+        "unit": "किग्रा",
+        "amount": 29024
+      },
+      {
+        "description": "एमएस पट्टी / एंगल (343)",
+        "quantity": "77.6",
+        "unit": "किग्रा",
+        "amount": 6053
+      },
+      {
+        "description": "एमएस पाइप (4x4)",
+        "quantity": "141.6",
+        "unit": "किग्रा",
+        "amount": 10620
+      },
+      {
+        "description": "स्टील / हार्डवेयर सामग्री (37.2 किग्रा)",
+        "quantity": "37.21",
+        "unit": "किग्रा",
+        "amount": 2902
+      },
+      {
+        "description": "हमाली मजदूरी",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 262
+      },
+      {
+        "description": "परिवहन भाड़ा",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 300
+      }
+    ]
+  },
+  {
+    "sno": 15,
+    "payee": "माँ नर्मदा ट्रेडर्स",
+    "date": "2026-09-19",
+    "voucherNo": "बिल क्र. 963",
+    "itemDescription": "निर्माण सामग्री एवं कार्य",
+    "category": "निर्माण सामग्री एवं कार्य",
+    "amount": 74103.1,
+    "taxableAmount": 74103.1,
+    "taxAmount": 0,
+    "paidAmount": 74103.1,
+    "balanceAmount": 0,
+    "gstin": "23AZEPP6225B1ZS",
+    "status": "पूर्ण चुकता",
+    "cheques": [
+      {
+        "mode": "चेक",
+        "ref": "049027",
+        "date": "2026-09-22",
+        "amt": 74103.1,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "लेवल पाइप",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 1460
+      },
+      {
+        "description": "फावड़ा (तगाड़ी/औजार)",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 340
+      },
+      {
+        "description": "1044 पाना 18mm",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 350
+      },
+      {
+        "description": "व्यापली (हार्डवेयर औजार)",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 100
+      },
+      {
+        "description": "झाई (हार्डवेयर सामग्री)",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 330
+      },
+      {
+        "description": "स्टील / लोहा सामग्री (368.9 किग्रा)",
+        "quantity": "368.93",
+        "unit": "किग्रा",
+        "amount": 33204
+      },
+      {
+        "description": "हार्डवेयर सामग्री (एमएस पट्टी)",
+        "quantity": "2",
+        "unit": "नग",
+        "amount": 280
+      },
+      {
+        "description": "एमएस पाइप / स्टील सेक्शन (528.8 किग्रा)",
+        "quantity": "528.86",
+        "unit": "किग्रा",
+        "amount": 35963
+      },
+      {
+        "description": "वेल्डिंग / कटिंग सामग्री",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 1306
+      },
+      {
+        "description": "विविध हार्डवेयर सामग्री",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 770.2
+      }
+    ]
+  },
+  {
+    "sno": 16,
+    "payee": "माँ नर्मदा ट्रेडर्स",
+    "date": "2026-09-19",
+    "voucherNo": "बिल क्र. 952",
+    "itemDescription": "निर्माण सामग्री एवं कार्य",
+    "category": "निर्माण सामग्री एवं कार्य",
+    "amount": 453441,
+    "taxableAmount": 453441,
+    "taxAmount": 0,
+    "paidAmount": 450000,
+    "balanceAmount": 3441,
+    "gstin": "23AZEPP6225B1ZS",
+    "status": "आंशिक चुकता",
+    "cheques": [
+      {
+        "mode": "चेक",
+        "ref": "049026",
+        "date": "2026-09-20",
+        "amt": 450000,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "एमएस पाइप",
+        "quantity": "87.21",
+        "unit": "किग्रा",
+        "amount": 7414
+      },
+      {
+        "description": "एमएस पाइप (4x4)",
+        "quantity": "600",
+        "unit": "किग्रा",
+        "amount": 50220
+      },
+      {
+        "description": "एमएस पाइप / स्ट्रक्चरल स्टील (3745)",
+        "quantity": "755",
+        "unit": "किग्रा",
+        "amount": 57908
+      },
+      {
+        "description": "एमएस पाइप / स्ट्रक्चरल स्टील (33)",
+        "quantity": "1959.4",
+        "unit": "किग्रा",
+        "amount": 148327
+      },
+      {
+        "description": "एमएस पाइप / स्ट्रक्चरल स्टील (37)",
+        "quantity": "1199",
+        "unit": "किग्रा",
+        "amount": 90764
+      },
+      {
+        "description": "हार्डवेयर एवं वेल्डिंग सामग्री",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 480
+      },
+      {
+        "description": "एमएस पट्टी / स्ट्रिप",
+        "quantity": "17.4",
+        "unit": "किग्रा",
+        "amount": 1131
+      },
+      {
+        "description": "एमएस पाइप (3x3)",
+        "quantity": "165.5",
+        "unit": "किग्रा",
+        "amount": 12413
+      },
+      {
+        "description": "एमएस पाइप / स्ट्रक्चरल स्टील",
+        "quantity": "912.6",
+        "unit": "किग्रा",
+        "amount": 69996
+      },
+      {
+        "description": "एमएस पाइप / स्ट्रक्चरल स्टील",
+        "quantity": "177.5",
+        "unit": "किग्रा",
+        "amount": 13437
+      },
+      {
+        "description": "वेल्डिंग एवं विविध हार्डवेयर सामग्री",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 1353
+      }
+    ]
+  },
+  {
+    "sno": 17,
+    "payee": "आनंद रमेशचन्द्र शर्मा",
+    "date": "2026-07-29",
+    "voucherNo": "बिल क्र. 24",
+    "itemDescription": "जेसीबी एवं मिट्टी भराव कार्य",
+    "category": "जेसीबी एवं मिट्टी भराव कार्य",
+    "amount": 143250,
+    "taxableAmount": 160250,
+    "taxAmount": 0,
+    "paidAmount": 143250,
+    "balanceAmount": 0,
+    "gstin": "",
+    "status": "पूर्ण चुकता",
+    "cheques": [
+      {
+        "mode": "चेक",
+        "ref": "049005",
+        "date": "2026-08-02",
+        "amt": 143250,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "जेसीबी खुदाई कार्य (16-19 जुलाई)",
+        "quantity": "32.5",
+        "unit": "घंटे",
+        "amount": 32500
+      },
+      {
+        "description": "ट्रैक्टर मिट्टी भराव कार्य (20/07/2026)",
+        "quantity": "35",
+        "unit": "ट्रिप",
+        "amount": 7000
+      },
+      {
+        "description": "ट्रैक्टर मुरुम भराव कार्य (21-24 जुलाई 2026)",
+        "quantity": "254",
+        "unit": "ट्रिप",
+        "amount": 63500
+      },
+      {
+        "description": "डंपर/ट्रैक्टर मुरुम भराव कार्य (25/07/2026)",
+        "quantity": "85",
+        "unit": "ट्रिप",
+        "amount": 21250
+      },
+      {
+        "description": "मुरुम भराव कार्य (26/07/2026)",
+        "quantity": "88",
+        "unit": "ट्रिप",
+        "amount": 22000
+      },
+      {
+        "description": "मुरुम भराव कार्य (27/07/2026)",
+        "quantity": "56",
+        "unit": "ट्रिप",
+        "amount": 14000
+      }
+    ]
+  },
+  {
+    "sno": 18,
+    "payee": "किसान मशीनरी पार्ट्स",
+    "date": "2026-08-23",
+    "voucherNo": "बिल क्र. 2025-818",
+    "itemDescription": "नल-जल",
+    "category": "नल-जल",
+    "amount": 120855,
+    "taxableAmount": 120855,
+    "taxAmount": 0,
+    "paidAmount": 120855,
+    "balanceAmount": 0,
+    "gstin": "23BMIPP6003K1Z2",
+    "status": "पूर्ण चुकता",
+    "cheques": [
+      {
+        "mode": "चेक",
+        "ref": "049019",
+        "date": "2026-08-25",
+        "amt": 120855,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "नल-जल पाइप / फिटिंग (10 नग)",
+        "quantity": "10",
+        "unit": "नग",
+        "amount": 14400
+      },
+      {
+        "description": "नल-जल पाइप / फिटिंग (12 नग)",
+        "quantity": "12",
+        "unit": "नग",
+        "amount": 12000
+      },
+      {
+        "description": "नल-जल पाइप (100 मीटर)",
+        "quantity": "100",
+        "unit": "मीटर",
+        "amount": 0
+      },
+      {
+        "description": "नल-जल फिटिंग (10x10)",
+        "quantity": "10",
+        "unit": "नग",
+        "amount": 100
+      },
+      {
+        "description": "नल-जल फिटिंग (160)",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 1600
+      },
+      {
+        "description": "नल-जल फिटिंग (1-120)",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 120
+      },
+      {
+        "description": "नल-जल फिटिंग (150x5)",
+        "quantity": "5",
+        "unit": "नग",
+        "amount": 750
+      },
+      {
+        "description": "नल-जल फिटिंग (150x21)",
+        "quantity": "21",
+        "unit": "नग",
+        "amount": 3150
+      },
+      {
+        "description": "नल-जल फिटिंग (3-10)",
+        "quantity": "3",
+        "unit": "नग",
+        "amount": 30
+      },
+      {
+        "description": "नल-जल पाइप / फिटिंग (400 मीटर)",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 4800
+      }
+    ]
+  },
+  {
+    "sno": 19,
+    "payee": "किसान मशीनरी पार्ट्स",
+    "date": "2026-07-30",
+    "voucherNo": "बिल क्र. 2025-792",
+    "itemDescription": "नल-जल",
+    "category": "नल-जल",
+    "amount": 14770,
+    "taxableAmount": 14770,
+    "taxAmount": 0,
+    "paidAmount": 14770,
+    "balanceAmount": 0,
+    "gstin": "23BMIPP6003K1Z2",
+    "status": "पूर्ण चुकता",
+    "cheques": [
+      {
+        "mode": "नकद",
+        "ref": "रोकड़ भुगतान",
+        "date": "2026-07-30",
+        "amt": 14770,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "टेक्समो सबमर्सिबल पंप / मोटर",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 11280
+      },
+      {
+        "description": "नल-जल फिटिंग सामग्री",
+        "quantity": "4",
+        "unit": "नग",
+        "amount": 1700
+      },
+      {
+        "description": "प्लंबिंग फिटिंग्स",
+        "quantity": "2",
+        "unit": "नग",
+        "amount": 170
+      }
+    ]
+  },
+  {
+    "sno": 20,
+    "payee": "किसान मशीनरी पार्ट्स",
+    "date": "2026-07-27",
+    "voucherNo": "बिल क्र. 2025-788",
+    "itemDescription": "नल-जल",
+    "category": "नल-जल",
+    "amount": 22529,
+    "taxableAmount": 22529,
+    "taxAmount": 0,
+    "paidAmount": 22529,
+    "balanceAmount": 0,
+    "gstin": "23BMIPP6003K1Z2",
+    "status": "पूर्ण चुकता",
+    "cheques": [
+      {
+        "mode": "नकद / चेक",
+        "ref": "049002",
+        "date": "2026-07-28",
+        "amt": 22529,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "विद्युत केबल (6x910)",
+        "quantity": "6",
+        "unit": "नग",
+        "amount": 5460
+      },
+      {
+        "description": "10mm पाइप / केबल",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 5410
+      },
+      {
+        "description": "मोटर स्टार्टर पैनल बॉक्स",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 6000
+      },
+      {
+        "description": "विद्युत एवं नल-जल फिटिंग्स",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 1200
+      },
+      {
+        "description": "मोटर / पंप पार्ट्स",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 4000
+      },
+      {
+        "description": "डबल निप्पल / कपलर",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 300
+      },
+      {
+        "description": "पक्कड़ एवं इंसुलेशन टेप",
+        "quantity": "2",
+        "unit": "नग",
+        "amount": 159
+      }
+    ]
+  },
+  {
+    "sno": 21,
+    "payee": "किसान मशीनरी पार्ट्स",
+    "date": "2026-07-19",
+    "voucherNo": "बिल क्र. 20257",
+    "itemDescription": "नल-जल",
+    "category": "नल-जल",
+    "amount": 8430,
+    "taxableAmount": 8430,
+    "taxAmount": 0,
+    "paidAmount": 8430,
+    "balanceAmount": 0,
+    "gstin": "23BMIPP6003K1Z2",
+    "status": "पूर्ण चुकता",
+    "cheques": [
+      {
+        "mode": "नकद",
+        "ref": "रोकड़ भुगतान",
+        "date": "2026-07-20",
+        "amt": 8430,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "नल-जल फिटिंग (20x60)",
+        "quantity": "20",
+        "unit": "नग",
+        "amount": 1200
+      },
+      {
+        "description": "नल-जल फिटिंग (25x120)",
+        "quantity": "25",
+        "unit": "नग",
+        "amount": 3000
+      },
+      {
+        "description": "नल-जल फिटिंग (2x10)",
+        "quantity": "2",
+        "unit": "नग",
+        "amount": 20
+      },
+      {
+        "description": "पीवीसी पाइप / फिटिंग (2x1640)",
+        "quantity": "2",
+        "unit": "नग",
+        "amount": 3280
+      },
+      {
+        "description": "नल-जल फिटिंग (2x102.5)",
+        "quantity": "2",
+        "unit": "नग",
+        "amount": 205
+      },
+      {
+        "description": "नल-जल फिटिंग (2x80)",
+        "quantity": "2",
+        "unit": "नग",
+        "amount": 160
+      }
+    ]
+  },
+  {
+    "sno": 22,
+    "payee": "किसान मशीनरी पार्ट्स",
+    "date": "2026-07-16",
+    "voucherNo": "बिल क्र. 2025-781",
+    "itemDescription": "नल-जल",
+    "category": "नल-जल",
+    "amount": 45220,
+    "taxableAmount": 45220,
+    "taxAmount": 0,
+    "paidAmount": 45220,
+    "balanceAmount": 0,
+    "gstin": "23BMIPP6003K1Z2",
+    "status": "पूर्ण चुकता",
+    "cheques": [
+      {
+        "mode": "चेक",
+        "ref": "048998",
+        "date": "2026-07-18",
+        "amt": 45220,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "110mm पाइप (36x935)",
+        "quantity": "36",
+        "unit": "नग",
+        "amount": 33660
+      },
+      {
+        "description": "110mm कपलर",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 1100
+      },
+      {
+        "description": "140mm पाइप / फिटिंग",
+        "quantity": "30",
+        "unit": "नग",
+        "amount": 3600
+      },
+      {
+        "description": "नल-जल फिटिंग 250 मीटर",
+        "quantity": "8",
+        "unit": "नग",
+        "amount": 1000
+      },
+      {
+        "description": "नल-जल फिटिंग (10x10)",
+        "quantity": "10",
+        "unit": "नग",
+        "amount": 100
+      },
+      {
+        "description": "140mm टी / फिटिंग",
+        "quantity": "10",
+        "unit": "नग",
+        "amount": 1200
+      },
+      {
+        "description": "110mm टी",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 320
+      },
+      {
+        "description": "विविध नल-जल फिटिंग्स",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 4240
+      }
+    ]
+  },
+  {
+    "sno": 23,
+    "payee": "पाटीदार फ्यूल्स",
+    "date": "2026-08-13",
+    "voucherNo": "बिल क्र. 218/2026",
+    "itemDescription": "ईंधन (डीजल एवं पेट्रोल)",
+    "category": "ईंधन (डीजल एवं पेट्रोल)",
+    "amount": 1261710,
+    "taxableAmount": 1261710,
+    "taxAmount": 0,
+    "paidAmount": 1250000,
+    "balanceAmount": 11710,
+    "gstin": "23CQBPP2023D1ZJ",
+    "status": "आंशिक चुकता",
+    "cheques": [
+      {
+        "mode": "चेक",
+        "ref": "049014",
+        "date": "2026-08-16",
+        "amt": 1250000,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "डीजल (पर्ची 14299 - मोहनलाल जी)",
+        "quantity": "415.84",
+        "unit": "लीटर",
+        "amount": 42000
+      },
+      {
+        "description": "डीजल (पर्ची 14309 - सोनू राजाजी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14310 - मोहनलाल जी)",
+        "quantity": "186.73",
+        "unit": "लीटर",
+        "amount": 18860
+      },
+      {
+        "description": "डीजल (पर्ची 14311 - मोहनलाल जी)",
+        "quantity": "346.53",
+        "unit": "लीटर",
+        "amount": 35000
+      },
+      {
+        "description": "डीजल (पर्ची 14312 - सोनू राजाजी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14315 - सोनू राजाजी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14316 - मोहनलाल जी)",
+        "quantity": "199.01",
+        "unit": "लीटर",
+        "amount": 20100
+      },
+      {
+        "description": "डीजल (पर्ची 14319 - सोनू राजाजी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14323 - सोनू राजाजी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14324 - मोहनलाल जी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14327 - सोनू राजाजी)",
+        "quantity": "99.01",
+        "unit": "लीटर",
+        "amount": 10000
+      },
+      {
+        "description": "डीजल (पर्ची 14329 - सोनू राजाजी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14330 - मोहनलाल जी)",
+        "quantity": "156.44",
+        "unit": "लीटर",
+        "amount": 15800
+      },
+      {
+        "description": "डीजल (पर्ची 14331 - सोनू राजाजी)",
+        "quantity": "297.03",
+        "unit": "लीटर",
+        "amount": 30000
+      },
+      {
+        "description": "डीजल (पर्ची 14333 - सोनू राजाजी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14334 - मोहनलाल जी)",
+        "quantity": "209.9",
+        "unit": "लीटर",
+        "amount": 21200
+      },
+      {
+        "description": "डीजल (पर्ची 14336 - मोहनलाल जी)",
+        "quantity": "275.25",
+        "unit": "लीटर",
+        "amount": 27800
+      },
+      {
+        "description": "डीजल (पर्ची 14341 - सोनू राजाजी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14342 - मोहनलाल जी)",
+        "quantity": "232.67",
+        "unit": "लीटर",
+        "amount": 23500
+      },
+      {
+        "description": "डीजल (पर्ची 14343 - सोनू राजाजी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14344 - मोहनलाल जी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14345 - दुर्गेश पाटीदार)",
+        "quantity": "663.37",
+        "unit": "लीटर",
+        "amount": 67000
+      },
+      {
+        "description": "डीजल (पर्ची 14346 - सोनू राजाजी)",
+        "quantity": "396.04",
+        "unit": "लीटर",
+        "amount": 40000
+      },
+      {
+        "description": "डीजल (पर्ची 14347 - मोहनलाल जी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14351 - सोनू राजाजी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14352 - मोहनलाल जी)",
+        "quantity": "480.2",
+        "unit": "लीटर",
+        "amount": 48500
+      },
+      {
+        "description": "डीजल (पर्ची 14353 - सोनू राजाजी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14355 - दुर्गेश पाटीदार)",
+        "quantity": "618.81",
+        "unit": "लीटर",
+        "amount": 62500
+      },
+      {
+        "description": "डीजल (पर्ची 14357 - सोनू राजाजी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14359 - मोहनलाल जी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14362 - सोनू राजाजी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14363 - मोहनलाल जी)",
+        "quantity": "376.24",
+        "unit": "लीटर",
+        "amount": 38000
+      },
+      {
+        "description": "डीजल (पर्ची 14368 - मोहनलाल जी)",
+        "quantity": "79.21",
+        "unit": "लीटर",
+        "amount": 8000
+      },
+      {
+        "description": "डीजल (पर्ची 14371 - सोनू राजाजी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14372 - दुर्गेश पाटीदार)",
+        "quantity": "638.61",
+        "unit": "लीटर",
+        "amount": 64500
+      },
+      {
+        "description": "डीजल (पर्ची 14373 - मोहनलाल जी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14375 - मोहनलाल जी)",
+        "quantity": "486.14",
+        "unit": "लीटर",
+        "amount": 49100
+      },
+      {
+        "description": "डीजल (पर्ची 14377 - सोनू राजाजी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14378 - मोहनलाल जी)",
+        "quantity": "39.6",
+        "unit": "लीटर",
+        "amount": 4000
+      },
+      {
+        "description": "डीजल (पर्ची 14380 - सोनू राजाजी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14382 - मोहनलाल जी)",
+        "quantity": "127.23",
+        "unit": "लीटर",
+        "amount": 12850
+      },
+      {
+        "description": "डीजल (पर्ची 14384 - सोनू राजाजी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14387 - दुर्गेश पाटीदार)",
+        "quantity": "613.86",
+        "unit": "लीटर",
+        "amount": 62000
+      },
+      {
+        "description": "डीजल (पर्ची 14388 - मोहनलाल जी)",
+        "quantity": "108.91",
+        "unit": "लीटर",
+        "amount": 11000
+      },
+      {
+        "description": "डीजल (पर्ची 14401 - सोनू राजाजी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14402 - मोहनलाल जी)",
+        "quantity": "396.04",
+        "unit": "लीटर",
+        "amount": 40000
+      },
+      {
+        "description": "डीजल (पर्ची 14403 - मोहनलाल जी)",
+        "quantity": "99.01",
+        "unit": "लीटर",
+        "amount": 10000
+      },
+      {
+        "description": "डीजल (पर्ची 14405 - सोनू राजाजी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 14407 - मोहनलाल जी)",
+        "quantity": "198.02",
+        "unit": "लीटर",
+        "amount": 20000
+      }
+    ]
+  },
+  {
+    "sno": 24,
+    "payee": "लीडर ग्राफिक्स एवं प्रिंटर्स",
+    "date": "2026-07-09",
+    "voucherNo": "बिल क्र. A-53",
+    "itemDescription": "छपाई एवं प्रचार-प्रसार",
+    "category": "छपाई एवं प्रचार-प्रसार",
+    "amount": 15000,
+    "taxableAmount": 12720,
+    "taxAmount": 2289.6,
+    "paidAmount": 15000,
+    "balanceAmount": 0,
+    "gstin": "23ADOPH5605F1ZT",
+    "status": "पूर्ण चुकता",
+    "cheques": [
+      {
+        "mode": "नकद / चेक",
+        "ref": "048992",
+        "date": "2026-07-10",
+        "amt": 15000,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "ए4 बहुरंगी पैम्फलेट / विवरणिका (130 जीएसएम)",
+        "quantity": "10000",
+        "unit": "नग",
+        "amount": 12720
+      }
+    ]
+  },
+  {
+    "sno": 25,
+    "payee": "सर्वोत्तम फ्यूल स्टेशन",
+    "date": "2026-11-15",
+    "voucherNo": "बिल क्र. LEDGER-01-07-2026-TO-15-11-2026",
+    "itemDescription": "ईंधन (डीजल एवं पेट्रोल)",
+    "category": "ईंधन (डीजल एवं पेट्रोल)",
+    "amount": 1092392.55,
+    "taxableAmount": 1092392.55,
+    "taxAmount": 0,
+    "paidAmount": 1050000,
+    "balanceAmount": 42392.55000000005,
+    "gstin": "23AEEFS6553E1Z4",
+    "status": "आंशिक चुकता",
+    "cheques": [
+      {
+        "mode": "चेक",
+        "ref": "049035",
+        "date": "2026-11-18",
+        "amt": 1050000,
+        "status": "सत्यापित"
+      }
+    ],
+    "items": [
+      {
+        "description": "डीजल (पर्ची 3840 - शर्माजी आनंद)",
+        "quantity": "70",
+        "unit": "लीटर",
+        "amount": 7080
+      },
+      {
+        "description": "डीजल (पर्ची 3869 - शर्माजी आनंद)",
+        "quantity": "25",
+        "unit": "लीटर",
+        "amount": 2528.75
+      },
+      {
+        "description": "डीजल (पर्ची 3874 - शर्माजी)",
+        "quantity": "75",
+        "unit": "लीटर",
+        "amount": 7586.25
+      },
+      {
+        "description": "डीजल (पर्ची 3905 - फियोरी)",
+        "quantity": "70.29",
+        "unit": "लीटर",
+        "amount": 7110
+      },
+      {
+        "description": "डीजल (पर्ची 3902 - फियोरी)",
+        "quantity": "40.73",
+        "unit": "लीटर",
+        "amount": 4120
+      },
+      {
+        "description": "डीजल (पर्ची 3914 - फियोरी)",
+        "quantity": "103.81",
+        "unit": "लीटर",
+        "amount": 10500
+      },
+      {
+        "description": "डीजल (पर्ची 3925 - अस्पताल)",
+        "quantity": "39.55",
+        "unit": "लीटर",
+        "amount": 4000
+      },
+      {
+        "description": "डीजल (पर्ची 3931 - उपेन्द्र)",
+        "quantity": "100",
+        "unit": "लीटर",
+        "amount": 10115
+      },
+      {
+        "description": "डीजल (पर्ची 3945 - फियोरी)",
+        "quantity": "57.83",
+        "unit": "लीटर",
+        "amount": 5850
+      },
+      {
+        "description": "डीजल (पर्ची 3952 - राजाजी)",
+        "quantity": "464.66",
+        "unit": "लीटर",
+        "amount": 47000
+      },
+      {
+        "description": "डीजल (पर्ची 3943 - जनरेटर)",
+        "quantity": "1.48",
+        "unit": "लीटर",
+        "amount": 150
+      },
+      {
+        "description": "डीजल (पर्ची 3962 - फियोरी)",
+        "quantity": "98.86",
+        "unit": "लीटर",
+        "amount": 10000
+      },
+      {
+        "description": "डीजल (पर्ची 3958 - अस्पताल)",
+        "quantity": "39.55",
+        "unit": "लीटर",
+        "amount": 4000
+      },
+      {
+        "description": "डीजल (पर्ची 3955 - राजाजी)",
+        "quantity": "227.39",
+        "unit": "लीटर",
+        "amount": 23000
+      },
+      {
+        "description": "डीजल (पर्ची 3968 - फियोरी)",
+        "quantity": "63.27",
+        "unit": "लीटर",
+        "amount": 6400
+      },
+      {
+        "description": "डीजल (पर्ची 3973 - राजाजी)",
+        "quantity": "197.73",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 3989 - लकड़ी वाला)",
+        "quantity": "10",
+        "unit": "लीटर",
+        "amount": 1011.5
+      },
+      {
+        "description": "डीजल (पर्ची 3998 - राजाजी)",
+        "quantity": "197.73",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 4044 - राजाजी)",
+        "quantity": "296.59",
+        "unit": "लीटर",
+        "amount": 30000
+      },
+      {
+        "description": "डीजल (पर्ची 4059 - राजाजी)",
+        "quantity": "197.73",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 4084 - राजाजी)",
+        "quantity": "593.18",
+        "unit": "लीटर",
+        "amount": 60000
+      },
+      {
+        "description": "डीजल (पर्ची 4082 - घाट)",
+        "quantity": "19.77",
+        "unit": "लीटर",
+        "amount": 2000
+      },
+      {
+        "description": "पेट्रोल (पर्ची 4091 - उमेर लोहार)",
+        "quantity": "5",
+        "unit": "लीटर",
+        "amount": 580.05
+      },
+      {
+        "description": "डीजल (पर्ची 4104 - रोलर)",
+        "quantity": "28.37",
+        "unit": "लीटर",
+        "amount": 2870
+      },
+      {
+        "description": "डीजल (पर्ची 4100 - राजाजी)",
+        "quantity": "98.86",
+        "unit": "लीटर",
+        "amount": 10000
+      },
+      {
+        "description": "डीजल (पर्ची 4133 - राजाजी)",
+        "quantity": "593.18",
+        "unit": "लीटर",
+        "amount": 60000
+      },
+      {
+        "description": "डीजल (पर्ची 4143 - राजाजी)",
+        "quantity": "197.73",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 4162 - राजाजी)",
+        "quantity": "247.16",
+        "unit": "लीटर",
+        "amount": 25000
+      },
+      {
+        "description": "डीजल (पर्ची 4181 - राजाजी)",
+        "quantity": "494.32",
+        "unit": "लीटर",
+        "amount": 50000
+      },
+      {
+        "description": "डीजल (पर्ची 4185 - फियोरी)",
+        "quantity": "60.32",
+        "unit": "लीटर",
+        "amount": 6101
+      },
+      {
+        "description": "पेट्रोल (पर्ची 4207 - राजाजी)",
+        "quantity": "137.92",
+        "unit": "लीटर",
+        "amount": 16000
+      },
+      {
+        "description": "डीजल (पर्ची 4235 - राजाजी)",
+        "quantity": "692.04",
+        "unit": "लीटर",
+        "amount": 70000
+      },
+      {
+        "description": "डीजल (पर्ची 4252 - OP)",
+        "quantity": "197.73",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 4261 - राजाजी)",
+        "quantity": "197.73",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 4277 - राजाजी)",
+        "quantity": "197.73",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 4294 - उमेर लोहार)",
+        "quantity": "45.87",
+        "unit": "लीटर",
+        "amount": 4640
+      },
+      {
+        "description": "डीजल (पर्ची 4291 - राजाजी)",
+        "quantity": "197.73",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 4298 - राजाजी)",
+        "quantity": "197.73",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 4318 - राजाजी)",
+        "quantity": "197.73",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 4330 - राजाजी)",
+        "quantity": "395.45",
+        "unit": "लीटर",
+        "amount": 40000
+      },
+      {
+        "description": "डीजल (पर्ची 4336 - राजाजी)",
+        "quantity": "197.73",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल (पर्ची 4352 - राजाजी)",
+        "quantity": "197.73",
+        "unit": "लीटर",
+        "amount": 20000
+      },
+      {
+        "description": "डीजल ट्रांसफर - लखन कुमावत कोटड़ा",
+        "quantity": "1",
+        "unit": "नग",
+        "amount": 324750
+      }
+    ]
+  }
+];
+    let accountingPayments = [
+  {
+    "sno": 1,
+    "date": "2026-07-29",
+    "payee": "बुरहानी बिल्डिंग मटेरियल, निसरपुर",
+    "voucherNo": "बिल क्र. 1070",
+    "category": "नल-जल",
+    "mode": "नकद / चेक",
+    "ref": "048995",
+    "amount": 14285,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹14285"
+  },
+  {
+    "sno": 2,
+    "date": "2026-09-09",
+    "payee": "सोना हार्डवेयर, अंजड़",
+    "voucherNo": "बिल क्र. 73",
+    "category": "निर्माण सामग्री एवं कार्य",
+    "mode": "चेक",
+    "ref": "049020",
+    "amount": 300000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹400137"
+  },
+  {
+    "sno": 3,
+    "date": "2026-09-23",
+    "payee": "सोना हार्डवेयर, अंजड़",
+    "voucherNo": "बिल क्र. 73",
+    "category": "निर्माण सामग्री एवं कार्य",
+    "mode": "चेक",
+    "ref": "049025",
+    "amount": 100000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹400137"
+  },
+  {
+    "sno": 4,
+    "date": "2026-09-25",
+    "payee": "देव एंटरप्राइजेस, कुक्षी",
+    "voucherNo": "बिल क्र. DEK/26-27/32",
+    "category": "निर्माण सामग्री एवं कार्य",
+    "mode": "चेक",
+    "ref": "049030",
+    "amount": 125000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹252000"
+  },
+  {
+    "sno": 5,
+    "date": "2026-09-16",
+    "payee": "देव एंटरप्राइजेस, कुक्षी",
+    "voucherNo": "बिल क्र. DEK/26-27/33",
+    "category": "निर्माण सामग्री एवं कार्य",
+    "mode": "चेक",
+    "ref": "049022",
+    "amount": 61000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹61000"
+  },
+  {
+    "sno": 6,
+    "date": "2026-09-09",
+    "payee": "विमल रावत पेंटर",
+    "voucherNo": "बिल क्र. 02",
+    "category": "रंग-रोगन एवं पुताई",
+    "mode": "नकद",
+    "ref": "रोकड़ भुगतान",
+    "amount": 9980,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹9980"
+  },
+  {
+    "sno": 7,
+    "date": "2026-08-12",
+    "payee": "मंगलम इलेक्ट्रीक एंड लाईट डेकोरेशन",
+    "voucherNo": "बिल क्र. 5416",
+    "category": "विद्युत एवं प्रकाश व्यवस्था",
+    "mode": "नकद",
+    "ref": "रोकड़ भुगतान",
+    "amount": 5500,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹5500"
+  },
+  {
+    "sno": 8,
+    "date": "2026-09-05",
+    "payee": "माँ नर्मदा एक्जॉटिक नर्सरी",
+    "voucherNo": "बिल क्र. 720",
+    "category": "वृक्षारोपण एवं उद्यान विकास",
+    "mode": "चेक",
+    "ref": "049015",
+    "amount": 208960,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹208960"
+  },
+  {
+    "sno": 9,
+    "date": "2026-08-20",
+    "payee": "देव एंटरप्राइजेस, कुक्षी",
+    "voucherNo": "बिल क्र. DEK/26-27/31",
+    "category": "निर्माण सामग्री एवं कार्य",
+    "mode": "चेक",
+    "ref": "049010",
+    "amount": 252000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹252000"
+  },
+  {
+    "sno": 10,
+    "date": "2026-08-10",
+    "payee": "शिव साईं स्टोन क्रेशर",
+    "voucherNo": "बिल क्र. 2627/129",
+    "category": "निर्माण सामग्री एवं कार्य",
+    "mode": "चेक",
+    "ref": "049012",
+    "amount": 175000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹175000"
+  },
+  {
+    "sno": 11,
+    "date": "2026-08-22",
+    "payee": "गर्व ईट उद्योग",
+    "voucherNo": "बिल क्र. 5",
+    "category": "जेसीबी एवं मिट्टी भराव कार्य",
+    "mode": "चेक",
+    "ref": "049016",
+    "amount": 56000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹56000"
+  },
+  {
+    "sno": 12,
+    "date": "2026-08-20",
+    "payee": "गंगामाता कंस्ट्रक्शन",
+    "voucherNo": "बिल क्र. 211",
+    "category": "निर्माण सामग्री एवं कार्य",
+    "mode": "नकद / चेक",
+    "ref": "049011",
+    "amount": 40500,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹40500"
+  },
+  {
+    "sno": 13,
+    "date": "2026-09-02",
+    "payee": "अग्रवाल सेल्स एजेन्सी",
+    "voucherNo": "बिल क्र. 867",
+    "category": "नल-जल",
+    "mode": "चेक",
+    "ref": "049018",
+    "amount": 96500,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹96500"
+  },
+  {
+    "sno": 14,
+    "date": "2026-08-08",
+    "payee": "श्री बालाजी सेल्स एजेंसी",
+    "voucherNo": "बिल क्र. 2496",
+    "category": "नल-जल",
+    "mode": "चेक",
+    "ref": "049008",
+    "amount": 79900,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹79900"
+  },
+  {
+    "sno": 15,
+    "date": "2026-09-22",
+    "payee": "माँ नर्मदा ट्रेडर्स",
+    "voucherNo": "बिल क्र. 964",
+    "category": "निर्माण सामग्री एवं कार्य",
+    "mode": "चेक",
+    "ref": "049028",
+    "amount": 53836.2,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹53836.2"
+  },
+  {
+    "sno": 16,
+    "date": "2026-09-22",
+    "payee": "माँ नर्मदा ट्रेडर्स",
+    "voucherNo": "बिल क्र. 963",
+    "category": "निर्माण सामग्री एवं कार्य",
+    "mode": "चेक",
+    "ref": "049027",
+    "amount": 74103.1,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹74103.1"
+  },
+  {
+    "sno": 17,
+    "date": "2026-09-20",
+    "payee": "माँ नर्मदा ट्रेडर्स",
+    "voucherNo": "बिल क्र. 952",
+    "category": "निर्माण सामग्री एवं कार्य",
+    "mode": "चेक",
+    "ref": "049026",
+    "amount": 450000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹453441"
+  },
+  {
+    "sno": 18,
+    "date": "2026-08-02",
+    "payee": "आनंद रमेशचन्द्र शर्मा",
+    "voucherNo": "बिल क्र. 24",
+    "category": "जेसीबी एवं मिट्टी भराव कार्य",
+    "mode": "चेक",
+    "ref": "049005",
+    "amount": 143250,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹143250"
+  },
+  {
+    "sno": 19,
+    "date": "2026-08-25",
+    "payee": "किसान मशीनरी पार्ट्स",
+    "voucherNo": "बिल क्र. 2025-818",
+    "category": "नल-जल",
+    "mode": "चेक",
+    "ref": "049019",
+    "amount": 120855,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹120855"
+  },
+  {
+    "sno": 20,
+    "date": "2026-07-30",
+    "payee": "किसान मशीनरी पार्ट्स",
+    "voucherNo": "बिल क्र. 2025-792",
+    "category": "नल-जल",
+    "mode": "नकद",
+    "ref": "रोकड़ भुगतान",
+    "amount": 14770,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹14770"
+  },
+  {
+    "sno": 21,
+    "date": "2026-07-28",
+    "payee": "किसान मशीनरी पार्ट्स",
+    "voucherNo": "बिल क्र. 2025-788",
+    "category": "नल-जल",
+    "mode": "नकद / चेक",
+    "ref": "049002",
+    "amount": 22529,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹22529"
+  },
+  {
+    "sno": 22,
+    "date": "2026-07-20",
+    "payee": "किसान मशीनरी पार्ट्स",
+    "voucherNo": "बिल क्र. 20257",
+    "category": "नल-जल",
+    "mode": "नकद",
+    "ref": "रोकड़ भुगतान",
+    "amount": 8430,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹8430"
+  },
+  {
+    "sno": 23,
+    "date": "2026-07-18",
+    "payee": "किसान मशीनरी पार्ट्स",
+    "voucherNo": "बिल क्र. 2025-781",
+    "category": "नल-जल",
+    "mode": "चेक",
+    "ref": "048998",
+    "amount": 45220,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹45220"
+  },
+  {
+    "sno": 24,
+    "date": "2026-08-16",
+    "payee": "पाटीदार फ्यूल्स",
+    "voucherNo": "बिल क्र. 218/2026",
+    "category": "ईंधन (डीजल एवं पेट्रोल)",
+    "mode": "चेक",
+    "ref": "049014",
+    "amount": 1250000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹1261710"
+  },
+  {
+    "sno": 25,
+    "date": "2026-07-10",
+    "payee": "लीडर ग्राफिक्स एवं प्रिंटर्स",
+    "voucherNo": "बिल क्र. A-53",
+    "category": "छपाई एवं प्रचार-प्रसार",
+    "mode": "नकद / चेक",
+    "ref": "048992",
+    "amount": 15000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹15000"
+  },
+  {
+    "sno": 26,
+    "date": "2026-11-18",
+    "payee": "सर्वोत्तम फ्यूल स्टेशन",
+    "voucherNo": "बिल क्र. LEDGER-01-07-2026-TO-15-11-2026",
+    "category": "ईंधन (डीजल एवं पेट्रोल)",
+    "mode": "चेक",
+    "ref": "049035",
+    "amount": 1050000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "बिल कुल: ₹1092392.55"
+  }
+];
+
+    let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
+    let currentAccountingTab = 'invoices'; // 'invoices', 'ledgers', 'payments', 'heads'
+    let currentAccInvoiceSearch = '';
+    let currentAccCategoryFilter = 'all';
+    let currentAccStatusFilter = 'all';
+    let currentPaymentSearch = '';
+    let selectedVendorName = 'सोना हार्डवेयर, अंजड़';
+
+    function switchMainModule(mod) {
+      currentMainModule = mod;
+      const secCampaign = document.getElementById('section-campaign');
+      const secAccounting = document.getElementById('section-accounting');
+      const btnCampaign = document.getElementById('btnModuleCampaign');
+      const btnAccounting = document.getElementById('btnModuleAccounting');
+
+      if (mod === 'accounting') {
+        if (secCampaign) secCampaign.style.display = 'none';
+        if (secAccounting) secAccounting.style.display = 'block';
+        if (btnCampaign) btnCampaign.classList.remove('active');
+        if (btnAccounting) btnAccounting.classList.add('active');
+        renderAccountingSection();
+        try {
+          if (window.history && window.history.replaceState) {
+            window.history.replaceState(null, '', '#accounting');
+          }
+        } catch(e) {}
+      } else {
+        if (secAccounting) secAccounting.style.display = 'none';
+        if (secCampaign) secCampaign.style.display = 'block';
+        if (btnAccounting) btnAccounting.classList.remove('active');
+        if (btnCampaign) btnCampaign.classList.add('active');
+        try {
+          if (window.history && window.history.replaceState) {
+            window.history.replaceState(null, '', '#donors');
+          }
+        } catch(e) {}
+      }
+    }
+
+    function switchAccountingTab(tabId, btn) {
+      currentAccountingTab = tabId;
+      document.querySelectorAll('.acc-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.acc-sub-pane').forEach(p => p.style.display = 'none');
+
+      if (!btn) {
+        btn = document.getElementById('btnAcc' + tabId.charAt(0).toUpperCase() + tabId.slice(1));
+      }
+      if (btn) btn.classList.add('active');
+
+      const targetPane = document.getElementById('acc-pane-' + tabId);
+      if (targetPane) targetPane.style.display = 'block';
+
+      if (tabId === 'invoices') renderAccountingInvoicesTable();
+      else if (tabId === 'ledgers') renderVendorLedgersView(selectedVendorName);
+      else if (tabId === 'payments') renderPaymentsTable();
+      else if (tabId === 'heads') renderAccountHeadsView();
+    }
+
+    function renderAccountingSection() {
+      const totalBilled = accountingInvoices.reduce((s, inv) => s + (Number(inv.amount) || 0), 0);
+      const totalPaid = accountingPayments.reduce((s, p) => s + (Number(p.amount) || 0), 0);
+      const totalDue = Math.max(0, totalBilled - totalPaid);
+      const totalDonations = declarations.reduce((s, d) => s + (Number(d.deposited) || 0), 0);
+      const netSurplus = Math.max(0, totalDonations - totalPaid);
+
+      // 5-Card KPI Strip
+      const elBilled = document.getElementById('accKpiTotalBilled');
+      const elPaid = document.getElementById('accKpiTotalPaid');
+      const elDue = document.getElementById('accKpiTotalDue');
+      const elRec = document.getElementById('accKpiTotalReceived');
+      const elSurp = document.getElementById('accKpiNetSurplus');
+
+      if (elBilled) elBilled.textContent = fmt(totalBilled);
+      if (elPaid) elPaid.textContent = fmt(totalPaid);
+      if (elDue) elDue.textContent = fmt(totalDue);
+      if (elRec) elRec.textContent = fmt(totalDonations);
+      if (elSurp) elSurp.textContent = fmt(netSurplus);
+
+      const elBilledSub = document.getElementById('accKpiBilledSub');
+      if (elBilledSub) elBilledSub.textContent = `${accountingInvoices.length} बीजक • 17 वेंडर`;
+
+      const elPaidSub = document.getElementById('accKpiPaidSub');
+      if (elPaidSub) elPaidSub.textContent = `${accountingPayments.length} चेक व बैंक प्रविष्टियां`;
+
+      const elInvCount = document.getElementById('accTabInvoicesCount');
+      if (elInvCount) elInvCount.textContent = accountingInvoices.length;
+
+      const elPayCount = document.getElementById('accTabPaymentsCount');
+      if (elPayCount) elPayCount.textContent = `${accountingPayments.length} चेक`;
+
+      // Render Sub-Views
+      renderAccountingInvoicesTable();
+      renderVendorLedgersView(selectedVendorName);
+      renderPaymentsTable();
+      renderAccountHeadsView();
+    }
+
+    function handleAccountingSearch(val) {
+      currentAccInvoiceSearch = (val || '').trim().toLowerCase();
+      renderAccountingInvoicesTable();
+    }
+
+    function handleAccountingCategoryFilter(val) {
+      currentAccCategoryFilter = val || 'all';
+      renderAccountingInvoicesTable();
+    }
+
+    function handleAccountingStatusFilter(val) {
+      currentAccStatusFilter = val || 'all';
+      renderAccountingInvoicesTable();
+    }
+
+    function renderAccountingInvoicesTable() {
+      const tbody = document.getElementById('accInvoicesTbody');
+      if (!tbody) return;
+
+      const filtered = accountingInvoices.filter(inv => {
+        const matchesCat = (currentAccCategoryFilter === 'all') || inv.category === currentAccCategoryFilter;
+        const matchesStatus = (currentAccStatusFilter === 'all') || inv.status === currentAccStatusFilter;
+        const matchesSearch = !currentAccInvoiceSearch ||
+          (inv.payee && inv.payee.toLowerCase().includes(currentAccInvoiceSearch)) ||
+          (inv.voucherNo && inv.voucherNo.toLowerCase().includes(currentAccInvoiceSearch)) ||
+          (inv.date && inv.date.includes(currentAccInvoiceSearch)) ||
+          (inv.category && inv.category.toLowerCase().includes(currentAccInvoiceSearch)) ||
+          (inv.items && inv.items.some(it => (it.description && it.description.toLowerCase().includes(currentAccInvoiceSearch))));
+
+        return matchesCat && matchesStatus && matchesSearch;
+      });
+
+      const filteredSum = filtered.reduce((s, inv) => s + (Number(inv.amount) || 0), 0);
+      const elBadge = document.getElementById('accFilteredSumBadge');
+      if (elBadge) elBadge.textContent = fmt(filteredSum);
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:28px;color:var(--text-muted);">कोई बीजक प्रविष्टि नहीं मिली।</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map((inv, idx) => {
+        const originalIndex = accountingInvoices.indexOf(inv);
+        const itemsCount = (inv.items && Array.isArray(inv.items)) ? inv.items.length : 0;
+        const paidAmt = Number(inv.paidAmount) || 0;
+        const dueAmt = Number(inv.balanceAmount) || 0;
+
+        let statusBadge = '';
+        if (dueAmt <= 0) {
+          statusBadge = '<span class="badge" style="background:rgba(46,125,50,0.12);color:#2E7D32;font-size:11px;font-weight:700;"><i class="fa-solid fa-circle-check"></i> पूर्ण चुकता</span>';
+        } else if (paidAmt > 0) {
+          statusBadge = '<span class="badge" style="background:rgba(217,119,6,0.14);color:#D97706;font-size:11px;font-weight:700;"><i class="fa-solid fa-clock-rotate-left"></i> आंशिक चुकता</span>';
+        } else {
+          statusBadge = '<span class="badge" style="background:rgba(196,90,56,0.12);color:#C45A38;font-size:11px;font-weight:700;"><i class="fa-regular fa-clock"></i> लंबित</span>';
+        }
+
+        const chequeInfo = (inv.cheques && inv.cheques.length > 0)
+          ? inv.cheques.map(c => `<div style="font-size:11px;color:var(--text-secondary);"><i class="fa-solid fa-money-check" style="color:var(--gold);margin-right:3px;"></i>${c.mode} ${c.ref} (${fmt(c.amt)})</div>`).join('')
+          : `<div style="font-size:11px;color:var(--text-muted);">-</div>`;
+
+        return `
+          <tr>
+            <td style="font-weight:700;color:var(--text-secondary);text-align:center;">${idx + 1}</td>
+            <td>
+              <div style="font-weight:700;color:var(--text-primary);font-size:13.5px;">${inv.payee}</div>
+              ${inv.gstin ? `<div style="font-size:10.5px;color:var(--text-muted);font-family:monospace;margin-top:2px;"><i class="fa-solid fa-building-shield" style="color:var(--gold);margin-right:3px;"></i>GSTIN: ${inv.gstin}</div>` : ''}
+            </td>
+            <td style="white-space:nowrap;font-size:12.5px;color:var(--text-secondary);"><i class="fa-regular fa-calendar" style="color:var(--gold);margin-right:4px;"></i>${inv.date}</td>
+            <td style="white-space:nowrap;font-weight:700;color:var(--teal);"><i class="fa-solid fa-hashtag" style="font-size:10.5px;opacity:0.6;margin-right:3px;"></i>${inv.voucherNo}</td>
+            <td><span class="badge badge-village" style="background:rgba(209,154,80,0.14);color:var(--gold-dark);font-size:11.5px;font-weight:700;"><i class="fa-solid fa-tag" style="font-size:10px;margin-right:4px;"></i>${inv.category}</span></td>
+            <td style="text-align:right;font-weight:800;color:#C45A38;font-size:14px;">${fmt(inv.amount)}</td>
+            <td style="text-align:right;font-weight:700;color:#2E7D32;font-size:13.5px;">
+              ${fmt(paidAmt)}
+              ${chequeInfo}
+            </td>
+            <td style="text-align:right;font-weight:800;color:${dueAmt > 0 ? '#D97706' : 'var(--sage)'};font-size:13.5px;">${fmt(dueAmt)}</td>
+            <td style="text-align:center;">${statusBadge}</td>
+            <td style="text-align:center;white-space:nowrap;">
+              <button class="btn btn-sm" onclick="openAccountingDetailModal(${originalIndex})" style="background:var(--teal);color:#fff;border:none;padding:5px 11px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;">
+                <i class="fa-solid fa-list-check"></i> <span>${itemsCount} वस्तुएं</span>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderVendorLedgersView(targetVendor) {
+      const selectorBox = document.getElementById('accVendorSelectorStrip');
+      const displayCard = document.getElementById('accVendorLedgerDisplay');
+      if (!selectorBox || !displayCard) return;
+
+      // Group invoices and payments by vendor
+      const vendorMap = {};
+      accountingInvoices.forEach(inv => {
+        const v = inv.payee;
+        if (!vendorMap[v]) {
+          vendorMap[v] = { name: v, gstin: inv.gstin, billed: 0, paid: 0, due: 0, transactions: [] };
+        }
+        vendorMap[v].billed += inv.amount;
+        if (inv.gstin && !vendorMap[v].gstin) vendorMap[v].gstin = inv.gstin;
+
+        vendorMap[v].transactions.push({
+          date: inv.date,
+          ref: inv.voucherNo,
+          particulars: `सामग्री आपूर्ति / बीजक (${inv.category})`,
+          type: 'बीजक (Cr)',
+          billAmt: inv.amount,
+          paidAmt: 0
+        });
+      });
+
+      accountingPayments.forEach(p => {
+        const v = p.payee;
+        if (!vendorMap[v]) {
+          vendorMap[v] = { name: v, gstin: '', billed: 0, paid: 0, due: 0, transactions: [] };
+        }
+        vendorMap[v].paid += p.amount;
+
+        vendorMap[v].transactions.push({
+          date: p.date,
+          ref: `${p.mode} ${p.ref}`,
+          particulars: `बैंक / नकद भुगतान (वाउचर: ${p.voucherNo})`,
+          type: 'भुगतान (Dr)',
+          billAmt: 0,
+          paidAmt: p.amount
+        });
+      });
+
+      Object.values(vendorMap).forEach(v => {
+        v.due = Math.max(0, v.billed - v.paid);
+        // Sort transactions chronologically
+        v.transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
+      });
+
+      const vendorNames = Object.keys(vendorMap);
+      if (!vendorMap[targetVendor] && vendorNames.length > 0) {
+        targetVendor = vendorNames[0];
+      }
+      selectedVendorName = targetVendor;
+
+      // Render vendor pills
+      selectorBox.innerHTML = vendorNames.map(name => {
+        const v = vendorMap[name];
+        const isActive = name === targetVendor;
+        const badgeClass = v.due > 0 ? 'vendor-pill-due' : 'vendor-pill-paid';
+        const badgeText = v.due > 0 ? `देय: ${fmt(v.due)}` : 'पूर्ण चुकता';
+
+        return `
+          <button class="vendor-pill ${isActive ? 'active' : ''}" onclick="selectVendorLedger('${name}')">
+            <span>${name}</span>
+            <span class="${badgeClass}">${badgeText}</span>
+          </button>
+        `;
+      }).join('');
+
+      // Render Selected Vendor Ledger
+      const cur = vendorMap[targetVendor];
+      if (!cur) return;
+
+      let runningBal = 0;
+      const rowsHtml = cur.transactions.map((t, idx) => {
+        if (t.type.includes('Cr')) {
+          runningBal += t.billAmt;
+        } else {
+          runningBal -= t.paidAmt;
+        }
+
+        const isBill = t.billAmt > 0;
+        return `
+          <tr>
+            <td style="text-align:center;font-weight:700;color:var(--text-muted);">${idx + 1}</td>
+            <td style="white-space:nowrap;font-size:12.5px;color:var(--text-secondary);"><i class="fa-regular fa-calendar" style="color:var(--gold);margin-right:4px;"></i>${t.date}</td>
+            <td style="font-weight:700;color:var(--teal);white-space:nowrap;">${t.ref}</td>
+            <td style="font-weight:600;color:var(--text-primary);">${t.particulars}</td>
+            <td style="text-align:center;"><span class="badge" style="background:${isBill ? 'rgba(196,90,56,0.12)' : 'rgba(46,125,50,0.12)'};color:${isBill ? '#C45A38' : '#2E7D32'};font-size:11px;font-weight:700;">${t.type}</span></td>
+            <td style="text-align:right;font-weight:700;color:#C45A38;">${t.billAmt > 0 ? fmt(t.billAmt) : '-'}</td>
+            <td style="text-align:right;font-weight:700;color:#2E7D32;">${t.paidAmt > 0 ? fmt(t.paidAmt) : '-'}</td>
+            <td style="text-align:right;font-weight:800;color:${runningBal > 0 ? '#D97706' : 'var(--sage)'};font-size:13.5px;">${fmt(Math.max(0, runningBal))} Cr</td>
+          </tr>
+        `;
+      }).join('');
+
+      displayCard.innerHTML = `
+        <div class="ledger-header">
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">विक्रेता / फर्म आधिकारिक खाता बही (Vendor Account Ledger)</div>
+            <h3 style="margin:4px 0 2px;font-size:19px;color:var(--teal);font-weight:800;">${cur.name}</h3>
+            ${cur.gstin ? `<div style="font-size:11.5px;color:var(--text-secondary);font-family:monospace;"><i class="fa-solid fa-building-shield" style="color:var(--gold);margin-right:4px;"></i>GSTIN: <strong>${cur.gstin}</strong></div>` : ''}
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <div style="background:#fff;padding:8px 14px;border-radius:8px;border:1px solid var(--sandstone);text-align:right;">
+              <div style="font-size:11px;color:var(--text-muted);font-weight:700;">कुल बीजक राशि</div>
+              <div style="font-size:15px;font-weight:800;color:#C45A38;">${fmt(cur.billed)}</div>
+            </div>
+            <div style="background:#fff;padding:8px 14px;border-radius:8px;border:1px solid var(--sandstone);text-align:right;">
+              <div style="font-size:11px;color:var(--text-muted);font-weight:700;">कुल भुगतान चुकता</div>
+              <div style="font-size:15px;font-weight:800;color:#2E7D32;">${fmt(cur.paid)}</div>
+            </div>
+            <div style="background:${cur.due > 0 ? 'rgba(217,119,6,0.1)' : 'rgba(46,125,50,0.1)'};padding:8px 16px;border-radius:8px;border:1px solid ${cur.due > 0 ? 'rgba(217,119,6,0.3)' : 'rgba(46,125,50,0.3)'};text-align:right;">
+              <div style="font-size:11px;color:${cur.due > 0 ? '#D97706' : '#2E7D32'};font-weight:800;">अंतिम देय शेष (Closing Due)</div>
+              <div style="font-size:16px;font-weight:800;color:${cur.due > 0 ? '#D97706' : '#2E7D32'};">${fmt(cur.due)}</div>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width:40px;">क्र.</th>
+                <th>दिनांक</th>
+                <th>संदर्भ क्र. (बीजक / चेक)</th>
+                <th>विवरण (Particulars)</th>
+                <th style="text-align:center;">प्रविष्टि प्रकार</th>
+                <th style="text-align:right;">बीजक राशि (Cr)</th>
+                <th style="text-align:right;">भुगतान राशि (Dr)</th>
+                <th style="text-align:right;">संचयी देय शेष (Balance)</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+            <tfoot>
+              <tr style="background:var(--sandstone-light);font-weight:800;">
+                <td colspan="5" style="text-align:right;font-size:13px;color:var(--teal);">खाता कुल योग (Total Ledger Summary):</td>
+                <td style="text-align:right;color:#C45A38;font-size:14px;">${fmt(cur.billed)}</td>
+                <td style="text-align:right;color:#2E7D32;font-size:14px;">${fmt(cur.paid)}</td>
+                <td style="text-align:right;color:${cur.due > 0 ? '#D97706' : '#2E7D32'};font-size:14px;">${fmt(cur.due)} Cr</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      `;
+    }
+
+    function selectVendorLedger(name) {
+      selectedVendorName = name;
+      renderVendorLedgersView(name);
+    }
+
+    function handlePaymentSearch(val) {
+      currentPaymentSearch = (val || '').trim().toLowerCase();
+      renderPaymentsTable();
+    }
+
+    function renderPaymentsTable() {
+      const tbody = document.getElementById('accPaymentsTbody');
+      if (!tbody) return;
+
+      const filtered = accountingPayments.filter(p => {
+        return !currentPaymentSearch ||
+          (p.payee && p.payee.toLowerCase().includes(currentPaymentSearch)) ||
+          (p.ref && p.ref.toLowerCase().includes(currentPaymentSearch)) ||
+          (p.mode && p.mode.toLowerCase().includes(currentPaymentSearch)) ||
+          (p.voucherNo && p.voucherNo.toLowerCase().includes(currentPaymentSearch)) ||
+          (p.date && p.date.includes(currentPaymentSearch));
+      });
+
+      const filteredTotal = filtered.reduce((s, p) => s + (Number(p.amount) || 0), 0);
+      const elBadge = document.getElementById('accPaymentsTotalBadge');
+      if (elBadge) elBadge.textContent = fmt(filteredTotal);
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--text-muted);">कोई भुगतान प्रविष्टि नहीं मिली।</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map((p, idx) => {
+        return `
+          <tr>
+            <td style="font-weight:700;color:var(--text-secondary);text-align:center;">${idx + 1}</td>
+            <td style="white-space:nowrap;font-size:12.5px;color:var(--text-secondary);"><i class="fa-regular fa-calendar" style="color:var(--gold);margin-right:4px;"></i>${p.date}</td>
+            <td style="font-weight:700;color:var(--text-primary);">${p.payee}</td>
+            <td><span class="badge" style="background:rgba(13,79,79,0.08);color:var(--teal);font-weight:700;font-size:11px;"><i class="fa-solid fa-credit-card" style="margin-right:4px;"></i>${p.mode}</span></td>
+            <td style="font-weight:700;color:#8B263E;font-family:monospace;font-size:13px;"><i class="fa-solid fa-money-check" style="margin-right:4px;"></i>${p.ref}</td>
+            <td style="white-space:nowrap;color:var(--teal);font-weight:600;font-size:12.5px;">${p.voucherNo}</td>
+            <td><span class="badge badge-village" style="background:rgba(209,154,80,0.12);color:var(--gold-dark);font-size:11px;font-weight:700;">${p.category}</span></td>
+            <td style="text-align:right;font-weight:800;color:#2E7D32;font-size:14px;">${fmt(p.amount)}</td>
+            <td style="text-align:center;"><span class="badge" style="background:rgba(46,125,50,0.12);color:#2E7D32;font-weight:700;font-size:11px;"><i class="fa-solid fa-shield-check"></i> ${p.status}</span></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderAccountHeadsView() {
+      const box = document.getElementById('accHeadsContainer');
+      if (!box) return;
+
+      const headsMap = {};
+      accountingInvoices.forEach(inv => {
+        const h = inv.category;
+        if (!headsMap[h]) headsMap[h] = { name: h, total: 0, count: 0, vouchers: [] };
+        headsMap[h].total += inv.amount;
+        headsMap[h].count += 1;
+        headsMap[h].vouchers.push(inv);
+      });
+
+      const grandTotal = accountingInvoices.reduce((s, inv) => s + (Number(inv.amount) || 0), 0);
+      const headsList = Object.values(headsMap).sort((a, b) => b.total - a.total);
+
+      const icons = {
+        'नल-जल': 'fa-solid fa-faucet-drip',
+        'निर्माण सामग्री एवं कार्य': 'fa-solid fa-trowel-bricks',
+        'ईंधन (डीजल एवं पेट्रोल)': 'fa-solid fa-gas-pump',
+        'रंग-रोगन एवं पुताई': 'fa-solid fa-paint-roller',
+        'जेसीबी एवं मिट्टी भराव कार्य': 'fa-solid fa-truck-monster',
+        'विद्युत एवं प्रकाश व्यवस्था': 'fa-solid fa-bolt',
+        'वृक्षारोपण एवं उद्यान विकास': 'fa-solid fa-seedling',
+        'छपाई एवं प्रचार-प्रसार': 'fa-solid fa-print'
+      };
+
+      box.innerHTML = headsList.map(h => {
+        const pct = grandTotal > 0 ? ((h.total / grandTotal) * 100).toFixed(1) : '0.0';
+        const icon = icons[h.name] || 'fa-solid fa-tag';
+
+        return `
+          <div class="acc-kpi-card" style="border-top:4px solid var(--teal);cursor:pointer;" onclick="filterByHeadFromCard('${h.name}')">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:14px;font-weight:800;color:var(--teal);display:flex;align-items:center;gap:7px;">
+                <i class="${icon}" style="color:var(--gold);"></i> ${h.name}
+              </span>
+              <span class="badge" style="background:rgba(13,79,79,0.08);color:var(--teal);font-size:11px;font-weight:700;">${h.count} बीजक</span>
+            </div>
+            <div style="font-size:22px;font-weight:800;color:#C45A38;margin:12px 0 6px;">${fmt(h.total)}</div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div style="flex:1;height:6px;background:var(--sandstone);border-radius:3px;overflow:hidden;">
+                <div style="height:100%;width:${pct}%;background:var(--teal);border-radius:3px;"></div>
+              </div>
+              <span style="font-size:11px;font-weight:700;color:var(--text-muted);white-space:nowrap;">${pct}% व्यय</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterByHeadFromCard(headName) {
+      const select = document.getElementById('accCategorySelect');
+      if (select) select.value = headName;
+      currentAccCategoryFilter = headName;
+      switchAccountingTab('invoices');
+      renderAccountingInvoicesTable();
+      const table = document.getElementById('accInvoicesTable');
+      if (table) table.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function openAccountingDetailModal(idx) {
+      const inv = accountingInvoices[idx];
+      if (!inv) return;
+
+      const modal = document.getElementById('expenseDetailModalBackdrop');
+      const metaBox = document.getElementById('expModalMeta');
+      const tbody = document.getElementById('expModalItemsTbody');
+      const countBadge = document.getElementById('expModalItemCount');
+
+      if (!modal) return;
+
+      if (metaBox) {
+        metaBox.innerHTML = `
+          <div>
+            <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;font-weight:700;">भुगतान प्राप्तकर्ता (फर्म / वेंडर)</div>
+            <div style="font-size:16px;font-weight:800;color:var(--teal);margin-top:2px;">${inv.payee}</div>
+            ${inv.gstin ? `<div style="font-size:11.5px;color:var(--text-secondary);font-family:monospace;margin-top:3px;"><i class="fa-solid fa-building-shield" style="color:var(--gold);margin-right:4px;"></i>GSTIN: <strong>${inv.gstin}</strong></div>` : ''}
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;gap:8px;">
+              <div>
+                <div style="font-size:11px;color:var(--text-muted);font-weight:700;">वाउचर / बिल क्र.</div>
+                <div style="font-size:14px;font-weight:700;color:#8B263E;margin-top:2px;">${inv.voucherNo}</div>
+              </div>
+              <div>
+                <div style="font-size:11px;color:var(--text-muted);font-weight:700;">बिल दिनांक</div>
+                <div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-top:2px;">${inv.date}</div>
+              </div>
+            </div>
+            <div style="margin-top:8px;">
+              <div style="font-size:11px;color:var(--text-muted);font-weight:700;">लेखा मद / श्रेणी</div>
+              <div style="font-size:13px;font-weight:700;color:var(--gold-dark);margin-top:2px;">
+                <i class="fa-solid fa-tag" style="margin-right:4px;"></i>${inv.category}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      const items = (inv.items && Array.isArray(inv.items)) ? inv.items : [];
+      if (countBadge) countBadge.textContent = `${items.length} वस्तुएं`;
+
+      if (tbody) {
+        if (items.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-muted);">इस बीजक के लिए विस्तृत सामग्री सूची दर्ज नहीं है।</td></tr>`;
+        } else {
+          tbody.innerHTML = items.map((itm, i) => {
+            const desc = itm.description || itm.name || '-';
+            const qty = itm.quantity !== undefined ? itm.quantity : (itm.qty !== undefined ? itm.qty : '-');
+            const unit = itm.unit || '';
+            const amt = itm.amount !== undefined ? Number(itm.amount) : 0;
+            return `
+              <tr>
+                <td style="text-align:center;font-weight:700;color:var(--text-muted);">${i + 1}</td>
+                <td style="font-weight:600;color:var(--text-primary);">${desc}</td>
+                <td style="text-align:right;font-weight:600;">${qty}</td>
+                <td style="text-align:center;color:var(--text-secondary);font-size:11.5px;">${unit}</td>
+                <td style="text-align:right;font-weight:700;color:var(--teal);">${fmt(amt)}</td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+
+      const calcBox = document.getElementById('expModalCalcStrip');
+      if (calcBox) {
+        const taxable = Number(inv.taxableAmount) || 0;
+        const gst = Number(inv.taxAmount) || 0;
+        const total = Number(inv.amount) || 0;
+        const paid = Number(inv.paidAmount) || 0;
+        const due = Number(inv.balanceAmount) || 0;
+
+        calcBox.innerHTML = `
+          <div><span style="color:var(--text-muted);">कर योग्य राशि:</span> <strong>${taxable > 0 ? fmt(taxable) : '-'}</strong></div>
+          <div><span style="color:var(--text-muted);">GST राशि:</span> <strong>${gst > 0 ? fmt(gst) : '-'}</strong></div>
+          <div><span style="color:var(--text-muted);">बिल कुल राशि:</span> <strong style="color:#C45A38;font-size:15px;">${fmt(total)}</strong></div>
+          <div><span style="color:var(--text-muted);">भुगतान:</span> <strong style="color:#2E7D32;">${fmt(paid)}</strong></div>
+          <div><span style="color:var(--text-muted);">देय शेष:</span> <strong style="color:${due > 0 ? '#D97706' : 'var(--sage)'};">${fmt(due)}</strong></div>
+        `;
+      }
+
+      modal.classList.add('active');
+    }
+
+    async function refreshAccountingFromSheet(btn) {
+      const icon = document.getElementById('accSyncSpinIcon');
+      if (icon) icon.classList.add('fa-spin');
+      if (btn) btn.disabled = true;
+      try {
+        await fetchGoogleSheetData(true);
+        renderAccountingSection();
+        const timeEl = document.getElementById('accLastSyncTime');
+        if (timeEl) {
+          const now = new Date();
+          timeEl.textContent = now.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+      } catch (e) {
+        console.error('Accounting refresh error:', e);
+      } finally {
+        if (icon) icon.classList.remove('fa-spin');
+        if (btn) btn.disabled = false;
+      }
+    }
+
+
     window.addEventListener('DOMContentLoaded', () => {
       renderStories();
 
       const initialHash = (window.location.hash || '').replace('#', '').trim();
       if (initialHash && document.getElementById('pane-' + initialHash)) {
         switchTab(initialHash);
+
+      // Check initial hash for direct routing to Accounting Module
+      if (window.location.hash === '#accounting' || window.location.hash === '#expenses' || window.location.hash === '#invoices' || window.location.hash === '#ledgers' || window.location.hash === '#payments') {
+        switchMainModule('accounting');
+        if (window.location.hash === '#ledgers') switchAccountingTab('ledgers');
+        else if (window.location.hash === '#payments') switchAccountingTab('payments');
+        else if (window.location.hash === '#heads') switchAccountingTab('heads');
+      } else {
+        renderAccountingSection();
+      }
+
       }
 
       // 100% CANONICAL GOOGLE SHEETS MIRROR (Pure read-only, zero device-specific drift)
@@ -3350,12 +6516,13 @@
         const getLiveGVizUrl = (tab) => `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(tab)}&tq=${encodeURIComponent('select *')}&_cb=${ts}&_r=${Math.random()}`;
 
         // Concurrently fetch baseline CSV stream, Live Declaration, Collections, and Live Collection (Zero-Cache)
-        const [csvSettled, liveDeclSettled, bulkCollSettled, liveCollSettled, expensesSettled] = await Promise.allSettled([
+        const [csvSettled, liveDeclSettled, bulkCollSettled, liveCollSettled, expensesSettled, paymentsSettled] = await Promise.allSettled([
           fetch(`${CSV_DECL_URL}&_cb=${ts}`, { cache: 'no-store' }),
           fetch(getLiveGVizUrl('Live Declaration'), { cache: 'no-store' }),
           fetch(getLiveGVizUrl('Collections'), { cache: 'no-store' }),
           fetch(getLiveGVizUrl('Live Collection'), { cache: 'no-store' }),
-          fetch(getLiveGVizUrl('Expenses'), { cache: 'no-store', headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' } })
+          fetch(getLiveGVizUrl('Expenses'), { cache: 'no-store', headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' } }),
+          fetch(getLiveGVizUrl('Payments'), { cache: 'no-store', headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' } })
         ]);
 
         // 1. PRIMARY FETCH: Process Google Sheets Raw CSV Stream (100% immune to UI filters)
@@ -3677,8 +6844,66 @@
           }
         }
 
-        // 6. EXPENSES FETCH: Process Expenses tab from Google Sheet
-        if (expensesSettled.status === 'fulfilled' && expensesSettled.value.ok) {
+        // 4. OPTIONAL SECONDARY FETCH: Process Expenses & Payments tabs from Google Sheet
+        // 4A. Process Payments tab if available
+        if (paymentsSettled && paymentsSettled.status === 'fulfilled' && paymentsSettled.value.ok) {
+          try {
+            const rawPay = await paymentsSettled.value.text();
+            const matchPay = rawPay.match(/setResponse\(([\s\S]*)\);?/);
+            if (matchPay) {
+              const payData = JSON.parse(matchPay[1]);
+              const payRows = payData.table && payData.table.rows ? payData.table.rows : [];
+              const parsedPayments = [];
+
+              for (let i = 0; i < payRows.length; i++) {
+                const pc = payRows[i].c;
+                if (!pc || pc.length < 4) continue;
+                const getPVal = (idx) => {
+                  if (idx === undefined || !pc[idx]) return '';
+                  if (pc[idx].f !== undefined && pc[idx].f !== null) return String(pc[idx].f).trim();
+                  if (pc[idx].v !== undefined && pc[idx].v !== null) return pc[idx].v;
+                  return '';
+                };
+
+                const pSno = getPVal(0);
+                const pDate = String(getPVal(1)).trim();
+                const pPayee = String(getPVal(2)).trim();
+                const pVouch = String(getPVal(3)).trim();
+                let pCat = String(getPVal(4)).trim();
+                if (pCat.includes('नल-जल') || pCat.includes('जल-व्यवस्था') || pCat.includes('Plumbing')) pCat = 'नल-जल';
+                const pMode = String(getPVal(5)).trim() || 'चेक';
+                const pRef = String(getPVal(6)).trim();
+                const pAmt = parseFloat(String(getPVal(7)).replace(/[^0-9.]/g, '')) || 0;
+                const pStat = String(getPVal(8)).trim() || 'बैंक निकासी सत्यापित';
+                const pRemarks = String(getPVal(9)).trim();
+
+                if (String(pSno).trim() === 'क्र.' || pPayee.includes('प्राप्तकर्ता') || pAmt <= 0) continue;
+
+                parsedPayments.push({
+                  sno: parsedPayments.length + 1,
+                  date: pDate,
+                  payee: pPayee,
+                  voucherNo: pVouch,
+                  category: pCat,
+                  mode: pMode,
+                  ref: pRef,
+                  amount: pAmt,
+                  status: pStat,
+                  remarks: pRemarks
+                });
+              }
+
+              if (parsedPayments.length > 0) {
+                accountingPayments = parsedPayments;
+              }
+            }
+          } catch (payErr) {
+            console.warn('Payments process notice:', payErr);
+          }
+        }
+
+        // 4B. Process Expenses tab from Google Sheet
+        if (expensesSettled && expensesSettled.status === 'fulfilled' && expensesSettled.value.ok) {
           try {
             const rawExp = await expensesSettled.value.text();
             const matchExp = rawExp.match(/setResponse\(([\s\S]*)\);?/);
@@ -3687,7 +6912,6 @@
               const expCols = expData.table && expData.table.cols ? expData.table.cols : [];
               const expRows = expData.table && expData.table.rows ? expData.table.rows : [];
 
-              // Dynamic column mapping based on header labels (supports both 1-row-per-item and 1-row-per-voucher)
               const colMap = {
                 sno: 0,
                 payee: 1,
@@ -3703,7 +6927,10 @@
                 taxAmount: 11,
                 billTotal: 12,
                 gstin: 13,
-                status: 14
+                status: 14,
+                paidAmt: 15,
+                balanceAmt: 16,
+                chequeRef: 17
               };
 
               expCols.forEach((col, idx) => {
@@ -3718,18 +6945,16 @@
                 else if (lbl.includes('कर योग्य') || lbl.includes('taxable')) colMap.taxableAmount = idx;
                 else if (lbl.includes('gst राशि') || lbl.includes('gst amount')) colMap.taxAmount = idx;
                 else if (lbl.includes('gstin')) colMap.gstin = idx;
+                else if (lbl.includes('भुगतान राशि') || lbl.includes('paid amt') || lbl.includes('paid')) colMap.paidAmt = idx;
+                else if (lbl.includes('शेष राशि') || lbl.includes('due amt') || lbl.includes('balance')) colMap.balanceAmt = idx;
+                else if (lbl.includes('भुगतान संदर्भ') || lbl.includes('चेक') || lbl.includes('cheque')) colMap.chequeRef = idx;
                 else if (lbl.includes('स्थिति') || lbl.includes('status')) colMap.status = idx;
-                else if (lbl.includes('वाउचर') || lbl.includes('बिल') || lbl.includes('voucher')) colMap.voucherNo = idx;
                 else if (lbl.includes('प्राप्तकर्ता') || lbl.includes('फर्म') || lbl.includes('वेंडर') || lbl.includes('payee')) colMap.payee = idx;
                 else if (lbl.includes('दिनांक') || lbl.includes('date')) colMap.date = idx;
-                else if (lbl.includes('मद') || lbl.includes('कार्य') || lbl.includes('विवरण') || lbl.includes('desc') || lbl.includes('head')) colMap.itemDescription = idx;
+                else if (lbl.includes('मद') || lbl.includes('कार्य विवरण') || lbl.includes('desc') || lbl.includes('head')) colMap.itemDescription = idx;
                 else if (lbl.includes('श्रेणी') || lbl.includes('category')) colMap.category = idx;
-                else if (lbl.includes('व्यय राशि') || lbl.includes('राशि') || lbl.includes('amount')) {
-                  if (colMap.billTotal === undefined || colMap.billTotal === 12) colMap.billTotal = idx;
-                }
               });
 
-              // Map to group individual item rows into canonical vouchers
               const vouchersMap = new Map();
 
               for (let i = 0; i < expRows.length; i++) {
@@ -3737,35 +6962,37 @@
                 if (!ec || ec.length < 3) continue;
 
                 const getVal = (idx) => {
-                  if (idx === undefined || !ec[idx]) return "";
+                  if (idx === undefined || !ec[idx]) return '';
                   if (ec[idx].f !== undefined && ec[idx].f !== null) return String(ec[idx].f).trim();
                   if (ec[idx].v !== undefined && ec[idx].v !== null) return ec[idx].v;
-                  return "";
+                  return '';
                 };
 
                 const eSno = getVal(colMap.sno) || (i + 1);
                 let ePayee = String(getVal(colMap.payee)).trim();
                 let eDate = String(getVal(colMap.date)).trim();
-                let eVouch = String(getVal(colMap.voucherNo)).trim() || "-";
-                let eDesc = String(getVal(colMap.itemDescription)).trim();
-                let eCat = String(getVal(colMap.category)).trim() || "विविध";
+                let eVouch = String(getVal(colMap.voucherNo)).trim() || '-';
+                let eCat = String(getVal(colMap.category)).trim() || 'विविध';
+                if (eCat.includes('नल-जल') || eCat.includes('जल-व्यवस्था') || eCat.includes('Plumbing')) eCat = 'नल-जल';
+                let eDesc = eCat; // Category and Head are kept identical!
                 let eItemName = String(getVal(colMap.itemName)).trim();
-                const eQty = getVal(colMap.qty) !== "" ? getVal(colMap.qty) : "";
-                const eUnit = String(getVal(colMap.unit)).trim() || "pcs";
+                const eQty = getVal(colMap.qty) !== '' ? getVal(colMap.qty) : '';
+                const eUnit = String(getVal(colMap.unit)).trim() || 'नग';
                 const eItemAmt = parseFloat(String(getVal(colMap.itemAmt)).replace(/[^0-9.]/g, '')) || 0;
                 const eTaxable = parseFloat(String(getVal(colMap.taxableAmount)).replace(/[^0-9.]/g, '')) || 0;
                 const eTaxAmt = parseFloat(String(getVal(colMap.taxAmount)).replace(/[^0-9.]/g, '')) || 0;
                 const eBillTotal = parseFloat(String(getVal(colMap.billTotal)).replace(/[^0-9.]/g, '')) || 0;
                 const eGstin = String(getVal(colMap.gstin)).trim();
-                const eStat = String(getVal(colMap.status)).trim() || "सत्यापित";
+                const eStat = String(getVal(colMap.status)).trim() || 'सत्यापित';
+                const ePaid = parseFloat(String(getVal(colMap.paidAmt)).replace(/[^0-9.]/g, '')) || 0;
+                const eBal = parseFloat(String(getVal(colMap.balanceAmt)).replace(/[^0-9.]/g, '')) || 0;
 
                 // Skip header row if returned inside rows
                 if (String(eSno).trim() === 'क्र.' || eDesc === 'मद / कार्य विवरण' || ePayee === 'भुगतान प्राप्तकर्ता' || eItemName === 'सामग्री नाम / विवरण') continue;
                 if (!eDesc && !ePayee && !eItemName && eBillTotal <= 0 && eItemAmt <= 0) continue;
 
-                // Group by voucher number (or fallback to payee + date or row index)
-                const cleanVKey = (v) => String(v || "").replace(/^बिल\s*क्र\.?\s*/i, "").replace(/[^a-zA-Z0-9_\-\/]/g, "").toLowerCase();
-                const vKey = cleanVKey(eVouch) || (ePayee + "_" + eDate).toLowerCase() || ("exp_" + eSno);
+                const cleanVKey = (v) => String(v || '').replace(/^बिल\s*क्र\.?\s*/i, '').replace(/[^a-zA-Z0-9_\-\/]/g, '').toLowerCase();
+                const vKey = cleanVKey(eVouch) || (ePayee + '_' + eDate).toLowerCase() || ('exp_' + eSno);
 
                 if (!vouchersMap.has(vKey)) {
                   vouchersMap.set(vKey, {
@@ -3773,55 +7000,74 @@
                     payee: ePayee,
                     date: eDate,
                     voucherNo: eVouch,
-                    itemDescription: eDesc || eItemName,
+                    itemDescription: eDesc,
                     category: eCat,
                     amount: eBillTotal > 0 ? eBillTotal : eItemAmt,
                     taxableAmount: eTaxable,
                     taxAmount: eTaxAmt,
+                    paidAmount: ePaid,
+                    balanceAmount: eBal,
                     gstin: eGstin,
-                    status: eStat,
+                    status: eBal <= 0 && ePaid > 0 ? 'पूर्ण चुकता' : (ePaid > 0 ? 'आंशिक चुकता' : eStat),
+                    cheques: [],
                     items: []
                   });
                 }
 
                 const v = vouchersMap.get(vKey);
-
-                // Update voucher-level fields if previously empty
                 if (!v.payee && ePayee) v.payee = ePayee;
                 if (!v.date && eDate) v.date = eDate;
                 if (!v.gstin && eGstin) v.gstin = eGstin;
                 if (eBillTotal > 0) v.amount = eBillTotal;
                 if (eTaxable > 0) v.taxableAmount = eTaxable;
                 if (eTaxAmt > 0) v.taxAmount = eTaxAmt;
+                if (ePaid > 0) v.paidAmount = ePaid;
+                if (eBal > 0) v.balanceAmount = eBal;
 
-                // Attach item row if itemName or itemAmt exists
                 if (eItemName || eItemAmt > 0) {
                   v.items.push({
                     description: eItemName || eDesc,
-                    quantity: eQty !== "" ? eQty : 1,
+                    quantity: eQty !== '' ? eQty : 1,
                     unit: eUnit,
                     amount: eItemAmt
                   });
                 }
               }
 
-              // Compute totals if billTotal wasn't set explicitly on vouchers
+              // Compute totals and link payments
               const parsedVouchers = Array.from(vouchersMap.values()).map(v => {
                 if (v.amount <= 0 && v.items.length > 0) {
                   const itemsSum = v.items.reduce((s, itm) => s + (Number(itm.amount) || 0), 0);
                   v.amount = itemsSum + (v.taxAmount || 0);
                 }
+                const cleanVKey = (val) => String(val || '').replace(/^बिल\s*क्र\.?\s*/i, '').replace(/[^a-zA-Z0-9_\-\/]/g, '').toLowerCase();
+                const curVKey = cleanVKey(v.voucherNo);
+                const matchingPayments = accountingPayments.filter(p => cleanVKey(p.voucherNo) === curVKey);
+                if (matchingPayments.length > 0) {
+                  v.cheques = matchingPayments.map(p => ({ mode: p.mode, ref: p.ref, date: p.date, amt: p.amount, status: p.status }));
+                  const sumPaid = matchingPayments.reduce((s, p) => s + p.amount, 0);
+                  if (sumPaid > 0) {
+                    v.paidAmount = sumPaid;
+                    v.balanceAmount = Math.max(0, v.amount - sumPaid);
+                    v.status = v.balanceAmount <= 0 ? 'पूर्ण चुकता' : 'आंशिक चुकता';
+                  }
+                }
                 return v;
               });
 
               if (parsedVouchers.length > 0) {
+                accountingInvoices = parsedVouchers;
                 expenses = parsedVouchers;
+                try {
+                  renderAccountingSection();
+                } catch(accErr) {}
               }
             }
           } catch (e) {
-            console.warn("Expenses process notice:", e);
+            console.warn('Expenses process notice:', e);
           }
         }
+        
 
         // 5. Apply local edits from Karyakarta portal (if edited on this device)
         try {
@@ -6187,6 +9433,7 @@
     }
 
     function renderExpensesTab() {
+      if (typeof renderAccountingSection === "function") renderAccountingSection();
       const totalExp = expenses.reduce((s, e) => s + (Number(e.amount) || 0), 0);
       const totalRec = declarations.reduce((s, d) => s + (Number(d.deposited) || 0), 0);
       const netBal = Math.max(0, totalRec - totalExp);
