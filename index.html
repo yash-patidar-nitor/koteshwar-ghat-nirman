@@ -606,6 +606,55 @@
       color: #ffffff;
     }
 
+        .acc-vendor-selector-bar {
+      background: var(--sandstone-light);
+      border: 1px solid var(--sandstone);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .acc-vendor-selector-inner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      min-width: 300px;
+    }
+    .acc-vendor-selector-label {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--teal);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .acc-vendor-selector-select-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+      max-width: 540px;
+    }
+    #accVendorDropdownSelect {
+      width: 100%;
+      padding: 9px 14px;
+      border: 2px solid var(--teal);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--teal);
+      background: #ffffff;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      outline: none;
+    }
+
     .ledger-card {
       background: #ffffff;
       border-radius: 12px;
@@ -2162,10 +2211,160 @@
         margin-bottom: 14px;
       }
 
-      .kpi-strip { grid-template-columns: 1fr 1fr; gap: 10px; }
-      .kpi-card.hero-card { grid-column: span 2; }
-      .kpi-card { padding: 13px; }
-      .kpi-amount { font-size: 20px; }
+      /* ---------- MOBILE TILE OPTIMIZATIONS (2 TILES HORIZONTALLY) ---------- */
+      .kpi-strip {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+        margin-bottom: 14px !important;
+      }
+      .kpi-card.hero-card { grid-column: span 2 !important; }
+      .kpi-card {
+        padding: 9px 11px !important;
+        border-radius: 9px !important;
+      }
+      .kpi-head { margin-bottom: 4px !important; }
+      .kpi-title { font-size: 11px !important; line-height: 1.25 !important; }
+      .kpi-icon-wrap { width: 28px !important; height: 28px !important; font-size: 13px !important; border-radius: 6px !important; }
+      .kpi-amount { font-size: 17px !important; margin-bottom: 3px !important; line-height: 1.15 !important; }
+      .kpi-footer { font-size: 10px !important; gap: 2px !important; }
+      .kpi-badge { font-size: 9px !important; padding: 1px 5px !important; }
+
+      /* Accounting 5 KPI Tiles: 2 Columns Horizontally */
+      .acc-kpi-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+        margin-bottom: 14px !important;
+      }
+      .acc-kpi-grid > .acc-kpi-card:first-child {
+        grid-column: span 2 !important;
+      }
+      .acc-kpi-card {
+        padding: 9px 11px !important;
+        border-radius: 9px !important;
+      }
+      .acc-kpi-title {
+        font-size: 10.5px !important;
+        gap: 4px !important;
+        line-height: 1.2 !important;
+      }
+      .acc-kpi-title i { font-size: 11.5px !important; }
+      .acc-kpi-val {
+        font-size: 15.5px !important;
+        margin: 4px 0 2px !important;
+        line-height: 1.15 !important;
+      }
+      .acc-kpi-sub {
+        font-size: 9.5px !important;
+        line-height: 1.2 !important;
+      }
+
+      /* Slab 5 KPI Tiles: 2 Columns Horizontally */
+      .slab-kpi-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+        margin-bottom: 14px !important;
+      }
+      .slab-kpi-grid > .slab-kpi-card:first-child {
+        grid-column: span 2 !important;
+      }
+      .slab-kpi-card {
+        padding: 9px 11px !important;
+        border-radius: 9px !important;
+      }
+      .slab-kpi-title {
+        font-size: 10.5px !important;
+        gap: 4px !important;
+        margin-bottom: 2px !important;
+      }
+      .slab-kpi-val {
+        font-size: 15.5px !important;
+        line-height: 1.15 !important;
+      }
+      .slab-kpi-sub {
+        font-size: 9.5px !important;
+        margin-top: 1px !important;
+      }
+
+      /* Account Heads View: 2 Columns Horizontally */
+      #accHeadsContainer {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+      }
+      #accHeadsContainer .acc-kpi-card {
+        padding: 9px 10px !important;
+        border-radius: 9px !important;
+      }
+      #accHeadsContainer .acc-kpi-card span[style*="font-size:14px"] {
+        font-size: 11.5px !important;
+        gap: 4px !important;
+      }
+      #accHeadsContainer .acc-kpi-card div[style*="font-size:22px"] {
+        font-size: 14.5px !important;
+        margin: 6px 0 3px !important;
+      }
+      #accHeadsContainer .acc-kpi-card span.badge {
+        font-size: 9px !important;
+        padding: 1px 4px !important;
+      }
+
+      /* Vendor Selector Bar on Mobile */
+      .acc-vendor-selector-bar {
+        padding: 10px 12px !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+      }
+      .acc-vendor-selector-inner {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        min-width: 0 !important;
+        gap: 6px !important;
+      }
+      .acc-vendor-selector-select-wrap {
+        min-width: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+      }
+      #accVendorDropdownSelect {
+        font-size: 13px !important;
+        padding: 8px 10px !important;
+        width: 100% !important;
+      }
+      #accVendorDropdownBalanceBadge {
+        width: 100% !important;
+      }
+      #accVendorDropdownBalanceBadge > div {
+        width: 100% !important;
+        justify-content: space-between !important;
+      }
+
+      /* Ledger Header & Stats Strip on Mobile */
+      .ledger-header {
+        padding: 12px 14px !important;
+      }
+      .ledger-stats-strip {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+        width: 100% !important;
+        margin-top: 10px !important;
+      }
+      .ledger-stats-strip > div:last-child {
+        grid-column: span 2 !important;
+      }
+
+      /* Master Plan and Legacy Grid 2-col on Mobile */
+      .master-plan-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+      }
+      .master-plan-card {
+        padding: 10px !important;
+      }
+      .legacy-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+      }
       .dashboard-wrap { padding: 14px 10px 50px; }
       .legacy-story-container { padding: 18px 12px; }
       .ba-module { padding: 14px 10px; }
@@ -3254,13 +3453,13 @@
 
         <!-- SUB-PANE 2: VENDOR LEDGERS -->
         <div id="acc-pane-ledgers" class="acc-sub-pane" style="display:none;">
-          <div style="background:var(--sandstone-light);border:1px solid var(--sandstone);border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;">
-            <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:300px;">
-              <label for="accVendorDropdownSelect" style="font-size:13.5px;font-weight:700;color:var(--teal);white-space:nowrap;display:flex;align-items:center;gap:7px;">
+          <div class="acc-vendor-selector-bar">
+            <div class="acc-vendor-selector-inner">
+              <label for="accVendorDropdownSelect" class="acc-vendor-selector-label">
                 <i class="fa-solid fa-building-user" style="color:var(--gold-dark);font-size:16px;"></i> विक्रेता / फर्म खाता बही चुनें:
               </label>
-              <div style="position:relative;flex:1;min-width:260px;max-width:540px;">
-                <select id="accVendorDropdownSelect" onchange="selectVendorLedger(this.value)" style="width:100%;padding:9px 14px;border:2px solid var(--teal);border-radius:8px;font-family:inherit;font-size:13.5px;font-weight:700;color:var(--teal);background:#ffffff;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.06);outline:none;">
+              <div class="acc-vendor-selector-select-wrap">
+                <select id="accVendorDropdownSelect" onchange="selectVendorLedger(this.value)">
                   <!-- Options populated via JS -->
                 </select>
               </div>
@@ -6062,7 +6261,7 @@
           <tr>
             <td style="font-weight:700;color:var(--text-secondary);text-align:center;">${idx + 1}</td>
             <td>
-              <div style="font-weight:700;color:var(--text-primary);font-size:13.5px;">${inv.payee}</div>
+              <div style="font-weight:700;font-size:13.5px;"><a href="javascript:void(0)" onclick="openVendorLedgerDirect('${inv.payee}')" style="color:var(--teal);text-decoration:none;border-bottom:1px dashed var(--teal);" title="विक्रेता खाता बही खोलें">${inv.payee}</a></div>
               ${inv.gstin ? `<div style="font-size:10.5px;color:var(--text-muted);font-family:monospace;margin-top:2px;"><i class="fa-solid fa-building-shield" style="color:var(--gold);margin-right:3px;"></i>GSTIN: ${inv.gstin}</div>` : ''}
             </td>
             <td style="white-space:nowrap;font-size:12.5px;color:var(--text-secondary);"><i class="fa-regular fa-calendar" style="color:var(--gold);margin-right:4px;"></i>${inv.date}</td>
@@ -6086,9 +6285,8 @@
     }
 
     function renderVendorLedgersView(targetVendor) {
-      const selectorBox = document.getElementById('accVendorSelectorStrip');
       const displayCard = document.getElementById('accVendorLedgerDisplay');
-      if (!selectorBox || !displayCard) return;
+      if (!displayCard) return;
 
       // Group invoices and payments by vendor
       const vendorMap = {};
@@ -6153,7 +6351,11 @@
         dropdownSelect.value = targetVendor;
       }
 
-      if (balanceBadge && cur) {
+      // Render Selected Vendor Ledger
+      const cur = vendorMap[targetVendor];
+      if (!cur) return;
+
+      if (balanceBadge) {
         const isDue = cur.due > 0;
         balanceBadge.innerHTML = `
           <div style="background:${isDue ? 'rgba(217,119,6,0.12)' : 'rgba(46,125,50,0.12)'};border:1px solid ${isDue ? 'rgba(217,119,6,0.3)' : 'rgba(46,125,50,0.3)'};padding:6px 14px;border-radius:8px;display:inline-flex;align-items:center;gap:8px;">
@@ -6162,10 +6364,6 @@
           </div>
         `;
       }
-
-      // Render Selected Vendor Ledger
-      const cur = vendorMap[targetVendor];
-      if (!cur) return;
 
       let runningBal = 0;
       const rowsHtml = cur.transactions.map((t, idx) => {
@@ -6197,7 +6395,7 @@
             <h3 style="margin:4px 0 2px;font-size:19px;color:var(--teal);font-weight:800;">${cur.name}</h3>
             ${cur.gstin ? `<div style="font-size:11.5px;color:var(--text-secondary);font-family:monospace;"><i class="fa-solid fa-building-shield" style="color:var(--gold);margin-right:4px;"></i>GSTIN: <strong>${cur.gstin}</strong></div>` : ''}
           </div>
-          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <div class="ledger-stats-strip" style="display:flex;gap:12px;flex-wrap:wrap;">
             <div style="background:#fff;padding:8px 14px;border-radius:8px;border:1px solid var(--sandstone);text-align:right;">
               <div style="font-size:11px;color:var(--text-muted);font-weight:700;">कुल बिल राशि</div>
               <div style="font-size:15px;font-weight:800;color:#C45A38;">${fmt(cur.billed)}</div>
@@ -6279,7 +6477,7 @@
           <tr>
             <td style="font-weight:700;color:var(--text-secondary);text-align:center;">${idx + 1}</td>
             <td style="white-space:nowrap;font-size:12.5px;color:var(--text-secondary);"><i class="fa-regular fa-calendar" style="color:var(--gold);margin-right:4px;"></i>${p.date}</td>
-            <td style="font-weight:700;color:var(--text-primary);">${p.payee}</td>
+            <td style="font-weight:700;"><a href="javascript:void(0)" onclick="openVendorLedgerDirect('${p.payee}')" style="color:var(--teal);text-decoration:none;border-bottom:1px dashed var(--teal);" title="विक्रेता खाता बही खोलें">${p.payee}</a></td>
             <td><span class="badge" style="background:rgba(13,79,79,0.08);color:var(--teal);font-weight:700;font-size:11px;"><i class="fa-solid fa-credit-card" style="margin-right:4px;"></i>${p.mode}</span></td>
             <td style="font-weight:700;color:#8B263E;font-family:monospace;font-size:13px;"><i class="fa-solid fa-money-check" style="margin-right:4px;"></i>${p.ref}</td>
             <td style="white-space:nowrap;color:var(--teal);font-weight:600;font-size:12.5px;">${p.voucherNo}</td>
