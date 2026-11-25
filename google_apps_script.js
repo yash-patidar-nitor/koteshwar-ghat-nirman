@@ -451,9 +451,9 @@ function doPost(e) {
       })).setMimeType(ContentService.MimeType.JSON);
 
     } else if (action === "addExpense") {
-      // 7. EXPENSES TAB (व्यय प्रविष्टि)
+      // 7. EXPENSES TAB (व्यय प्रविष्टि - प्रत्येक सामग्री की पृथक पंक्ति / 1 Row Per Item)
       var expSheet = getOrCreateSheet(ss, "Expenses", [
-        "क्र.", "भुगतान प्राप्तकर्ता", "दिनांक", "वाउचर क्र.", "मद / कार्य विवरण", "श्रेणी", "व्यय राशि", "कर योग्य राशि", "GST राशि", "GSTIN", "सामग्री विवरण", "स्थिति"
+        "क्र.", "भुगतान प्राप्तकर्ता", "दिनांक", "वाउचर क्र.", "मद / कार्य विवरण", "श्रेणी", "सामग्री नाम / विवरण", "मात्रा", "इकाई", "दर / सामग्री राशि", "कर योग्य राशि", "GST राशि", "बिल कुल राशि", "GSTIN", "स्थिति"
       ], "#8B263E");
 
       var nextExpSno = 1;
@@ -465,46 +465,58 @@ function doPost(e) {
         }
       }
 
-      var itemsJsonStr = "";
-      if (item.items) {
-        itemsJsonStr = typeof item.items === 'string' ? item.items : JSON.stringify(item.items);
-      }
+      var dateStr = item.date || Utilities.formatDate(new Date(), Session.getScriptTimeZone() || "GMT+5:30", "yyyy-MM-dd");
+      var payeeStr = item.payee || item.vendor || "";
+      var voucherStr = item.voucherNo || item.invoiceNo || "-";
+      var descStr = item.itemDescription || item.description || "";
+      var catStr = item.category || "विविध";
+      var billTotalNum = Number(item.amount) || Number(item.grandTotal) || 0;
+      var taxableNum = Number(item.taxableAmount) || 0;
+      var gstNum = Number(item.taxAmount) || 0;
+      var gstinStr = item.gstin || "";
+      var statusStr = item.status || "सत्यापित";
 
-      var expRow = [
-        item.sno || nextExpSno,
-        item.payee || item.vendor || "",
-        item.date || Utilities.formatDate(new Date(), Session.getScriptTimeZone() || "GMT+5:30", "yyyy-MM-dd"),
-        item.voucherNo || item.invoiceNo || "-",
-        item.itemDescription || item.description || "",
-        item.category || "विविध",
-        Number(item.amount) || 0,
-        Number(item.taxableAmount) || 0,
-        Number(item.taxAmount) || 0,
-        item.gstin || "",
-        itemsJsonStr,
-        item.status || "सत्यापित"
-      ];
-
-      expSheet.appendRow(expRow);
-
-      // Append items to Expense_Items sheet if present
       if (item.items && Array.isArray(item.items) && item.items.length > 0) {
-        var itemsSheet = getOrCreateSheet(ss, "Expense_Items", [
-          "वाउचर / बिल क्र.", "क्र.", "सामग्री नाम / विवरण", "मात्रा", "इकाई", "राशि (₹)", "फर्म / वेंडर", "दिनांक"
-        ], "#1F5F61");
         for (var itmIdx = 0; itmIdx < item.items.length; itmIdx++) {
           var itm = item.items[itmIdx];
-          itemsSheet.appendRow([
-            item.voucherNo || item.invoiceNo || "-",
-            itmIdx + 1,
+          var itmRow = [
+            nextExpSno++,
+            payeeStr,
+            dateStr,
+            voucherStr,
+            descStr,
+            catStr,
             itm.description || itm.name || "",
             itm.quantity !== undefined ? itm.quantity : (itm.qty || 1),
             itm.unit || "pcs",
             Number(itm.amount) || 0,
-            item.payee || item.vendor || "",
-            item.date || ""
-          ]);
+            taxableNum,
+            gstNum,
+            billTotalNum,
+            gstinStr,
+            statusStr
+          ];
+          expSheet.appendRow(itmRow);
         }
+      } else {
+        var singleRow = [
+          nextExpSno,
+          payeeStr,
+          dateStr,
+          voucherStr,
+          descStr,
+          catStr,
+          descStr,
+          1,
+          "मद",
+          billTotalNum,
+          taxableNum,
+          gstNum,
+          billTotalNum,
+          gstinStr,
+          statusStr
+        ];
+        expSheet.appendRow(singleRow);
       }
 
       recordAuditLog(

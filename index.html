@@ -3681,7 +3681,7 @@
               const expCols = expData.table && expData.table.cols ? expData.table.cols : [];
               const expRows = expData.table && expData.table.rows ? expData.table.rows : [];
 
-              // Dynamic column mapping based on header labels
+              // Dynamic column mapping based on header labels (supports both 1-row-per-item and 1-row-per-voucher)
               const colMap = {
                 sno: 0,
                 payee: 1,
@@ -3689,31 +3689,42 @@
                 voucherNo: 3,
                 itemDescription: 4,
                 category: 5,
-                amount: 6,
-                taxableAmount: 7,
-                taxAmount: 8,
-                gstin: 9,
-                items: 10,
-                status: 11
+                itemName: 6,
+                qty: 7,
+                unit: 8,
+                itemAmt: 9,
+                taxableAmount: 10,
+                taxAmount: 11,
+                billTotal: 12,
+                gstin: 13,
+                status: 14
               };
 
               expCols.forEach((col, idx) => {
                 const lbl = (col.label || '').trim().toLowerCase();
                 if (lbl.includes('क्र.') || lbl === 'sno') colMap.sno = idx;
-                else if (lbl.includes('प्राप्तकर्ता') || lbl.includes('फर्म') || lbl.includes('वेंडर') || lbl.includes('payee')) colMap.payee = idx;
-                else if (lbl.includes('दिनांक') || lbl.includes('date')) colMap.date = idx;
-                else if (lbl.includes('वाउचर') || lbl.includes('बिल') || lbl.includes('voucher')) colMap.voucherNo = idx;
-                else if (lbl.includes('मद') || lbl.includes('कार्य') || lbl.includes('विवरण') || lbl.includes('desc')) colMap.itemDescription = idx;
-                else if (lbl.includes('श्रेणी') || lbl.includes('category')) colMap.category = idx;
-                else if (lbl.includes('व्यय राशि') || lbl.includes('राशि') || lbl.includes('amount')) colMap.amount = idx;
+                else if (lbl.includes('सामग्री नाम') || lbl.includes('सामग्री का नाम') || lbl.includes('item name') || lbl.includes('item desc')) colMap.itemName = idx;
+                else if (lbl.includes('मात्रा') || lbl.includes('qty') || lbl.includes('quantity')) colMap.qty = idx;
+                else if (lbl.includes('इकाई') || lbl.includes('unit')) colMap.unit = idx;
+                else if (lbl.includes('दर') || lbl.includes('सामग्री राशि') || lbl.includes('item amt')) colMap.itemAmt = idx;
+                else if (lbl.includes('बिल कुल राशि') || lbl.includes('कुल बिल') || lbl.includes('grand total') || lbl.includes('कुल राशि')) colMap.billTotal = idx;
                 else if (lbl.includes('कर योग्य') || lbl.includes('taxable')) colMap.taxableAmount = idx;
                 else if (lbl.includes('gst राशि') || lbl.includes('gst amount')) colMap.taxAmount = idx;
                 else if (lbl.includes('gstin')) colMap.gstin = idx;
-                else if (lbl.includes('सामग्री') || lbl.includes('items')) colMap.items = idx;
                 else if (lbl.includes('स्थिति') || lbl.includes('status')) colMap.status = idx;
+                else if (lbl.includes('वाउचर') || lbl.includes('बिल') || lbl.includes('voucher')) colMap.voucherNo = idx;
+                else if (lbl.includes('प्राप्तकर्ता') || lbl.includes('फर्म') || lbl.includes('वेंडर') || lbl.includes('payee')) colMap.payee = idx;
+                else if (lbl.includes('दिनांक') || lbl.includes('date')) colMap.date = idx;
+                else if (lbl.includes('मद') || lbl.includes('कार्य') || lbl.includes('विवरण') || lbl.includes('desc') || lbl.includes('head')) colMap.itemDescription = idx;
+                else if (lbl.includes('श्रेणी') || lbl.includes('category')) colMap.category = idx;
+                else if (lbl.includes('व्यय राशि') || lbl.includes('राशि') || lbl.includes('amount')) {
+                  if (colMap.billTotal === undefined || colMap.billTotal === 12) colMap.billTotal = idx;
+                }
               });
 
-              const parsedExp = [];
+              // Map to group individual item rows into canonical vouchers
+              const vouchersMap = new Map();
+
               for (let i = 0; i < expRows.length; i++) {
                 const ec = expRows[i].c;
                 if (!ec || ec.length < 3) continue;
@@ -3731,47 +3742,72 @@
                 let eVouch = String(getVal(colMap.voucherNo)).trim() || "-";
                 let eDesc = String(getVal(colMap.itemDescription)).trim();
                 let eCat = String(getVal(colMap.category)).trim() || "विविध";
-                const eAmt = parseFloat(String(getVal(colMap.amount)).replace(/[^0-9.]/g, '')) || 0;
+                let eItemName = String(getVal(colMap.itemName)).trim();
+                const eQty = getVal(colMap.qty) !== "" ? getVal(colMap.qty) : "";
+                const eUnit = String(getVal(colMap.unit)).trim() || "pcs";
+                const eItemAmt = parseFloat(String(getVal(colMap.itemAmt)).replace(/[^0-9.]/g, '')) || 0;
                 const eTaxable = parseFloat(String(getVal(colMap.taxableAmount)).replace(/[^0-9.]/g, '')) || 0;
                 const eTaxAmt = parseFloat(String(getVal(colMap.taxAmount)).replace(/[^0-9.]/g, '')) || 0;
+                const eBillTotal = parseFloat(String(getVal(colMap.billTotal)).replace(/[^0-9.]/g, '')) || 0;
                 const eGstin = String(getVal(colMap.gstin)).trim();
-                const rawItems = getVal(colMap.items);
-                let eItems = [];
-
-                if (rawItems) {
-                  try {
-                    eItems = typeof rawItems === 'string' ? JSON.parse(rawItems) : rawItems;
-                  } catch (err) {
-                    console.warn("Items JSON parse err:", err);
-                  }
-                }
-
                 const eStat = String(getVal(colMap.status)).trim() || "सत्यापित";
 
-                // Header row check
-                if (String(eSno).includes('क्र.') || eDesc.includes('कार्य विवरण') || ePayee.includes('प्राप्तकर्ता')) continue;
-                if (!eDesc && !ePayee && eAmt <= 0) continue;
+                // Skip header row if returned inside rows
+                if (String(eSno).includes('क्र.') || eDesc.includes('कार्य विवरण') || ePayee.includes('प्राप्तकर्ता') || eItemName.includes('सामग्री')) continue;
+                if (!eDesc && !ePayee && !eItemName && eBillTotal <= 0 && eItemAmt <= 0) continue;
 
-                // Clean description if bracketed list was left in
-                eDesc = eDesc.replace(/\s*\(\([^)]*\)\)/g, '').replace(/\s*\([^)]*HDPE[^)]*\)/gi, '').trim();
+                // Group by voucher number (or fallback to payee + date or row index)
+                const vKey = (eVouch !== "-" ? eVouch : (ePayee + "_" + eDate) || ("EXP_" + eSno)).toLowerCase();
 
-                parsedExp.push({
-                  sno: eSno,
-                  payee: ePayee,
-                  date: eDate,
-                  voucherNo: eVouch,
-                  itemDescription: eDesc,
-                  category: eCat,
-                  amount: eAmt,
-                  taxableAmount: eTaxable,
-                  taxAmount: eTaxAmt,
-                  gstin: eGstin,
-                  items: Array.isArray(eItems) ? eItems : [],
-                  status: eStat
-                });
+                if (!vouchersMap.has(vKey)) {
+                  vouchersMap.set(vKey, {
+                    sno: vouchersMap.size + 1,
+                    payee: ePayee,
+                    date: eDate,
+                    voucherNo: eVouch,
+                    itemDescription: eDesc || eItemName,
+                    category: eCat,
+                    amount: eBillTotal > 0 ? eBillTotal : eItemAmt,
+                    taxableAmount: eTaxable,
+                    taxAmount: eTaxAmt,
+                    gstin: eGstin,
+                    status: eStat,
+                    items: []
+                  });
+                }
+
+                const v = vouchersMap.get(vKey);
+
+                // Update voucher-level fields if previously empty
+                if (!v.payee && ePayee) v.payee = ePayee;
+                if (!v.date && eDate) v.date = eDate;
+                if (!v.gstin && eGstin) v.gstin = eGstin;
+                if (eBillTotal > 0) v.amount = eBillTotal;
+                if (eTaxable > 0) v.taxableAmount = eTaxable;
+                if (eTaxAmt > 0) v.taxAmount = eTaxAmt;
+
+                // Attach item row if itemName or itemAmt exists
+                if (eItemName || eItemAmt > 0) {
+                  v.items.push({
+                    description: eItemName || eDesc,
+                    quantity: eQty !== "" ? eQty : 1,
+                    unit: eUnit,
+                    amount: eItemAmt
+                  });
+                }
               }
-              if (parsedExp.length > 0) {
-                expenses = parsedExp;
+
+              // Compute totals if billTotal wasn't set explicitly on vouchers
+              const parsedVouchers = Array.from(vouchersMap.values()).map(v => {
+                if (v.amount <= 0 && v.items.length > 0) {
+                  const itemsSum = v.items.reduce((s, itm) => s + (Number(itm.amount) || 0), 0);
+                  v.amount = itemsSum + (v.taxAmount || 0);
+                }
+                return v;
+              });
+
+              if (parsedVouchers.length > 0) {
+                expenses = parsedVouchers;
               }
             }
           } catch (e) {
@@ -4619,7 +4655,8 @@
           (e.payee && e.payee.toLowerCase().includes(currentExpenseSearch)) ||
           (e.voucherNo && e.voucherNo.toLowerCase().includes(currentExpenseSearch)) ||
           (e.date && e.date.includes(currentExpenseSearch)) ||
-          (e.category && e.category.toLowerCase().includes(currentExpenseSearch));
+          (e.category && e.category.toLowerCase().includes(currentExpenseSearch)) ||
+          (e.items && e.items.some(itm => itm.description && itm.description.toLowerCase().includes(currentExpenseSearch)));
         return matchesCat && matchesSearch;
       });
 
