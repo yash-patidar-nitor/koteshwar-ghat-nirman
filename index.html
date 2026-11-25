@@ -1810,6 +1810,71 @@
       gap: 10px;
     }
 
+    .modal-card.modal-lg {
+      max-width: 760px;
+      width: 95%;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .expense-meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      background: var(--sandstone-light);
+      border: 1px solid var(--sandstone);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 600px) {
+      .expense-meta-grid { grid-template-columns: 1fr; }
+    }
+    .expense-items-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .expense-items-table th {
+      background: #EFE8DC;
+      color: var(--text-primary);
+      font-weight: 700;
+      padding: 8px 10px;
+      border-bottom: 2px solid var(--gold);
+      text-align: left;
+    }
+    .expense-items-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--sandstone);
+      color: var(--text-primary);
+    }
+    .expense-items-table tr:nth-child(even) {
+      background: rgba(245, 240, 230, 0.4);
+    }
+    .expense-calc-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 8px;
+      margin-top: 14px;
+      background: #FAF7F2;
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+      padding: 10px 14px;
+    }
+    .expense-calc-item {
+      text-align: center;
+    }
+    .expense-calc-lbl {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+    .expense-calc-val {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--teal);
+    }
+
     .pagination-row {
       display: flex;
       justify-content: space-between;
@@ -2727,12 +2792,13 @@
             <thead>
               <tr>
                 <th style="width:48px;">क्र.</th>
+                <th>भुगतान प्राप्तकर्ता (फर्म / वेंडर)</th>
                 <th>दिनांक</th>
                 <th>वाउचर / बिल क्र.</th>
-                <th>मद / सामग्री / कार्य विवरण</th>
+                <th>मद / कार्य विवरण</th>
                 <th>व्यय श्रेणी</th>
-                <th>भुगतान प्राप्तकर्ता (फर्म / वेंडर)</th>
                 <th style="text-align:right;">व्यय राशि</th>
+                <th style="text-align:center;">सामग्री विवरण</th>
                 <th style="text-align:center;">स्थिति</th>
               </tr>
             </thead>
@@ -2884,6 +2950,63 @@
           <i class="fa-brands fa-whatsapp"></i> WhatsApp पर भेजें
         </button>
         <button onclick="closeCertModal()" class="btn btn-white btn-sm">बंद करें</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== EXPENSE ITEMS DRILL-DOWN MODAL ==================== -->
+  <div class="modal-backdrop" id="expenseDetailModalBackdrop" onclick="closeExpenseDetailModal(event)">
+    <div class="modal-card modal-lg" onclick="event.stopPropagation()">
+      <div class="modal-head" style="background:#8B263E; border-bottom:2px solid var(--gold);">
+        <h4 style="font-size:15px;font-weight:700;margin:0;display:flex;align-items:center;gap:8px;">
+          <i class="fa-solid fa-receipt" style="color:var(--gold-light);"></i>
+          <span>व्यय वाउचर एवं सामग्री विवरण</span>
+        </h4>
+        <button class="btn-modal-close" onclick="closeExpenseDetailModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="overflow-y:auto;max-height:calc(90vh - 130px);padding:16px 20px;">
+        <!-- Meta Details Box -->
+        <div class="expense-meta-grid" id="expModalMeta">
+          <!-- Populated dynamically -->
+        </div>
+
+        <!-- Items Table Title & Count -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <h5 style="margin:0;font-size:13.5px;font-weight:700;color:var(--teal);display:flex;align-items:center;gap:6px;">
+            <i class="fa-solid fa-list-check" style="color:var(--gold);"></i> बिल में दर्ज सामग्री की विस्तृत सूची
+          </h5>
+          <span id="expModalItemCount" style="font-size:11.5px;color:var(--text-muted);font-weight:600;background:var(--sandstone-light);padding:2px 8px;border-radius:10px;border:1px solid var(--sandstone);">0 वस्तुएं</span>
+        </div>
+
+        <!-- Items Table Container -->
+        <div class="table-responsive" style="border:1px solid var(--sandstone);border-radius:8px;overflow:hidden;margin-bottom:12px;">
+          <table class="expense-items-table">
+            <thead>
+              <tr>
+                <th style="width:40px;text-align:center;">#</th>
+                <th>सामग्री का नाम / विवरण</th>
+                <th style="width:80px;text-align:right;">मात्रा</th>
+                <th style="width:75px;text-align:center;">इकाई</th>
+                <th style="width:115px;text-align:right;">राशि (₹)</th>
+              </tr>
+            </thead>
+            <tbody id="expModalItemsTbody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Financial Tax & Total Strip -->
+        <div class="expense-calc-strip" id="expModalCalcStrip">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+      <div class="modal-footer" style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:11.5px;color:var(--text-muted);">
+          <i class="fa-solid fa-circle-check" style="color:var(--sage);margin-right:4px;"></i>
+          प्रमाणित निर्माण व्यय • कोटेश्वर तीर्थ घाट निर्माण
+        </span>
+        <button type="button" class="btn" style="background:#8B263E;color:#fff;border:none;padding:7px 18px;border-radius:6px;font-size:12.5px;font-weight:600;cursor:pointer;" onclick="closeExpenseDetailModal()">बंद करें</button>
       </div>
     </div>
   </div>
@@ -3555,31 +3678,95 @@
             const matchExp = rawExp.match(/setResponse\(([\s\S]*)\);?/);
             if (matchExp) {
               const expData = JSON.parse(matchExp[1]);
+              const expCols = expData.table && expData.table.cols ? expData.table.cols : [];
               const expRows = expData.table && expData.table.rows ? expData.table.rows : [];
+
+              // Dynamic column mapping based on header labels
+              const colMap = {
+                sno: 0,
+                payee: 1,
+                date: 2,
+                voucherNo: 3,
+                itemDescription: 4,
+                category: 5,
+                amount: 6,
+                taxableAmount: 7,
+                taxAmount: 8,
+                gstin: 9,
+                items: 10,
+                status: 11
+              };
+
+              expCols.forEach((col, idx) => {
+                const lbl = (col.label || '').trim().toLowerCase();
+                if (lbl.includes('क्र.') || lbl === 'sno') colMap.sno = idx;
+                else if (lbl.includes('प्राप्तकर्ता') || lbl.includes('फर्म') || lbl.includes('वेंडर') || lbl.includes('payee')) colMap.payee = idx;
+                else if (lbl.includes('दिनांक') || lbl.includes('date')) colMap.date = idx;
+                else if (lbl.includes('वाउचर') || lbl.includes('बिल') || lbl.includes('voucher')) colMap.voucherNo = idx;
+                else if (lbl.includes('मद') || lbl.includes('कार्य') || lbl.includes('विवरण') || lbl.includes('desc')) colMap.itemDescription = idx;
+                else if (lbl.includes('श्रेणी') || lbl.includes('category')) colMap.category = idx;
+                else if (lbl.includes('व्यय राशि') || lbl.includes('राशि') || lbl.includes('amount')) colMap.amount = idx;
+                else if (lbl.includes('कर योग्य') || lbl.includes('taxable')) colMap.taxableAmount = idx;
+                else if (lbl.includes('gst राशि') || lbl.includes('gst amount')) colMap.taxAmount = idx;
+                else if (lbl.includes('gstin')) colMap.gstin = idx;
+                else if (lbl.includes('सामग्री') || lbl.includes('items')) colMap.items = idx;
+                else if (lbl.includes('स्थिति') || lbl.includes('status')) colMap.status = idx;
+              });
+
               const parsedExp = [];
               for (let i = 0; i < expRows.length; i++) {
                 const ec = expRows[i].c;
-                if (!ec || ec.length < 5) continue;
-                const eSno = ec[0] && ec[0].v !== null ? ec[0].v : (i + 1);
-                const eDate = ec[1] ? (ec[1].f || ec[1].v || "") : "";
-                const eDesc = ec[2] && ec[2].v !== null ? String(ec[2].v).trim() : "";
-                const eCat = ec[3] && ec[3].v !== null ? String(ec[3].v).trim() : "विविध";
-                const eAmt = parseFloat(String(ec[4] && ec[4].v !== null ? ec[4].v : "0").replace(/[^0-9.]/g, '')) || 0;
-                const ePayee = ec[5] && ec[5].v !== null ? String(ec[5].v).trim() : "";
-                const eVouch = ec[6] && ec[6].v !== null ? String(ec[6].v).trim() : "-";
-                const eStat = ec[7] && ec[7].v !== null ? String(ec[7].v).trim() : "सत्यापित";
+                if (!ec || ec.length < 3) continue;
 
-                if (String(eSno).includes('क्र.') || eDesc.includes('कार्य विवरण')) continue;
-                if (!eDesc && eAmt <= 0) continue;
+                const getVal = (idx) => {
+                  if (idx === undefined || !ec[idx]) return "";
+                  if (ec[idx].f !== undefined && ec[idx].f !== null) return String(ec[idx].f).trim();
+                  if (ec[idx].v !== undefined && ec[idx].v !== null) return ec[idx].v;
+                  return "";
+                };
+
+                const eSno = getVal(colMap.sno) || (i + 1);
+                let ePayee = String(getVal(colMap.payee)).trim();
+                let eDate = String(getVal(colMap.date)).trim();
+                let eVouch = String(getVal(colMap.voucherNo)).trim() || "-";
+                let eDesc = String(getVal(colMap.itemDescription)).trim();
+                let eCat = String(getVal(colMap.category)).trim() || "विविध";
+                const eAmt = parseFloat(String(getVal(colMap.amount)).replace(/[^0-9.]/g, '')) || 0;
+                const eTaxable = parseFloat(String(getVal(colMap.taxableAmount)).replace(/[^0-9.]/g, '')) || 0;
+                const eTaxAmt = parseFloat(String(getVal(colMap.taxAmount)).replace(/[^0-9.]/g, '')) || 0;
+                const eGstin = String(getVal(colMap.gstin)).trim();
+                const rawItems = getVal(colMap.items);
+                let eItems = [];
+
+                if (rawItems) {
+                  try {
+                    eItems = typeof rawItems === 'string' ? JSON.parse(rawItems) : rawItems;
+                  } catch (err) {
+                    console.warn("Items JSON parse err:", err);
+                  }
+                }
+
+                const eStat = String(getVal(colMap.status)).trim() || "सत्यापित";
+
+                // Header row check
+                if (String(eSno).includes('क्र.') || eDesc.includes('कार्य विवरण') || ePayee.includes('प्राप्तकर्ता')) continue;
+                if (!eDesc && !ePayee && eAmt <= 0) continue;
+
+                // Clean description if bracketed list was left in
+                eDesc = eDesc.replace(/\s*\(\([^)]*\)\)/g, '').replace(/\s*\([^)]*HDPE[^)]*\)/gi, '').trim();
 
                 parsedExp.push({
                   sno: eSno,
+                  payee: ePayee,
                   date: eDate,
+                  voucherNo: eVouch,
                   itemDescription: eDesc,
                   category: eCat,
                   amount: eAmt,
-                  payee: ePayee,
-                  voucherNo: eVouch,
+                  taxableAmount: eTaxable,
+                  taxAmount: eTaxAmt,
+                  gstin: eGstin,
+                  items: Array.isArray(eItems) ? eItems : [],
                   status: eStat
                 });
               }
@@ -4343,16 +4530,30 @@
     let expenses = [
       {
         sno: 1,
+        payee: "बुरहानी बिल्डिंग मटेरियल, निसरपुर",
         date: "2026-07-29",
-        itemDescription: "नल-जल पाइपलाइन सामग्री (HDPE पाइप 1\" 650 फीट, कपलर 110/140mm, ब्रास वाल्व, सॉल्वेंट, गार्डन पाइप, फिटिंग्स)",
+        voucherNo: "बिल क्र. 1070",
+        itemDescription: "नल-जल पाइपलाइन सामग्री",
         category: "जल-व्यवस्था एवं नल-जल",
         amount: 14285,
-        payee: "बुरहानी बिल्डिंग मटेरियल, निसरपुर",
-        voucherNo: "बिल क्र. 1070",
-        status: "सत्यापित",
-        gstin: "23BBWPA9809F1ZH",
         taxableAmount: 12106,
-        taxAmount: 2179
+        taxAmount: 2179,
+        gstin: "23BBWPA9809F1ZH",
+        phone: "9179152421",
+        address: "कोटेश्वर फाटा, निसरपुर, तहसील कुक्षी, धार (म.प्र.)",
+        status: "सत्यापित",
+        items: [
+          { description: "Coupler 110mm", quantity: 12, unit: "pcs", amount: 610.17 },
+          { description: "Coupler 140mm", quantity: 11, unit: "pcs", amount: 1728.65 },
+          { description: "Solvent 500ml", quantity: 4, unit: "pcs", amount: 949.76 },
+          { description: "HDPE Pipe 1 inch", quantity: 650, unit: "ft", amount: 6885.60 },
+          { description: "Brass Valve 1 inch", quantity: 2, unit: "pcs", amount: 677.97 },
+          { description: "Connector 1 inch", quantity: 2, unit: "pcs", amount: 33.90 },
+          { description: "GI Nipple 1 inch", quantity: 2, unit: "pcs", amount: 186.45 },
+          { description: "Garden Pipe 1 inch", quantity: 2, unit: "bundle", amount: 1525.43 },
+          { description: "Teflon Tape", quantity: 3, unit: "pcs", amount: 33.90 },
+          { description: "Unidentified item - handwritten चुंडी", quantity: 6, unit: "pcs", amount: 84.75 }
+        ]
       }
     ];
 
@@ -4427,14 +4628,21 @@
       if (elSumBadge) elSumBadge.textContent = fmt(filteredSum);
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:28px;color:var(--text-muted);">कोई व्यय वाउचर प्रविष्टि नहीं मिली।</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--text-muted);">कोई व्यय वाउचर प्रविष्टि नहीं मिली।</td></tr>`;
         return;
       }
 
       tbody.innerHTML = filtered.map((e, idx) => {
+        const originalIndex = expenses.indexOf(e);
+        const itemsCount = (e.items && Array.isArray(e.items)) ? e.items.length : 0;
+
         return `
           <tr>
             <td style="font-weight:700;color:var(--text-secondary);">${e.sno || (idx + 1)}</td>
+            <td>
+              <div style="font-weight:700;color:var(--text-primary);font-size:13.5px;">${e.payee || '-'}</div>
+              ${e.gstin ? `<div style="font-size:10.5px;color:var(--text-muted);font-family:monospace;margin-top:2px;"><i class="fa-solid fa-building-shield" style="color:var(--gold);margin-right:3px;"></i>GSTIN: ${e.gstin}</div>` : ''}
+            </td>
             <td style="white-space:nowrap;font-size:12.5px;color:var(--text-secondary);"><i class="fa-regular fa-calendar" style="color:var(--gold);margin-right:4px;"></i>${e.date || '-'}</td>
             <td style="white-space:nowrap;font-weight:600;color:var(--teal);"><i class="fa-solid fa-hashtag" style="font-size:11px;opacity:0.6;margin-right:3px;"></i>${e.voucherNo || '-'}</td>
             <td>
@@ -4442,15 +4650,123 @@
               ${e.taxableAmount ? `<div style="font-size:11px;color:var(--text-muted);margin-top:2px;">कर योग्य: ${fmt(e.taxableAmount)} + GST: ${fmt(e.taxAmount)}</div>` : ''}
             </td>
             <td><span class="badge badge-village" style="background:rgba(209,154,80,0.12);color:var(--gold-dark);font-size:11.5px;font-weight:600;"><i class="fa-solid fa-tag" style="font-size:10px;margin-right:4px;"></i>${e.category}</span></td>
-            <td>
-              <div style="font-weight:600;color:var(--text-primary);">${e.payee}</div>
-              ${e.gstin ? `<div style="font-size:10.5px;color:var(--text-muted);font-family:monospace;">GSTIN: ${e.gstin}</div>` : ''}
-            </td>
             <td style="text-align:right;font-weight:800;color:#C45A38;font-size:14.5px;">${fmt(e.amount)}</td>
+            <td style="text-align:center;white-space:nowrap;">
+              <button class="btn btn-sm" onclick="openExpenseDetailModal(${originalIndex})" style="background:var(--teal);color:#fff;border:none;padding:5px 11px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:0 1px 3px rgba(0,0,0,0.08);transition:all 0.15s ease;" title="सामग्री सूची एवं बिल विवरण देखें">
+                <i class="fa-solid fa-list-check" style="color:var(--gold-light);"></i>
+                <span>सामग्री देखें</span>
+                ${itemsCount > 0 ? `<span style="background:rgba(255,255,255,0.25);padding:1px 5px;border-radius:8px;font-size:10.5px;font-weight:700;">${itemsCount}</span>` : ''}
+              </button>
+            </td>
             <td style="text-align:center;"><span class="badge badge-received" style="font-size:11px;"><i class="fa-solid fa-check"></i> ${e.status || 'सत्यापित'}</span></td>
           </tr>
         `;
       }).join('');
+    }
+
+    function openExpenseDetailModal(idx) {
+      const e = expenses[idx];
+      if (!e) return;
+
+      const modal = document.getElementById('expenseDetailModalBackdrop');
+      const metaBox = document.getElementById('expModalMeta');
+      const tbody = document.getElementById('expModalItemsTbody');
+      const calcBox = document.getElementById('expModalCalcStrip');
+      const countBadge = document.getElementById('expModalItemCount');
+
+      if (!modal) return;
+
+      if (metaBox) {
+        metaBox.innerHTML = `
+          <div>
+            <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;font-weight:700;">भुगतान प्राप्तकर्ता (फर्म / वेंडर)</div>
+            <div style="font-size:15px;font-weight:800;color:var(--teal);margin-top:2px;">${e.payee || '-'}</div>
+            ${e.gstin ? `<div style="font-size:11.5px;color:var(--text-secondary);font-family:monospace;margin-top:3px;"><i class="fa-solid fa-building-shield" style="color:var(--gold);margin-right:4px;"></i>GSTIN: <strong>${e.gstin}</strong></div>` : ''}
+            ${e.phone ? `<div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;"><i class="fa-solid fa-phone" style="font-size:10px;margin-right:4px;"></i>${e.phone}</div>` : ''}
+            ${e.address ? `<div style="font-size:11px;color:var(--text-muted);margin-top:2px;"><i class="fa-solid fa-location-dot" style="font-size:10px;margin-right:4px;"></i>${e.address}</div>` : ''}
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;gap:8px;">
+              <div>
+                <div style="font-size:11px;color:var(--text-muted);font-weight:700;">वाउचर / बिल क्र.</div>
+                <div style="font-size:14px;font-weight:700;color:#8B263E;margin-top:2px;">${e.voucherNo || '-'}</div>
+              </div>
+              <div>
+                <div style="font-size:11px;color:var(--text-muted);font-weight:700;">बिल दिनांक</div>
+                <div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-top:2px;">${e.date || '-'}</div>
+              </div>
+            </div>
+            <div style="margin-top:8px;">
+              <div style="font-size:11px;color:var(--text-muted);font-weight:700;">व्यय मद एवं श्रेणी</div>
+              <div style="font-size:12.5px;font-weight:600;color:var(--text-primary);margin-top:2px;">
+                ${e.itemDescription || '-'} <span class="badge" style="background:rgba(209,154,80,0.15);color:var(--gold-dark);font-size:10.5px;padding:2px 6px;margin-left:4px;">${e.category || 'विविध'}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      const items = (e.items && Array.isArray(e.items)) ? e.items : [];
+      if (countBadge) countBadge.textContent = `${items.length} वस्तुएं`;
+
+      if (tbody) {
+        if (items.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-muted);">इस वाउचर के लिए विस्तृत सामग्री सूची दर्ज नहीं है। मद विवरण: <strong>${e.itemDescription}</strong></td></tr>`;
+        } else {
+          tbody.innerHTML = items.map((itm, i) => {
+            const desc = itm.description || itm.name || '-';
+            const qty = itm.quantity !== undefined ? itm.quantity : (itm.qty !== undefined ? itm.qty : '-');
+            const unit = itm.unit || '';
+            const amt = itm.amount !== undefined ? Number(itm.amount) : 0;
+            return `
+              <tr>
+                <td style="text-align:center;font-weight:700;color:var(--text-muted);">${i + 1}</td>
+                <td style="font-weight:600;color:var(--text-primary);">${desc}</td>
+                <td style="text-align:right;font-weight:600;">${qty}</td>
+                <td style="text-align:center;color:var(--text-secondary);font-size:11.5px;">${unit}</td>
+                <td style="text-align:right;font-weight:700;color:var(--teal);">${fmt(amt)}</td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+
+      if (calcBox) {
+        const taxable = e.taxableAmount || (e.amount - (e.taxAmount || 0));
+        const tax = e.taxAmount || 0;
+        const cgst = tax > 0 ? (tax / 2) : 0;
+        const sgst = tax > 0 ? (tax / 2) : 0;
+        const grand = e.amount || 0;
+
+        calcBox.innerHTML = `
+          ${e.taxableAmount ? `
+            <div class="expense-calc-item">
+              <div class="expense-calc-lbl">कर योग्य राशि (Taxable)</div>
+              <div class="expense-calc-val">${fmt(taxable)}</div>
+            </div>
+            <div class="expense-calc-item">
+              <div class="expense-calc-lbl">CGST (9%)</div>
+              <div class="expense-calc-val" style="color:var(--text-secondary);">${fmt(cgst)}</div>
+            </div>
+            <div class="expense-calc-item">
+              <div class="expense-calc-lbl">SGST (9%)</div>
+              <div class="expense-calc-val" style="color:var(--text-secondary);">${fmt(sgst)}</div>
+            </div>
+          ` : ''}
+          <div class="expense-calc-item" style="${e.taxableAmount ? 'border-left:1px dashed var(--sandstone);padding-left:10px;' : ''}">
+            <div class="expense-calc-lbl">कुल प्रमाणित व्यय राशि</div>
+            <div class="expense-calc-val" style="color:#8B263E;font-size:16px;font-weight:800;">${fmt(grand)}</div>
+          </div>
+        `;
+      }
+
+      modal.classList.add('open');
+    }
+
+    function closeExpenseDetailModal(e) {
+      if (e && e.target !== e.currentTarget && !e.target.closest('.btn-modal-close') && !e.target.classList.contains('btn')) return;
+      const modal = document.getElementById('expenseDetailModalBackdrop');
+      if (modal) modal.classList.remove('open');
     }
 
     /* ============================================================
