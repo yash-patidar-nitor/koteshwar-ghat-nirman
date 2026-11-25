@@ -2604,6 +2604,20 @@
       </div>
     </section>
 
+    <!-- ==================== QUICK JUMP NAVIGATION BAR ==================== -->
+    <div class="top-nav-anchors" style="display:flex;justify-content:center;gap:14px;margin:24px 0 20px;flex-wrap:wrap;">
+      <a href="#section-campaign" onclick="scrollToSection('section-campaign', event)" class="top-anchor-pill active" style="text-decoration:none;background:#ffffff;border:1.5px solid var(--sandstone);padding:10px 22px;border-radius:25px;font-size:13.5px;font-weight:700;color:var(--teal);box-shadow:0 3px 10px rgba(0,0,0,0.05);display:inline-flex;align-items:center;gap:8px;transition:all 0.2s;">
+        <i class="fa-solid fa-hands-praying" style="color:var(--gold);font-size:16px;"></i> <span>जनसहयोग महाअभियान</span>
+        <span style="font-size:11px;background:rgba(13,79,79,0.08);color:var(--teal);padding:2px 8px;border-radius:12px;font-weight:700;">608 श्रद्धालु</span>
+      </a>
+      <a href="#section-accounting" onclick="scrollToSection('section-accounting', event)" class="top-anchor-pill" style="text-decoration:none;background:#ffffff;border:1.5px solid var(--teal);padding:10px 22px;border-radius:25px;font-size:13.5px;font-weight:700;color:var(--teal);box-shadow:0 3px 10px rgba(13,79,79,0.1);display:inline-flex;align-items:center;gap:8px;transition:all 0.2s;">
+        <i class="fa-solid fa-scale-balanced" style="color:var(--gold);font-size:16px;"></i> <span>🏛️ निर्माण लेखा एवं बहीखाता (Accounting)</span>
+        <span style="font-size:11px;background:rgba(196,90,56,0.14);color:#C45A38;padding:2px 8px;border-radius:12px;font-weight:800;">25 बिल • 17 वेंडर</span>
+      </a>
+    </div>
+
+    <!-- ==================== SECTION 1: CAMPAIGN & DONORS DIRECTORY ==================== -->
+    <section id="section-campaign" class="main-module-section" style="display:block;">
     <!-- 4. DETAILED DATA & PARTICIPATION DIRECTORY HEADER -->
     <div class="detailed-tables-header" style="margin-top:28px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
       <div>
@@ -3108,10 +3122,10 @@
 
     <!-- ==================== 4. TRANSPARENCY & DATA SOURCE FOOTER (RELOCATED FOR MOBILE OPTIMIZATION) ==================== -->
     
-    </div> <!-- END #section-campaign -->
+    </section> <!-- END #section-campaign -->
 
     <!-- ==================== MODULE 2: STANDALONE ACCOUNTING & LEDGER SYSTEM ==================== -->
-    <section id="section-accounting" class="main-module-section" style="display:none;margin-top:10px;">
+    <section id="section-accounting" class="main-module-section" style="display:block;margin-top:40px;">
       <div class="section-card" style="box-shadow:0 4px 20px rgba(0,0,0,0.06);border:1px solid var(--sandstone);">
         <!-- Accounting Section Header -->
         <div class="section-header-box" style="margin-bottom:20px;border-bottom:1px solid var(--sandstone);padding-bottom:16px;">
@@ -5880,6 +5894,20 @@
     let currentAccStatusFilter = 'all';
     let currentPaymentSearch = '';
     let selectedVendorName = 'सोना हार्डवेयर, अंजड़';
+
+    
+    function scrollToSection(secId, e) {
+      if (e) e.preventDefault();
+      const el = document.getElementById(secId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        try {
+          if (window.history && window.history.replaceState) {
+            window.history.replaceState(null, '', '#' + (secId === 'section-accounting' ? 'accounting' : 'donors'));
+          }
+        } catch(err) {}
+      }
+    }
 
     function switchMainModule(mod) {
       currentMainModule = mod;
