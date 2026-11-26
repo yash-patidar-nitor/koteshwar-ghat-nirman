@@ -2274,6 +2274,75 @@
 
     /* ==================== MOBILE ADAPTATIONS (<768px) ==================== */
     @media (max-width: 768px) {
+      
+      /* ---------- MOBILE SYMMETRY & UX ENHANCEMENTS ---------- */
+      .mobile-only {
+        display: inline !important;
+      }
+      .acc-kpi-card, .kpi-card, .slab-kpi-card {
+        min-height: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+      }
+      .progress-legend-row {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 6px 12px !important;
+        font-size: 11px !important;
+      }
+      .progress-legend-row .leg-item:last-child {
+        grid-column: span 2 !important;
+        justify-content: center !important;
+        margin-left: 0 !important;
+        padding-top: 4px !important;
+        border-top: 1px dashed var(--sandstone) !important;
+      }
+      .progress-panel {
+        padding: 12px 12px !important;
+        margin-bottom: 12px !important;
+      }
+      .progress-title {
+        font-size: 13.5px !important;
+      }
+      .progress-subtitle {
+        font-size: 11px !important;
+      }
+      .leadership-callout {
+        padding: 11px 12px !important;
+        gap: 10px !important;
+        margin-bottom: 12px !important;
+      }
+      .leadership-callout h4 {
+        font-size: 13.5px !important;
+        margin-bottom: 4px !important;
+      }
+      .leadership-callout p {
+        font-size: 11.5px !important;
+        line-height: 1.45 !important;
+      }
+      .metric-badge-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 6px !important;
+        margin-bottom: 12px !important;
+      }
+      .metric-box {
+        padding: 8px 10px !important;
+        text-align: center !important;
+      }
+      .metric-val {
+        font-size: 16px !important;
+      }
+      .metric-lbl {
+        font-size: 10.5px !important;
+      }
+      .slab-sort-btn {
+        flex: 1 !important;
+        justify-content: center !important;
+        font-size: 11.5px !important;
+        padding: 5px 8px !important;
+      }
+
       /* Responsive Tab Labels (Compact on Mobile) */
       .tab-label-desktop {
         display: none !important;
@@ -3360,7 +3429,7 @@
               <span style="font-size:13px;color:var(--text-secondary);font-weight:600;"><i class="fa-solid fa-chart-pie" style="color:var(--gold-dark);"></i> क्षेत्रीय जनसहयोग सारांश</span>
             </div>
             <button type="button" class="btn btn-white btn-sm" onclick="clearVillageFilter()" style="font-size:11.5px;padding:5px 12px;border:1px solid var(--sandstone);border-radius:6px;cursor:pointer;">
-              <i class="fa-solid fa-xmark" style="color:#C45A38;"></i> सभी क्षेत्र देखें (Clear Filter)
+              <i class="fa-solid fa-xmark" style="color:#C45A38;"></i> सभी क्षेत्र देखें
             </button>
           </div>
           <div class="village-summary-grid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(135px, 1fr));gap:10px;">
@@ -3430,7 +3499,7 @@
       <div class="section-card">
         <div class="section-header-box" style="margin-bottom:16px;">
           <div>
-            <h2><i class="fa-solid fa-calendar-days" style="color:var(--gold);"></i> पावन जनसहयोग की दैनिक समयरेखा (Date-wise Donations)</h2>
+            <h2><i class="fa-solid fa-calendar-days" style="color:var(--gold);"></i> पावन जनसहयोग की दैनिक समयरेखा</h2>
             <p>Google Sheet से लाइव संकलित: प्रत्येक तिथि पर प्राप्त दान संकल्प, जमा सहयोग राशि एवं समर्पित दानदाताओं का कालक्रमानुसार प्रामाणिक विवरण</p>
           </div>
           <span style="font-size:12px;color:var(--teal);font-weight:600;"><i class="fa-solid fa-clock-rotate-left"></i> कालक्रमानुसार व्यवस्थित</span>
@@ -3471,7 +3540,7 @@
 
             <!-- Date Select Dropdown -->
             <select id="dateSelectFilter" onchange="handleDateFilterChange()" style="padding:7px 10px;border-radius:6px;border:1px solid var(--sandstone);background:#fff;font-size:12.5px;color:var(--teal);font-weight:600;outline:none;max-width:250px;">
-              <option value="all">📅 सभी तिथियां (All Dates)</option>
+              <option value="all">📅 सभी तिथियां</option>
             </select>
 
             <!-- Sort Select (Date Wise Only, Oldest First by Default) -->
@@ -3562,7 +3631,7 @@
             <div class="slab-kpi-sub" id="expTotalExpensesSub">1 सत्यापित वाउचर</div>
           </div>
           <div class="slab-kpi-card" style="border-left:4px solid var(--gold);">
-            <div class="slab-kpi-title"><i class="fa-solid fa-vault" style="color:var(--gold-dark);"></i> शुद्ध उपलब्ध कोष शेष (Net Balance)</div>
+            <div class="slab-kpi-title"><i class="fa-solid fa-vault" style="color:var(--gold-dark);"></i> शुद्ध उपलब्ध कोष शेष</div>
             <div class="slab-kpi-val" id="expNetBalanceCard" style="color:var(--gold-dark);">₹0</div>
             <div class="slab-kpi-sub">बैंक व नकद कोष में उपलब्ध</div>
           </div>
@@ -3681,12 +3750,12 @@
             <div class="acc-kpi-sub" id="accKpiBilledSub">25 बिल • 17 वेंडर</div>
           </div>
           <div class="acc-kpi-card" style="border-left:4px solid #2E7D32;">
-            <div class="acc-kpi-title"><i class="fa-solid fa-money-bill-transfer" style="color:#2E7D32;"></i> कुल भुगतान चुकता (Paid)</div>
+            <div class="acc-kpi-title"><i class="fa-solid fa-money-bill-transfer" style="color:#2E7D32;"></i> कुल भुगतान चुकता</div>
             <div class="acc-kpi-val" id="accKpiTotalPaid" style="color:#2E7D32;">₹47,72,618.30</div>
             <div class="acc-kpi-sub" id="accKpiPaidSub">26 चेक व बैंक प्रविष्टियां</div>
           </div>
           <div class="acc-kpi-card" style="border-left:4px solid #D97706;">
-            <div class="acc-kpi-title"><i class="fa-solid fa-hourglass-half" style="color:#D97706;"></i> कुल शेष देयता (Due)</div>
+            <div class="acc-kpi-title"><i class="fa-solid fa-hourglass-half" style="color:#D97706;"></i> कुल शेष देयता</div>
             <div class="acc-kpi-val" id="accKpiTotalDue" style="color:#D97706;">₹1,84,680.55</div>
             <div class="acc-kpi-sub" id="accKpiDueSub">वेंडरों को देय शेष राशि</div>
           </div>
@@ -3696,7 +3765,7 @@
             <div class="acc-kpi-sub">दानदाताओं से जमा राशि</div>
           </div>
           <div class="acc-kpi-card" style="border-left:4px solid var(--gold-dark);">
-            <div class="acc-kpi-title"><i class="fa-solid fa-vault" style="color:var(--gold-dark);"></i> शुद्ध उपलब्ध कोष (Net Surplus)</div>
+            <div class="acc-kpi-title"><i class="fa-solid fa-vault" style="color:var(--gold-dark);"></i> शुद्ध उपलब्ध कोष</div>
             <div class="acc-kpi-val" id="accKpiNetSurplus" style="color:var(--gold-dark);">₹36,98,222.70</div>
             <div class="acc-kpi-sub">बैंक व नकद कोष में शेष</div>
           </div>
@@ -6857,7 +6926,7 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
       displayCard.innerHTML = `
         <div class="ledger-header">
           <div>
-            <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">विक्रेता / फर्म आधिकारिक खाता बही (Vendor Account Ledger)</div>
+            <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">विक्रेता / फर्म आधिकारिक खाता बही</div>
             <h3 style="margin:4px 0 2px;font-size:19px;color:var(--teal);font-weight:800;">${cur.name}</h3>
             ${cur.gstin ? `<div style="font-size:11.5px;color:var(--text-secondary);font-family:monospace;"><i class="fa-solid fa-building-shield" style="color:var(--gold);margin-right:4px;"></i>GSTIN: <strong>${cur.gstin}</strong></div>` : ''}
           </div>
@@ -6871,7 +6940,7 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
               <div style="font-size:15px;font-weight:800;color:#2E7D32;">${fmt(cur.paid)}</div>
             </div>
             <div style="background:${cur.due > 0 ? 'rgba(217,119,6,0.1)' : 'rgba(46,125,50,0.1)'};padding:8px 16px;border-radius:8px;border:1px solid ${cur.due > 0 ? 'rgba(217,119,6,0.3)' : 'rgba(46,125,50,0.3)'};text-align:right;">
-              <div style="font-size:11px;color:${cur.due > 0 ? '#D97706' : '#2E7D32'};font-weight:800;">अंतिम देय शेष (Closing Due)</div>
+              <div style="font-size:11px;color:${cur.due > 0 ? '#D97706' : '#2E7D32'};font-weight:800;">अंतिम देय शेष</div>
               <div style="font-size:16px;font-weight:800;color:${cur.due > 0 ? '#D97706' : '#2E7D32'};">${fmt(cur.due)}</div>
             </div>
           </div>
@@ -6883,11 +6952,11 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
                 <th style="width:40px;">क्र.</th>
                 <th>दिनांक</th>
                 <th>संदर्भ क्र. (बिल / चेक)</th>
-                <th>विवरण (Particulars)</th>
+                <th>विवरण</th>
                 <th style="text-align:center;">प्रविष्टि प्रकार</th>
                 <th style="text-align:right;">बिल राशि (Cr)</th>
                 <th style="text-align:right;">भुगतान राशि (Dr)</th>
-                <th style="text-align:right;">संचयी देय शेष (Balance)</th>
+                <th style="text-align:right;">संचयी देय शेष</th>
               </tr>
             </thead>
             <tbody>
@@ -6895,7 +6964,7 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
             </tbody>
             <tfoot>
               <tr style="background:var(--sandstone-light);font-weight:800;">
-                <td colspan="5" style="text-align:right;font-size:13px;color:var(--teal);">खाता कुल योग (Total Ledger Summary):</td>
+                <td colspan="5" style="text-align:right;font-size:13px;color:var(--teal);">खाता कुल योग:</td>
                 <td style="text-align:right;color:#C45A38;font-size:14px;">${fmt(cur.billed)}</td>
                 <td style="text-align:right;color:#2E7D32;font-size:14px;">${fmt(cur.paid)}</td>
                 <td style="text-align:right;color:${cur.due > 0 ? '#D97706' : '#2E7D32'};font-size:14px;">${fmt(cur.due)} Cr</td>
