@@ -3308,7 +3308,7 @@
         <div class="section-header-box">
           <div>
             <h2><i class="fa-solid fa-chart-simple" style="color:var(--gold);"></i> दान राशि स्लैब वार विज़ुअल वितरण</h2>
-            <p>दानदाताओं के संकल्पों का राशि स्लैब अनुसार सांख्यिकीय ग्राफ़ (दानदाता संख्या व प्रतिशत अनुपात)</p>
+            <p>राशि स्लैब अनुसार दानदाताओं का सांख्यिकीय ग्राफ़</p>
           </div>
           <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
             <span style="font-size:12.5px;color:var(--text-muted);background:var(--sandstone-light);padding:5px 12px;border-radius:6px;border:1px solid var(--sandstone);">
@@ -3336,21 +3336,7 @@
           </div>
         </div>
 
-        <!-- Slabs Filter / Sort Toolbar -->
-        <div class="directory-toolbar" style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-          <div style="display:inline-flex;gap:6px;background:var(--sandstone-light);padding:3px;border-radius:8px;border:1px solid var(--sandstone);">
-            <button id="btnSortSlabsCount" class="slab-sort-btn active" onclick="setSlabSortOrder('count')">
-              <i class="fa-solid fa-arrow-down-wide-short"></i> दानदाता संख्या अनुसार
-            </button>
-            <button id="btnSortSlabsAmount" class="slab-sort-btn" onclick="setSlabSortOrder('amount')">
-              <i class="fa-solid fa-arrow-up-1-9"></i> राशि स्लैब अनुसार
-            </button>
-          </div>
-          <div style="font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:6px;">
-            <i class="fa-regular fa-lightbulb" style="color:var(--gold);"></i>
-            <span>किसी भी स्लैब पर क्लिक करके उस राशि के दानदाताओं की सूची देखें</span>
-          </div>
-        </div>
+        
 
         <!-- Slabs Horizontal Bar Container -->
         <div class="slab-chart-table-wrap">
@@ -7998,10 +7984,10 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
       if (elLegReceived) elLegReceived.textContent = `${fmt(totalReceived)} (${pctReceivedOfTarget}%)`;
 
       const elLegPending = document.getElementById('progLegPending');
-      if (elLegPending) elLegPending.textContent = `${fmt(pendingPledged)} (${pctPendingOfTarget}%)`;
+      if (elLegPending) elLegPending.textContent = fmt(pendingPledged);
 
       const elLegTargetRem = document.getElementById('progLegTargetRem');
-      if (elLegTargetRem) elLegTargetRem.textContent = `${fmt(targetRemaining)} (${pctRemainingOfTarget}%)`;
+      if (elLegTargetRem) elLegTargetRem.textContent = fmt(targetRemaining);
 
       const elLegFamilies = document.getElementById('progLegFamilies');
       if (elLegFamilies) elLegFamilies.textContent = `${totalFamilies} परिवार (${familiesDeposited} जमा)`;
