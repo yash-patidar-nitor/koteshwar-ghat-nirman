@@ -2273,6 +2273,52 @@
 
     /* ==================== MOBILE ADAPTATIONS (<768px) ==================== */
     @media (max-width: 768px) {
+      /* Responsive Tab Labels (Compact on Mobile) */
+      .tab-label-desktop {
+        display: none !important;
+      }
+      .tab-label-mobile {
+        display: inline !important;
+      }
+      .acc-tab, .seg-tab {
+        max-width: 70vw !important;
+        flex-shrink: 0 !important;
+      }
+      .tabs-slider-outer {
+        margin-bottom: 10px !important;
+      }
+      .slider-arrow {
+        width: 24px !important;
+        height: 24px !important;
+        font-size: 9.5px !important;
+      }
+      .slider-arrow-left { left: -3px !important; }
+      .slider-arrow-right { right: -3px !important; }
+      .slider-fade { width: 28px !important; }
+
+      .acc-tabs-wrapper,
+      .segmented-tabs-wrapper {
+        scrollbar-width: thin !important;
+        scrollbar-color: rgba(13, 79, 79, 0.22) transparent !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding-bottom: 3px !important;
+      }
+      .acc-tabs-wrapper::-webkit-scrollbar,
+      .segmented-tabs-wrapper::-webkit-scrollbar {
+        display: block !important;
+        height: 3px !important;
+      }
+      .acc-tabs-wrapper::-webkit-scrollbar-track,
+      .segmented-tabs-wrapper::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.03) !important;
+        border-radius: 3px !important;
+      }
+      .acc-tabs-wrapper::-webkit-scrollbar-thumb,
+      .segmented-tabs-wrapper::-webkit-scrollbar-thumb {
+        background: rgba(13, 79, 79, 0.25) !important;
+        border-radius: 3px !important;
+      }
+
       .desktop-only { display: none !important; }
       .mobile-header-tools { display: inline-flex !important; align-items: center; gap: 6px; }
       .header-inner {
