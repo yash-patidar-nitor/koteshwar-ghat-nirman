@@ -7136,11 +7136,26 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
         const due = Number(inv.balanceAmount) || 0;
 
         calcBox.innerHTML = `
-          <div><span style="color:var(--text-muted);">कर योग्य राशि:</span> <strong>${taxable > 0 ? fmt(taxable) : '-'}</strong></div>
-          <div><span style="color:var(--text-muted);">GST राशि:</span> <strong>${gst > 0 ? fmt(gst) : '-'}</strong></div>
-          <div><span style="color:var(--text-muted);">बिल कुल राशि:</span> <strong style="color:#C45A38;font-size:15px;">${fmt(total)}</strong></div>
-          <div><span style="color:var(--text-muted);">भुगतान:</span> <strong style="color:#2E7D32;">${fmt(paid)}</strong></div>
-          <div><span style="color:var(--text-muted);">देय शेष:</span> <strong style="color:${due > 0 ? '#D97706' : 'var(--sage)'};">${fmt(due)}</strong></div>
+          <div class="expense-calc-item">
+            <div class="expense-calc-lbl">कर योग्य राशि</div>
+            <div class="expense-calc-val">${taxable > 0 ? fmt(taxable) : '-'}</div>
+          </div>
+          <div class="expense-calc-item">
+            <div class="expense-calc-lbl">GST राशि</div>
+            <div class="expense-calc-val">${gst > 0 ? fmt(gst) : '-'}</div>
+          </div>
+          <div class="expense-calc-item">
+            <div class="expense-calc-lbl">बिल कुल राशि</div>
+            <div class="expense-calc-val" style="color:#C45A38;">${fmt(total)}</div>
+          </div>
+          <div class="expense-calc-item">
+            <div class="expense-calc-lbl">भुगतान</div>
+            <div class="expense-calc-val" style="color:#2E7D32;">${fmt(paid)}</div>
+          </div>
+          <div class="expense-calc-item">
+            <div class="expense-calc-lbl">देय शेष</div>
+            <div class="expense-calc-val" style="color:${due > 0 ? '#D97706' : 'var(--sage)'};">${fmt(due)}</div>
+          </div>
         `;
       }
 
@@ -7702,18 +7717,18 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
               expCols.forEach((col, idx) => {
                 const lbl = (col.label || '').trim().toLowerCase();
                 if (lbl === 'क्र.' || lbl === 'क्र' || lbl === 'sno' || lbl === 'sr' || lbl === 'sr.') colMap.sno = idx;
-                else if (lbl.includes('वाउचर') || lbl.includes('बिल क्र') || lbl.includes('voucher') || lbl.includes('बिल')) colMap.voucherNo = idx;
+                else if (lbl.includes('वाउचर') || lbl.includes('voucher') || (lbl.includes('बिल क्र') && !lbl.includes('कुल'))) colMap.voucherNo = idx;
                 else if (lbl.includes('सामग्री नाम') || lbl.includes('सामग्री का नाम') || lbl.includes('item name') || lbl.includes('item desc')) colMap.itemName = idx;
                 else if (lbl.includes('मात्रा') || lbl.includes('qty') || lbl.includes('quantity')) colMap.qty = idx;
                 else if (lbl.includes('इकाई') || lbl.includes('unit')) colMap.unit = idx;
-                else if (lbl.includes('दर') || lbl.includes('सामग्री राशि') || lbl.includes('item amt')) colMap.itemAmt = idx;
-                else if (lbl.includes('बिल कुल राशि') || lbl.includes('कुल बिल') || lbl.includes('grand total') || lbl.includes('कुल राशि')) colMap.billTotal = idx;
+                else if ((lbl.includes('सामग्री राशि') || lbl.includes('item amt') || lbl.includes('rate') || /(^|[\s/])दर([\s/]|$)/.test(lbl)) && !lbl.includes('संदर्भ')) colMap.itemAmt = idx;
+                else if (lbl.includes('बिल कुल राशि') || lbl.includes('कुल बिल') || lbl.includes('grand total') || (lbl.includes('कुल राशि') && !lbl.includes('कर'))) colMap.billTotal = idx;
                 else if (lbl.includes('कर योग्य') || lbl.includes('taxable')) colMap.taxableAmount = idx;
-                else if (lbl.includes('gst राशि') || lbl.includes('gst amount')) colMap.taxAmount = idx;
+                else if (lbl.includes('gst राशि') || lbl.includes('gst amount') || lbl.includes('कर राशि')) colMap.taxAmount = idx;
                 else if (lbl.includes('gstin')) colMap.gstin = idx;
-                else if (lbl.includes('भुगतान राशि') || lbl.includes('paid amt') || lbl.includes('paid')) colMap.paidAmt = idx;
+                else if (lbl.includes('भुगतान राशि') || lbl.includes('paid amt')) colMap.paidAmt = idx;
                 else if (lbl.includes('शेष राशि') || lbl.includes('due amt') || lbl.includes('balance')) colMap.balanceAmt = idx;
-                else if (lbl.includes('भुगतान संदर्भ') || lbl.includes('चेक') || lbl.includes('cheque')) colMap.chequeRef = idx;
+                else if (lbl.includes('संदर्भ') || lbl.includes('चेक') || lbl.includes('cheque')) colMap.chequeRef = idx;
                 else if (lbl.includes('स्थिति') || lbl.includes('status')) colMap.status = idx;
                 else if (lbl.includes('प्राप्तकर्ता') || lbl.includes('फर्म') || lbl.includes('वेंडर') || lbl.includes('payee')) colMap.payee = idx;
                 else if (lbl.includes('दिनांक') || lbl.includes('date')) colMap.date = idx;
