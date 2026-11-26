@@ -498,6 +498,88 @@
       color: var(--text-secondary);
     }
 
+    
+    /* ---------- TAB SLIDERS, OVERFLOW INDICATORS & SCROLL AFFORDANCE ---------- */
+    .tabs-slider-outer {
+      position: relative;
+      width: 100%;
+      margin-bottom: 18px;
+    }
+    .slider-fade {
+      position: absolute;
+      top: 0;
+      bottom: 2px;
+      width: 38px;
+      pointer-events: none;
+      z-index: 3;
+      transition: opacity 0.25s ease;
+    }
+    .slider-fade-left {
+      left: 0;
+      background: linear-gradient(to right, #ffffff, rgba(255, 255, 255, 0));
+      opacity: 0;
+    }
+    .slider-fade-right {
+      right: 0;
+      background: linear-gradient(to left, #ffffff, rgba(255, 255, 255, 0));
+      opacity: 0;
+    }
+    .tabs-slider-outer.has-overflow-left .slider-fade-left {
+      opacity: 1;
+    }
+    .tabs-slider-outer.has-overflow-right .slider-fade-right {
+      opacity: 1;
+    }
+
+    .slider-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 6;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 1.5px solid var(--sandstone);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      color: var(--teal);
+      font-size: 11px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .slider-arrow:hover {
+      background: var(--teal);
+      color: #ffffff;
+      border-color: var(--teal);
+    }
+    .slider-arrow-left {
+      left: -6px;
+    }
+    .slider-arrow-right {
+      right: -6px;
+    }
+    .tabs-slider-outer.has-overflow-left .slider-arrow-left {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .tabs-slider-outer.has-overflow-right .slider-arrow-right {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Responsive Tab Labels (Full on Desktop, Compact on Mobile) */
+    .tab-label-desktop {
+      display: inline;
+    }
+    .tab-label-mobile {
+      display: none;
+    }
+
     .acc-tabs-wrapper {
       display: flex;
       gap: 8px;
@@ -2982,35 +3064,74 @@
       </div>
     </div>
 
-    <!-- PRESTIGIOUS SEGMENTED NAVIGATION CONTROLS (1. VILLAGES, 2. SLABS, 3. DONORS, 4. DATES, 5. STORIES, 6. WORKS) -->
-    <nav class="segmented-tabs-wrapper">
-      <div class="segmented-tabs">
-        <!-- 1st Tab (Leftmost & Active by default): Slabs Bar Graph -->
-        <button class="seg-tab active" onclick="switchTab('slabs', this)">
-          <i class="fa-solid fa-chart-simple"></i> <span>राशि स्लैब ग्राफ़</span> <span class="seg-badge" id="tabSlabsBadge">12 स्लैब्स</span>
-        </button>
-        <!-- 2nd Tab: Nagar/Gramwar Sahbhagita -->
-        <button class="seg-tab" onclick="switchTab('villages', this)">
-          <i class="fa-solid fa-city"></i> <span>नगर / ग्रामवार सहभागिता</span> <span class="seg-badge" id="tabVillageBadge">-</span>
-        </button>
-        <!-- 3rd Tab: Dandata Nirdeshika (Sorted Decreasing by Amount) -->
-        <button class="seg-tab" onclick="switchTab('donors', this)">
-          <i class="fa-solid fa-users"></i> <span>दानदाता निर्देशिका</span> <span class="seg-badge" id="tabDonorBadge">-</span>
-        </button>
-        <!-- 4th Tab: Date-wise Donations -->
-        <button class="seg-tab" onclick="switchTab('dates', this)">
-          <i class="fa-solid fa-calendar-days"></i> <span>दिनांक वार दान विवरण</span> <span class="seg-badge" id="tabDateBadge">-</span>
-        </button>
-        <!-- 5th Tab: Prerna dai Prasang -->
-        <button class="seg-tab" onclick="switchTab('stories', this)">
-          <i class="fa-solid fa-star"></i> <span>प्रेरणादायी प्रसंग</span> <span class="seg-badge">8</span>
-        </button>
-        <!-- 6th Tab: Works & Budget -->
-        <button class="seg-tab" onclick="switchTab('works', this)">
-          <i class="fa-solid fa-compass-drafting"></i> <span>निर्माण कार्य व बजट</span>
-        </button>
-      </div>
-    </nav>
+    <!-- PRESTIGIOUS SEGMENTED NAVIGATION CONTROLS WITH SLIDER OVERFLOW CONTROLS -->
+    <div class="tabs-slider-outer" id="donorTabsSliderWrap">
+      <button type="button" class="slider-arrow slider-arrow-left" onclick="slideNavTabs('donorTabsNav', -160)" aria-label="पिछला टैब देखें">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      <nav class="segmented-tabs-wrapper" id="donorTabsNav" onscroll="updateSliderScrollHints(this, 'donorTabsSliderWrap')">
+        <div class="segmented-tabs">
+          <!-- 1st Tab (Leftmost & Active by default): Slabs Bar Graph -->
+          <button class="seg-tab active" onclick="switchTab('slabs', this)">
+            <i class="fa-solid fa-chart-simple"></i>
+            <span>
+              <span class="tab-label-desktop">राशि स्लैब ग्राफ़</span>
+              <span class="tab-label-mobile">राशि स्लैब</span>
+            </span>
+            <span class="seg-badge" id="tabSlabsBadge">12 स्लैब्स</span>
+          </button>
+          <!-- 2nd Tab: Nagar/Gramwar Sahbhagita -->
+          <button class="seg-tab" onclick="switchTab('villages', this)">
+            <i class="fa-solid fa-city"></i>
+            <span>
+              <span class="tab-label-desktop">नगर / ग्रामवार सहभागिता</span>
+              <span class="tab-label-mobile">ग्रामवार</span>
+            </span>
+            <span class="seg-badge" id="tabVillageBadge">-</span>
+          </button>
+          <!-- 3rd Tab: Dandata Nirdeshika (Sorted Decreasing by Amount) -->
+          <button class="seg-tab" onclick="switchTab('donors', this)">
+            <i class="fa-solid fa-users"></i>
+            <span>
+              <span class="tab-label-desktop">दानदाता निर्देशिका</span>
+              <span class="tab-label-mobile">दानदाता सूची</span>
+            </span>
+            <span class="seg-badge" id="tabDonorBadge">-</span>
+          </button>
+          <!-- 4th Tab: Date-wise Donations -->
+          <button class="seg-tab" onclick="switchTab('dates', this)">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>
+              <span class="tab-label-desktop">दिनांक वार दान विवरण</span>
+              <span class="tab-label-mobile">दिनांक वार</span>
+            </span>
+            <span class="seg-badge" id="tabDateBadge">-</span>
+          </button>
+          <!-- 5th Tab: Prerna dai Prasang -->
+          <button class="seg-tab" onclick="switchTab('stories', this)">
+            <i class="fa-solid fa-star"></i>
+            <span>
+              <span class="tab-label-desktop">प्रेरणादायी प्रसंग</span>
+              <span class="tab-label-mobile">प्रेरक प्रसंग</span>
+            </span>
+            <span class="seg-badge">8</span>
+          </button>
+          <!-- 6th Tab: Works & Budget -->
+          <button class="seg-tab" onclick="switchTab('works', this)">
+            <i class="fa-solid fa-compass-drafting"></i>
+            <span>
+              <span class="tab-label-desktop">निर्माण कार्य व बजट</span>
+              <span class="tab-label-mobile">कार्य व बजट</span>
+            </span>
+          </button>
+        </div>
+      </nav>
+      <button type="button" class="slider-arrow slider-arrow-right" onclick="slideNavTabs('donorTabsNav', 160)" aria-label="अगला टैब देखें">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+      <div class="slider-fade slider-fade-left"></div>
+      <div class="slider-fade slider-fade-right"></div>
+    </div>
 
     <!-- ==================== TAB 1 (FIRST): VILLAGE TABLE (DEFAULT ACTIVE) ==================== -->
     <div id="pane-villages" class="tab-pane">
@@ -3530,25 +3651,55 @@
           </div>
         </div>
 
-        <!-- Accounting Sub-Tabs Navigation -->
-        <nav class="acc-tabs-wrapper">
-          <!-- 1st Tab (Leftmost): Account Heads -->
-          <button class="acc-tab active" id="btnAccHeads" onclick="switchAccountingTab('heads', this)">
-            <i class="fa-solid fa-sitemap"></i> <span>मदवार व्यय खाता (Account Heads)</span> <span class="acc-tab-badge">8 मदें</span>
+        <!-- Accounting Sub-Tabs Navigation with Slider Overflow Controls -->
+        <div class="tabs-slider-outer" id="accTabsSliderWrap">
+          <button type="button" class="slider-arrow slider-arrow-left" onclick="slideNavTabs('accTabsNav', -160)" aria-label="पिछला टैब देखें">
+            <i class="fa-solid fa-chevron-left"></i>
           </button>
-          <!-- 2nd Tab: Bills Register -->
-          <button class="acc-tab" id="btnAccInvoices" onclick="switchAccountingTab('invoices', this)">
-            <i class="fa-solid fa-file-invoice"></i> <span>बिल पंजी (Bills Register)</span> <span class="acc-tab-badge" id="accTabInvoicesCount">25 बिल</span>
+          <nav class="acc-tabs-wrapper" id="accTabsNav" onscroll="updateSliderScrollHints(this, 'accTabsSliderWrap')">
+            <!-- 1st Tab (Leftmost): Account Heads -->
+            <button class="acc-tab active" id="btnAccHeads" onclick="switchAccountingTab('heads', this)">
+              <i class="fa-solid fa-sitemap"></i>
+              <span>
+                <span class="tab-label-desktop">मदवार व्यय खाता (Account Heads)</span>
+                <span class="tab-label-mobile">मदवार व्यय</span>
+              </span>
+              <span class="acc-tab-badge">8 मदें</span>
+            </button>
+            <!-- 2nd Tab: Bills Register -->
+            <button class="acc-tab" id="btnAccInvoices" onclick="switchAccountingTab('invoices', this)">
+              <i class="fa-solid fa-file-invoice"></i>
+              <span>
+                <span class="tab-label-desktop">बिल पंजी (Bills Register)</span>
+                <span class="tab-label-mobile">बिल पंजी</span>
+              </span>
+              <span class="acc-tab-badge" id="accTabInvoicesCount">25 बिल</span>
+            </button>
+            <!-- 3rd Tab: Vendor Ledgers -->
+            <button class="acc-tab" id="btnAccLedgers" onclick="switchAccountingTab('ledgers', this)">
+              <i class="fa-solid fa-book-journal-whills"></i>
+              <span>
+                <span class="tab-label-desktop">विक्रेता खाता बही (Vendor Ledgers)</span>
+                <span class="tab-label-mobile">खाता बही</span>
+              </span>
+              <span class="acc-tab-badge">17 वेंडर</span>
+            </button>
+            <!-- 4th Tab: Payments Register -->
+            <button class="acc-tab" id="btnAccPayments" onclick="switchAccountingTab('payments', this)">
+              <i class="fa-solid fa-money-check-dollar"></i>
+              <span>
+                <span class="tab-label-desktop">भुगतान पंजी (Payments Book)</span>
+                <span class="tab-label-mobile">भुगतान पंजी</span>
+              </span>
+              <span class="acc-tab-badge" id="accTabPaymentsCount">26 चेक</span>
+            </button>
+          </nav>
+          <button type="button" class="slider-arrow slider-arrow-right" onclick="slideNavTabs('accTabsNav', 160)" aria-label="अगला टैब देखें">
+            <i class="fa-solid fa-chevron-right"></i>
           </button>
-          <!-- 3rd Tab: Vendor Ledgers -->
-          <button class="acc-tab" id="btnAccLedgers" onclick="switchAccountingTab('ledgers', this)">
-            <i class="fa-solid fa-book-journal-whills"></i> <span>विक्रेता खाता बही (Vendor Ledgers)</span> <span class="acc-tab-badge">17 वेंडर</span>
-          </button>
-          <!-- 4th Tab: Payments Register -->
-          <button class="acc-tab" id="btnAccPayments" onclick="switchAccountingTab('payments', this)">
-            <i class="fa-solid fa-money-check-dollar"></i> <span>भुगतान पंजी (Payments Book)</span> <span class="acc-tab-badge" id="accTabPaymentsCount">26 चेक</span>
-          </button>
-        </nav>
+          <div class="slider-fade slider-fade-left"></div>
+          <div class="slider-fade slider-fade-right"></div>
+        </div>
 
         <!-- SUB-PANE 1: INVOICES REGISTER -->
         <div id="acc-pane-invoices" class="acc-sub-pane" style="display:none;">
@@ -6345,6 +6496,50 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
       }
     }
 
+    
+    /* ---------- TAB SLIDERS SCROLL AFFORDANCE & HELPER FUNCTIONS ---------- */
+    function updateSliderScrollHints(navEl, wrapId) {
+      if (!navEl) return;
+      const wrap = typeof wrapId === 'string' ? document.getElementById(wrapId) : wrapId;
+      if (!wrap) return;
+      const sl = navEl.scrollLeft;
+      const maxScroll = navEl.scrollWidth - navEl.clientWidth;
+      
+      if (sl > 8) {
+        wrap.classList.add('has-overflow-left');
+      } else {
+        wrap.classList.remove('has-overflow-left');
+      }
+      
+      if (maxScroll - sl > 8) {
+        wrap.classList.add('has-overflow-right');
+      } else {
+        wrap.classList.remove('has-overflow-right');
+      }
+    }
+
+    function slideNavTabs(navId, distance) {
+      const el = document.getElementById(navId);
+      if (el) {
+        el.scrollBy({ left: distance, behavior: 'smooth' });
+        setTimeout(() => {
+          if (navId === 'accTabsNav') updateSliderScrollHints(el, 'accTabsSliderWrap');
+          else if (navId === 'donorTabsNav') updateSliderScrollHints(el, 'donorTabsSliderWrap');
+        }, 250);
+      }
+    }
+
+    function initAllTabSliders() {
+      const accNav = document.getElementById('accTabsNav');
+      if (accNav) updateSliderScrollHints(accNav, 'accTabsSliderWrap');
+      const donorNav = document.getElementById('donorTabsNav');
+      if (donorNav) updateSliderScrollHints(donorNav, 'donorTabsSliderWrap');
+    }
+    window.addEventListener('load', initAllTabSliders);
+    window.addEventListener('resize', initAllTabSliders);
+    setTimeout(initAllTabSliders, 500);
+    setTimeout(initAllTabSliders, 1500);
+
     function switchAccountingTab(tabId, btn) {
       currentAccountingTab = tabId;
       document.querySelectorAll('.acc-tab').forEach(b => b.classList.remove('active'));
@@ -6353,7 +6548,16 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
       if (!btn) {
         btn = document.getElementById('btnAcc' + tabId.charAt(0).toUpperCase() + tabId.slice(1));
       }
-      if (btn) btn.classList.add('active');
+      if (btn) {
+        btn.classList.add('active');
+        if (typeof btn.scrollIntoView === 'function') {
+          btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+        setTimeout(() => {
+          const accNav = document.getElementById('accTabsNav');
+          if (accNav) updateSliderScrollHints(accNav, 'accTabsSliderWrap');
+        }, 320);
+      }
 
       const targetPane = document.getElementById('acc-pane-' + tabId);
       if (targetPane) targetPane.style.display = 'block';
@@ -10562,6 +10766,13 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
 
       if (btn) {
         btn.classList.add('active');
+        if (typeof btn.scrollIntoView === 'function') {
+          btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+        setTimeout(() => {
+          const donorNav = document.getElementById('donorTabsNav');
+          if (donorNav) updateSliderScrollHints(donorNav, 'donorTabsSliderWrap');
+        }, 320);
       }
       const target = document.getElementById('pane-' + tabId);
       if (target) target.classList.add('active');
