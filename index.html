@@ -369,12 +369,13 @@
       gap: 18px;
       font-size: 12px;
       color: var(--text-secondary);
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
     }
     .leg-item {
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      white-space: nowrap;
     }
     .leg-dot {
       width: 10px;
@@ -2286,17 +2287,15 @@
         justify-content: space-between !important;
       }
       .progress-legend-row {
-        display: grid !important;
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 6px 12px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 6px 8px !important;
         font-size: 11px !important;
+        flex-wrap: nowrap !important;
       }
-      .progress-legend-row .leg-item:last-child {
-        grid-column: span 2 !important;
-        justify-content: center !important;
-        margin-left: 0 !important;
-        padding-top: 4px !important;
-        border-top: 1px dashed var(--sandstone) !important;
+      .progress-legend-row .leg-item {
+        white-space: nowrap !important;
       }
       .progress-panel {
         padding: 12px 12px !important;
