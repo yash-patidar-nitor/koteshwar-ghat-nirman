@@ -2211,114 +2211,181 @@
         margin-bottom: 14px;
       }
 
-      /* ---------- MOBILE TILE OPTIMIZATIONS (2 TILES HORIZONTALLY) ---------- */
+      /* ---------- MOBILE TILE OPTIMIZATIONS (2 TILES HORIZONTALLY & CENTERED HERO/LEAD) ---------- */
       .kpi-strip {
         grid-template-columns: repeat(2, 1fr) !important;
+        gap: 6px !important;
+        margin-bottom: 10px !important;
+      }
+      /* Top Hero Card (Full-width, Centered) */
+      .kpi-card.hero-card {
+        grid-column: span 2 !important;
+        text-align: center !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      .kpi-card.hero-card .kpi-head {
+        justify-content: center !important;
         gap: 8px !important;
-        margin-bottom: 14px !important;
+        width: 100% !important;
       }
-      .kpi-card.hero-card { grid-column: span 2 !important; }
+      .kpi-card.hero-card .kpi-amount {
+        text-align: center !important;
+        width: 100% !important;
+      }
+      .kpi-card.hero-card .kpi-footer {
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        flex-direction: row !important;
+        gap: 6px !important;
+        width: 100% !important;
+      }
       .kpi-card {
-        padding: 9px 11px !important;
-        border-radius: 9px !important;
+        padding: 8px 9px !important;
+        border-radius: 8px !important;
       }
-      .kpi-head { margin-bottom: 4px !important; }
-      .kpi-title { font-size: 11px !important; line-height: 1.25 !important; }
-      .kpi-icon-wrap { width: 28px !important; height: 28px !important; font-size: 13px !important; border-radius: 6px !important; }
-      .kpi-amount { font-size: 17px !important; margin-bottom: 3px !important; line-height: 1.15 !important; }
-      .kpi-footer { font-size: 10px !important; gap: 2px !important; }
-      .kpi-badge { font-size: 9px !important; padding: 1px 5px !important; }
+      .kpi-head { margin-bottom: 3px !important; }
+      .kpi-title { font-size: 10.5px !important; line-height: 1.25 !important; }
+      .kpi-icon-wrap { width: 26px !important; height: 26px !important; font-size: 12px !important; border-radius: 6px !important; }
+      .kpi-amount { font-size: 16px !important; margin-bottom: 2px !important; line-height: 1.15 !important; }
+      .kpi-footer { font-size: 9.5px !important; gap: 2px !important; }
+      .kpi-badge { font-size: 8.5px !important; padding: 1px 4px !important; }
 
       /* Accounting 5 KPI Tiles: 2 Columns Horizontally */
       .acc-kpi-grid {
         grid-template-columns: repeat(2, 1fr) !important;
-        gap: 8px !important;
-        margin-bottom: 14px !important;
+        gap: 6px !important;
+        margin-bottom: 10px !important;
       }
+      /* Lead Tile: कुल प्रमाणित व्यय बिल (Full-width, Centered) */
       .acc-kpi-grid > .acc-kpi-card:first-child {
         grid-column: span 2 !important;
+        text-align: center !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      .acc-kpi-grid > .acc-kpi-card:first-child .acc-kpi-title {
+        text-align: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+      }
+      .acc-kpi-grid > .acc-kpi-card:first-child .acc-kpi-val {
+        text-align: center !important;
+        width: 100% !important;
+      }
+      .acc-kpi-grid > .acc-kpi-card:first-child .acc-kpi-sub {
+        text-align: center !important;
+        width: 100% !important;
       }
       .acc-kpi-card {
-        padding: 9px 11px !important;
-        border-radius: 9px !important;
+        padding: 8px 9px !important;
+        border-radius: 8px !important;
       }
       .acc-kpi-title {
-        font-size: 10.5px !important;
+        font-size: 10px !important;
         gap: 4px !important;
         line-height: 1.2 !important;
       }
-      .acc-kpi-title i { font-size: 11.5px !important; }
+      .acc-kpi-title i { font-size: 11px !important; }
       .acc-kpi-val {
-        font-size: 15.5px !important;
-        margin: 4px 0 2px !important;
+        font-size: 15px !important;
+        margin: 3px 0 2px !important;
         line-height: 1.15 !important;
       }
       .acc-kpi-sub {
-        font-size: 9.5px !important;
+        font-size: 9px !important;
         line-height: 1.2 !important;
       }
 
-      /* Slab 5 KPI Tiles: 2 Columns Horizontally */
+      /* Slab Highlight Cards: 2 Columns Horizontally */
       .slab-kpi-grid {
         grid-template-columns: repeat(2, 1fr) !important;
-        gap: 8px !important;
-        margin-bottom: 14px !important;
+        gap: 6px !important;
+        margin-bottom: 10px !important;
       }
+      /* Lead Tile: सर्वाधिक लोकप्रिय स्लैब (Full-width, Centered) */
       .slab-kpi-grid > .slab-kpi-card:first-child {
         grid-column: span 2 !important;
+        text-align: center !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      .slab-kpi-grid > .slab-kpi-card:first-child .slab-kpi-title {
+        text-align: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+      }
+      .slab-kpi-grid > .slab-kpi-card:first-child .slab-kpi-val {
+        text-align: center !important;
+        width: 100% !important;
+      }
+      .slab-kpi-grid > .slab-kpi-card:first-child .slab-kpi-sub {
+        text-align: center !important;
+        width: 100% !important;
       }
       .slab-kpi-card {
-        padding: 9px 11px !important;
-        border-radius: 9px !important;
+        padding: 8px 9px !important;
+        border-radius: 8px !important;
       }
       .slab-kpi-title {
-        font-size: 10.5px !important;
+        font-size: 10px !important;
         gap: 4px !important;
         margin-bottom: 2px !important;
       }
       .slab-kpi-val {
-        font-size: 15.5px !important;
+        font-size: 15px !important;
         line-height: 1.15 !important;
       }
       .slab-kpi-sub {
-        font-size: 9.5px !important;
+        font-size: 9px !important;
         margin-top: 1px !important;
       }
 
       /* Account Heads View: 2 Columns Horizontally */
       #accHeadsContainer {
         grid-template-columns: repeat(2, 1fr) !important;
-        gap: 8px !important;
+        gap: 6px !important;
       }
       #accHeadsContainer .acc-kpi-card {
-        padding: 9px 10px !important;
-        border-radius: 9px !important;
+        padding: 8px 8px !important;
+        border-radius: 8px !important;
       }
       #accHeadsContainer .acc-kpi-card span[style*="font-size:14px"] {
-        font-size: 11.5px !important;
-        gap: 4px !important;
+        font-size: 11px !important;
+        gap: 3px !important;
       }
       #accHeadsContainer .acc-kpi-card div[style*="font-size:22px"] {
-        font-size: 14.5px !important;
-        margin: 6px 0 3px !important;
+        font-size: 14px !important;
+        margin: 4px 0 2px !important;
       }
       #accHeadsContainer .acc-kpi-card span.badge {
-        font-size: 9px !important;
-        padding: 1px 4px !important;
+        font-size: 8.5px !important;
+        padding: 1px 3px !important;
       }
 
       /* Vendor Selector Bar on Mobile */
       .acc-vendor-selector-bar {
-        padding: 10px 12px !important;
+        padding: 8px 10px !important;
         flex-direction: column !important;
         align-items: stretch !important;
-        gap: 10px !important;
+        gap: 8px !important;
+        margin-bottom: 10px !important;
       }
       .acc-vendor-selector-inner {
         flex-direction: column !important;
         align-items: stretch !important;
         min-width: 0 !important;
-        gap: 6px !important;
+        gap: 4px !important;
+      }
+      .acc-vendor-selector-label {
+        font-size: 12.5px !important;
       }
       .acc-vendor-selector-select-wrap {
         min-width: 0 !important;
@@ -2326,8 +2393,8 @@
         width: 100% !important;
       }
       #accVendorDropdownSelect {
-        font-size: 13px !important;
-        padding: 8px 10px !important;
+        font-size: 12.5px !important;
+        padding: 7px 9px !important;
         width: 100% !important;
       }
       #accVendorDropdownBalanceBadge {
@@ -2336,58 +2403,146 @@
       #accVendorDropdownBalanceBadge > div {
         width: 100% !important;
         justify-content: space-between !important;
+        padding: 5px 10px !important;
       }
 
       /* Ledger Header & Stats Strip on Mobile */
       .ledger-header {
-        padding: 12px 14px !important;
+        padding: 10px 12px !important;
       }
       .ledger-stats-strip {
         display: grid !important;
         grid-template-columns: repeat(2, 1fr) !important;
-        gap: 8px !important;
+        gap: 6px !important;
         width: 100% !important;
-        margin-top: 10px !important;
+        margin-top: 8px !important;
       }
       .ledger-stats-strip > div:last-child {
         grid-column: span 2 !important;
+      }
+      .ledger-stats-strip > div {
+        padding: 6px 10px !important;
       }
 
       /* Master Plan and Legacy Grid 2-col on Mobile */
       .master-plan-grid {
         grid-template-columns: repeat(2, 1fr) !important;
-        gap: 8px !important;
+        gap: 6px !important;
       }
       .master-plan-card {
-        padding: 10px !important;
+        padding: 8px !important;
       }
       .legacy-grid {
         grid-template-columns: repeat(2, 1fr) !important;
-        gap: 8px !important;
+        gap: 6px !important;
       }
-      .dashboard-wrap { padding: 14px 10px 50px; }
-      .legacy-story-container { padding: 18px 12px; }
-      .ba-module { padding: 14px 10px; }
 
-      .footer-card-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
+      /* ---------- TIGHTER MOBILE PADDINGS & MARGINS (FIT MORE CONTENT) ---------- */
+      .dashboard-wrap {
+        padding: 6px 4px 36px !important;
+      }
+      .section-card {
+        padding: 10px 10px !important;
+        margin-bottom: 12px !important;
+        border-radius: 9px !important;
+      }
+      #section-accounting {
+        margin-top: 14px !important;
+      }
+      .section-header-box {
+        margin-bottom: 10px !important;
+        padding-bottom: 8px !important;
+      }
+      .section-header-box h2 {
+        font-size: 16px !important;
+        margin-bottom: 2px !important;
+      }
+      .section-header-box p {
+        font-size: 11px !important;
+        line-height: 1.3 !important;
+        margin: 0 !important;
+      }
+      .detailed-tables-header {
+        margin-top: 10px !important;
+        margin-bottom: 8px !important;
+      }
+      .detailed-tables-header h3 {
+        font-size: 15px !important;
+      }
+
+      /* Top Navigation Pills on Mobile */
+      .top-nav-anchors {
+        margin: 10px 0 !important;
+        gap: 6px !important;
+      }
+      .top-anchor-pill {
+        padding: 6px 12px !important;
+        font-size: 12px !important;
+        border-radius: 20px !important;
+      }
+
+      /* Toolbar & Search Inputs on Mobile */
+      .directory-toolbar {
+        margin-bottom: 8px !important;
+        gap: 6px !important;
+      }
+      .search-box {
+        min-width: 0 !important;
+        width: 100% !important;
+      }
+      .search-input {
+        padding: 7px 10px 7px 32px !important;
+        font-size: 12px !important;
+      }
+
+      /* Tab Bars on Mobile */
+      .segmented-tabs-wrapper {
+        margin-bottom: 10px !important;
+      }
+      .seg-tab {
+        padding: 6px 10px !important;
+        font-size: 12px !important;
+      }
+      .acc-tabs-wrapper {
+        margin-bottom: 10px !important;
+        gap: 4px !important;
+      }
+      .acc-tab {
+        padding: 6px 10px !important;
+        font-size: 12px !important;
+      }
+
+      /* Tables on Mobile */
+      .data-table th, .data-table td {
+        padding: 6px 6px !important;
+        font-size: 11.5px !important;
+      }
+      .table-responsive {
+        margin-bottom: 8px !important;
+      }
+
+      .legacy-story-container { padding: 14px 10px !important; }
+      .ba-module { padding: 10px 8px !important; }
+
+      .footer-card-inner { flex-direction: column; align-items: flex-start; gap: 10px; }
       .footer-actions-row { width: 100%; justify-content: flex-start; }
       .footer-sub-bar { flex-direction: column; align-items: flex-start; }
       .dev-prominent-card {
-        padding: 16px 18px;
+        padding: 12px 14px;
         flex-direction: column;
         align-items: flex-start;
-        gap: 14px;
+        gap: 10px;
       }
       .dev-contact-pills {
         width: 100%;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
       }
       .dev-btn-pill {
         width: 100%;
         justify-content: center;
-        padding: 10px 14px;
+        padding: 8px 12px;
       }
     }
   </style>
