@@ -2027,6 +2027,7 @@
     @media (max-width: 900px) {
       .metric-badge-grid { grid-template-columns: 1fr 1fr; }
       .timeline-grid { grid-template-columns: 1fr; }
+      .timeline-wrap h4 { font-size: 15px !important; }
       .impact-dual-grid { grid-template-columns: 1fr; }
       .legacy-grid { grid-template-columns: repeat(2, 1fr); }
       .ba-stage-frame { height: 320px; }
@@ -2564,6 +2565,25 @@
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 6px !important;
       }
+      /* कोठड़ा घाट (पावन महाअभियान) Full-width Centered Tile on Mobile */
+      .legacy-grid > .legacy-card.current-ghat,
+      .legacy-grid > .legacy-card:last-child {
+        grid-column: span 2 !important;
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center !important;
+        align-items: center !important;
+        text-align: center !important;
+        gap: 10px !important;
+        padding: 9px 12px !important;
+      }
+      .legacy-grid > .legacy-card.current-ghat .legacy-card-title,
+      .legacy-grid > .legacy-card:last-child .legacy-card-title {
+        justify-content: center !important;
+        text-align: center !important;
+        margin: 0 !important;
+      }
+
 
       /* ---------- TIGHTER MOBILE PADDINGS & MARGINS (FIT MORE CONTENT) ---------- */
       .dashboard-wrap {
@@ -2921,11 +2941,10 @@
 
       <!-- 3. Interactive Milestones Timeline -->
       <div class="timeline-wrap">
-        <div style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="margin-bottom:14px;">
           <h4 style="font-size:16px;font-weight:700;color:var(--teal);margin:0;display:flex;align-items:center;gap:8px;">
             <i class="fa-solid fa-timeline" style="color:var(--gold);"></i> कोटेश्वर घाट निर्माण के ऐतिहासिक पड़ाव
           </h4>
-          <span style="font-size:12px;color:var(--text-muted);"><i class="fa-solid fa-calendar-days"></i> जुलाई - अगस्त 2026</span>
         </div>
 
         <div class="timeline-grid">
@@ -3106,7 +3125,6 @@
         <h3 style="margin:0;font-size:18px;font-weight:800;color:var(--teal);display:flex;align-items:center;gap:8px;">
           <i class="fa-solid fa-table-cells" style="color:var(--gold);"></i> दानदाताओ का संपूर्ण विवरण
         </h3>
-        <p style="margin:2px 0 0;font-size:12.5px;color:var(--text-secondary);">Google Sheet से लाइव संकलित: नगर एवं ग्रामवार सहभागिता, दानदाता निर्देशिका व प्रेरक प्रसंग</p>
       </div>
     </div>
 
