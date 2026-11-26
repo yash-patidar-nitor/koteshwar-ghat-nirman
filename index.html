@@ -2892,7 +2892,7 @@
           <div class="progress-subtitle">कोटेश्वर तीर्थ (कोठड़ा) घाट निर्माण हेतु ₹4 करोड़ के महासंकल्प की वर्तमान प्रगति</div>
         </div>
         <div style="font-size:13.5px;font-weight:700;color:var(--teal);" class="num" id="progSummaryText">
-          डेटा लोड हो रहा है...
+          लक्ष्य: <strong>₹4.00 करोड़</strong>
         </div>
       </div>
 
@@ -2910,14 +2910,6 @@
       </div>
 
       <div class="progress-legend-row">
-        <div class="leg-item">
-          <span class="leg-dot" style="background:var(--teal);"></span>
-          <span>कुल घोषित संकल्प: <strong id="progLegPledged" style="color:var(--teal);">गणना जारी...</strong></span>
-        </div>
-        <div class="leg-item">
-          <span class="leg-dot" style="background:var(--sage);"></span>
-          <span>प्राप्त जनसहयोग: <strong id="progLegReceived" style="color:var(--sage);">गणना जारी...</strong></span>
-        </div>
         <div class="leg-item">
           <span class="leg-dot" style="background:var(--gold);"></span>
           <span>घोषित शेष: <strong id="progLegPending" style="color:var(--gold-dark);">गणना जारी...</strong></span>
@@ -7997,7 +7989,7 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
       const pctRemainingOfTarget = Math.max(0, 100 - parseFloat(pctPledgedOfTarget)).toFixed(1);
 
       document.getElementById('progSummaryText').innerHTML = 
-        `घोषित: ${fmt(totalPledged)} (${crPledged} करोड़ • <span style="color:var(--gold-dark);font-weight:800;">${pctPledgedOfTarget}%</span>) | लक्ष्य: <strong>₹${crTarget} करोड़</strong>`;
+        `लक्ष्य: <strong>₹${crTarget} करोड़</strong>`;
       
       const elLegPledged = document.getElementById('progLegPledged');
       if (elLegPledged) elLegPledged.textContent = `${fmt(totalPledged)} (${pctPledgedOfTarget}%)`;
