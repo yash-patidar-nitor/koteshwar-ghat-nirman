@@ -6151,12 +6151,12 @@
 let accountingPayments = [
   {
     "sno": 1,
-    "date": "2026-07-29",
+    "date": "2025-09-26",
     "payee": "बुरहानी बिल्डिंग मटेरियल, निसरपुर",
     "voucherNo": "वाउचर क्र. 1",
     "category": "नल-जल",
     "mode": "नकद / चेक",
-    "ref": "048995",
+    "ref": "049031",
     "amount": 14285,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "बिल कुल: ₹14285",
@@ -6220,8 +6220,8 @@ let accountingPayments = [
     "payee": "विमल रावत पेंटर",
     "voucherNo": "वाउचर क्र. 5",
     "category": "रंग-रोगन एवं पुताई",
-    "mode": "नकद",
-    "ref": "रोकड़ भुगतान",
+    "mode": "चेक",
+    "ref": "049019",
     "amount": 9980,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "बिल कुल: ₹9980",
@@ -6229,12 +6229,12 @@ let accountingPayments = [
   },
   {
     "sno": 7,
-    "date": "2026-08-12",
+    "date": "2026-09-09",
     "payee": "मंगलम इलेक्ट्रीक एंड लाईट डेकोरेशन",
     "voucherNo": "वाउचर क्र. 6",
     "category": "विद्युत एवं प्रकाश व्यवस्था",
-    "mode": "नकद",
-    "ref": "रोकड़ भुगतान",
+    "mode": "चेक",
+    "ref": "049019",
     "amount": 5500,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "बिल कुल: ₹5500",
@@ -6298,8 +6298,8 @@ let accountingPayments = [
     "payee": "गंगामाता कंस्ट्रक्शन",
     "voucherNo": "वाउचर क्र. 11",
     "category": "निर्माण सामग्री एवं कार्य",
-    "mode": "नकद / चेक",
-    "ref": "049011",
+    "mode": "चेक",
+    "ref": "049008",
     "amount": 40500,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "बिल कुल: ₹40500",
@@ -6312,7 +6312,7 @@ let accountingPayments = [
     "voucherNo": "वाउचर क्र. 12",
     "category": "नल-जल",
     "mode": "चेक",
-    "ref": "049018",
+    "ref": "049011",
     "amount": 96500,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "बिल कुल: ₹96500",
@@ -6325,7 +6325,7 @@ let accountingPayments = [
     "voucherNo": "वाउचर क्र. 13",
     "category": "नल-जल",
     "mode": "चेक",
-    "ref": "049008",
+    "ref": "049001",
     "amount": 79900,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "बिल कुल: ₹79900",
@@ -7752,7 +7752,7 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
                 }
               }
 
-              // Compute totals and link payments
+              // Compute totals and link payments STRICTLY & EXCLUSIVELY from accountingPayments (Payments tab SSOT)
               const parsedVouchers = Array.from(vouchersMap.values()).map(v => {
                 if (v.amount <= 0 && v.items.length > 0) {
                   const itemsSum = v.items.reduce((s, itm) => s + (Number(itm.amount) || 0), 0);
@@ -7760,16 +7760,23 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
                 }
                 const cleanVKey = (val) => String(val || '').replace(/^(?:बिल|वाउचर)\s*क्र\.?\s*/i, '').replace(/[^a-zA-Z0-9_\-\/]/g, '').toLowerCase();
                 const curVKey = cleanVKey(v.voucherNo);
+                
+                // Find all matching payments from Payments tab
                 const matchingPayments = accountingPayments.filter(p => cleanVKey(p.voucherNo) === curVKey);
-                if (matchingPayments.length > 0) {
-                  v.cheques = matchingPayments.map(p => ({ mode: p.mode, ref: p.ref, date: p.date, amt: p.amount, status: p.status }));
-                  const sumPaid = matchingPayments.reduce((s, p) => s + p.amount, 0);
-                  if (sumPaid > 0) {
-                    v.paidAmount = sumPaid;
-                    v.balanceAmount = Math.max(0, v.amount - sumPaid);
-                    v.status = v.balanceAmount <= 0 ? 'पूर्ण चुकता' : 'आंशिक चुकता';
-                  }
-                }
+                
+                // SINGLE SOURCE OF TRUTH: All paid amounts and payment details come exclusively from Payments tab
+                const sumPaid = matchingPayments.reduce((s, p) => s + (Number(p.amount) || 0), 0);
+                v.paidAmount = sumPaid;
+                v.balanceAmount = Math.max(0, v.amount - sumPaid);
+                v.status = v.amount > 0 && v.balanceAmount <= 0 ? 'पूर्ण चुकता' : (sumPaid > 0 ? 'आंशिक चुकता' : 'सत्यापित');
+                v.cheques = matchingPayments.map(p => ({
+                  mode: p.mode,
+                  ref: p.ref,
+                  date: p.date,
+                  amt: p.amount,
+                  status: p.status
+                }));
+
                 return v;
               });
 
