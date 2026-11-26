@@ -5158,20 +5158,34 @@
     "voucherNo": "वाउचर क्र. 17",
     "itemDescription": "जेसीबी एवं मिट्टी भराव कार्य",
     "category": "जेसीबी एवं मिट्टी भराव कार्य",
-    "amount": 143250,
+    "amount": 160250,
     "taxableAmount": 160250,
     "taxAmount": 0,
-    "paidAmount": 143250,
+    "paidAmount": 160250,
     "balanceAmount": 0,
     "gstin": "",
     "status": "पूर्ण चुकता",
     "cheques": [
       {
         "mode": "चेक",
-        "ref": "049005",
-        "date": "2026-08-02",
-        "amt": 143250,
+        "ref": "49012",
+        "date": "2026-08-31",
+        "amt": 60000,
         "status": "सत्यापित"
+      },
+      {
+        "mode": "चेक",
+        "ref": "49028",
+        "date": "2026-09-25",
+        "amt": 83250,
+        "status": "सत्यापित"
+      },
+      {
+        "mode": "डीजल समायोजन (Contra)",
+        "ref": "सर्वोत्तम पर्ची 3840, 3869, 3874",
+        "date": "2026-08-02",
+        "amt": 17000,
+        "status": "समायोजित"
       }
     ],
     "items": [
@@ -6817,11 +6831,15 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
         }
         vendorMap[v].paid += p.amount;
 
+        const isContra = (p.mode && (p.mode.includes('समायोजन') || p.mode.includes('Contra'))) || (p.ref && p.ref.includes('समायोजन'));
         vendorMap[v].transactions.push({
           date: p.date,
           ref: `${p.mode} ${p.ref}`,
-          particulars: `बैंक / नकद भुगतान (वाउचर: ${p.voucherNo})`,
-          type: 'भुगतान (Dr)',
+          particulars: isContra
+            ? (p.remarks || `डीजल आपूर्ति समायोजन (वाउचर: ${p.voucherNo})`)
+            : `बैंक / नकद भुगतान (वाउचर: ${p.voucherNo})`,
+          type: isContra ? 'समायोजन (Dr)' : 'भुगतान (Dr)',
+          isContra: isContra,
           billAmt: 0,
           paidAmt: p.amount
         });
@@ -6882,7 +6900,11 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
             <td style="white-space:nowrap;font-size:12.5px;color:var(--text-secondary);"><i class="fa-regular fa-calendar" style="color:var(--gold);margin-right:4px;"></i>${t.date}</td>
             <td style="font-weight:700;color:var(--teal);white-space:nowrap;">${t.ref}</td>
             <td style="font-weight:600;color:var(--text-primary);">${t.particulars}</td>
-            <td style="text-align:center;"><span class="badge" style="background:${isBill ? 'rgba(196,90,56,0.12)' : 'rgba(46,125,50,0.12)'};color:${isBill ? '#C45A38' : '#2E7D32'};font-size:11px;font-weight:700;">${t.type}</span></td>
+            <td style="text-align:center;">
+              <span class="badge" style="background:${isBill ? 'rgba(196,90,56,0.12)' : (t.isContra ? 'rgba(217,119,6,0.14)' : 'rgba(46,125,50,0.12)')};color:${isBill ? '#C45A38' : (t.isContra ? '#D97706' : '#2E7D32')};font-size:11px;font-weight:700;">
+                ${t.isContra ? '<i class="fa-solid fa-gas-pump" style="margin-right:3px;"></i>' : (!isBill ? '<i class="fa-solid fa-check" style="margin-right:3px;"></i>' : '')}${t.type}
+              </span>
+            </td>
             <td style="text-align:right;font-weight:700;color:#C45A38;">${t.billAmt > 0 ? fmt(t.billAmt) : '-'}</td>
             <td style="text-align:right;font-weight:700;color:#2E7D32;">${t.paidAmt > 0 ? fmt(t.paidAmt) : '-'}</td>
             <td style="text-align:right;font-weight:800;color:${runningBal > 0 ? '#D97706' : 'var(--sage)'};font-size:13.5px;">${fmt(Math.max(0, runningBal))} Cr</td>
@@ -6981,7 +7003,11 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
             <td style="font-weight:700;color:var(--text-secondary);text-align:center;">${idx + 1}</td>
             <td style="white-space:nowrap;font-size:12.5px;color:var(--text-secondary);"><i class="fa-regular fa-calendar" style="color:var(--gold);margin-right:4px;"></i>${p.date}</td>
             <td style="font-weight:700;"><a href="javascript:void(0)" onclick="openVendorLedgerDirect('${p.payee}')" style="color:var(--teal);text-decoration:none;border-bottom:1px dashed var(--teal);" title="विक्रेता खाता बही खोलें">${p.payee}</a></td>
-            <td><span class="badge" style="background:rgba(13,79,79,0.08);color:var(--teal);font-weight:700;font-size:11px;"><i class="fa-solid fa-credit-card" style="margin-right:4px;"></i>${p.mode}</span></td>
+            <td>
+              <span class="badge" style="background:${p.mode && p.mode.includes('समायोजन') ? 'rgba(217,119,6,0.14)' : 'rgba(13,79,79,0.08)'};color:${p.mode && p.mode.includes('समायोजन') ? '#D97706' : 'var(--teal)'};font-weight:700;font-size:11px;">
+                <i class="${p.mode && p.mode.includes('समायोजन') ? 'fa-solid fa-gas-pump' : 'fa-solid fa-credit-card'}" style="margin-right:4px;"></i>${p.mode}
+              </span>
+            </td>
             <td style="font-weight:700;color:#8B263E;font-family:monospace;font-size:13px;"><i class="fa-solid fa-money-check" style="margin-right:4px;"></i>${p.ref}</td>
             <td style="white-space:nowrap;">
               <span style="font-weight:700;color:var(--teal);font-size:12.5px;"><i class="fa-solid fa-receipt" style="font-size:10px;margin-right:4px;color:var(--gold);"></i>${p.voucherNo}</span>
@@ -7800,9 +7826,11 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
 
               // Compute totals and link payments STRICTLY & EXCLUSIVELY from accountingPayments (Payments tab SSOT)
               const parsedVouchers = Array.from(vouchersMap.values()).map(v => {
-                if (v.amount <= 0 && v.items.length > 0) {
+                if (v.items.length > 0) {
                   const itemsSum = v.items.reduce((s, itm) => s + (Number(itm.amount) || 0), 0);
-                  v.amount = itemsSum + (v.taxAmount || 0);
+                  if (itemsSum > v.amount || v.amount <= 0) {
+                    v.amount = itemsSum + (v.taxAmount || 0);
+                  }
                 }
                 const cleanVKey = (val) => String(val || '').replace(/^(?:बिल|वाउचर)\s*क्र\.?\s*/i, '').replace(/[^a-zA-Z0-9_\-\/]/g, '').toLowerCase();
                 const curVKey = cleanVKey(v.voucherNo);
