@@ -6779,7 +6779,12 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
           <tr>
             <td style="font-weight:700;color:var(--text-secondary);text-align:center;">${idx + 1}</td>
             <td>
-              <div style="font-weight:700;font-size:13.5px;"><a href="javascript:void(0)" onclick="openVendorLedgerDirect('${inv.payee}')" style="color:var(--teal);text-decoration:none;border-bottom:1px dashed var(--teal);" title="विक्रेता खाता बही खोलें">${inv.payee}</a></div>
+              <div style="font-weight:700;font-size:13.5px;">
+                <a href="javascript:void(0)" onclick="openVendorLedgerDirect(decodeURIComponent('${encodeURIComponent(inv.payee)}'))" style="color:var(--teal);text-decoration:none;border-bottom:1.5px solid var(--teal);display:inline-flex;align-items:center;gap:5px;transition:all 0.2s ease;" title="${inv.payee} का खाता बही (Ledger) देखें">
+                  <span>${inv.payee}</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10.5px;color:var(--gold-dark);opacity:0.85;"></i>
+                </a>
+              </div>
               ${inv.gstin ? `<div style="font-size:10.5px;color:var(--text-muted);font-family:monospace;margin-top:2px;"><i class="fa-solid fa-building-shield" style="color:var(--gold);margin-right:3px;"></i>GSTIN: ${inv.gstin}</div>` : ''}
             </td>
             <td style="white-space:nowrap;font-size:12.5px;color:var(--text-secondary);"><i class="fa-regular fa-calendar" style="color:var(--gold);margin-right:4px;"></i>${inv.date}</td>
@@ -6969,6 +6974,21 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
       renderVendorLedgersView(name);
     }
 
+    function openVendorLedgerDirect(name) {
+      if (!name) return;
+      if (typeof switchMainModule === 'function' && currentMainModule !== 'accounting') {
+        switchMainModule('accounting');
+      }
+      switchAccountingTab('ledgers');
+      selectVendorLedger(name);
+      setTimeout(() => {
+        const pane = document.getElementById('accVendorLedgerDisplay') || document.getElementById('acc-pane-ledgers');
+        if (pane) {
+          pane.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 150);
+    }
+
     function handlePaymentSearch(val) {
       currentPaymentSearch = (val || '').trim().toLowerCase();
       renderPaymentsTable();
@@ -7002,7 +7022,12 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
           <tr>
             <td style="font-weight:700;color:var(--text-secondary);text-align:center;">${idx + 1}</td>
             <td style="white-space:nowrap;font-size:12.5px;color:var(--text-secondary);"><i class="fa-regular fa-calendar" style="color:var(--gold);margin-right:4px;"></i>${p.date}</td>
-            <td style="font-weight:700;"><a href="javascript:void(0)" onclick="openVendorLedgerDirect('${p.payee}')" style="color:var(--teal);text-decoration:none;border-bottom:1px dashed var(--teal);" title="विक्रेता खाता बही खोलें">${p.payee}</a></td>
+            <td style="font-weight:700;">
+              <a href="javascript:void(0)" onclick="openVendorLedgerDirect(decodeURIComponent('${encodeURIComponent(p.payee)}'))" style="color:var(--teal);text-decoration:none;border-bottom:1.5px solid var(--teal);display:inline-flex;align-items:center;gap:5px;transition:all 0.2s ease;" title="${p.payee} का खाता बही (Ledger) देखें">
+                <span>${p.payee}</span>
+                <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10.5px;color:var(--gold-dark);opacity:0.85;"></i>
+              </a>
+            </td>
             <td>
               <span class="badge" style="background:${p.mode && p.mode.includes('समायोजन') ? 'rgba(217,119,6,0.14)' : 'rgba(13,79,79,0.08)'};color:${p.mode && p.mode.includes('समायोजन') ? '#D97706' : 'var(--teal)'};font-weight:700;font-size:11px;">
                 <i class="${p.mode && p.mode.includes('समायोजन') ? 'fa-solid fa-gas-pump' : 'fa-solid fa-credit-card'}" style="margin-right:4px;"></i>${p.mode}
