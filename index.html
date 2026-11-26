@@ -7132,8 +7132,6 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
         const taxable = Number(inv.taxableAmount) || 0;
         const gst = Number(inv.taxAmount) || 0;
         const total = Number(inv.amount) || 0;
-        const paid = Number(inv.paidAmount) || 0;
-        const due = Number(inv.balanceAmount) || 0;
 
         calcBox.innerHTML = `
           <div class="expense-calc-item">
@@ -7146,15 +7144,7 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
           </div>
           <div class="expense-calc-item">
             <div class="expense-calc-lbl">बिल कुल राशि</div>
-            <div class="expense-calc-val" style="color:#C45A38;">${fmt(total)}</div>
-          </div>
-          <div class="expense-calc-item">
-            <div class="expense-calc-lbl">भुगतान</div>
-            <div class="expense-calc-val" style="color:#2E7D32;">${fmt(paid)}</div>
-          </div>
-          <div class="expense-calc-item">
-            <div class="expense-calc-lbl">देय शेष</div>
-            <div class="expense-calc-val" style="color:${due > 0 ? '#D97706' : 'var(--sage)'};">${fmt(due)}</div>
+            <div class="expense-calc-val" style="color:#C45A38;font-size:15px;">${fmt(total)}</div>
           </div>
         `;
       }
