@@ -1,0 +1,16 @@
+{
+  "name": "koteshwar-ghat-nirman",
+  "version": "1.0.0",
+  "main": "google_apps_script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@libsql/client": "^0.18.0",
+    "dotenv": "^18.0.10"
+  }
+}

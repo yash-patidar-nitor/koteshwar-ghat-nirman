@@ -2,6 +2,12 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "cleanUrls": true,
+  "crons": [
+    {
+      "path": "/api/backup-turso",
+      "schedule": "30 20 * * *"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

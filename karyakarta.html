@@ -6644,9 +6644,9 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
       transactions.push({
         date: donor.date || '-',
         ref: 'संकल्प क्र. #' + donor.sno,
-        particulars: 'पावन जनसहयोग संकल्प घोषणा (Pledge Declaration)',
+        particulars: 'पावन जनसहयोग संकल्प घोषणा',
         mode: '-',
-        collector: donor.collector || donor.collectorUsername || '-',
+        collector: '-',
         pledgeAmt: Number(donor.amount) || 0,
         paidAmt: 0
       });
@@ -6736,7 +6736,6 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
               '<div style="margin-top:6px;font-size:12.5px;color:var(--text-muted);display:flex;gap:14px;flex-wrap:wrap;">' +
                 '<span><i class="fa-regular fa-calendar"></i> संकल्प दिनांक: <strong>' + formatDisplayDate(donor.date) + '</strong></span>' +
                 (cleanPhone ? ('<span><i class="fa-solid fa-phone"></i> <strong>' + cleanPhone + '</strong></span>') : '') +
-                (donor.collector ? ('<span><i class="fa-solid fa-user-check"></i> संग्रहकर्ता: <strong>' + donor.collector + '</strong></span>') : '') +
               '</div>' +
               (donor.notes ? ('<div style="margin-top:4px;font-size:12px;color:var(--text-muted);font-style:italic;"><i class="fa-solid fa-note-sticky"></i> ' + donor.notes + '</div>') : '') +
             '</div>' +
