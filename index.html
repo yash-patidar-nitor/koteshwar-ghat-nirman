@@ -3785,7 +3785,7 @@
                 <span class="tab-label-desktop">भुगतान पंजी (Payments Book)</span>
                 <span class="tab-label-mobile">भुगतान पंजी</span>
               </span>
-              <span class="acc-tab-badge" id="accTabPaymentsCount">48 प्रविष्टियां</span>
+              <span class="acc-tab-badge" id="accTabPaymentsCount">46 प्रविष्टियां</span>
             </button>
           </nav>
           <button type="button" class="slider-arrow slider-arrow-right" onclick="slideNavTabs('accTabsNav', 160)" aria-label="अगला टैब देखें">
@@ -3903,10 +3903,10 @@
                 </span>
                 <div>
                   <h3 style="margin:0;font-size:15px;font-weight:800;color:var(--teal);">बैंक ऑफ इंडिया चेक पंजी (Bank Cheque Register - 049001 से 049041)</h3>
-                  <div style="font-size:11.5px;color:var(--text-muted);font-weight:600;">चेकबुक क्रम क्र. 1 से 41 (39 जारी चेक + 2 निरस्त चेक)</div>
+                  <div style="font-size:11.5px;color:var(--text-muted);font-weight:600;">चेकबुक क्रम क्र. 1 से 39 (सभी 39 जारी चेक)</div>
                 </div>
               </div>
-              <span id="accChequeCountBadge" class="badge" style="background:rgba(13,79,79,0.08);color:var(--teal);font-weight:700;font-size:11.5px;">41 चेक प्रविष्टियां</span>
+              <span id="accChequeCountBadge" class="badge" style="background:rgba(13,79,79,0.08);color:var(--teal);font-weight:700;font-size:11.5px;">39 चेक प्रविष्टियां</span>
             </div>
 
             <div class="table-responsive">
@@ -8340,19 +8340,6 @@ let accountingPayments = [
   },
   {
     "sno": 2,
-    "date": "2026-08-02",
-    "payee": "निरस्त चेक (Cancelled)",
-    "category": "निरस्त",
-    "mode": "चेक (निरस्त)",
-    "ref": "049002",
-    "amount": 0,
-    "status": "निरस्त (Cancelled)",
-    "remarks": "Marked 'निरस्त' (Cancelled) across the row",
-    "accountId": "ACC-GEN",
-    "chequeSno": 2
-  },
-  {
-    "sno": 3,
     "date": "2026-08-13",
     "payee": "पाटीदार फ्यूल्स",
     "category": "ईंधन एवं डीजल",
@@ -8362,10 +8349,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डिजल (Written as 49003; note '411710' in margin)",
     "accountId": "ACC-102",
-    "chequeSno": 3
+    "chequeSno": 2
   },
   {
-    "sno": 4,
+    "sno": 3,
     "date": "2026-08-17",
     "payee": "माँ नर्मदा ट्रेडर्स",
     "category": "शेड एवं फेब्रिकेशन",
@@ -8375,10 +8362,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "टीन शेड (Written as 49004)",
     "accountId": "ACC-103",
-    "chequeSno": 4
+    "chequeSno": 3
   },
   {
-    "sno": 5,
+    "sno": 4,
     "date": "2026-08-18",
     "payee": "शिव साईं स्टोन क्रेशर",
     "category": "गिट्टी एवं निर्माण सामग्री",
@@ -8388,10 +8375,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "गिट्टी (Written as 49005; amount written as 75000=00)",
     "accountId": "ACC-104",
-    "chequeSno": 5
+    "chequeSno": 4
   },
   {
-    "sno": 6,
+    "sno": 5,
     "date": "2026-08-20",
     "payee": "लखन रामकिशन प्रजापत",
     "category": "जेसीबी एवं मिट्टी भराव कार्य",
@@ -8401,10 +8388,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "भरावा (Written as 49006)",
     "accountId": "ACC-105",
-    "chequeSno": 6
+    "chequeSno": 5
   },
   {
-    "sno": 7,
+    "sno": 6,
     "date": "2026-08-20",
     "payee": "पाटीदार फ्यूल्स",
     "category": "ईंधन एवं डीजल",
@@ -8414,10 +8401,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डीजल (Written as 049007)",
     "accountId": "ACC-102",
-    "chequeSno": 7
+    "chequeSno": 6
   },
   {
-    "sno": 8,
+    "sno": 7,
     "date": "2026-08-20",
     "payee": "गंगामाता कंस्ट्रक्शन",
     "category": "जेसीबी एवं मिट्टी भराव कार्य",
@@ -8427,10 +8414,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "भरावा (Written as 49008; margin notes '531500 वापस फियोरी')",
     "accountId": "ACC-106",
-    "chequeSno": 8
+    "chequeSno": 7
   },
   {
-    "sno": 9,
+    "sno": 8,
     "date": "2026-08-24",
     "payee": "सर्वोत्तम फ्यूल स्टेशन",
     "category": "ईंधन एवं डीजल",
@@ -8440,10 +8427,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डीजल (Written as 49009; margin notes '25000')",
     "accountId": "ACC-107",
-    "chequeSno": 9
+    "chequeSno": 8
   },
   {
-    "sno": 10,
+    "sno": 9,
     "date": "2026-08-29",
     "payee": "देव एंटरप्राइजेस, कुक्षी",
     "category": "सीमेंट एवं निर्माण सामग्री",
@@ -8453,10 +8440,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "सीमेंट (Written as 49010)",
     "accountId": "ACC-108",
-    "chequeSno": 10
+    "chequeSno": 9
   },
   {
-    "sno": 11,
+    "sno": 10,
     "date": "2026-08-31",
     "payee": "अग्रवाल सेल्स एजेन्सी",
     "category": "नल-जल",
@@ -8466,10 +8453,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "पाईप",
     "accountId": "ACC-109",
-    "chequeSno": 11
+    "chequeSno": 10
   },
   {
-    "sno": 12,
+    "sno": 11,
     "date": "2026-08-31",
     "payee": "आनंद रमेशचन्द्र शर्मा",
     "category": "जेसीबी एवं मिट्टी भराव कार्य",
@@ -8479,10 +8466,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "भरावा",
     "accountId": "ACC-110",
-    "chequeSno": 12
+    "chequeSno": 11
   },
   {
-    "sno": 13,
+    "sno": 12,
     "date": "2026-09-01",
     "payee": "माँ नर्मदा एक्जॉटिक नर्सरी",
     "category": "वृक्षारोपण एवं नर्सरी",
@@ -8492,10 +8479,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "पौधे",
     "accountId": "ACC-111",
-    "chequeSno": 13
+    "chequeSno": 12
   },
   {
-    "sno": 14,
+    "sno": 13,
     "date": "2026-09-02",
     "payee": "शिव साईं स्टोन क्रेशर",
     "category": "गिट्टी एवं निर्माण सामग्री",
@@ -8505,10 +8492,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "गिट्टी",
     "accountId": "ACC-104",
-    "chequeSno": 14
+    "chequeSno": 13
   },
   {
-    "sno": 15,
+    "sno": 14,
     "date": "2026-09-02",
     "payee": "न्यू खुशी वेल्डिंग वर्क्स",
     "category": "शेड एवं फेब्रिकेशन",
@@ -8518,10 +8505,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "टीनशेड",
     "accountId": "ACC-112",
-    "chequeSno": 15
+    "chequeSno": 14
   },
   {
-    "sno": 16,
+    "sno": 15,
     "date": "2026-09-02",
     "payee": "मंगलम इलेक्ट्रीक एंड लाईट डेकोरेशन",
     "category": "विद्युत एवं प्रकाश व्यवस्था",
@@ -8531,10 +8518,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "जनरेटर साउंड",
     "accountId": "ACC-113",
-    "chequeSno": 16
+    "chequeSno": 15
   },
   {
-    "sno": 17,
+    "sno": 16,
     "date": "2026-09-05",
     "payee": "सर्वोत्तम फ्यूल स्टेशन",
     "category": "ईंधन एवं डीजल",
@@ -8544,10 +8531,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डिजल",
     "accountId": "ACC-107",
-    "chequeSno": 17
+    "chequeSno": 16
   },
   {
-    "sno": 18,
+    "sno": 17,
     "date": "2026-09-08",
     "payee": "सर्वोत्तम फ्यूल स्टेशन",
     "category": "ईंधन एवं डीजल",
@@ -8557,10 +8544,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डिजल",
     "accountId": "ACC-107",
-    "chequeSno": 18
+    "chequeSno": 17
   },
   {
-    "sno": 19,
+    "sno": 18,
     "date": "2026-09-09",
     "payee": "विमल रावत पेंटर",
     "category": "रंग-रोगन एवं पुताई",
@@ -8570,10 +8557,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "पेन्टर लेबर",
     "accountId": "ACC-114",
-    "chequeSno": 19
+    "chequeSno": 18
   },
   {
-    "sno": 20,
+    "sno": 19,
     "date": "2026-09-09",
     "payee": "सोना हार्डवेयर, अंजड़",
     "category": "शेड एवं फेब्रिकेशन",
@@ -8583,10 +8570,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "टीन शेड",
     "accountId": "ACC-115",
-    "chequeSno": 20
+    "chequeSno": 19
   },
   {
-    "sno": 21,
+    "sno": 20,
     "date": "2026-09-10",
     "payee": "न्यू खुशी वेल्डिंग वर्क्स",
     "category": "शेड एवं फेब्रिकेशन",
@@ -8596,10 +8583,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "टीन शेड",
     "accountId": "ACC-112",
-    "chequeSno": 21
+    "chequeSno": 20
   },
   {
-    "sno": 22,
+    "sno": 21,
     "date": "2026-09-16",
     "payee": "देव एंटरप्राइजेस, कुक्षी",
     "category": "सीमेंट एवं निर्माण सामग्री",
@@ -8609,10 +8596,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "सीमेन्ट",
     "accountId": "ACC-108",
-    "chequeSno": 22
+    "chequeSno": 21
   },
   {
-    "sno": 23,
+    "sno": 22,
     "date": "2026-09-17",
     "payee": "पाटीदार फ्यूल्स",
     "category": "ईंधन एवं डीजल",
@@ -8622,10 +8609,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डीजल",
     "accountId": "ACC-102",
-    "chequeSno": 23
+    "chequeSno": 22
   },
   {
-    "sno": 24,
+    "sno": 23,
     "date": "2026-09-19",
     "payee": "सर्वोत्तम फ्यूल स्टेशन",
     "category": "ईंधन एवं डीजल",
@@ -8635,10 +8622,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डीजल",
     "accountId": "ACC-107",
-    "chequeSno": 24
+    "chequeSno": 23
   },
   {
-    "sno": 25,
+    "sno": 24,
     "date": "2026-09-23",
     "payee": "सोना हार्डवेयर, अंजड़",
     "category": "शेड एवं फेब्रिकेशन",
@@ -8648,10 +8635,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "टीन शेड",
     "accountId": "ACC-115",
-    "chequeSno": 25
+    "chequeSno": 24
   },
   {
-    "sno": 26,
+    "sno": 25,
     "date": "2026-09-23",
     "payee": "ग्वाला डेयरी उत्पाद (मुकेश धनगर)",
     "category": "भंडारा",
@@ -8661,23 +8648,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "GEE (Note '53518' written next to amount; matches sum of Gwala Dairy bills (21075 + 21075 + 33525 + 10825 = 86500))",
     "accountId": "ACC-116",
-    "chequeSno": 26
+    "chequeSno": 25
   },
   {
-    "sno": 27,
-    "date": "2026-09-24",
-    "payee": "बुरहानी बिल्डिंग मटेरियल, निसरपुर (निरस्त)",
-    "category": "निरस्त",
-    "mode": "चेक (निरस्त)",
-    "ref": "049027",
-    "amount": 0,
-    "status": "निरस्त (Cancelled)",
-    "remarks": "नलजल निरस्त (Purpose annotated with 'निरस्त' (Cancelled); reissued via cheque 049031 for 14285)",
-    "accountId": "ACC-GEN",
-    "chequeSno": 27
-  },
-  {
-    "sno": 28,
+    "sno": 26,
     "date": "2026-09-25",
     "payee": "आनंद रमेशचन्द्र शर्मा",
     "category": "जेसीबी एवं मिट्टी भराव कार्य",
@@ -8687,10 +8661,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "भरावा (Payee 'आनंद शर्मा' written above row; note '43626' next to purpose)",
     "accountId": "ACC-110",
-    "chequeSno": 28
+    "chequeSno": 26
   },
   {
-    "sno": 29,
+    "sno": 27,
     "date": "2026-09-25",
     "payee": "पाटीदार फ्यूल्स",
     "category": "ईंधन एवं डीजल",
@@ -8700,10 +8674,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डीजल",
     "accountId": "ACC-102",
-    "chequeSno": 29
+    "chequeSno": 27
   },
   {
-    "sno": 30,
+    "sno": 28,
     "date": "2026-09-25",
     "payee": "देव एंटरप्राइजेस, कुक्षी",
     "category": "सीमेंट एवं निर्माण सामग्री",
@@ -8713,10 +8687,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "सीमेंट",
     "accountId": "ACC-108",
-    "chequeSno": 30
+    "chequeSno": 28
   },
   {
-    "sno": 31,
+    "sno": 29,
     "date": "2026-09-25",
     "payee": "बुरहानी बिल्डिंग मटेरियल, निसरपुर",
     "category": "नल-जल",
@@ -8726,10 +8700,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "नलजल (Amount written as 14285-00)",
     "accountId": "ACC-117",
-    "chequeSno": 31
+    "chequeSno": 29
   },
   {
-    "sno": 32,
+    "sno": 30,
     "date": "2026-09-25",
     "payee": "सर्वोत्तम फ्यूल स्टेशन",
     "category": "ईंधन एवं डीजल",
@@ -8739,10 +8713,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डिजल (Margin notes '85783')",
     "accountId": "ACC-107",
-    "chequeSno": 32
+    "chequeSno": 30
   },
   {
-    "sno": 33,
+    "sno": 31,
     "date": "2026-09-28",
     "payee": "सर्वोत्तम फ्यूल स्टेशन",
     "category": "ईंधन एवं डीजल",
@@ -8752,10 +8726,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डिजल",
     "accountId": "ACC-107",
-    "chequeSno": 33
+    "chequeSno": 31
   },
   {
-    "sno": 34,
+    "sno": 32,
     "date": "2026-10-05",
     "payee": "माँ नर्मदा ट्रेडर्स",
     "category": "शेड एवं फेब्रिकेशन",
@@ -8765,10 +8739,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "टीनशेड",
     "accountId": "ACC-103",
-    "chequeSno": 34
+    "chequeSno": 32
   },
   {
-    "sno": 35,
+    "sno": 33,
     "date": "2026-10-08",
     "payee": "सर्वोत्तम फ्यूल स्टेशन",
     "category": "ईंधन एवं डीजल",
@@ -8778,10 +8752,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डिजल (Margin notes '200,000')",
     "accountId": "ACC-107",
-    "chequeSno": 35
+    "chequeSno": 33
   },
   {
-    "sno": 36,
+    "sno": 34,
     "date": "2026-10-08",
     "payee": "किसान मशीनरी पार्ट्स",
     "category": "नल-जल",
@@ -8791,10 +8765,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "नलजल 34300 (Annotation '34300' written next to नलजल)",
     "accountId": "ACC-118",
-    "chequeSno": 36
+    "chequeSno": 34
   },
   {
-    "sno": 37,
+    "sno": 35,
     "date": "2026-10-17",
     "payee": "रावल हार्डवेयर कुक्षी",
     "category": "सरिया एवं लोहा",
@@ -8804,10 +8778,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "सरिया",
     "accountId": "ACC-119",
-    "chequeSno": 37
+    "chequeSno": 35
   },
   {
-    "sno": 38,
+    "sno": 36,
     "date": "2026-10-26",
     "payee": "माँ नर्मदा ट्रेडर्स",
     "category": "सरिया एवं लोहा",
@@ -8817,10 +8791,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "सरिया (Written as 49038)",
     "accountId": "ACC-103",
-    "chequeSno": 38
+    "chequeSno": 36
   },
   {
-    "sno": 39,
+    "sno": 37,
     "date": "2026-10-28",
     "payee": "राजाजी कन्ट्रक्शन करोली - सोनू भाई / सचिन राजाजी",
     "category": "जेसीबी एवं मिट्टी भराव कार्य",
@@ -8830,10 +8804,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "भरावा (Amount written as 775000=00)",
     "accountId": "ACC-120",
-    "chequeSno": 39
+    "chequeSno": 37
   },
   {
-    "sno": 40,
+    "sno": 38,
     "date": "2026-11-18",
     "payee": "सर्वोत्तम फ्यूल स्टेशन",
     "category": "ईंधन एवं डीजल",
@@ -8843,10 +8817,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डिजल",
     "accountId": "ACC-107",
-    "chequeSno": 40
+    "chequeSno": 38
   },
   {
-    "sno": 41,
+    "sno": 39,
     "date": "2026-11-18",
     "payee": "पाटीदार फ्यूल्स",
     "category": "ईंधन एवं डीजल",
@@ -8856,10 +8830,10 @@ let accountingPayments = [
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डिजल (Date written as 18.11.2026 (overlapping cheque no. 049041))",
     "accountId": "ACC-102",
-    "chequeSno": 41
+    "chequeSno": 39
   },
   {
-    "sno": 42,
+    "sno": 40,
     "date": "2026-08-04",
     "payee": "मिस्त्री देवराम (गाडिल)",
     "accountId": "ACC-124",
@@ -8872,7 +8846,7 @@ let accountingPayments = [
     "adjSno": 1
   },
   {
-    "sno": 43,
+    "sno": 41,
     "date": "2026-08-02",
     "payee": "आनंद रमेशचन्द्र शर्मा",
     "accountId": "ACC-110",
@@ -8885,7 +8859,7 @@ let accountingPayments = [
     "adjSno": 2
   },
   {
-    "sno": 44,
+    "sno": 42,
     "date": "2026-08-09",
     "payee": "रामाश्रय कन्स्ट्रक्शन लिंगवा - रविन्द्र पाटीदार",
     "accountId": "ACC-121",
@@ -8898,7 +8872,7 @@ let accountingPayments = [
     "adjSno": 3
   },
   {
-    "sno": 45,
+    "sno": 43,
     "date": "2026-08-09",
     "payee": "लखन-भागीरथ कुमावत - कोठड़ा निसरपुर",
     "accountId": "ACC-122",
@@ -8911,7 +8885,7 @@ let accountingPayments = [
     "adjSno": 4
   },
   {
-    "sno": 46,
+    "sno": 44,
     "date": "2026-08-09",
     "payee": "बजरंग कंस्ट्रक्शन लिंगवा - दुर्गेश पाटीदार",
     "accountId": "ACC-123",
@@ -8924,7 +8898,7 @@ let accountingPayments = [
     "adjSno": 5
   },
   {
-    "sno": 47,
+    "sno": 45,
     "date": "2026-08-20",
     "payee": "राजाजी कन्ट्रक्शन करोली - सोनू भाई / सचिन राजाजी",
     "accountId": "ACC-120",
@@ -8937,7 +8911,7 @@ let accountingPayments = [
     "adjSno": 6
   },
   {
-    "sno": 48,
+    "sno": 46,
     "date": "2026-08-20",
     "payee": "राजाजी कन्ट्रक्शन करोली - सोनू भाई / सचिन राजाजी",
     "accountId": "ACC-120",
@@ -9843,8 +9817,9 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
       const chequeTbody = document.getElementById('accChequePaymentsTbody');
       const adjTbody = document.getElementById('accAdjPaymentsTbody');
 
-      // Filter all payments
+      // Filter all payments (excluding cancelled)
       const filtered = accountingPayments.filter(p => {
+        if (p.status && p.status.includes('निरस्त') || p.amount <= 0) return false;
         return !currentPaymentSearch ||
           (p.accountId && p.accountId.toLowerCase().includes(currentPaymentSearch)) ||
           (p.payee && p.payee.toLowerCase().includes(currentPaymentSearch)) ||
@@ -9880,32 +9855,30 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
       const elAdjCount = document.getElementById('accAdjCountBadge');
       if (elAdjCount) elAdjCount.textContent = `${filteredAdj.length} समायोजन प्रविष्टियां`;
 
-      // 1. RENDER CHEQUES TABLE (क्र. 1 से 41)
+      // 1. RENDER CHEQUES TABLE (क्र. 1 से 39)
       if (chequeTbody) {
         if (filteredCheques.length === 0) {
           chequeTbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text-muted);">कोई चेक प्रविष्टि नहीं मिली।</td></tr>`;
         } else {
           chequeTbody.innerHTML = filteredCheques.map((p, idx) => {
-            const isCancelled = p.status && p.status.includes('निरस्त');
             const displaySno = p.chequeSno || (idx + 1);
 
             return `
-              <tr style="${isCancelled ? 'opacity:0.65;background:rgba(220,38,38,0.03);' : ''}">
+              <tr>
                 <td style="font-weight:700;color:var(--text-secondary);text-align:center;">${displaySno}</td>
                 <td style="white-space:nowrap;font-size:12.5px;color:var(--text-secondary);"><i class="fa-regular fa-calendar" style="color:var(--gold);margin-right:4px;"></i>${p.date}</td>
                 <td style="font-weight:700;">
-                  ${isCancelled ? `<span style="color:#DC2626;text-decoration:line-through;"><span class="badge" style="background:#FEE2E2;color:#DC2626;font-family:monospace;font-size:10px;padding:2px 5px;border-radius:4px;margin-right:5px;font-weight:700;">${p.accountId || 'ACC'}</span>${p.payee}</span>` : `
                   <div style="display:inline-flex;align-items:center;flex-wrap:wrap;gap:5px;">
                     <span class="badge" style="background:#0D4F4F;color:#D4AF37;font-family:monospace;font-size:10.5px;padding:2px 6px;border-radius:4px;font-weight:700;" title="वेंडर खाता क्र. (Party Account ID)">${p.accountId || 'ACC'}</span>
                     <a href="javascript:void(0)" onclick="openVendorLedgerDirect(decodeURIComponent('${encodeURIComponent(p.payee)}'))" style="color:var(--teal);text-decoration:none;border-bottom:1.5px solid var(--teal);display:inline-flex;align-items:center;gap:4px;transition:all 0.2s ease;" title="${p.payee} का खाता बही (Ledger) देखें">
                       <span>${p.payee}</span>
                       <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10.5px;color:var(--gold-dark);opacity:0.85;"></i>
                     </a>
-                  </div>`}
+                  </div>
                 </td>
                 <td>
-                  <span class="badge" style="background:${isCancelled ? 'rgba(220,38,38,0.12)' : 'rgba(13,79,79,0.08)'};color:${isCancelled ? '#DC2626' : 'var(--teal)'};font-weight:700;font-size:11px;">
-                    <i class="${isCancelled ? 'fa-solid fa-ban' : 'fa-solid fa-credit-card'}" style="margin-right:4px;"></i>${p.mode}
+                  <span class="badge" style="background:rgba(13,79,79,0.08);color:var(--teal);font-weight:700;font-size:11px;">
+                    <i class="fa-solid fa-credit-card" style="margin-right:4px;"></i>${p.mode}
                   </span>
                 </td>
                 <td style="font-weight:700;color:#8B263E;font-family:monospace;font-size:13px;"><i class="fa-solid fa-money-check" style="margin-right:4px;"></i>${p.ref}</td>
@@ -9913,10 +9886,10 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
                   <span class="badge badge-village" style="background:rgba(209,154,80,0.12);color:var(--gold-dark);font-size:11px;font-weight:700;">${p.category}</span>
                   ${p.remarks ? `<div style="font-size:10.5px;color:var(--text-muted);font-weight:600;margin-top:2px;">${p.remarks}</div>` : ''}
                 </td>
-                <td style="text-align:right;font-weight:800;color:${isCancelled ? '#9CA3AF' : '#2E7D32'};font-size:14px;">${isCancelled ? '₹0' : fmt(p.amount)}</td>
+                <td style="text-align:right;font-weight:800;color:#2E7D32;font-size:14px;">${fmt(p.amount)}</td>
                 <td style="text-align:center;">
-                  <span class="badge" style="background:${isCancelled ? 'rgba(220,38,38,0.12)' : 'rgba(46,125,50,0.12)'};color:${isCancelled ? '#DC2626' : '#2E7D32'};font-weight:700;font-size:11px;">
-                    <i class="${isCancelled ? 'fa-solid fa-ban' : 'fa-solid fa-shield-check'}"></i> ${p.status}
+                  <span class="badge" style="background:rgba(46,125,50,0.12);color:#2E7D32;font-weight:700;font-size:11px;">
+                    <i class="fa-solid fa-shield-check"></i> ${p.status}
                   </span>
                 </td>
               </tr>
@@ -10764,7 +10737,7 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
                 const pRemarks = String(getPVal(9)).trim();
 
                 if (String(pSno).trim() === 'क्र.' || pPayee.includes('प्राप्तकर्ता')) continue;
-                if (pAmt <= 0 && !pStat.includes('निरस्त')) continue;
+                if (pAmt <= 0 || pStat.includes('निरस्त') || pPayee.includes('निरस्त')) continue;
 
                 parsedPayments.push({
                   sno: parsedPayments.length + 1,
