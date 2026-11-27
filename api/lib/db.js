@@ -2,17 +2,22 @@ const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 require('dotenv').config();
 
-const { createClient } = require('@libsql/client');
+const { createClient } = require('@libsql/client/web');
 
 function getDbClient() {
-  const url = process.env.TURSO_DATABASE_URL;
-  const authToken = process.env.TURSO_AUTH_TOKEN;
+  let url = (process.env.TURSO_DATABASE_URL || '').trim().replace(/^["']|["']$/g, '');
+  const authToken = (process.env.TURSO_AUTH_TOKEN || '').trim().replace(/^["']|["']$/g, '');
 
   if (!url || !authToken) {
     const missing = [];
     if (!url) missing.push('TURSO_DATABASE_URL');
     if (!authToken) missing.push('TURSO_AUTH_TOKEN');
-    throw new Error(`Missing environment variables: ${missing.join(', ')}. Please add them in Vercel Project Settings > Environment Variables and redeploy.`);
+    throw new Error(`Missing environment variable(s): ${missing.join(', ')} in Vercel.`);
+  }
+
+  // Ensure pure HTTPS URL for serverless/edge compatibility
+  if (url.startsWith('libsql://')) {
+    url = url.replace('libsql://', 'https://');
   }
 
   return createClient({
@@ -21,7 +26,6 @@ function getDbClient() {
   });
 }
 
-// Lazy-loaded or immediate client
 let clientInstance = null;
 function getDb() {
   if (!clientInstance) {
@@ -30,7 +34,6 @@ function getDb() {
   return clientInstance;
 }
 
-// Proxy so db.execute(...) works directly
 const proxy = new Proxy({}, {
   get(target, prop) {
     const client = getDb();

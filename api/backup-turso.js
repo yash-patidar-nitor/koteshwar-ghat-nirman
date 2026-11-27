@@ -4,7 +4,7 @@
  */
 
 const db = require('./lib/db');
-const { backupAllData } = require('../scripts/sync_sheets_to_turso');
+const { backupAllData } = require('./lib/sync');
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -44,7 +44,7 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    // Execute backup (runs in < 2 seconds via LibSQL batch pipeline)
+    // Execute backup (runs in < 2.5 seconds via LibSQL batch pipeline)
     const result = await backupAllData();
 
     const lastSync = await db.execute('SELECT * FROM sync_history ORDER BY id DESC LIMIT 1');
