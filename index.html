@@ -739,9 +739,9 @@
       transition: all 0.2s ease;
     }
     #accVendorDropdownSelect option.opt-missing-invoice {
-      color: #DC2626 !important;
-      background-color: #FEE2E2 !important;
-      font-weight: 800 !important;
+      color: #B91C1C !important;
+      background-color: #FDF2F2 !important;
+      font-weight: 600 !important;
     }
 
     .ledger-card {
@@ -9722,7 +9722,7 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
       }
       selectedVendorName = targetVendor;
 
-      // Render vendor dropdown options
+      // Render vendor dropdown options (Clean single mild highlight for missing invoice accounts)
       const dropdownSelect = document.getElementById('accVendorDropdownSelect');
       const balanceBadge = document.getElementById('accVendorDropdownBalanceBadge');
 
@@ -9734,39 +9734,25 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
           let optStyle = '';
 
           if (v.noInvoice) {
-            optText = '🚨 [' + (v.accountId || 'ACC') + '] ' + name + ' [जमा: ' + fmt(v.paid) + ' - बिल अप्राप्त]';
-            optStyle = 'color:#DC2626;background-color:#FEE2E2;font-weight:800;';
+            optText = '⚠️ [' + (v.accountId || 'ACC') + '] ' + name + ' (बिल अप्राप्त - जमा: ' + fmt(v.paid) + ')';
+            optStyle = 'background-color:#FDF2F2;color:#B91C1C;font-weight:600;';
           } else if (v.discount > 0) {
-            optText = '[' + (v.accountId || 'ACC') + '] ' + name + ' (पूर्ण चुकता - छूट: ' + fmt(v.discount) + ' NILL)';
-            optStyle = 'color:#15803D;font-weight:700;';
+            optText = '[' + (v.accountId || 'ACC') + '] ' + name + ' (पूर्ण चुकता - छूट: ' + fmt(v.discount) + ')';
           } else if (v.due === 0) {
             if (v.rawDiff < 0) {
-              optText = '[' + (v.accountId || 'ACC') + '] ' + name + ' (अग्रिम जमा: ' + fmt(Math.abs(v.rawDiff)) + ')';
-              optStyle = 'color:#2563EB;font-weight:600;';
+              optText = '[' + (v.accountId || 'ACC') + '] ' + name + ' (अग्रिम: ' + fmt(Math.abs(v.rawDiff)) + ')';
             } else {
-              optText = '[' + (v.accountId || 'ACC') + '] ' + name + ' (✓ खाता पूर्ण चुकता)';
-              optStyle = 'color:#15803D;font-weight:600;';
+              optText = '[' + (v.accountId || 'ACC') + '] ' + name + ' (पूर्ण चुकता)';
             }
           } else {
             optText = '[' + (v.accountId || 'ACC') + '] ' + name + ' (देय शेष: ' + fmt(v.due) + ')';
-            optStyle = 'color:#D97706;font-weight:700;';
           }
 
-          return '<option value="' + name + '" class="' + (v.noInvoice ? 'opt-missing-invoice' : '') + '" style="' + optStyle + '" ' + isSel + '>' + optText + '</option>';
+          const styleAttr = optStyle ? ' style="' + optStyle + '"' : '';
+          const classAttr = v.noInvoice ? ' class="opt-missing-invoice"' : '';
+          return '<option value="' + name + '"' + classAttr + styleAttr + ' ' + isSel + '>' + optText + '</option>';
         }).join('');
         dropdownSelect.value = targetVendor;
-
-        // Visual alert styling for the select box itself
-        const curV = vendorMap[targetVendor];
-        if (curV && curV.noInvoice) {
-          dropdownSelect.style.borderColor = '#DC2626';
-          dropdownSelect.style.color = '#B91C1C';
-          dropdownSelect.style.backgroundColor = '#FFF5F5';
-        } else {
-          dropdownSelect.style.borderColor = 'var(--teal)';
-          dropdownSelect.style.color = 'var(--teal)';
-          dropdownSelect.style.backgroundColor = '#FFFFFF';
-        }
       }
 
       // Render Selected Vendor Ledger
