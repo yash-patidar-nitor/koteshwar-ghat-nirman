@@ -4826,7 +4826,7 @@
     "cheques": [
       {
         "mode": "चेक",
-        "ref": "049016",
+        "ref": "049006",
         "date": "2026-08-22",
         "amt": 56000,
         "status": "सत्यापित"
@@ -8386,14 +8386,14 @@ let accountingPayments = [
   {
     "sno": 5,
     "date": "2026-08-20",
-    "payee": "लखन रामकिशन प्रजापत",
+    "payee": "गर्व ईट उद्योग",
     "category": "जेसीबी एवं मिट्टी भराव कार्य",
     "mode": "चेक",
     "ref": "049006",
     "amount": 56000,
     "status": "बैंक निकासी सत्यापित",
-    "remarks": "भरावा (Written as 49006)",
-    "accountId": "ACC-105",
+    "remarks": "भरावा (Written as 49006, लखन प्रजापत)",
+    "accountId": "ACC-125",
     "chequeSno": 5
   },
   {
@@ -9785,7 +9785,7 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
             '<strong style="color:#2E7D32;font-size:13.5px;">✓ खाता पूर्ण चुकता (छूट: ' + fmt(cur.discount) + ' समायोजित - NILL)</strong>' +
           '</div>';
         } else if (cur.due > 0) {
-          balanceBadge.innerHTML = '<div style="background:rgba(217,119,6,0.12);border:1.5px solid rgba(217,119,6,0.3);padding:6px 14px;border-radius:8px;display:inline-flex;align-items:center;gap:8px;">' +
+          balanceBadge.innerHTML = '<div style="background:rgba(217,119,6,0.12);border:1px solid rgba(217,119,6,0.3);padding:6px 14px;border-radius:8px;display:inline-flex;align-items:center;gap:8px;">' +
             '<span style="font-size:12px;color:var(--text-muted);font-weight:600;">खाता स्थिति:</span>' +
             '<strong style="color:#D97706;font-size:13.5px;">देय शेष: ' + fmt(cur.due) + '</strong>' +
           '</div>';
@@ -9802,7 +9802,7 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
         }
       }
 
-      // Build Transaction Rows
+      // Build Transaction Rows with Account Number
       let runningBal = 0;
       const rowsHtml = cur.transactions.map((t, idx) => {
         if (t.type.includes('Cr')) {
@@ -9838,6 +9838,7 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
         return '<tr>' +
           '<td style="text-align:center;font-weight:700;color:var(--text-muted);">' + (idx + 1) + '</td>' +
           '<td style="white-space:nowrap;font-size:12.5px;color:var(--text-secondary);"><i class="fa-regular fa-calendar" style="color:var(--gold);margin-right:4px;"></i>' + t.date + '</td>' +
+          '<td style="text-align:center;font-family:monospace;font-weight:700;color:var(--teal);font-size:12px;background:rgba(13,79,79,0.03);">' + (cur.accountId || 'ACC') + '</td>' +
           '<td style="font-weight:700;color:var(--teal);white-space:nowrap;">' + t.ref + '</td>' +
           '<td style="font-weight:600;color:var(--text-primary);">' + t.particulars + '</td>' +
           '<td style="text-align:center;">' + badgeHtml + '</td>' +
@@ -9874,10 +9875,16 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
         '</div>';
       }
 
-      // Stats Strip HTML
+      // Stats Strip HTML with Account Number Tile
+      const accNumberTile = '<div style="background:#fff;padding:8px 14px;border-radius:8px;border:1px solid var(--sandstone);text-align:center;min-width:110px;">' +
+        '<div style="font-size:11px;color:var(--text-muted);font-weight:700;">खाता क्रमांक (A/C)</div>' +
+        '<div style="font-size:15px;font-weight:800;color:var(--teal);font-family:monospace;">' + (cur.accountId || 'ACC') + '</div>' +
+      '</div>';
+
       let statsStripHtml = '';
       if (cur.noInvoice) {
-        statsStripHtml = '<div style="background:#fff;padding:8px 14px;border-radius:8px;border:1px solid var(--sandstone);text-align:right;">' +
+        statsStripHtml = accNumberTile +
+        '<div style="background:#fff;padding:8px 14px;border-radius:8px;border:1px solid var(--sandstone);text-align:right;">' +
           '<div style="font-size:11px;color:var(--text-muted);font-weight:700;">कुल बिल राशि</div>' +
           '<div style="font-size:15px;font-weight:800;color:#C45A38;">₹0.00</div>' +
         '</div>' +
@@ -9890,7 +9897,8 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
           '<div style="font-size:15px;font-weight:800;color:#DC2626;">-' + fmt(cur.paid) + ' (बिल प्रतीक्षित)</div>' +
         '</div>';
       } else if (cur.discount > 0) {
-        statsStripHtml = '<div style="background:#fff;padding:8px 14px;border-radius:8px;border:1px solid var(--sandstone);text-align:right;">' +
+        statsStripHtml = accNumberTile +
+        '<div style="background:#fff;padding:8px 14px;border-radius:8px;border:1px solid var(--sandstone);text-align:right;">' +
           '<div style="font-size:11px;color:var(--text-muted);font-weight:700;">कुल बिल राशि</div>' +
           '<div style="font-size:15px;font-weight:800;color:#C45A38;">' + fmt(cur.billed) + '</div>' +
         '</div>' +
@@ -9904,7 +9912,8 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
         '</div>';
       } else {
         const isDue = cur.due > 0;
-        statsStripHtml = '<div style="background:#fff;padding:8px 14px;border-radius:8px;border:1px solid var(--sandstone);text-align:right;">' +
+        statsStripHtml = accNumberTile +
+        '<div style="background:#fff;padding:8px 14px;border-radius:8px;border:1px solid var(--sandstone);text-align:right;">' +
           '<div style="font-size:11px;color:var(--text-muted);font-weight:700;">कुल बिल राशि</div>' +
           '<div style="font-size:15px;font-weight:800;color:#C45A38;">' + fmt(cur.billed) + '</div>' +
         '</div>' +
@@ -9930,8 +9939,13 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
 
       displayCard.innerHTML = '<div class="ledger-header">' +
         '<div>' +
-          '<div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">विक्रेता / फर्म आधिकारिक खाता बही</div>' +
-          '<h3 style="margin:4px 0 2px;font-size:19px;color:var(--teal);font-weight:800;">[' + (cur.accountId || 'ACC') + '] ' + cur.name + '</h3>' +
+          '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px;">' +
+            '<span style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">विक्रेता / फर्म आधिकारिक खाता बही</span>' +
+            '<span class="badge" style="background:var(--teal);color:#FFFFFF;font-family:monospace;font-size:12px;padding:4px 10px;border-radius:6px;font-weight:800;letter-spacing:0.5px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">' +
+              '<i class="fa-solid fa-id-card" style="color:var(--gold);margin-right:5px;"></i>खाता क्रमांक: ' + (cur.accountId || 'ACC') +
+            '</span>' +
+          '</div>' +
+          '<h3 style="margin:2px 0 4px;font-size:20px;color:var(--teal);font-weight:800;">' + cur.name + '</h3>' +
           (cur.gstin ? '<div style="font-size:11.5px;color:var(--text-secondary);font-family:monospace;"><i class="fa-solid fa-building-shield" style="color:var(--gold);margin-right:4px;"></i>GSTIN: <strong>' + cur.gstin + '</strong></div>' : '') +
         '</div>' +
         '<div class="ledger-stats-strip" style="display:flex;gap:12px;flex-wrap:wrap;">' +
@@ -9945,6 +9959,7 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
             '<tr>' +
               '<th style="width:40px;">क्र.</th>' +
               '<th>दिनांक</th>' +
+              '<th style="text-align:center;">खाता क्र.</th>' +
               '<th>संदर्भ क्र. (बिल / चेक)</th>' +
               '<th>विवरण</th>' +
               '<th style="text-align:center;">प्रविष्टि प्रकार</th>' +
@@ -9958,7 +9973,7 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
           '</tbody>' +
           '<tfoot>' +
             '<tr style="background:var(--sandstone-light);font-weight:800;">' +
-              '<td colspan="5" style="text-align:right;font-size:13px;color:var(--teal);">खाता कुल योग:</td>' +
+              '<td colspan="6" style="text-align:right;font-size:13px;color:var(--teal);">खाता [' + (cur.accountId || 'ACC') + '] कुल योग:</td>' +
               '<td style="text-align:right;color:#C45A38;font-size:14px;">' + fmt(cur.billed) + '</td>' +
               '<td style="text-align:right;color:#2E7D32;font-size:14px;">' + fmt(cur.paid + (cur.discount || 0)) + '</td>' +
               '<td style="text-align:right;font-size:14px;">' + footerDueText + '</td>' +
