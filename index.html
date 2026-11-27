@@ -11659,7 +11659,10 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
               <br><small style="color:var(--text-muted);font-size:10px;">क्र. ${d.sno}</small>
             </td>
             <td>
-              <strong style="color:var(--teal);font-size:14px;">${d.name}</strong>
+              <a href="karyakarta.html?donor=${encodeURIComponent(d.sno)}" target="_blank" style="color:var(--teal);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;gap:4px;" title="क्लिक करें: कार्यकर्ता पोर्टल पर दानदाता खाता बही देखें">
+                <span>${d.name}</span>
+                <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:9.5px;color:var(--gold-dark);opacity:0.75;"></i>
+              </a>
             </td>
             <td><span style="background:var(--teal-subtle);color:var(--teal);padding:2px 8px;border-radius:4px;font-size:11.5px;font-weight:600;">${d.city}</span></td>
             <td style="font-size:12px;color:var(--text-secondary);white-space:normal;max-width:260px;">${d.notes || '-'}</td>
