@@ -1572,9 +1572,6 @@
             <button class="btn-outline-action" onclick="testWebhookConnection()" style="padding:6px 14px;font-size:12px;">
               <i class="fa-solid fa-vial"></i> कनेक्शन जांचें
             </button>
-            <button class="btn-submit-action" onclick="syncAllPendingToSheet()" style="width:auto;min-height:36px;padding:6px 14px;font-size:12px;background:var(--sage);">
-              <i class="fa-solid fa-cloud-arrow-up"></i> फ़ोन की पेंडिंग रसीदें Sheet में भेजें (Sync Now)
-            </button>
           </div>
         </div>
 
@@ -2587,11 +2584,6 @@
           }
         } catch (e) {}
       }, 500);
-
-      // Automatically sync any pending offline entries to Google Sheet in the background
-      setTimeout(() => {
-        try { syncAllPendingToSheet(true); } catch (e) {}
-      }, 1200);
 
       // Check if URL specifies a donor to open ledger directly
       try {
@@ -7583,74 +7575,39 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
       const ribbon = document.getElementById('portalSyncRibbon');
       if (!ribbon) return;
 
-      let customColls = [];
-      let customDecls = [];
-      try {
-        customColls = JSON.parse(localStorage.getItem('koteshwar_custom_collections') || '[]');
-        customDecls = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
-      } catch (e) {}
-
-      // A record is pending if it has not been flagged as syncedToSheet
-      const pendingColls = customColls.filter(c => !c.syncedToSheet);
-      const pendingDecls = customDecls.filter(d => !d.syncedToSheet);
-      const totalPending = pendingColls.length + pendingDecls.length;
-
-      ribbon.style.display = 'flex';
-
       if (isBusy) {
+        ribbon.style.display = 'flex';
         ribbon.style.background = 'rgba(209, 154, 80, 0.15)';
         ribbon.style.border = '1px solid var(--gold)';
         ribbon.style.color = 'var(--text-primary)';
         ribbon.innerHTML = `
           <div style="display:flex;align-items:center;gap:8px;">
             <i class="fa-solid fa-arrows-rotate fa-spin" style="color:var(--gold-dark);"></i>
-            <span>${customMsg || "डेटा लोड / सिंक हो रहा है..."}</span>
+            <span>${customMsg || "डेटा सुरक्षित हो रहा है..."}</span>
           </div>
         `;
         return;
       }
 
-      if (!webhookUrl) {
-        ribbon.style.background = '#FFF3CD';
-        ribbon.style.border = '1.5px solid #FFEBAA';
-        ribbon.style.color = '#856404';
+      if (customMsg) {
+        ribbon.style.display = 'flex';
+        ribbon.style.background = 'rgba(46, 125, 90, 0.1)';
+        ribbon.style.border = '1px solid rgba(46, 125, 90, 0.3)';
+        ribbon.style.color = 'var(--sage)';
         ribbon.innerHTML = `
-          <div style="display:flex;align-items:center;gap:8px;flex:1;">
-            <i class="fa-solid fa-triangle-exclamation" style="color:#C45A38;font-size:16px;"></i>
-            <span><strong>सूचना:</strong> Google Apps Script Webhook URL सेट नहीं है। आपकी बनाई गई रसीदें अभी केवल इसी फ़ोन में सुरक्षित हैं और Google Sheet / सार्वजनिक वेबसाइट में नहीं पहुँची हैं।</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <i class="fa-solid fa-circle-check" style="color:var(--sage);"></i>
+            <span>${customMsg}</span>
           </div>
-          <button type="button" onclick="switchPortalTab('settings-sync', document.querySelectorAll('.tab-btn')[5])" class="btn btn-white btn-sm" style="font-size:11.5px;padding:4px 10px;border:1px solid #C45A38;color:#C45A38;border-radius:6px;cursor:pointer;font-weight:700;">
-            <i class="fa-solid fa-gear"></i> Webhook सेट करें
-          </button>
         `;
-        return;
+        setTimeout(() => {
+          if (ribbon.innerHTML.includes(customMsg)) {
+            ribbon.style.display = 'none';
+          }
+        }, 4000);
+      } else {
+        ribbon.style.display = 'none';
       }
-
-      if (totalPending > 0) {
-        ribbon.style.background = '#FFF3CD';
-        ribbon.style.border = '1.5px solid #FFEBAA';
-        ribbon.style.color = '#856404';
-        ribbon.innerHTML = `
-          <div style="display:flex;align-items:center;gap:8px;flex:1;">
-            <i class="fa-solid fa-cloud-arrow-up" style="color:var(--gold-dark);font-size:16px;"></i>
-            <span><strong>${totalPending} प्रविष्टि / रसीद</strong> Google Sheet में सिंक होना बाकी है।</span>
-          </div>
-          <button type="button" onclick="syncAllPendingToSheet()" class="btn btn-white btn-sm" style="font-size:11.5px;padding:5px 12px;background:var(--teal);color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:700;">
-            <i class="fa-solid fa-arrows-rotate"></i> अभी सिंक करें (Sync Now)
-          </button>
-        `;
-        return;
-      }
-
-      ribbon.style.background = 'rgba(46, 125, 90, 0.1)';
-      ribbon.style.border = '1px solid rgba(46, 125, 90, 0.3)';
-      ribbon.style.color = 'var(--sage)';
-      ribbon.innerHTML = `
-        <div style="display:flex;align-items:center;gap:8px;">
-          <i class="fa-solid fa-circle-check" style="color:var(--sage);"></i>
-          <span>${customMsg || "Google Sheet से पूर्णतः सिंक है • सभी रसीदें क्लाउड पर सुरक्षित हैं"}</span>
-        </div>
-      `;
     }
 
     function saveWebhookUrl() {
@@ -7661,79 +7618,13 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
       }
       localStorage.setItem('koteshwar_webhook_url', url);
       webhookUrl = url;
-      alert("✅ Google Apps Script Webhook URL सुरक्षित कर दिया गया है!\n\nअब आपके फ़ोन की सभी लंबित रसीदें Google Sheet में भेजी जा रही हैं...");
-      syncAllPendingToSheet();
+      alert("✅ Google Apps Script Webhook URL सुरक्षित कर दिया गया है!");
+      updateRibbon(false, "वेबहुक URL सुरक्षित है");
     }
 
-    async function syncAllPendingToSheet(silent = false) {
-      if (!webhookUrl) {
-        if (!silent) {
-          alert("कृपया पहले नीचे 'Google Apps Script Webhook URL' दर्ज करके 'URL सुरक्षित करें' पर क्लिक करें!");
-          const inp = document.getElementById('webhookUrlInput');
-          if (inp) inp.focus();
-        }
-        return;
-      }
-
-      let customColls = [];
-      let customDecls = [];
-      try {
-        customColls = JSON.parse(localStorage.getItem('koteshwar_custom_collections') || '[]');
-        customDecls = JSON.parse(localStorage.getItem('koteshwar_custom_declarations') || '[]');
-      } catch (e) {}
-
-      // Consider any custom item as needing sync if !syncedToSheet
-      const pendingColls = customColls.filter(c => !c.syncedToSheet);
-      const pendingDecls = customDecls.filter(d => !d.syncedToSheet);
-      const totalPending = pendingColls.length + pendingDecls.length;
-
-      if (totalPending === 0) {
-        if (!silent) {
-          alert("फ़ोन की सभी रसीदें एवं संकल्प पहले से ही Google Sheet में सिंक हैं!");
-        }
-        updateRibbon();
-        return;
-      }
-
-      updateRibbon(true, `${totalPending} प्रविष्टियाँ Google Sheet में भेजी जा रही हैं...`);
-
-      let successCount = 0;
-      for (const c of pendingColls) {
-        try {
-          const ok = await postWebhookData('addCollection', c);
-          if (ok) {
-            c.syncedToSheet = true;
-            successCount++;
-          }
-        } catch (err) {
-          console.error("Failed to sync collection:", c.receiptNo, err);
-        }
-      }
-
-      for (const d of pendingDecls) {
-        try {
-          const ok = await postWebhookData('addDeclaration', d);
-          if (ok) {
-            d.syncedToSheet = true;
-            successCount++;
-          }
-        } catch (err) {
-          console.error("Failed to sync declaration:", d.sno, err);
-        }
-      }
-
-      try {
-        const remainingColls = customColls.filter(c => !c.syncedToSheet);
-        const remainingDecls = customDecls.filter(d => !d.syncedToSheet);
-        localStorage.setItem('koteshwar_custom_collections', JSON.stringify(remainingColls));
-        localStorage.setItem('koteshwar_custom_declarations', JSON.stringify(remainingDecls));
-      } catch (e) {}
-
-      updateRibbon(false, `✅ ${successCount} प्रविष्टि(याँ) Google Sheet में सफलतापूर्वक सिंक हो गईं!`);
-      if (!silent) {
-        alert(`✅ ${successCount} प्रविष्टि(याँ) Google Sheet में सफलतापूर्वक सिंक हो गईं!\n\nअब Google Sheet और डेस्कटॉप पब्लिक व्यू में यह डेटा दिखने लगेगा।`);
-      }
-      refreshPortalData(true);
+    async function syncAllPendingToSheet(silent = true) {
+      // Deprecated: All entries are now dual-written directly to Google Sheet & Turso in real time.
+      return;
     }
 
     async function testWebhookConnection() {
