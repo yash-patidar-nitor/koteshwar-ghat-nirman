@@ -3875,36 +3875,95 @@
 
         <!-- SUB-PANE 3: PAYMENTS REGISTER (BANK & CASH BOOK) -->
         <div id="acc-pane-payments" class="acc-sub-pane" style="display:none;">
-          <div class="directory-toolbar" style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-            <div class="search-input-wrap" style="flex:1.8;min-width:320px;">
+          <!-- Top Directory Toolbar & Stat Badges -->
+          <div class="directory-toolbar" style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+            <div class="search-input-wrap" style="flex:1.8;min-width:300px;">
               <i class="fa-solid fa-magnifying-glass search-icon"></i>
               <input type="text" id="accPaymentSearch" placeholder="वेंडर, चेक क्र., माध्यम या दिनांक खोजें..." oninput="handlePaymentSearch(this.value)" class="search-input" />
             </div>
-            <div style="display:flex;gap:8px;align-items:center;">
-              <span style="font-size:12.5px;color:var(--text-secondary);background:var(--sandstone-light);padding:7px 14px;border-radius:8px;font-weight:600;">
-                कुल भुगतान: <strong id="accPaymentsTotalBadge" style="color:#2E7D32;">₹47,72,618.30</strong>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+              <span style="font-size:12px;color:var(--text-secondary);background:var(--sandstone-light);padding:6px 12px;border-radius:8px;font-weight:600;border:1px solid rgba(13,79,79,0.1);">
+                <i class="fa-solid fa-money-check" style="color:var(--teal);margin-right:4px;"></i>चेक: <strong id="accChequesTotalBadge" style="color:var(--teal);">₹59,14,228</strong>
+              </span>
+              <span style="font-size:12px;color:var(--text-secondary);background:var(--sandstone-light);padding:6px 12px;border-radius:8px;font-weight:600;border:1px solid rgba(217,119,6,0.18);">
+                <i class="fa-solid fa-gas-pump" style="color:#D97706;margin-right:4px;"></i>कॉन्ट्रा व नकद: <strong id="accAdjTotalBadge" style="color:#D97706;">₹22,77,855</strong>
+              </span>
+              <span style="font-size:12px;color:var(--text-secondary);background:rgba(46,125,50,0.08);padding:6px 14px;border-radius:8px;font-weight:700;border:1px solid rgba(46,125,50,0.2);">
+                कुल योग: <strong id="accPaymentsTotalBadge" style="color:#2E7D32;font-size:13.5px;">₹81,92,083</strong>
               </span>
             </div>
           </div>
 
-          <div class="table-responsive">
-            <table class="data-table" id="accPaymentsTable">
-              <thead>
-                <tr>
-                  <th style="width:40px;">क्र.</th>
-                  <th>भुगतान दिनांक</th>
-                  <th>खाता क्र. एवं वेंडर (Party)</th>
-                  <th>माध्यम</th>
-                  <th>चेक / संदर्भ क्र.</th>
-                  <th>लेखा मद / उद्देश्य</th>
-                  <th style="text-align:right;">भुगतान राशि</th>
-                  <th style="text-align:center;">निकासी स्थिति</th>
-                </tr>
-              </thead>
-              <tbody id="accPaymentsTbody">
-                <!-- Injected via JS -->
-              </tbody>
-            </table>
+          <!-- SECTION 1: BANK CHEQUE PAYMENTS REGISTER (क्र. 1 से 41) -->
+          <div style="margin-bottom:28px;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:12px;padding:16px 18px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px;padding-bottom:10px;border-bottom:1.5px solid var(--sandstone-light);">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="background:rgba(13,79,79,0.1);color:var(--teal);width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;">
+                  <i class="fa-solid fa-money-check"></i>
+                </span>
+                <div>
+                  <h3 style="margin:0;font-size:15px;font-weight:800;color:var(--teal);">बैंक ऑफ इंडिया चेक पंजी (Bank Cheque Register - 049001 से 049041)</h3>
+                  <div style="font-size:11.5px;color:var(--text-muted);font-weight:600;">चेकबुक क्रम क्र. 1 से 41 (39 जारी चेक + 2 निरस्त चेक)</div>
+                </div>
+              </div>
+              <span id="accChequeCountBadge" class="badge" style="background:rgba(13,79,79,0.08);color:var(--teal);font-weight:700;font-size:11.5px;">41 चेक प्रविष्टियां</span>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table" id="accChequePaymentsTable">
+                <thead>
+                  <tr>
+                    <th style="width:40px;">क्र.</th>
+                    <th>भुगतान दिनांक</th>
+                    <th>खाता क्र. एवं वेंडर (Party)</th>
+                    <th>माध्यम</th>
+                    <th>चेक क्र.</th>
+                    <th>लेखा मद / उद्देश्य</th>
+                    <th style="text-align:right;">भुगतान राशि</th>
+                    <th style="text-align:center;">निकासी स्थिति</th>
+                  </tr>
+                </thead>
+                <tbody id="accChequePaymentsTbody">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- SECTION 2: DIESEL CONTRA & CASH ADJUSTMENTS (क्र. 1 से 7) -->
+          <div style="margin-bottom:20px;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:12px;padding:16px 18px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px;padding-bottom:10px;border-bottom:1.5px solid var(--sandstone-light);">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="background:rgba(217,119,6,0.12);color:#D97706;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;">
+                  <i class="fa-solid fa-arrows-rotate"></i>
+                </span>
+                <div>
+                  <h3 style="margin:0;font-size:15px;font-weight:800;color:#D97706;">डीजल समायोजन (Contra) एवं रोकड़ भुगतान पंजी (Adjustments & Cash)</h3>
+                  <div style="font-size:11.5px;color:var(--text-muted);font-weight:600;">ठेकेदारों के बिलों से समायोजित डीजल आपूर्ति (6 Contra) + मस्टर रोल मजदूरी (1 Cash)</div>
+                </div>
+              </div>
+              <span id="accAdjCountBadge" class="badge" style="background:rgba(217,119,6,0.12);color:#D97706;font-weight:700;font-size:11.5px;">7 समायोजन प्रविष्टियां</span>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table" id="accAdjPaymentsTable">
+                <thead>
+                  <tr>
+                    <th style="width:40px;">क्र.</th>
+                    <th>समायोजन दिनांक</th>
+                    <th>खाता क्र. एवं वेंडर (Party)</th>
+                    <th>माध्यम</th>
+                    <th>संदर्भ / पर्ची विवरण</th>
+                    <th>लेखा मद / कार्य</th>
+                    <th style="text-align:right;">समायोजित राशि</th>
+                    <th style="text-align:center;">स्थिति</th>
+                  </tr>
+                </thead>
+                <tbody id="accAdjPaymentsTbody">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -8276,7 +8335,8 @@ let accountingPayments = [
     "amount": 79900,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "पाईप (Written as 49001)",
-    "accountId": "ACC-101"
+    "accountId": "ACC-101",
+    "chequeSno": 1
   },
   {
     "sno": 2,
@@ -8288,7 +8348,8 @@ let accountingPayments = [
     "amount": 0,
     "status": "निरस्त (Cancelled)",
     "remarks": "Marked 'निरस्त' (Cancelled) across the row",
-    "accountId": "ACC-GEN"
+    "accountId": "ACC-GEN",
+    "chequeSno": 2
   },
   {
     "sno": 3,
@@ -8300,7 +8361,8 @@ let accountingPayments = [
     "amount": 250000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डिजल (Written as 49003; note '411710' in margin)",
-    "accountId": "ACC-102"
+    "accountId": "ACC-102",
+    "chequeSno": 3
   },
   {
     "sno": 4,
@@ -8312,7 +8374,8 @@ let accountingPayments = [
     "amount": 325000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "टीन शेड (Written as 49004)",
-    "accountId": "ACC-103"
+    "accountId": "ACC-103",
+    "chequeSno": 4
   },
   {
     "sno": 5,
@@ -8324,7 +8387,8 @@ let accountingPayments = [
     "amount": 75000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "गिट्टी (Written as 49005; amount written as 75000=00)",
-    "accountId": "ACC-104"
+    "accountId": "ACC-104",
+    "chequeSno": 5
   },
   {
     "sno": 6,
@@ -8336,7 +8400,8 @@ let accountingPayments = [
     "amount": 56000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "भरावा (Written as 49006)",
-    "accountId": "ACC-105"
+    "accountId": "ACC-105",
+    "chequeSno": 6
   },
   {
     "sno": 7,
@@ -8348,7 +8413,8 @@ let accountingPayments = [
     "amount": 200000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डीजल (Written as 049007)",
-    "accountId": "ACC-102"
+    "accountId": "ACC-102",
+    "chequeSno": 7
   },
   {
     "sno": 8,
@@ -8360,7 +8426,8 @@ let accountingPayments = [
     "amount": 40500,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "भरावा (Written as 49008; margin notes '531500 वापस फियोरी')",
-    "accountId": "ACC-106"
+    "accountId": "ACC-106",
+    "chequeSno": 8
   },
   {
     "sno": 9,
@@ -8372,7 +8439,8 @@ let accountingPayments = [
     "amount": 200000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डीजल (Written as 49009; margin notes '25000')",
-    "accountId": "ACC-107"
+    "accountId": "ACC-107",
+    "chequeSno": 9
   },
   {
     "sno": 10,
@@ -8384,7 +8452,8 @@ let accountingPayments = [
     "amount": 252000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "सीमेंट (Written as 49010)",
-    "accountId": "ACC-108"
+    "accountId": "ACC-108",
+    "chequeSno": 10
   },
   {
     "sno": 11,
@@ -8396,7 +8465,8 @@ let accountingPayments = [
     "amount": 96500,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "पाईप",
-    "accountId": "ACC-109"
+    "accountId": "ACC-109",
+    "chequeSno": 11
   },
   {
     "sno": 12,
@@ -8408,7 +8478,8 @@ let accountingPayments = [
     "amount": 60000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "भरावा",
-    "accountId": "ACC-110"
+    "accountId": "ACC-110",
+    "chequeSno": 12
   },
   {
     "sno": 13,
@@ -8420,7 +8491,8 @@ let accountingPayments = [
     "amount": 208000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "पौधे",
-    "accountId": "ACC-111"
+    "accountId": "ACC-111",
+    "chequeSno": 13
   },
   {
     "sno": 14,
@@ -8432,7 +8504,8 @@ let accountingPayments = [
     "amount": 100000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "गिट्टी",
-    "accountId": "ACC-104"
+    "accountId": "ACC-104",
+    "chequeSno": 14
   },
   {
     "sno": 15,
@@ -8444,7 +8517,8 @@ let accountingPayments = [
     "amount": 50000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "टीनशेड",
-    "accountId": "ACC-112"
+    "accountId": "ACC-112",
+    "chequeSno": 15
   },
   {
     "sno": 16,
@@ -8456,7 +8530,8 @@ let accountingPayments = [
     "amount": 5500,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "जनरेटर साउंड",
-    "accountId": "ACC-113"
+    "accountId": "ACC-113",
+    "chequeSno": 16
   },
   {
     "sno": 17,
@@ -8468,7 +8543,8 @@ let accountingPayments = [
     "amount": 200000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डिजल",
-    "accountId": "ACC-107"
+    "accountId": "ACC-107",
+    "chequeSno": 17
   },
   {
     "sno": 18,
@@ -8480,7 +8556,8 @@ let accountingPayments = [
     "amount": 200000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डिजल",
-    "accountId": "ACC-107"
+    "accountId": "ACC-107",
+    "chequeSno": 18
   },
   {
     "sno": 19,
@@ -8492,7 +8569,8 @@ let accountingPayments = [
     "amount": 9980,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "पेन्टर लेबर",
-    "accountId": "ACC-114"
+    "accountId": "ACC-114",
+    "chequeSno": 19
   },
   {
     "sno": 20,
@@ -8504,7 +8582,8 @@ let accountingPayments = [
     "amount": 300000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "टीन शेड",
-    "accountId": "ACC-115"
+    "accountId": "ACC-115",
+    "chequeSno": 20
   },
   {
     "sno": 21,
@@ -8516,7 +8595,8 @@ let accountingPayments = [
     "amount": 30000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "टीन शेड",
-    "accountId": "ACC-112"
+    "accountId": "ACC-112",
+    "chequeSno": 21
   },
   {
     "sno": 22,
@@ -8528,7 +8608,8 @@ let accountingPayments = [
     "amount": 61000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "सीमेन्ट",
-    "accountId": "ACC-108"
+    "accountId": "ACC-108",
+    "chequeSno": 22
   },
   {
     "sno": 23,
@@ -8540,7 +8621,8 @@ let accountingPayments = [
     "amount": 411710,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डीजल",
-    "accountId": "ACC-102"
+    "accountId": "ACC-102",
+    "chequeSno": 23
   },
   {
     "sno": 24,
@@ -8552,7 +8634,8 @@ let accountingPayments = [
     "amount": 100000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डीजल",
-    "accountId": "ACC-107"
+    "accountId": "ACC-107",
+    "chequeSno": 24
   },
   {
     "sno": 25,
@@ -8564,7 +8647,8 @@ let accountingPayments = [
     "amount": 100000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "टीन शेड",
-    "accountId": "ACC-115"
+    "accountId": "ACC-115",
+    "chequeSno": 25
   },
   {
     "sno": 26,
@@ -8576,7 +8660,8 @@ let accountingPayments = [
     "amount": 86500,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "GEE (Note '53518' written next to amount; matches sum of Gwala Dairy bills (21075 + 21075 + 33525 + 10825 = 86500))",
-    "accountId": "ACC-116"
+    "accountId": "ACC-116",
+    "chequeSno": 26
   },
   {
     "sno": 27,
@@ -8588,7 +8673,8 @@ let accountingPayments = [
     "amount": 0,
     "status": "निरस्त (Cancelled)",
     "remarks": "नलजल निरस्त (Purpose annotated with 'निरस्त' (Cancelled); reissued via cheque 049031 for 14285)",
-    "accountId": "ACC-GEN"
+    "accountId": "ACC-GEN",
+    "chequeSno": 27
   },
   {
     "sno": 28,
@@ -8600,7 +8686,8 @@ let accountingPayments = [
     "amount": 83250,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "भरावा (Payee 'आनंद शर्मा' written above row; note '43626' next to purpose)",
-    "accountId": "ACC-110"
+    "accountId": "ACC-110",
+    "chequeSno": 28
   },
   {
     "sno": 29,
@@ -8612,7 +8699,8 @@ let accountingPayments = [
     "amount": 150000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डीजल",
-    "accountId": "ACC-102"
+    "accountId": "ACC-102",
+    "chequeSno": 29
   },
   {
     "sno": 30,
@@ -8624,7 +8712,8 @@ let accountingPayments = [
     "amount": 125000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "सीमेंट",
-    "accountId": "ACC-108"
+    "accountId": "ACC-108",
+    "chequeSno": 30
   },
   {
     "sno": 31,
@@ -8636,7 +8725,8 @@ let accountingPayments = [
     "amount": 14285,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "नलजल (Amount written as 14285-00)",
-    "accountId": "ACC-117"
+    "accountId": "ACC-117",
+    "chequeSno": 31
   },
   {
     "sno": 32,
@@ -8648,7 +8738,8 @@ let accountingPayments = [
     "amount": 75000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डिजल (Margin notes '85783')",
-    "accountId": "ACC-107"
+    "accountId": "ACC-107",
+    "chequeSno": 32
   },
   {
     "sno": 33,
@@ -8660,7 +8751,8 @@ let accountingPayments = [
     "amount": 75000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डिजल",
-    "accountId": "ACC-107"
+    "accountId": "ACC-107",
+    "chequeSno": 33
   },
   {
     "sno": 34,
@@ -8672,7 +8764,8 @@ let accountingPayments = [
     "amount": 100000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "टीनशेड",
-    "accountId": "ACC-103"
+    "accountId": "ACC-103",
+    "chequeSno": 34
   },
   {
     "sno": 35,
@@ -8684,7 +8777,8 @@ let accountingPayments = [
     "amount": 125000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डिजल (Margin notes '200,000')",
-    "accountId": "ACC-107"
+    "accountId": "ACC-107",
+    "chequeSno": 35
   },
   {
     "sno": 36,
@@ -8696,7 +8790,8 @@ let accountingPayments = [
     "amount": 50000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "नलजल 34300 (Annotation '34300' written next to नलजल)",
-    "accountId": "ACC-118"
+    "accountId": "ACC-118",
+    "chequeSno": 36
   },
   {
     "sno": 37,
@@ -8708,7 +8803,8 @@ let accountingPayments = [
     "amount": 376711,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "सरिया",
-    "accountId": "ACC-119"
+    "accountId": "ACC-119",
+    "chequeSno": 37
   },
   {
     "sno": 38,
@@ -8720,7 +8816,8 @@ let accountingPayments = [
     "amount": 100000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "सरिया (Written as 49038)",
-    "accountId": "ACC-103"
+    "accountId": "ACC-103",
+    "chequeSno": 38
   },
   {
     "sno": 39,
@@ -8732,7 +8829,8 @@ let accountingPayments = [
     "amount": 775000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "भरावा (Amount written as 775000=00)",
-    "accountId": "ACC-120"
+    "accountId": "ACC-120",
+    "chequeSno": 39
   },
   {
     "sno": 40,
@@ -8744,7 +8842,8 @@ let accountingPayments = [
     "amount": 117392,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डिजल",
-    "accountId": "ACC-107"
+    "accountId": "ACC-107",
+    "chequeSno": 40
   },
   {
     "sno": 41,
@@ -8756,7 +8855,8 @@ let accountingPayments = [
     "amount": 250000,
     "status": "बैंक निकासी सत्यापित",
     "remarks": "डिजल (Date written as 18.11.2026 (overlapping cheque no. 049041))",
-    "accountId": "ACC-102"
+    "accountId": "ACC-102",
+    "chequeSno": 41
   },
   {
     "sno": 42,
@@ -8768,7 +8868,8 @@ let accountingPayments = [
     "ref": "रोकड़ भुगतान",
     "amount": 23200,
     "status": "सत्यापित",
-    "remarks": "नगदी भुगतान (मस्टर रोल 28/7 से 3/8 मजदूरी)"
+    "remarks": "नगदी भुगतान (मस्टर रोल 28/7 से 3/8 मजदूरी)",
+    "adjSno": 1
   },
   {
     "sno": 43,
@@ -8780,7 +8881,8 @@ let accountingPayments = [
     "ref": "सर्वोत्तम पर्ची 3840, 3869, 3874",
     "amount": 17195,
     "status": "समायोजित",
-    "remarks": "सर्वोत्तम फ्यूल स्टेशन डीजल आपूर्ति समायोजन (170 लीटर)"
+    "remarks": "सर्वोत्तम फ्यूल स्टेशन डीजल आपूर्ति समायोजन (170 लीटर)",
+    "adjSno": 2
   },
   {
     "sno": 44,
@@ -8792,7 +8894,8 @@ let accountingPayments = [
     "ref": "पाटीदार फ्यूल्स वाउचर 23 (रविंद्र भाई)",
     "amount": 545710,
     "status": "समायोजित",
-    "remarks": "पाटीदार फ्यूल्स डीजल आपूर्ति समायोजन (5403.07 लीटर)"
+    "remarks": "पाटीदार फ्यूल्स डीजल आपूर्ति समायोजन (5403.07 लीटर)",
+    "adjSno": 3
   },
   {
     "sno": 45,
@@ -8804,7 +8907,8 @@ let accountingPayments = [
     "ref": "सर्वोत्तम फ्यूल स्टेशन वाउचर 25 (लखन कुमावत कोटड़ा)",
     "amount": 324750,
     "status": "समायोजित",
-    "remarks": "सर्वोत्तम फ्यूल स्टेशन डीजल आपूर्ति समायोजन"
+    "remarks": "सर्वोत्तम फ्यूल स्टेशन डीजल आपूर्ति समायोजन",
+    "adjSno": 4
   },
   {
     "sno": 46,
@@ -8816,7 +8920,8 @@ let accountingPayments = [
     "ref": "पाटीदार फ्यूल्स वाउचर 23 (पर्ची 14345, 14355, 14372, 14387)",
     "amount": 256000,
     "status": "समायोजित",
-    "remarks": "पाटीदार फ्यूल्स डीजल आपूर्ति समायोजन (दुर्गेश पाटीदार 4 पर्चियां, 2534.65 लीटर)"
+    "remarks": "पाटीदार फ्यूल्स डीजल आपूर्ति समायोजन (दुर्गेश पाटीदार 4 पर्चियां, 2534.65 लीटर)",
+    "adjSno": 5
   },
   {
     "sno": 47,
@@ -8828,7 +8933,8 @@ let accountingPayments = [
     "ref": "पाटीदार फ्यूल्स वाउचर 23 (सोनू राजाजी)",
     "amount": 460000,
     "status": "समायोजित",
-    "remarks": "पाटीदार फ्यूल्स डीजल आपूर्ति समायोजन (22 पर्चियां, 4554.46 लीटर)"
+    "remarks": "पाटीदार फ्यूल्स डीजल आपूर्ति समायोजन (22 पर्चियां, 4554.46 लीटर)",
+    "adjSno": 6
   },
   {
     "sno": 48,
@@ -8840,7 +8946,8 @@ let accountingPayments = [
     "ref": "सर्वोत्तम फ्यूल स्टेशन वाउचर 25 (राजाजी)",
     "amount": 651000,
     "status": "समायोजित",
-    "remarks": "सर्वोत्तम फ्यूल स्टेशन डीजल आपूर्ति समायोजन (22 पर्चियां, 5326.65 लीटर)"
+    "remarks": "सर्वोत्तम फ्यूल स्टेशन डीजल आपूर्ति समायोजन (22 पर्चियां, 5326.65 लीटर)",
+    "adjSno": 7
   }
 ];
 
@@ -9733,9 +9840,10 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
     }
 
     function renderPaymentsTable() {
-      const tbody = document.getElementById('accPaymentsTbody');
-      if (!tbody) return;
+      const chequeTbody = document.getElementById('accChequePaymentsTbody');
+      const adjTbody = document.getElementById('accAdjPaymentsTbody');
 
+      // Filter all payments
       const filtered = accountingPayments.filter(p => {
         return !currentPaymentSearch ||
           (p.accountId && p.accountId.toLowerCase().includes(currentPaymentSearch)) ||
@@ -9747,55 +9855,122 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
           (p.date && p.date.includes(currentPaymentSearch));
       });
 
-      const filteredTotal = filtered.reduce((s, p) => s + (Number(p.amount) || 0), 0);
-      const elBadge = document.getElementById('accPaymentsTotalBadge');
-      if (elBadge) elBadge.textContent = fmt(filteredTotal);
+      // Split filtered into Cheques and Adjustments
+      const filteredCheques = filtered.filter(p => p.mode && p.mode.includes('चेक'));
+      const filteredAdj = filtered.filter(p => !p.mode || !p.mode.includes('चेक'));
 
-      if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:28px;color:var(--text-muted);">कोई भुगतान प्रविष्टि नहीं मिली।</td></tr>`;
-        return;
+      // Calculate totals
+      const chequeTotal = filteredCheques.reduce((s, p) => s + (Number(p.amount) || 0), 0);
+      const adjTotal = filteredAdj.reduce((s, p) => s + (Number(p.amount) || 0), 0);
+      const grandTotal = chequeTotal + adjTotal;
+
+      // Update badges
+      const elChequeBadge = document.getElementById('accChequesTotalBadge');
+      if (elChequeBadge) elChequeBadge.textContent = fmt(chequeTotal);
+
+      const elAdjBadge = document.getElementById('accAdjTotalBadge');
+      if (elAdjBadge) elAdjBadge.textContent = fmt(adjTotal);
+
+      const elTotalBadge = document.getElementById('accPaymentsTotalBadge');
+      if (elTotalBadge) elTotalBadge.textContent = fmt(grandTotal);
+
+      const elChequeCount = document.getElementById('accChequeCountBadge');
+      if (elChequeCount) elChequeCount.textContent = `${filteredCheques.length} चेक प्रविष्टियां`;
+
+      const elAdjCount = document.getElementById('accAdjCountBadge');
+      if (elAdjCount) elAdjCount.textContent = `${filteredAdj.length} समायोजन प्रविष्टियां`;
+
+      // 1. RENDER CHEQUES TABLE (क्र. 1 से 41)
+      if (chequeTbody) {
+        if (filteredCheques.length === 0) {
+          chequeTbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text-muted);">कोई चेक प्रविष्टि नहीं मिली।</td></tr>`;
+        } else {
+          chequeTbody.innerHTML = filteredCheques.map((p, idx) => {
+            const isCancelled = p.status && p.status.includes('निरस्त');
+            const displaySno = p.chequeSno || (idx + 1);
+
+            return `
+              <tr style="${isCancelled ? 'opacity:0.65;background:rgba(220,38,38,0.03);' : ''}">
+                <td style="font-weight:700;color:var(--text-secondary);text-align:center;">${displaySno}</td>
+                <td style="white-space:nowrap;font-size:12.5px;color:var(--text-secondary);"><i class="fa-regular fa-calendar" style="color:var(--gold);margin-right:4px;"></i>${p.date}</td>
+                <td style="font-weight:700;">
+                  ${isCancelled ? `<span style="color:#DC2626;text-decoration:line-through;"><span class="badge" style="background:#FEE2E2;color:#DC2626;font-family:monospace;font-size:10px;padding:2px 5px;border-radius:4px;margin-right:5px;font-weight:700;">${p.accountId || 'ACC'}</span>${p.payee}</span>` : `
+                  <div style="display:inline-flex;align-items:center;flex-wrap:wrap;gap:5px;">
+                    <span class="badge" style="background:#0D4F4F;color:#D4AF37;font-family:monospace;font-size:10.5px;padding:2px 6px;border-radius:4px;font-weight:700;" title="वेंडर खाता क्र. (Party Account ID)">${p.accountId || 'ACC'}</span>
+                    <a href="javascript:void(0)" onclick="openVendorLedgerDirect(decodeURIComponent('${encodeURIComponent(p.payee)}'))" style="color:var(--teal);text-decoration:none;border-bottom:1.5px solid var(--teal);display:inline-flex;align-items:center;gap:4px;transition:all 0.2s ease;" title="${p.payee} का खाता बही (Ledger) देखें">
+                      <span>${p.payee}</span>
+                      <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10.5px;color:var(--gold-dark);opacity:0.85;"></i>
+                    </a>
+                  </div>`}
+                </td>
+                <td>
+                  <span class="badge" style="background:${isCancelled ? 'rgba(220,38,38,0.12)' : 'rgba(13,79,79,0.08)'};color:${isCancelled ? '#DC2626' : 'var(--teal)'};font-weight:700;font-size:11px;">
+                    <i class="${isCancelled ? 'fa-solid fa-ban' : 'fa-solid fa-credit-card'}" style="margin-right:4px;"></i>${p.mode}
+                  </span>
+                </td>
+                <td style="font-weight:700;color:#8B263E;font-family:monospace;font-size:13px;"><i class="fa-solid fa-money-check" style="margin-right:4px;"></i>${p.ref}</td>
+                <td>
+                  <span class="badge badge-village" style="background:rgba(209,154,80,0.12);color:var(--gold-dark);font-size:11px;font-weight:700;">${p.category}</span>
+                  ${p.remarks ? `<div style="font-size:10.5px;color:var(--text-muted);font-weight:600;margin-top:2px;">${p.remarks}</div>` : ''}
+                </td>
+                <td style="text-align:right;font-weight:800;color:${isCancelled ? '#9CA3AF' : '#2E7D32'};font-size:14px;">${isCancelled ? '₹0' : fmt(p.amount)}</td>
+                <td style="text-align:center;">
+                  <span class="badge" style="background:${isCancelled ? 'rgba(220,38,38,0.12)' : 'rgba(46,125,50,0.12)'};color:${isCancelled ? '#DC2626' : '#2E7D32'};font-weight:700;font-size:11px;">
+                    <i class="${isCancelled ? 'fa-solid fa-ban' : 'fa-solid fa-shield-check'}"></i> ${p.status}
+                  </span>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
       }
 
-      tbody.innerHTML = filtered.map((p, idx) => {
-        const isCancelled = p.status && p.status.includes('निरस्त');
-        const isContra = p.mode && p.mode.includes('समायोजन');
-        const isCash = p.mode && p.mode.includes('नकद');
+      // 2. RENDER ADJUSTMENTS & CASH TABLE (क्र. 1 से 7)
+      if (adjTbody) {
+        if (filteredAdj.length === 0) {
+          adjTbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text-muted);">कोई समायोजन या नकद प्रविष्टि नहीं मिली।</td></tr>`;
+        } else {
+          adjTbody.innerHTML = filteredAdj.map((p, idx) => {
+            const isContra = p.mode && p.mode.includes('समायोजन');
+            const isCash = p.mode && p.mode.includes('नकद');
+            const displaySno = p.adjSno || (idx + 1);
 
-        return `
-          <tr style="${isCancelled ? 'opacity:0.65;background:rgba(220,38,38,0.03);' : (isContra ? 'background:rgba(217,119,6,0.02);' : '')}">
-            <td style="font-weight:700;color:var(--text-secondary);text-align:center;">${idx + 1}</td>
-            <td style="white-space:nowrap;font-size:12.5px;color:var(--text-secondary);"><i class="fa-regular fa-calendar" style="color:var(--gold);margin-right:4px;"></i>${p.date}</td>
-            <td style="font-weight:700;">
-              ${isCancelled ? `<span style="color:#DC2626;text-decoration:line-through;"><span class="badge" style="background:#FEE2E2;color:#DC2626;font-family:monospace;font-size:10px;padding:2px 5px;border-radius:4px;margin-right:5px;font-weight:700;">${p.accountId || 'ACC'}</span>${p.payee}</span>` : `
-              <div style="display:inline-flex;align-items:center;flex-wrap:wrap;gap:5px;">
-                <span class="badge" style="background:#0D4F4F;color:#D4AF37;font-family:monospace;font-size:10.5px;padding:2px 6px;border-radius:4px;font-weight:700;" title="वेंडर खाता क्र. (Party Account ID)">${p.accountId || 'ACC'}</span>
-                <a href="javascript:void(0)" onclick="openVendorLedgerDirect(decodeURIComponent('${encodeURIComponent(p.payee)}'))" style="color:var(--teal);text-decoration:none;border-bottom:1.5px solid var(--teal);display:inline-flex;align-items:center;gap:4px;transition:all 0.2s ease;" title="${p.payee} का खाता बही (Ledger) देखें">
-                  <span>${p.payee}</span>
-                  <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10.5px;color:var(--gold-dark);opacity:0.85;"></i>
-                </a>
-              </div>`}
-            </td>
-            <td>
-              <span class="badge" style="background:${isCancelled ? 'rgba(220,38,38,0.12)' : (isContra ? 'rgba(217,119,6,0.14)' : (isCash ? 'rgba(13,79,79,0.14)' : 'rgba(13,79,79,0.08)'))};color:${isCancelled ? '#DC2626' : (isContra ? '#D97706' : 'var(--teal)')};font-weight:700;font-size:11px;">
-                <i class="${isCancelled ? 'fa-solid fa-ban' : (isContra ? 'fa-solid fa-gas-pump' : (isCash ? 'fa-solid fa-money-bill-wave' : 'fa-solid fa-credit-card'))}" style="margin-right:4px;"></i>${p.mode}
-              </span>
-            </td>
-            <td style="font-weight:700;color:#8B263E;font-family:monospace;font-size:12.5px;">
-              <i class="${isContra ? 'fa-solid fa-arrows-rotate' : (isCash ? 'fa-solid fa-wallet' : 'fa-solid fa-money-check')}" style="margin-right:4px;"></i>${p.ref}
-            </td>
-            <td>
-              <span class="badge badge-village" style="background:rgba(209,154,80,0.12);color:var(--gold-dark);font-size:11px;font-weight:700;">${p.category}</span>
-              ${p.remarks ? `<div style="font-size:10.5px;color:var(--text-muted);font-weight:600;margin-top:2px;">${p.remarks}</div>` : ''}
-            </td>
-            <td style="text-align:right;font-weight:800;color:${isCancelled ? '#9CA3AF' : '#2E7D32'};font-size:14px;">${isCancelled ? '₹0' : fmt(p.amount)}</td>
-            <td style="text-align:center;">
-              <span class="badge" style="background:${isCancelled ? 'rgba(220,38,38,0.12)' : (isContra ? 'rgba(217,119,6,0.12)' : 'rgba(46,125,50,0.12)')};color:${isCancelled ? '#DC2626' : (isContra ? '#D97706' : '#2E7D32')};font-weight:700;font-size:11px;">
-                <i class="${isCancelled ? 'fa-solid fa-ban' : (isContra ? 'fa-solid fa-arrows-rotate' : 'fa-solid fa-shield-check')}"></i> ${p.status}
-              </span>
-            </td>
-          </tr>
-        `;
-      }).join('');
+            return `
+              <tr style="${isContra ? 'background:rgba(217,119,6,0.02);' : ''}">
+                <td style="font-weight:700;color:var(--text-secondary);text-align:center;">${displaySno}</td>
+                <td style="white-space:nowrap;font-size:12.5px;color:var(--text-secondary);"><i class="fa-regular fa-calendar" style="color:var(--gold);margin-right:4px;"></i>${p.date}</td>
+                <td style="font-weight:700;">
+                  <div style="display:inline-flex;align-items:center;flex-wrap:wrap;gap:5px;">
+                    <span class="badge" style="background:#0D4F4F;color:#D4AF37;font-family:monospace;font-size:10.5px;padding:2px 6px;border-radius:4px;font-weight:700;" title="वेंडर खाता क्र. (Party Account ID)">${p.accountId || 'ACC'}</span>
+                    <a href="javascript:void(0)" onclick="openVendorLedgerDirect(decodeURIComponent('${encodeURIComponent(p.payee)}'))" style="color:var(--teal);text-decoration:none;border-bottom:1.5px solid var(--teal);display:inline-flex;align-items:center;gap:4px;transition:all 0.2s ease;" title="${p.payee} का खाता बही (Ledger) देखें">
+                      <span>${p.payee}</span>
+                      <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10.5px;color:var(--gold-dark);opacity:0.85;"></i>
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <span class="badge" style="background:${isContra ? 'rgba(217,119,6,0.14)' : 'rgba(13,79,79,0.14)'};color:${isContra ? '#D97706' : 'var(--teal)'};font-weight:700;font-size:11px;">
+                    <i class="${isContra ? 'fa-solid fa-gas-pump' : 'fa-solid fa-money-bill-wave'}" style="margin-right:4px;"></i>${p.mode}
+                  </span>
+                </td>
+                <td style="font-weight:700;color:#8B263E;font-family:monospace;font-size:12.5px;">
+                  <i class="${isContra ? 'fa-solid fa-arrows-rotate' : 'fa-solid fa-wallet'}" style="margin-right:4px;"></i>${p.ref}
+                </td>
+                <td>
+                  <span class="badge badge-village" style="background:rgba(209,154,80,0.12);color:var(--gold-dark);font-size:11px;font-weight:700;">${p.category}</span>
+                  ${p.remarks ? `<div style="font-size:10.5px;color:var(--text-muted);font-weight:600;margin-top:2px;">${p.remarks}</div>` : ''}
+                </td>
+                <td style="text-align:right;font-weight:800;color:#2E7D32;font-size:14px;">${fmt(p.amount)}</td>
+                <td style="text-align:center;">
+                  <span class="badge" style="background:${isContra ? 'rgba(217,119,6,0.12)' : 'rgba(46,125,50,0.12)'};color:${isContra ? '#D97706' : '#2E7D32'};font-weight:700;font-size:11px;">
+                    <i class="${isContra ? 'fa-solid fa-arrows-rotate' : 'fa-solid fa-shield-check'}"></i> ${p.status}
+                  </span>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
     }
 
     function renderAccountHeadsView() {
