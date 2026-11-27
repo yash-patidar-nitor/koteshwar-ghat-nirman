@@ -7700,14 +7700,11 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
       let successCount = 0;
       for (const c of pendingColls) {
         try {
-          await fetch(webhookUrl, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'addCollection', data: c })
-          });
-          c.syncedToSheet = true;
-          successCount++;
+          const ok = await postWebhookData('addCollection', c);
+          if (ok) {
+            c.syncedToSheet = true;
+            successCount++;
+          }
         } catch (err) {
           console.error("Failed to sync collection:", c.receiptNo, err);
         }
@@ -7715,14 +7712,11 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
 
       for (const d of pendingDecls) {
         try {
-          await fetch(webhookUrl, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'addDeclaration', data: d })
-          });
-          d.syncedToSheet = true;
-          successCount++;
+          const ok = await postWebhookData('addDeclaration', d);
+          if (ok) {
+            d.syncedToSheet = true;
+            successCount++;
+          }
         } catch (err) {
           console.error("Failed to sync declaration:", d.sno, err);
         }
@@ -7761,22 +7755,55 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
     }
 
     async function postWebhookData(action, data) {
-      if (!webhookUrl) {
-        console.warn("Webhook URL not configured; saved locally in offline storage.");
-        updateRibbon();
-        return false;
+      let sheetOk = false;
+      let tursoOk = false;
+
+      // 1. Dual-write to Google Apps Script Webhook (Google Sheets)
+      if (webhookUrl) {
+        try {
+          await fetch(webhookUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: action, data: data })
+          });
+          sheetOk = true;
+        } catch (e) {
+          console.warn("Google Sheet webhook background notice:", e);
+        }
       }
+
+      // 2. Dual-write to Turso SQLite Database (via Vercel Serverless API)
       try {
-        await fetch(webhookUrl, {
+        const tursoApiUrl = (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '443'))
+          ? 'https://koteshwar-ghat-nirman.vercel.app/api/turso-transaction'
+          : '/api/turso-transaction';
+
+        const tursoRes = await fetch(tursoApiUrl, {
           method: 'POST',
-          mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: action, data: data })
         });
+        if (tursoRes.ok) {
+          const resData = await tursoRes.json();
+          if (resData && resData.success) {
+            tursoOk = true;
+          }
+        }
+      } catch (err) {
+        console.warn("Turso real-time sync notice:", err);
+      }
+
+      if (sheetOk && tursoOk) {
+        updateRibbon(false, "✅ Google Sheet एवं Turso DB में डेटा सुरक्षित");
+        return true;
+      } else if (sheetOk) {
         updateRibbon(false, "Google Sheet में डेटा सुरक्षित किया गया");
         return true;
-      } catch (e) {
-        console.warn("Webhook background sync notice:", e);
+      } else if (tursoOk) {
+        updateRibbon(false, "Turso DB में डेटा सुरक्षित किया गया");
+        return true;
+      } else {
         updateRibbon(false, "स्थानीय रूप से सुरक्षित (ऑफ़लाइन कैश)");
         return false;
       }
