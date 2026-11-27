@@ -3785,7 +3785,7 @@
                 <span class="tab-label-desktop">भुगतान पंजी (Payments Book)</span>
                 <span class="tab-label-mobile">भुगतान पंजी</span>
               </span>
-              <span class="acc-tab-badge" id="accTabPaymentsCount">26 चेक</span>
+              <span class="acc-tab-badge" id="accTabPaymentsCount">41 चेक</span>
             </button>
           </nav>
           <button type="button" class="slider-arrow slider-arrow-right" onclick="slideNavTabs('accTabsNav', 160)" aria-label="अगला टैब देखें">
@@ -3895,9 +3895,8 @@
                   <th>भुगतान दिनांक</th>
                   <th>प्राप्तकर्ता फर्म (वेंडर)</th>
                   <th>माध्यम</th>
-                  <th>चेक / संदर्भ क्र.</th>
-                  <th>संबंधित बिल</th>
-                  <th>लेखा मद</th>
+                  <th>चेक क्र.</th>
+                  <th>लेखा मद / उद्देश्य</th>
                   <th style="text-align:right;">भुगतान राशि</th>
                   <th style="text-align:center;">निकासी स्थिति</th>
                 </tr>
@@ -8233,426 +8232,454 @@
 let accountingPayments = [
   {
     "sno": 1,
-    "date": "2025-09-26",
-    "payee": "बुरहानी बिल्डिंग मटेरियल, निसरपुर",
-    "voucherNo": "वाउचर क्र. 1",
-    "category": "नल-जल",
-    "mode": "नकद / चेक",
-    "ref": "049031",
-    "amount": 14285,
-    "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹14285",
-    "billNo": "बिल क्र. 1070"
-  },
-  {
-    "sno": 2,
-    "date": "2026-09-09",
-    "payee": "सोना हार्डवेयर, अंजड़",
-    "voucherNo": "वाउचर क्र. 2",
-    "category": "निर्माण सामग्री एवं कार्य",
-    "mode": "चेक",
-    "ref": "049020",
-    "amount": 300000,
-    "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹400137",
-    "billNo": "बिल क्र. 73"
-  },
-  {
-    "sno": 3,
-    "date": "2026-09-23",
-    "payee": "सोना हार्डवेयर, अंजड़",
-    "voucherNo": "वाउचर क्र. 2",
-    "category": "निर्माण सामग्री एवं कार्य",
-    "mode": "चेक",
-    "ref": "049025",
-    "amount": 100000,
-    "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹400137",
-    "billNo": "बिल क्र. 73"
-  },
-  {
-    "sno": 4,
-    "date": "2026-09-25",
-    "payee": "देव एंटरप्राइजेस, कुक्षी",
-    "voucherNo": "वाउचर क्र. 3",
-    "category": "निर्माण सामग्री एवं कार्य",
-    "mode": "चेक",
-    "ref": "049030",
-    "amount": 125000,
-    "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹252000",
-    "billNo": "बिल क्र. DEK/26-27/32"
-  },
-  {
-    "sno": 5,
-    "date": "2026-09-16",
-    "payee": "देव एंटरप्राइजेस, कुक्षी",
-    "voucherNo": "वाउचर क्र. 4",
-    "category": "निर्माण सामग्री एवं कार्य",
-    "mode": "चेक",
-    "ref": "049022",
-    "amount": 61000,
-    "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹61000",
-    "billNo": "बिल क्र. DEK/26-27/33"
-  },
-  {
-    "sno": 6,
-    "date": "2026-09-09",
-    "payee": "विमल रावत पेंटर",
-    "voucherNo": "वाउचर क्र. 5",
-    "category": "रंग-रोगन एवं पुताई",
-    "mode": "चेक",
-    "ref": "049019",
-    "amount": 9980,
-    "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹9980",
-    "billNo": "बिल क्र. 02"
-  },
-  {
-    "sno": 7,
-    "date": "2026-09-09",
-    "payee": "मंगलम इलेक्ट्रीक एंड लाईट डेकोरेशन",
-    "voucherNo": "वाउचर क्र. 6",
-    "category": "विद्युत एवं प्रकाश व्यवस्था",
-    "mode": "चेक",
-    "ref": "049019",
-    "amount": 5500,
-    "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹5500",
-    "billNo": "बिल क्र. 5416"
-  },
-  {
-    "sno": 8,
-    "date": "2026-09-05",
-    "payee": "माँ नर्मदा एक्जॉटिक नर्सरी",
-    "voucherNo": "वाउचर क्र. 7",
-    "category": "वृक्षारोपण एवं उद्यान विकास",
-    "mode": "चेक",
-    "ref": "049015",
-    "amount": 208960,
-    "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹208960",
-    "billNo": "बिल क्र. 720"
-  },
-  {
-    "sno": 9,
-    "date": "2026-08-20",
-    "payee": "देव एंटरप्राइजेस, कुक्षी",
-    "voucherNo": "वाउचर क्र. 8",
-    "category": "निर्माण सामग्री एवं कार्य",
-    "mode": "चेक",
-    "ref": "049010",
-    "amount": 252000,
-    "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹252000",
-    "billNo": "बिल क्र. DEK/26-27/31"
-  },
-  {
-    "sno": 10,
-    "date": "2026-08-10",
-    "payee": "शिव साईं स्टोन क्रेशर",
-    "voucherNo": "वाउचर क्र. 9",
-    "category": "निर्माण सामग्री एवं कार्य",
-    "mode": "चेक",
-    "ref": "049012",
-    "amount": 175000,
-    "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹175000",
-    "billNo": "बिल क्र. 2627/129"
-  },
-  {
-    "sno": 11,
-    "date": "2026-08-22",
-    "payee": "गर्व ईट उद्योग",
-    "voucherNo": "वाउचर क्र. 10",
-    "category": "जेसीबी एवं मिट्टी भराव कार्य",
-    "mode": "चेक",
-    "ref": "049016",
-    "amount": 56000,
-    "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹56000",
-    "billNo": "बिल क्र. 5"
-  },
-  {
-    "sno": 12,
-    "date": "2026-08-20",
-    "payee": "गंगामाता कंस्ट्रक्शन",
-    "voucherNo": "वाउचर क्र. 11",
-    "category": "निर्माण सामग्री एवं कार्य",
-    "mode": "चेक",
-    "ref": "049008",
-    "amount": 40500,
-    "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹40500",
-    "billNo": "बिल क्र. 211"
-  },
-  {
-    "sno": 13,
-    "date": "2026-09-02",
-    "payee": "अग्रवाल सेल्स एजेन्सी",
-    "voucherNo": "वाउचर क्र. 12",
-    "category": "नल-जल",
-    "mode": "चेक",
-    "ref": "049011",
-    "amount": 96500,
-    "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹96500",
-    "billNo": "बिल क्र. 867"
-  },
-  {
-    "sno": 14,
-    "date": "2026-08-08",
+    "date": "2026-08-01",
     "payee": "श्री बालाजी सेल्स एजेंसी",
-    "voucherNo": "वाउचर क्र. 13",
     "category": "नल-जल",
     "mode": "चेक",
     "ref": "049001",
     "amount": 79900,
     "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹79900",
-    "billNo": "बिल क्र. 2496"
+    "remarks": "पाईप (Written as 49001)"
+  },
+  {
+    "sno": 2,
+    "date": "2026-08-02",
+    "payee": "निरस्त चेक (Cancelled)",
+    "category": "निरस्त",
+    "mode": "चेक (निरस्त)",
+    "ref": "049002",
+    "amount": 0,
+    "status": "निरस्त (Cancelled)",
+    "remarks": "Marked 'निरस्त' (Cancelled) across the row"
+  },
+  {
+    "sno": 3,
+    "date": "2026-08-13",
+    "payee": "पाटीदार फ्यूल्स",
+    "category": "ईंधन एवं डीजल",
+    "mode": "चेक",
+    "ref": "049003",
+    "amount": 250000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "डिजल (Written as 49003; note '411710' in margin)"
+  },
+  {
+    "sno": 4,
+    "date": "2026-08-17",
+    "payee": "माँ नर्मदा ट्रेडर्स",
+    "category": "शेड एवं फेब्रिकेशन",
+    "mode": "चेक",
+    "ref": "049004",
+    "amount": 325000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "टीन शेड (Written as 49004)"
+  },
+  {
+    "sno": 5,
+    "date": "2026-08-18",
+    "payee": "शिव साईं स्टोन क्रेशर",
+    "category": "गिट्टी एवं निर्माण सामग्री",
+    "mode": "चेक",
+    "ref": "049005",
+    "amount": 75000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "गिट्टी (Written as 49005; amount written as 75000=00)"
+  },
+  {
+    "sno": 6,
+    "date": "2026-08-20",
+    "payee": "लखन रामकिशन प्रजापत",
+    "category": "जेसीबी एवं मिट्टी भराव कार्य",
+    "mode": "चेक",
+    "ref": "049006",
+    "amount": 56000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "भरावा (Written as 49006)"
+  },
+  {
+    "sno": 7,
+    "date": "2026-08-20",
+    "payee": "पाटीदार फ्यूल्स",
+    "category": "ईंधन एवं डीजल",
+    "mode": "चेक",
+    "ref": "049007",
+    "amount": 200000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "डीजल (Written as 049007)"
+  },
+  {
+    "sno": 8,
+    "date": "2026-08-20",
+    "payee": "गंगामाता कंस्ट्रक्शन",
+    "category": "जेसीबी एवं मिट्टी भराव कार्य",
+    "mode": "चेक",
+    "ref": "049008",
+    "amount": 40500,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "भरावा (Written as 49008; margin notes '531500 वापस फियोरी')"
+  },
+  {
+    "sno": 9,
+    "date": "2026-08-24",
+    "payee": "सर्वोत्तम फ्यूल स्टेशन",
+    "category": "ईंधन एवं डीजल",
+    "mode": "चेक",
+    "ref": "049009",
+    "amount": 200000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "डीजल (Written as 49009; margin notes '25000')"
+  },
+  {
+    "sno": 10,
+    "date": "2026-08-29",
+    "payee": "देव एंटरप्राइजेस, कुक्षी",
+    "category": "सीमेंट एवं निर्माण सामग्री",
+    "mode": "चेक",
+    "ref": "049010",
+    "amount": 252000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "सीमेंट (Written as 49010)"
+  },
+  {
+    "sno": 11,
+    "date": "2026-08-31",
+    "payee": "अग्रवाल सेल्स एजेन्सी",
+    "category": "नल-जल",
+    "mode": "चेक",
+    "ref": "049011",
+    "amount": 96500,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "पाईप"
+  },
+  {
+    "sno": 12,
+    "date": "2026-08-31",
+    "payee": "आनंद रमेशचन्द्र शर्मा",
+    "category": "जेसीबी एवं मिट्टी भराव कार्य",
+    "mode": "चेक",
+    "ref": "049012",
+    "amount": 60000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "भरावा"
+  },
+  {
+    "sno": 13,
+    "date": "2026-09-01",
+    "payee": "माँ नर्मदा एक्जॉटिक नर्सरी",
+    "category": "वृक्षारोपण एवं नर्सरी",
+    "mode": "चेक",
+    "ref": "049013",
+    "amount": 208000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "पौधे"
+  },
+  {
+    "sno": 14,
+    "date": "2026-09-02",
+    "payee": "शिव साईं स्टोन क्रेशर",
+    "category": "गिट्टी एवं निर्माण सामग्री",
+    "mode": "चेक",
+    "ref": "049014",
+    "amount": 100000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "गिट्टी"
   },
   {
     "sno": 15,
-    "date": "2026-09-22",
-    "payee": "माँ नर्मदा ट्रेडर्स",
-    "voucherNo": "वाउचर क्र. 14",
-    "category": "निर्माण सामग्री एवं कार्य",
+    "date": "2026-09-02",
+    "payee": "न्यू खुशी वेल्डिंग वर्क्स",
+    "category": "शेड एवं फेब्रिकेशन",
     "mode": "चेक",
-    "ref": "049028",
-    "amount": 53836.2,
+    "ref": "049015",
+    "amount": 50000,
     "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹53836.2",
-    "billNo": "बिल क्र. 964"
+    "remarks": "टीनशेड"
   },
   {
     "sno": 16,
-    "date": "2026-09-22",
-    "payee": "माँ नर्मदा ट्रेडर्स",
-    "voucherNo": "वाउचर क्र. 15",
-    "category": "निर्माण सामग्री एवं कार्य",
+    "date": "2026-09-02",
+    "payee": "मंगलम इलेक्ट्रीक एंड लाईट डेकोरेशन",
+    "category": "विद्युत एवं प्रकाश व्यवस्था",
     "mode": "चेक",
-    "ref": "049027",
-    "amount": 74103.1,
+    "ref": "049016",
+    "amount": 5500,
     "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹74103.1",
-    "billNo": "बिल क्र. 963"
+    "remarks": "जनरेटर साउंड"
   },
   {
     "sno": 17,
-    "date": "2026-09-20",
-    "payee": "माँ नर्मदा ट्रेडर्स",
-    "voucherNo": "वाउचर क्र. 16",
-    "category": "निर्माण सामग्री एवं कार्य",
+    "date": "2026-09-05",
+    "payee": "सर्वोत्तम फ्यूल स्टेशन",
+    "category": "ईंधन एवं डीजल",
     "mode": "चेक",
-    "ref": "049026",
-    "amount": 450000,
+    "ref": "049017",
+    "amount": 200000,
     "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹453441",
-    "billNo": "बिल क्र. 952"
+    "remarks": "डिजल"
   },
   {
     "sno": 18,
-    "date": "2026-08-02",
-    "payee": "आनंद रमेशचन्द्र शर्मा",
-    "voucherNo": "वाउचर क्र. 17",
-    "category": "जेसीबी एवं मिट्टी भराव कार्य",
+    "date": "2026-09-08",
+    "payee": "सर्वोत्तम फ्यूल स्टेशन",
+    "category": "ईंधन एवं डीजल",
     "mode": "चेक",
-    "ref": "049005",
-    "amount": 143250,
+    "ref": "049018",
+    "amount": 200000,
     "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹143250",
-    "billNo": "बिल क्र. 24"
+    "remarks": "डिजल"
   },
   {
     "sno": 19,
-    "date": "2026-08-25",
-    "payee": "किसान मशीनरी पार्ट्स",
-    "voucherNo": "वाउचर क्र. 18",
-    "category": "नल-जल",
+    "date": "2026-09-09",
+    "payee": "विमल रावत पेंटर",
+    "category": "रंग-रोगन एवं पुताई",
     "mode": "चेक",
     "ref": "049019",
-    "amount": 120855,
+    "amount": 9980,
     "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹120855",
-    "billNo": "बिल क्र. 2025-818"
+    "remarks": "पेन्टर लेबर"
   },
   {
     "sno": 20,
-    "date": "2026-07-30",
-    "payee": "किसान मशीनरी पार्ट्स",
-    "voucherNo": "वाउचर क्र. 19",
-    "category": "नल-जल",
-    "mode": "नकद",
-    "ref": "रोकड़ भुगतान",
-    "amount": 14770,
+    "date": "2026-09-09",
+    "payee": "सोना हार्डवेयर, अंजड़",
+    "category": "शेड एवं फेब्रिकेशन",
+    "mode": "चेक",
+    "ref": "049020",
+    "amount": 300000,
     "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹14770",
-    "billNo": "बिल क्र. 2025-792"
+    "remarks": "टीन शेड"
   },
   {
     "sno": 21,
-    "date": "2026-07-28",
-    "payee": "किसान मशीनरी पार्ट्स",
-    "voucherNo": "वाउचर क्र. 20",
-    "category": "नल-जल",
-    "mode": "नकद / चेक",
-    "ref": "049002",
-    "amount": 22529,
+    "date": "2026-09-10",
+    "payee": "न्यू खुशी वेल्डिंग वर्क्स",
+    "category": "शेड एवं फेब्रिकेशन",
+    "mode": "चेक",
+    "ref": "049021",
+    "amount": 30000,
     "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹22529",
-    "billNo": "बिल क्र. 2025-788"
+    "remarks": "टीन शेड"
   },
   {
     "sno": 22,
-    "date": "2026-07-20",
-    "payee": "किसान मशीनरी पार्ट्स",
-    "voucherNo": "वाउचर क्र. 21",
-    "category": "नल-जल",
-    "mode": "नकद",
-    "ref": "रोकड़ भुगतान",
-    "amount": 8430,
+    "date": "2026-09-16",
+    "payee": "देव एंटरप्राइजेस, कुक्षी",
+    "category": "सीमेंट एवं निर्माण सामग्री",
+    "mode": "चेक",
+    "ref": "049022",
+    "amount": 61000,
     "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹8430",
-    "billNo": "बिल क्र. 20257"
+    "remarks": "सीमेन्ट"
   },
   {
     "sno": 23,
-    "date": "2026-07-18",
-    "payee": "किसान मशीनरी पार्ट्स",
-    "voucherNo": "वाउचर क्र. 22",
-    "category": "नल-जल",
+    "date": "2026-09-17",
+    "payee": "पाटीदार फ्यूल्स",
+    "category": "ईंधन एवं डीजल",
     "mode": "चेक",
-    "ref": "048998",
-    "amount": 45220,
+    "ref": "049023",
+    "amount": 411710,
     "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹45220",
-    "billNo": "बिल क्र. 2025-781"
+    "remarks": "डीजल"
   },
   {
     "sno": 24,
-    "date": "2026-08-16",
-    "payee": "पाटीदार फ्यूल्स",
-    "voucherNo": "वाउचर क्र. 23",
-    "category": "ईंधन (डीजल एवं पेट्रोल)",
+    "date": "2026-09-19",
+    "payee": "सर्वोत्तम फ्यूल स्टेशन",
+    "category": "ईंधन एवं डीजल",
     "mode": "चेक",
-    "ref": "049014",
-    "amount": 1250000,
+    "ref": "049024",
+    "amount": 100000,
     "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹1261710",
-    "billNo": "बिल क्र. 218/2026"
+    "remarks": "डीजल"
   },
   {
     "sno": 25,
-    "date": "2026-07-10",
-    "payee": "लीडर ग्राफिक्स एवं प्रिंटर्स",
-    "voucherNo": "वाउचर क्र. 24",
-    "category": "छपाई एवं प्रचार-प्रसार",
-    "mode": "नकद / चेक",
-    "ref": "048992",
-    "amount": 15000,
+    "date": "2026-09-23",
+    "payee": "सोना हार्डवेयर, अंजड़",
+    "category": "शेड एवं फेब्रिकेशन",
+    "mode": "चेक",
+    "ref": "049025",
+    "amount": 100000,
     "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹15000",
-    "billNo": "बिल क्र. A-53"
+    "remarks": "टीन शेड"
   },
   {
     "sno": 26,
-    "date": "2026-11-18",
-    "payee": "सर्वोत्तम फ्यूल स्टेशन",
-    "voucherNo": "वाउचर क्र. 25",
-    "category": "ईंधन (डीजल एवं पेट्रोल)",
+    "date": "2026-09-23",
+    "payee": "ग्वाला डेयरी उत्पाद (मुकेश धनगर)",
+    "category": "भंडारा",
     "mode": "चेक",
-    "ref": "049035",
-    "amount": 1050000,
+    "ref": "049026",
+    "amount": 86500,
     "status": "बैंक निकासी सत्यापित",
-    "remarks": "बिल कुल: ₹1092392.55",
-    "billNo": "बिल क्र. LEDGER-01-07-2026-TO-15-11-2026"
-  }
-,
+    "remarks": "GEE (Note '53518' written next to amount; matches sum of Gwala Dairy bills (21075 + 21075 + 33525 + 10825 = 86500))"
+  },
   {
     "sno": 27,
-    "date": "2026-08-02",
-    "payee": "आनंद रमेशचन्द्र शर्मा",
-    "voucherNo": "वाउचर क्र. 17",
-    "category": "जेसीबी एवं मिट्टी भराव कार्य",
-    "mode": "डीजल समायोजन (Contra)",
-    "ref": "सर्वोत्तम पर्ची 3840, 3869, 3874",
-    "amount": 17195,
-    "status": "समायोजित",
-    "remarks": "सर्वोत्तम फ्यूल स्टेशन डीजल आपूर्ति समायोजन (170 लीटर)"
+    "date": "2026-09-24",
+    "payee": "बुरहानी बिल्डिंग मटेरियल, निसरपुर (निरस्त)",
+    "category": "निरस्त",
+    "mode": "चेक (निरस्त)",
+    "ref": "049027",
+    "amount": 0,
+    "status": "निरस्त (Cancelled)",
+    "remarks": "नलजल निरस्त (Purpose annotated with 'निरस्त' (Cancelled); reissued via cheque 049031 for 14285)"
   },
   {
     "sno": 28,
-    "date": "2026-08-04",
-    "payee": "मिस्त्री देवराम (गाडिल)",
-    "voucherNo": "वाउचर क्र. 27",
-    "category": "विविध खर्च",
-    "mode": "नकद (Cash)",
-    "ref": "रोकड़ भुगतान",
-    "amount": 23200,
-    "status": "सत्यापित",
-    "remarks": "नगदी भुगतान (मस्टर रोल 28/7 से 3/8)"
+    "date": "2026-09-25",
+    "payee": "आनंद रमेशचन्द्र शर्मा",
+    "category": "जेसीबी एवं मिट्टी भराव कार्य",
+    "mode": "चेक",
+    "ref": "049028",
+    "amount": 83250,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "भरावा (Payee 'आनंद शर्मा' written above row; note '43626' next to purpose)"
   },
   {
     "sno": 29,
-    "date": "2026-08-09",
-    "payee": "रामाश्रय कन्स्ट्रक्शन लिंगवा - रविन्द्र पाटीदार",
-    "voucherNo": "वाउचर क्र. 34",
-    "category": "जेसीबी एवं मिट्टी भराव कार्य",
-    "mode": "डीजल समायोजन (Contra)",
-    "ref": "पाटीदार फ्यूल्स वाउचर 23 (रविंद्र भाई)",
-    "amount": 545710,
-    "status": "समायोजित",
-    "remarks": "पाटीदार फ्यूल्स डीजल आपूर्ति समायोजन (5403.07 लीटर)"
+    "date": "2026-09-25",
+    "payee": "पाटीदार फ्यूल्स",
+    "category": "ईंधन एवं डीजल",
+    "mode": "चेक",
+    "ref": "049029",
+    "amount": 150000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "डीजल"
   },
   {
     "sno": 30,
-    "date": "2026-08-09",
-    "payee": "लखन-भागीरथ कुमावत - कोठड़ा निसरपुर",
-    "voucherNo": "वाउचर क्र. 35",
-    "category": "जेसीबी एवं मिट्टी भराव कार्य",
-    "mode": "डीजल समायोजन (Contra)",
-    "ref": "सर्वोत्तम फ्यूल स्टेशन वाउचर 25 (लखन कुमावत कोटड़ा)",
-    "amount": 324750,
-    "status": "समायोजित",
-    "remarks": "सर्वोत्तम फ्यूल स्टेशन डीजल आपूर्ति समायोजन"
+    "date": "2026-09-25",
+    "payee": "देव एंटरप्राइजेस, कुक्षी",
+    "category": "सीमेंट एवं निर्माण सामग्री",
+    "mode": "चेक",
+    "ref": "049030",
+    "amount": 125000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "सीमेंट"
   },
   {
     "sno": 31,
-    "date": "2026-08-09",
-    "payee": "बजरंग कंस्ट्रक्शन लिंगवा - दुर्गेश पाटीदार",
-    "voucherNo": "वाउचर क्र. 33",
+    "date": "2026-09-25",
+    "payee": "बुरहानी बिल्डिंग मटेरियल, निसरपुर",
+    "category": "नल-जल",
+    "mode": "चेक",
+    "ref": "049031",
+    "amount": 14285,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "नलजल (Amount written as 14285-00)"
+  },
+  {
+    "sno": 32,
+    "date": "2026-09-25",
+    "payee": "सर्वोत्तम फ्यूल स्टेशन",
+    "category": "ईंधन एवं डीजल",
+    "mode": "चेक",
+    "ref": "049032",
+    "amount": 75000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "डिजल (Margin notes '85783')"
+  },
+  {
+    "sno": 33,
+    "date": "2026-09-28",
+    "payee": "सर्वोत्तम फ्यूल स्टेशन",
+    "category": "ईंधन एवं डीजल",
+    "mode": "चेक",
+    "ref": "049033",
+    "amount": 75000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "डिजल"
+  },
+  {
+    "sno": 34,
+    "date": "2026-10-05",
+    "payee": "माँ नर्मदा ट्रेडर्स",
+    "category": "शेड एवं फेब्रिकेशन",
+    "mode": "चेक",
+    "ref": "049034",
+    "amount": 100000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "टीनशेड"
+  },
+  {
+    "sno": 35,
+    "date": "2026-10-08",
+    "payee": "सर्वोत्तम फ्यूल स्टेशन",
+    "category": "ईंधन एवं डीजल",
+    "mode": "चेक",
+    "ref": "049035",
+    "amount": 125000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "डिजल (Margin notes '200,000')"
+  },
+  {
+    "sno": 36,
+    "date": "2026-10-08",
+    "payee": "किसान मशीनरी पार्ट्स",
+    "category": "नल-जल",
+    "mode": "चेक",
+    "ref": "049036",
+    "amount": 50000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "नलजल 34300 (Annotation '34300' written next to नलजल)"
+  },
+  {
+    "sno": 37,
+    "date": "2026-10-17",
+    "payee": "रावल हार्डवेयर कुक्षी",
+    "category": "सरिया एवं लोहा",
+    "mode": "चेक",
+    "ref": "049037",
+    "amount": 376711,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "सरिया"
+  },
+  {
+    "sno": 38,
+    "date": "2026-10-26",
+    "payee": "माँ नर्मदा ट्रेडर्स",
+    "category": "सरिया एवं लोहा",
+    "mode": "चेक",
+    "ref": "049038",
+    "amount": 100000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "सरिया (Written as 49038)"
+  },
+  {
+    "sno": 39,
+    "date": "2026-10-28",
+    "payee": "राजाजी कन्ट्रक्शन करोली - सोनू भाई / सचिन राजाजी",
     "category": "जेसीबी एवं मिट्टी भराव कार्य",
-    "mode": "डीजल समायोजन (Contra)",
-    "ref": "पाटीदार फ्यूल्स वाउचर 23 (पर्ची 14345, 14355, 14372, 14387)",
-    "amount": 256000,
-    "status": "समायोजित",
-    "remarks": "पाटीदार फ्यूल्स डीजल आपूर्ति समायोजन (दुर्गेश पाटीदार 4 पर्चियां, 2534.65 लीटर)"
+    "mode": "चेक",
+    "ref": "049039",
+    "amount": 775000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "भरावा (Amount written as 775000=00)"
   },
   {
-      "sno": 32,
-      "date": "2026-08-20",
-      "payee": "राजाजी कन्ट्रक्शन करोली - सोनू भाई / सचिन राजाजी",
-      "voucherNo": "वाउचर क्र. 36",
-      "category": "जेसीबी एवं मिट्टी भराव कार्य",
-      "mode": "डीजल समायोजन (Contra)",
-      "ref": "पाटीदार फ्यूल्स वाउचर 23 (सोनू राजाजी)",
-      "amount": 460000,
-      "status": "समायोजित",
-      "remarks": "पाटीदार फ्यूल्स डीजल आपूर्ति समायोजन (22 पर्चियां, 4554.46 लीटर)"
+    "sno": 40,
+    "date": "2026-11-18",
+    "payee": "सर्वोत्तम फ्यूल स्टेशन",
+    "category": "ईंधन एवं डीजल",
+    "mode": "चेक",
+    "ref": "049040",
+    "amount": 117392,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "डिजल"
   },
   {
-      "sno": 33,
-      "date": "2026-08-20",
-      "payee": "राजाजी कन्ट्रक्शन करोली - सोनू भाई / सचिन राजाजी",
-      "voucherNo": "वाउचर क्र. 36",
-      "category": "जेसीबी एवं मिट्टी भराव कार्य",
-      "mode": "डीजल समायोजन (Contra)",
-      "ref": "सर्वोत्तम फ्यूल स्टेशन वाउचर 25 (राजाजी)",
-      "amount": 651000,
-      "status": "समायोजित",
-      "remarks": "सर्वोत्तम फ्यूल स्टेशन डीजल आपूर्ति समायोजन (22 पर्चियां, 5326.65 लीटर)"
+    "sno": 41,
+    "date": "2026-11-18",
+    "payee": "पाटीदार फ्यूल्स",
+    "category": "ईंधन एवं डीजल",
+    "mode": "चेक",
+    "ref": "049041",
+    "amount": 250000,
+    "status": "बैंक निकासी सत्यापित",
+    "remarks": "डिजल (Date written as 18.11.2026 (overlapping cheque no. 049041))"
   }
 ];
 
@@ -9246,8 +9273,8 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
           date: p.date,
           ref: `${p.mode} ${p.ref}`,
           particulars: isContra
-            ? (p.remarks || `डीजल आपूर्ति समायोजन (वाउचर: ${p.voucherNo})`)
-            : `बैंक / नकद भुगतान (वाउचर: ${p.voucherNo})`,
+            ? (p.remarks || 'डीजल आपूर्ति समायोजन')
+            : (p.remarks ? 'बैंक चेक भुगतान - ' + p.remarks : ('बैंक चेक भुगतान (चेक: ' + p.ref + ')')),
           type: isContra ? 'समायोजन (Dr)' : 'भुगतान (Dr)',
           isContra: isContra,
           billAmt: 0,
@@ -9408,8 +9435,8 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
           (p.payee && p.payee.toLowerCase().includes(currentPaymentSearch)) ||
           (p.ref && p.ref.toLowerCase().includes(currentPaymentSearch)) ||
           (p.mode && p.mode.toLowerCase().includes(currentPaymentSearch)) ||
-          (p.voucherNo && p.voucherNo.toLowerCase().includes(currentPaymentSearch)) ||
-          (p.billNo && p.billNo.toLowerCase().includes(currentPaymentSearch)) ||
+          (p.category && p.category.toLowerCase().includes(currentPaymentSearch)) ||
+          (p.remarks && p.remarks.toLowerCase().includes(currentPaymentSearch)) ||
           (p.date && p.date.includes(currentPaymentSearch));
       });
 
@@ -9418,34 +9445,35 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
       if (elBadge) elBadge.textContent = fmt(filteredTotal);
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--text-muted);">कोई भुगतान प्रविष्टि नहीं मिली।</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:28px;color:var(--text-muted);">कोई भुगतान प्रविष्टि नहीं मिली।</td></tr>`;
         return;
       }
 
       tbody.innerHTML = filtered.map((p, idx) => {
+        const isCancelled = p.status && p.status.includes('निरस्त');
         return `
-          <tr>
+          <tr style="${isCancelled ? 'opacity:0.65;background:rgba(220,38,38,0.03);' : ''}">
             <td style="font-weight:700;color:var(--text-secondary);text-align:center;">${idx + 1}</td>
             <td style="white-space:nowrap;font-size:12.5px;color:var(--text-secondary);"><i class="fa-regular fa-calendar" style="color:var(--gold);margin-right:4px;"></i>${p.date}</td>
             <td style="font-weight:700;">
+              ${isCancelled ? `<span style="color:#DC2626;text-decoration:line-through;">${p.payee}</span>` : `
               <a href="javascript:void(0)" onclick="openVendorLedgerDirect(decodeURIComponent('${encodeURIComponent(p.payee)}'))" style="color:var(--teal);text-decoration:none;border-bottom:1.5px solid var(--teal);display:inline-flex;align-items:center;gap:5px;transition:all 0.2s ease;" title="${p.payee} का खाता बही (Ledger) देखें">
                 <span>${p.payee}</span>
                 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10.5px;color:var(--gold-dark);opacity:0.85;"></i>
-              </a>
+              </a>`}
             </td>
             <td>
-              <span class="badge" style="background:${p.mode && p.mode.includes('समायोजन') ? 'rgba(217,119,6,0.14)' : 'rgba(13,79,79,0.08)'};color:${p.mode && p.mode.includes('समायोजन') ? '#D97706' : 'var(--teal)'};font-weight:700;font-size:11px;">
-                <i class="${p.mode && p.mode.includes('समायोजन') ? 'fa-solid fa-gas-pump' : 'fa-solid fa-credit-card'}" style="margin-right:4px;"></i>${p.mode}
+              <span class="badge" style="background:${isCancelled ? 'rgba(220,38,38,0.12)' : 'rgba(13,79,79,0.08)'};color:${isCancelled ? '#DC2626' : 'var(--teal)'};font-weight:700;font-size:11px;">
+                <i class="${isCancelled ? 'fa-solid fa-ban' : 'fa-solid fa-credit-card'}" style="margin-right:4px;"></i>${p.mode}
               </span>
             </td>
             <td style="font-weight:700;color:#8B263E;font-family:monospace;font-size:13px;"><i class="fa-solid fa-money-check" style="margin-right:4px;"></i>${p.ref}</td>
-            <td style="white-space:nowrap;">
-              <span style="font-weight:700;color:var(--teal);font-size:12.5px;"><i class="fa-solid fa-receipt" style="font-size:10px;margin-right:4px;color:var(--gold);"></i>${p.voucherNo}</span>
-              ${p.billNo ? `<div style="font-size:10.5px;color:var(--text-muted);font-weight:600;margin-top:2px;">${p.billNo}</div>` : ''}
+            <td>
+              <span class="badge badge-village" style="background:rgba(209,154,80,0.12);color:var(--gold-dark);font-size:11px;font-weight:700;">${p.category}</span>
+              ${p.remarks ? `<div style="font-size:10.5px;color:var(--text-muted);font-weight:600;margin-top:2px;">${p.remarks}</div>` : ''}
             </td>
-            <td><span class="badge badge-village" style="background:rgba(209,154,80,0.12);color:var(--gold-dark);font-size:11px;font-weight:700;">${p.category}</span></td>
-            <td style="text-align:right;font-weight:800;color:#2E7D32;font-size:14px;">${fmt(p.amount)}</td>
-            <td style="text-align:center;"><span class="badge" style="background:rgba(46,125,50,0.12);color:#2E7D32;font-weight:700;font-size:11px;"><i class="fa-solid fa-shield-check"></i> ${p.status}</span></td>
+            <td style="text-align:right;font-weight:800;color:${isCancelled ? '#9CA3AF' : '#2E7D32'};font-size:14px;">${isCancelled ? '₹0' : fmt(p.amount)}</td>
+            <td style="text-align:center;"><span class="badge" style="background:${isCancelled ? 'rgba(220,38,38,0.12)' : 'rgba(46,125,50,0.12)'};color:${isCancelled ? '#DC2626' : '#2E7D32'};font-weight:700;font-size:11px;"><i class="${isCancelled ? 'fa-solid fa-ban' : 'fa-solid fa-shield-check'}"></i> ${p.status}</span></td>
           </tr>
         `;
       }).join('');
@@ -10232,22 +10260,21 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
                 const pSno = getPVal(0);
                 const pDate = String(getPVal(1)).trim();
                 const pPayee = String(getPVal(2)).trim();
-                const pVouch = String(getPVal(3)).trim();
-                let pCat = String(getPVal(4)).trim();
+                let pCat = String(getPVal(3)).trim();
                 if (pCat.includes('नल-जल') || pCat.includes('जल-व्यवस्था') || pCat.includes('Plumbing')) pCat = 'नल-जल';
-                const pMode = String(getPVal(5)).trim() || 'चेक';
-                const pRef = String(getPVal(6)).trim();
-                const pAmt = parseFloat(String(getPVal(7)).replace(/[^0-9.]/g, '')) || 0;
-                const pStat = String(getPVal(8)).trim() || 'बैंक निकासी सत्यापित';
-                const pRemarks = String(getPVal(9)).trim();
+                const pMode = String(getPVal(4)).trim() || 'चेक';
+                const pRef = String(getPVal(5)).trim();
+                const pAmt = parseFloat(String(getPVal(6)).replace(/[^0-9.]/g, '')) || 0;
+                const pStat = String(getPVal(7)).trim() || 'बैंक निकासी सत्यापित';
+                const pRemarks = String(getPVal(8)).trim();
 
-                if (String(pSno).trim() === 'क्र.' || pPayee.includes('प्राप्तकर्ता') || pAmt <= 0) continue;
+                if (String(pSno).trim() === 'क्र.' || pPayee.includes('प्राप्तकर्ता')) continue;
+                if (pAmt <= 0 && !pStat.includes('निरस्त')) continue;
 
                 parsedPayments.push({
                   sno: parsedPayments.length + 1,
                   date: pDate,
                   payee: pPayee,
-                  voucherNo: pVouch,
                   category: pCat,
                   mode: pMode,
                   ref: pRef,
