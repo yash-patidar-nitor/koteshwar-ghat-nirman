@@ -9031,11 +9031,14 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
       }
       if (btn) {
         btn.classList.add('active');
-        if (typeof btn.scrollIntoView === 'function') {
+        const accNav = document.getElementById('accTabsNav');
+        if (accNav && btn.offsetLeft !== undefined) {
+          const scrollPos = btn.offsetLeft - (accNav.clientWidth / 2) + (btn.clientWidth / 2);
+          accNav.scrollTo({ left: Math.max(0, scrollPos), behavior: 'smooth' });
+        } else if (typeof btn.scrollIntoView === 'function') {
           btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
         setTimeout(() => {
-          const accNav = document.getElementById('accTabsNav');
           if (accNav) updateSliderScrollHints(accNav, 'accTabsSliderWrap');
         }, 320);
       }
@@ -10175,8 +10178,32 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
       currentAccCategoryFilter = headName;
       switchAccountingTab('invoices');
       renderAccountingInvoicesTable();
-      const table = document.getElementById('accInvoicesTable');
-      if (table) table.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // Ensure horizontal scroll of the table container is at 0 so "भुगतान प्राप्तकर्ता (फर्म / वेंडर)" is visible from start
+      const tableResp = document.querySelector('#acc-pane-invoices .table-responsive');
+      if (tableResp) {
+        tableResp.scrollLeft = 0;
+      }
+
+      // Smooth scroll the window to the start of the Bills Register (directory toolbar & table header)
+      setTimeout(() => {
+        if (tableResp) tableResp.scrollLeft = 0;
+        const targetEl = document.querySelector('#acc-pane-invoices .directory-toolbar') || document.getElementById('acc-pane-invoices') || document.getElementById('accInvoicesTable');
+        if (targetEl) {
+          const navHeader = document.querySelector('.header') || document.querySelector('header');
+          const navOffset = navHeader ? navHeader.offsetHeight + 14 : 74;
+          const targetY = targetEl.getBoundingClientRect().top + window.pageYOffset - navOffset;
+          window.scrollTo({
+            top: Math.max(0, targetY),
+            behavior: 'smooth'
+          });
+        }
+      }, 70);
+
+      // Re-assert table horizontal scroll left = 0 after smooth transitions settle
+      setTimeout(() => {
+        if (tableResp) tableResp.scrollLeft = 0;
+      }, 250);
     }
 
     function openAccountingDetailModal(idx) {
