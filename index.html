@@ -3820,7 +3820,9 @@
                 <option value="पूर्ण चुकता">पूर्ण चुकता (Paid)</option>
                 <option value="आंशिक चुकता">आंशिक चुकता (Partially Paid)</option>
                 <option value="लंबित">लंबित (Unpaid)</option>
+                <option value="mismatch" style="color:#B45309;font-weight:700;">⚠️ मद योग बेमेल (Sum Mismatch)</option>
               </select>
+              <span id="accMismatchBadge" style="display:none;"></span>
               <span style="font-size:12px;color:var(--text-secondary);background:var(--sandstone-light);padding:7px 12px;border-radius:8px;font-weight:600;">
                 कुल प्रदर्शित: <strong id="accFilteredSumBadge" style="color:#C45A38;">₹49,57,298.85</strong>
               </span>
@@ -4032,6 +4034,8 @@
         <div class="expense-meta-grid" id="expModalMeta">
           <!-- Populated dynamically -->
         </div>
+
+        <div id="expModalAuditNotice" style="display:none;margin-bottom:12px;"></div>
 
         <!-- Items Table Title & Count -->
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
@@ -6729,13 +6733,83 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
       renderAccountingInvoicesTable();
     }
 
+    
+    function checkInvoiceReconciliation(inv) {
+      if (!inv) return { isMatch: true, itemsSum: 0, diff: 0, expected: 0, matchType: 'none' };
+      const items = (inv.items && Array.isArray(inv.items)) ? inv.items : [];
+      if (items.length === 0) {
+        return { isMatch: true, itemsSum: 0, diff: 0, expected: Number(inv.amount) || 0, matchType: 'no_items' };
+      }
+
+      const itemsSum = items.reduce((s, itm) => s + (Number(itm.amount) || 0), 0);
+      const billTotal = Number(inv.amount) || 0;
+      const taxable = Number(inv.taxableAmount) || 0;
+      const tax = Number(inv.taxAmount) || 0;
+
+      // 1. Direct match with total bill amount (tolerance ±₹2)
+      const matchDirect = Math.abs(itemsSum - billTotal) <= 2;
+
+      // 2. Taxable match: items are pre-tax and match taxable, and taxable + tax equals billTotal (tolerance ±₹10 for GST round-off)
+      const matchTaxable = taxable > 0 && Math.abs(itemsSum - taxable) <= 2 && Math.abs((taxable + tax) - billTotal) <= 10;
+
+      // 3. Inclusive match: items sum + tax equals bill total
+      const matchInclusive = tax > 0 && Math.abs((itemsSum + tax) - billTotal) <= 10;
+
+      const isMatch = matchDirect || matchTaxable || matchInclusive;
+      
+      let expected = billTotal;
+      if (tax > 0 && taxable > 0 && Math.abs((taxable + tax) - billTotal) <= 10) {
+        expected = taxable;
+      }
+      const diff = itemsSum - expected;
+
+      return {
+        isMatch,
+        itemsSum,
+        diff,
+        expected,
+        matchType: matchDirect ? 'direct' : (matchTaxable ? 'taxable' : (matchInclusive ? 'inclusive' : 'none'))
+      };
+    }
+
+    function filterToMismatches() {
+      currentAccStatusFilter = 'mismatch';
+      const sel = document.getElementById('accStatusSelect');
+      if (sel) sel.value = 'mismatch';
+      renderAccountingInvoicesTable();
+    }
+
     function renderAccountingInvoicesTable() {
       const tbody = document.getElementById('accInvoicesTbody');
       if (!tbody) return;
 
+      // Ensure reconciliation flags are active on all invoices
+      accountingInvoices.forEach(inv => {
+        if (inv.hasDiscrepancy === undefined) {
+          const rec = checkInvoiceReconciliation(inv);
+          inv.hasDiscrepancy = !rec.isMatch;
+          inv.discrepancyDiff = rec.diff;
+          inv.itemsSum = rec.itemsSum;
+          inv.expectedAmount = rec.expected;
+          inv.matchType = rec.matchType;
+        }
+      });
+
+      const totalMismatches = accountingInvoices.filter(inv => inv.hasDiscrepancy).length;
+      const elMismatchBadge = document.getElementById('accMismatchBadge');
+      if (elMismatchBadge) {
+        if (totalMismatches > 0) {
+          elMismatchBadge.style.display = 'inline-flex';
+          elMismatchBadge.innerHTML = `<span class="badge" onclick="filterToMismatches()" style="background:#FEF3C7;color:#B45309;border:1px solid #FCD34D;font-size:11.5px;font-weight:700;padding:6px 11px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;" title="क्लिक करें: मद योग बेमेल बिलों को फ़िल्टर करें"><i class="fa-solid fa-triangle-exclamation"></i> ${totalMismatches} बिलों में मद योग बेमेल</span>`;
+        } else {
+          elMismatchBadge.style.display = 'none';
+        }
+      }
+
       const filtered = accountingInvoices.filter(inv => {
         const matchesCat = (currentAccCategoryFilter === 'all') || inv.category === currentAccCategoryFilter;
-        const matchesStatus = (currentAccStatusFilter === 'all') || inv.status === currentAccStatusFilter;
+        const matchesStatus = (currentAccStatusFilter === 'all') ||
+          (currentAccStatusFilter === 'mismatch' ? inv.hasDiscrepancy : inv.status === currentAccStatusFilter);
         const matchesSearch = !currentAccInvoiceSearch ||
           (inv.payee && inv.payee.toLowerCase().includes(currentAccInvoiceSearch)) ||
           (inv.voucherNo && inv.voucherNo.toLowerCase().includes(currentAccInvoiceSearch)) ||
@@ -6793,12 +6867,34 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
               ${inv.billNo ? `<div style="font-size:10.5px;color:var(--text-muted);font-weight:600;margin-top:2px;"><i class="fa-solid fa-file-invoice" style="font-size:9.5px;margin-right:3px;"></i>${inv.billNo}</div>` : ''}
             </td>
             <td><span class="badge badge-village" style="background:rgba(209,154,80,0.14);color:var(--gold-dark);font-size:11.5px;font-weight:700;"><i class="fa-solid fa-tag" style="font-size:10px;margin-right:4px;"></i>${inv.category}</span></td>
-            <td style="text-align:right;font-weight:800;color:#C45A38;font-size:14px;">${fmt(inv.amount)}</td>
+            <td style="text-align:right;">
+              ${inv.hasDiscrepancy ? `
+                <div style="display:flex;align-items:center;justify-content:flex-end;gap:5px;">
+                  <span style="font-weight:800;color:#C45A38;font-size:14px;">${fmt(inv.amount)}</span>
+                  <span title="सावधानी: सामग्री मदों का योग (${fmt(inv.itemsSum)}) बिल कुल राशि से मेल नहीं खा रहा! अंतर: ${inv.discrepancyDiff > 0 ? '+' : ''}${fmt(inv.discrepancyDiff)}" style="cursor:help;color:#D97706;font-size:13px;display:inline-flex;align-items:center;">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                  </span>
+                </div>
+                <div style="font-size:10.5px;color:#B45309;font-weight:700;margin-top:2px;" title="दर्ज सामग्री मदों का योग">
+                  मद योग: ${fmt(inv.itemsSum)}
+                </div>
+              ` : `
+                <div style="font-weight:800;color:#C45A38;font-size:14px;">${fmt(inv.amount)}</div>
+              `}
+            </td>
             <td style="text-align:center;">${statusBadge}</td>
             <td style="text-align:center;white-space:nowrap;">
-              <button class="btn btn-sm" onclick="openAccountingDetailModal(${originalIndex})" style="background:var(--teal);color:#fff;border:none;padding:5px 11px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;">
-                <i class="fa-solid fa-list-check"></i> <span>${itemsCount} वस्तुएं</span>
-              </button>
+              ${inv.hasDiscrepancy ? `
+                <button class="btn btn-sm" onclick="openAccountingDetailModal(${originalIndex})" style="background:#FFFBEB;color:#B45309;border:1.5px solid #FCD34D;padding:5px 9px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px;" title="मद योग बेमेल: दर्ज सामग्री योग ${fmt(inv.itemsSum)} vs बिल राशि ${fmt(inv.amount)} (अंतर: ${inv.discrepancyDiff > 0 ? '+' : ''}${fmt(inv.discrepancyDiff)})">
+                  <i class="fa-solid fa-triangle-exclamation" style="color:#D97706;"></i>
+                  <span>${itemsCount} वस्तुएं</span>
+                  <span style="background:#FEF3C7;color:#92400E;padding:1px 5px;border-radius:4px;font-size:9.5px;font-weight:800;border:1px solid #FCD34D;">बेमेल</span>
+                </button>
+              ` : `
+                <button class="btn btn-sm" onclick="openAccountingDetailModal(${originalIndex})" style="background:var(--teal);color:#fff;border:none;padding:5px 11px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;">
+                  <i class="fa-solid fa-list-check"></i> <span>${itemsCount} वस्तुएं</span>
+                </button>
+              `}
             </td>
           </tr>
         `;
@@ -7171,13 +7267,39 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
         }
       }
 
+      const noticeBox = document.getElementById('expModalAuditNotice');
+      if (noticeBox) {
+        if (inv.hasDiscrepancy) {
+          const diffSign = inv.discrepancyDiff > 0 ? '+' : '';
+          noticeBox.style.display = 'block';
+          noticeBox.innerHTML = `
+            <div style="background:#FEF3C7;border-left:4px solid #D97706;border-radius:6px;padding:10px 14px;display:flex;align-items:center;gap:10px;font-size:12.5px;color:#92400E;">
+              <i class="fa-solid fa-triangle-exclamation" style="font-size:20px;color:#D97706;flex-shrink:0;"></i>
+              <div>
+                <strong style="color:#78350F;">⚠️ लेखा परीक्षण चेतावनी (योग बेमेल):</strong> 
+                इस बिल में दर्ज सामग्री मदों का योग (<strong style="color:#B45309;">${fmt(inv.itemsSum)}</strong>) बिल की कुल राशि (<strong style="color:#8B263E;">${fmt(inv.amount)}</strong>) से मेल नहीं खा रहा है।
+                <span style="display:inline-block;margin-left:6px;background:#FDE68A;padding:2px 7px;border-radius:4px;font-weight:800;color:#92400E;">अंतर: ${diffSign}${fmt(inv.discrepancyDiff)}</span>
+              </div>
+            </div>
+          `;
+        } else {
+          noticeBox.style.display = 'none';
+          noticeBox.innerHTML = '';
+        }
+      }
+
       const calcBox = document.getElementById('expModalCalcStrip');
       if (calcBox) {
         const taxable = Number(inv.taxableAmount) || 0;
         const gst = Number(inv.taxAmount) || 0;
         const total = Number(inv.amount) || 0;
+        const itemsSum = Number(inv.itemsSum) || 0;
 
         calcBox.innerHTML = `
+          <div class="expense-calc-item" style="${inv.hasDiscrepancy ? 'border:1.5px solid #FCD34D;background:#FFFBEB;border-radius:6px;padding:4px 8px;' : ''}">
+            <div class="expense-calc-lbl" style="${inv.hasDiscrepancy ? 'color:#B45309;font-weight:700;' : ''}">सामग्री मदों का योग</div>
+            <div class="expense-calc-val" style="color:${inv.hasDiscrepancy ? '#B45309' : 'var(--teal)'};font-weight:800;">${fmt(itemsSum)}</div>
+          </div>
           <div class="expense-calc-item">
             <div class="expense-calc-lbl">कर योग्य राशि</div>
             <div class="expense-calc-val">${taxable > 0 ? fmt(taxable) : '-'}</div>
@@ -7190,6 +7312,12 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
             <div class="expense-calc-lbl">बिल कुल राशि</div>
             <div class="expense-calc-val" style="color:#C45A38;font-size:15px;">${fmt(total)}</div>
           </div>
+          ${inv.hasDiscrepancy ? `
+          <div class="expense-calc-item" style="border-left:2px solid #D97706;padding-left:10px;">
+            <div class="expense-calc-lbl" style="color:#B45309;font-weight:700;">योग अंतर (Diff)</div>
+            <div class="expense-calc-val" style="color:#B45309;font-size:14px;font-weight:800;">${inv.discrepancyDiff > 0 ? '+' : ''}${fmt(inv.discrepancyDiff)}</div>
+          </div>
+          ` : ''}
         `;
       }
 
@@ -7833,9 +7961,9 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
                 if (!v.payee && ePayee) v.payee = ePayee;
                 if (!v.date && eDate) v.date = eDate;
                 if (!v.gstin && eGstin) v.gstin = eGstin;
-                if (eBillTotal > 0) v.amount = eBillTotal;
-                if (eTaxable > 0) v.taxableAmount = eTaxable;
-                if (eTaxAmt > 0) v.taxAmount = eTaxAmt;
+                if (eBillTotal > 0) v.amount = Math.max(v.amount, eBillTotal);
+                if (eTaxable > 0) v.taxableAmount = Math.max(v.taxableAmount || 0, eTaxable);
+                if (eTaxAmt > 0) v.taxAmount = Math.max(v.taxAmount || 0, eTaxAmt);
                 if (ePaid > 0) v.paidAmount = ePaid;
                 if (eBal > 0) v.balanceAmount = eBal;
 
@@ -7851,12 +7979,19 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
 
               // Compute totals and link payments STRICTLY & EXCLUSIVELY from accountingPayments (Payments tab SSOT)
               const parsedVouchers = Array.from(vouchersMap.values()).map(v => {
-                if (v.items.length > 0) {
+                // Do NOT blindly overwrite recorded invoice totals; only compute if missing
+                if (v.amount <= 0 && v.items.length > 0) {
                   const itemsSum = v.items.reduce((s, itm) => s + (Number(itm.amount) || 0), 0);
-                  if (itemsSum > v.amount || v.amount <= 0) {
-                    v.amount = itemsSum + (v.taxAmount || 0);
-                  }
+                  v.amount = itemsSum + (v.taxAmount || 0);
                 }
+
+                // Check reconciliation against recorded items
+                const rec = checkInvoiceReconciliation(v);
+                v.hasDiscrepancy = !rec.isMatch;
+                v.discrepancyDiff = rec.diff;
+                v.itemsSum = rec.itemsSum;
+                v.expectedAmount = rec.expected;
+                v.matchType = rec.matchType;
                 const cleanVKey = (val) => String(val || '').replace(/^(?:बिल|वाउचर)\s*क्र\.?\s*/i, '').replace(/[^a-zA-Z0-9_\-\/]/g, '').toLowerCase();
                 const curVKey = cleanVKey(v.voucherNo);
                 
