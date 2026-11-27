@@ -3820,13 +3820,6 @@
                 <option value="विविध खर्च">विविध खर्च (मजदूरी, रंग-रोगन, विद्युत, छपाई)</option>
                 <option value="वृक्षारोपण एवं उद्यान विकास">वृक्षारोपण एवं उद्यान विकास</option>
               </select>
-              <select id="accStatusSelect" onchange="handleAccountingStatusFilter(this.value)" style="padding:8px 12px;border:1px solid var(--sandstone);border-radius:8px;font-family:inherit;font-size:12.5px;color:var(--text-primary);background:#fff;cursor:pointer;">
-                <option value="all">सभी भुगतान स्थितियां</option>
-                <option value="पूर्ण चुकता">पूर्ण चुकता (Paid)</option>
-                <option value="आंशिक चुकता">आंशिक चुकता (Partially Paid)</option>
-                <option value="लंबित">लंबित (Unpaid)</option>
-                <option value="mismatch" style="color:#B45309;font-weight:700;">⚠️ मद योग बेमेल (Sum Mismatch)</option>
-              </select>
               <span id="accMismatchBadge" style="display:none;"></span>
               <span style="font-size:12px;color:var(--text-secondary);background:var(--sandstone-light);padding:7px 12px;border-radius:8px;font-weight:600;">
                 कुल प्रदर्शित: <strong id="accFilteredSumBadge" style="color:#C45A38;">₹49,57,298.85</strong>
@@ -9490,9 +9483,7 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
     }
 
     function filterToMismatches() {
-      currentAccStatusFilter = 'mismatch';
-      const sel = document.getElementById('accStatusSelect');
-      if (sel) sel.value = 'mismatch';
+      currentAccStatusFilter = (currentAccStatusFilter === 'mismatch' ? 'all' : 'mismatch');
       renderAccountingInvoicesTable();
     }
 
