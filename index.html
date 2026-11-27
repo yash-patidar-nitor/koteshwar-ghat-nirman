@@ -4036,6 +4036,14 @@
         </div>
 
         <div id="expModalAuditNotice" style="display:none;margin-bottom:12px;"></div>
+        <!-- Party Filter Pills Bar (shown for fuel/petrol/diesel invoices with multiple parties) -->
+        <div id="expModalPartyFilterContainer" style="display:none;margin-bottom:12px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;padding:9px 12px;">
+          <div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:6px;display:flex;align-items:center;gap:5px;">
+            <i class="fa-solid fa-filter" style="color:var(--gold-dark);font-size:10px;"></i>
+            <span>पार्टी-वार पर्चियां फ़िल्टर करें (Party Filter):</span>
+          </div>
+          <div id="expModalPartyFilterPills" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+        </div>
 
         <!-- Items Table Title & Count -->
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
@@ -4064,6 +4072,9 @@
         </div>
 
         <!-- Financial Tax & Total Strip -->
+        <!-- Party-wise Fuel Breakdown & Reconciliation Section -->
+        <div id="expModalPartySection" style="display:none;margin-top:14px;margin-bottom:14px;"></div>
+
         <div class="expense-calc-strip" id="expModalCalcStrip">
           <!-- Populated dynamically -->
         </div>
@@ -6734,6 +6745,184 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
     }
 
     
+    function normalizePartyName(name) {
+      if (!name) return 'अन्य / सामान्य';
+      let p = String(name).trim();
+      if ((p.includes('शर्मा') && (p.includes('आनंद') || p === 'शर्माजी')) || p === 'आनंद शर्मा') {
+        return 'आनंद शर्माजी';
+      }
+      if (p === 'राजा' || p === 'राजा जी') {
+        return 'राजाजी';
+      }
+      return p;
+    }
+
+    function extractFuelParty(desc) {
+      if (!desc) return null;
+      const str = String(desc).trim();
+      if (!/(?:डीजल|पेट्रोल|ईंधन|ऑयल|फ्यूल|पर्ची)/i.test(str)) return null;
+
+      // Pattern 1: (पर्ची ... - Party)
+      let m = str.match(/\([^)]*[-–—]\s*([^)]+)\)/);
+      if (m) {
+        let p = m[1].trim();
+        if (p && !/^\d+$/.test(p)) return normalizePartyName(p);
+      }
+
+      // Pattern 2: डीजल ट्रांसफर - Party
+      m = str.match(/(?:डीजल|पेट्रोल|ईंधन)\s*(?:ट्रांसफर)?\s*[-–—]\s*(.+)$/i);
+      if (m) {
+        let p = m[1].trim().replace(/\)+$/, '').trim();
+        if (p && !/^\d+$/.test(p)) return normalizePartyName(p);
+      }
+      return null;
+    }
+
+    function computeInvoicePartyBreakdown(inv) {
+      if (!inv || !inv.items || !Array.isArray(inv.items) || inv.items.length === 0) return null;
+
+      const isFuelInvoice = (inv.category && inv.category.includes('ईंधन')) ||
+                            (inv.payee && (inv.payee.includes('फ्यूल') || inv.payee.includes('पेट्रोल'))) ||
+                            inv.items.some(it => /(?:डीजल|पेट्रोल|ईंधन)/i.test(it.description || it.name || ''));
+
+      if (!isFuelInvoice) return null;
+
+      const partyMap = {};
+      let totalPartyAmount = 0;
+      let totalPartyQty = 0;
+      let detectedPartiesCount = 0;
+
+      inv.items.forEach((it, idx) => {
+        const desc = it.description || it.name || '';
+        const party = extractFuelParty(desc) || 'अन्य / सामान्य';
+        if (party !== 'अन्य / सामान्य') detectedPartiesCount++;
+
+        const amt = Number(it.amount) || 0;
+        const qty = Number(it.quantity !== undefined ? it.quantity : (it.qty !== undefined ? it.qty : 0)) || 0;
+        const unit = it.unit || 'लीटर';
+
+        if (!partyMap[party]) {
+          partyMap[party] = {
+            name: party,
+            count: 0,
+            qty: 0,
+            unit: unit,
+            amount: 0,
+            itemIndices: []
+          };
+        }
+        partyMap[party].count += 1;
+        partyMap[party].qty += qty;
+        partyMap[party].amount += amt;
+        partyMap[party].itemIndices.push(idx);
+        totalPartyAmount += amt;
+        totalPartyQty += qty;
+      });
+
+      if (detectedPartiesCount === 0) return null;
+
+      const parties = Object.values(partyMap);
+      parties.sort((a, b) => b.amount - a.amount);
+
+      const billTotal = Number(inv.amount) || 0;
+      const diffWithBill = Math.round((totalPartyAmount - billTotal) * 100) / 100;
+      const isMatch = Math.abs(diffWithBill) <= 2;
+
+      return {
+        parties,
+        totalPartyAmount: Math.round(totalPartyAmount * 100) / 100,
+        totalPartyQty: Math.round(totalPartyQty * 100) / 100,
+        billTotal,
+        diff: diffWithBill,
+        isMatch,
+        partiesCount: parties.length
+      };
+    }
+
+    let currentModalInvoiceIdx = null;
+    let currentModalPartyFilter = null;
+
+    function filterModalByParty(partyName) {
+      if (currentModalInvoiceIdx === null) return;
+      const inv = accountingInvoices[currentModalInvoiceIdx];
+      if (!inv) return;
+
+      currentModalPartyFilter = (currentModalPartyFilter === partyName || partyName === 'all') ? null : partyName;
+      renderModalItemsTable(inv);
+    }
+
+    function renderModalItemsTable(inv) {
+      const tbody = document.getElementById('expModalItemsTbody');
+      const countBadge = document.getElementById('expModalItemCount');
+      if (!tbody) return;
+
+      const allItems = (inv.items && Array.isArray(inv.items)) ? inv.items : [];
+      let displayItems = allItems;
+      if (currentModalPartyFilter) {
+        displayItems = allItems.filter(itm => {
+          const p = extractFuelParty(itm.description || itm.name || '') || 'अन्य / सामान्य';
+          return p === currentModalPartyFilter;
+        });
+      }
+
+      if (countBadge) {
+        if (currentModalPartyFilter) {
+          countBadge.innerHTML = `<strong>${displayItems.length}</strong> / ${allItems.length} वस्तुएं (<span style="color:var(--teal);font-weight:700;">${currentModalPartyFilter}</span>)`;
+        } else {
+          countBadge.textContent = `${allItems.length} वस्तुएं`;
+        }
+      }
+
+      if (displayItems.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-muted);">इस फ़िल्टर के लिए कोई वस्तु नहीं मिली।</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = displayItems.map((itm, i) => {
+        const desc = itm.description || itm.name || '-';
+        const qty = itm.quantity !== undefined ? itm.quantity : (itm.qty !== undefined ? itm.qty : '-');
+        const unit = itm.unit || '';
+        const amt = itm.amount !== undefined ? Number(itm.amount) : 0;
+        const itemParty = extractFuelParty(desc);
+
+        return `
+          <tr>
+            <td style="text-align:center;font-weight:700;color:var(--text-muted);">${allItems.indexOf(itm) + 1}</td>
+            <td style="font-weight:600;color:var(--text-primary);">
+              <span>${desc}</span>
+              ${itemParty ? `
+                <span style="display:inline-flex;align-items:center;gap:3px;background:#EEF2FF;color:#4338CA;border:1px solid #C7D2FE;padding:1px 6px;border-radius:10px;font-size:10.5px;font-weight:700;margin-left:6px;" title="पार्टी: ${itemParty}">
+                  <i class="fa-solid fa-user-tag" style="font-size:9px;"></i>${itemParty}
+                </span>
+              ` : ''}
+            </td>
+            <td style="text-align:right;font-weight:600;">${qty}</td>
+            <td style="text-align:center;color:var(--text-secondary);font-size:11.5px;">${unit}</td>
+            <td style="text-align:right;font-weight:700;color:var(--teal);">${fmt(amt)}</td>
+          </tr>
+        `;
+      }).join('');
+
+      const pillsBox = document.getElementById('expModalPartyFilterPills');
+      if (pillsBox) {
+        const pills = pillsBox.querySelectorAll('.party-filter-pill');
+        pills.forEach(pill => {
+          const pName = pill.getAttribute('data-party');
+          if ((!currentModalPartyFilter && pName === 'all') || (currentModalPartyFilter && pName === currentModalPartyFilter)) {
+            pill.style.background = 'var(--teal)';
+            pill.style.color = '#fff';
+            pill.style.borderColor = 'var(--teal)';
+            pill.style.fontWeight = '700';
+          } else {
+            pill.style.background = '#fff';
+            pill.style.color = 'var(--text-primary)';
+            pill.style.borderColor = '#CBD5E1';
+            pill.style.fontWeight = '600';
+          }
+        });
+      }
+    }
+
     function checkInvoiceReconciliation(inv) {
       if (!inv) return { isMatch: true, itemsSum: 0, diff: 0, expected: 0, matchType: 'none' };
       const items = (inv.items && Array.isArray(inv.items)) ? inv.items : [];
@@ -6895,6 +7084,16 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
                   <i class="fa-solid fa-list-check"></i> <span>${itemsCount} वस्तुएं</span>
                 </button>
               `}
+              ${(() => {
+                const pb = computeInvoicePartyBreakdown(inv);
+                if (!pb || pb.parties.length === 0) return '';
+                return `
+                  <div style="font-size:10px;color:#4338CA;font-weight:700;margin-top:3px;display:flex;align-items:center;justify-content:center;gap:4px;" title="${pb.parties.length} पार्टियां: ${pb.parties.map(p => p.name).join(', ')}">
+                    <i class="fa-solid fa-gas-pump" style="color:var(--gold-dark);font-size:9.5px;"></i>
+                    <span>${pb.parties.length} पार्टियां (${pb.isMatch ? 'योग सत्यापित ✓' : 'बेमेल ⚠️'})</span>
+                  </div>
+                `;
+              })()}
             </td>
           </tr>
         `;
@@ -7207,10 +7406,11 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
       const inv = accountingInvoices[idx];
       if (!inv) return;
 
+      currentModalInvoiceIdx = idx;
+      currentModalPartyFilter = null;
+
       const modal = document.getElementById('expenseDetailModalBackdrop');
       const metaBox = document.getElementById('expModalMeta');
-      const tbody = document.getElementById('expModalItemsTbody');
-      const countBadge = document.getElementById('expModalItemCount');
 
       if (!modal) return;
 
@@ -7242,30 +7442,133 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
         `;
       }
 
+      // Party breakdown for fuel invoices
+      const pb = computeInvoicePartyBreakdown(inv);
+      const filterContainer = document.getElementById('expModalPartyFilterContainer');
+      const pillsBox = document.getElementById('expModalPartyFilterPills');
+      const partySec = document.getElementById('expModalPartySection');
       const items = (inv.items && Array.isArray(inv.items)) ? inv.items : [];
-      if (countBadge) countBadge.textContent = `${items.length} वस्तुएं`;
 
-      if (tbody) {
-        if (items.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-muted);">इस बिल के लिए विस्तृत सामग्री सूची दर्ज नहीं है।</td></tr>`;
-        } else {
-          tbody.innerHTML = items.map((itm, i) => {
-            const desc = itm.description || itm.name || '-';
-            const qty = itm.quantity !== undefined ? itm.quantity : (itm.qty !== undefined ? itm.qty : '-');
-            const unit = itm.unit || '';
-            const amt = itm.amount !== undefined ? Number(itm.amount) : 0;
-            return `
-              <tr>
-                <td style="text-align:center;font-weight:700;color:var(--text-muted);">${i + 1}</td>
-                <td style="font-weight:600;color:var(--text-primary);">${desc}</td>
-                <td style="text-align:right;font-weight:600;">${qty}</td>
-                <td style="text-align:center;color:var(--text-secondary);font-size:11.5px;">${unit}</td>
-                <td style="text-align:right;font-weight:700;color:var(--teal);">${fmt(amt)}</td>
-              </tr>
-            `;
-          }).join('');
+      if (pb && pb.parties.length > 0) {
+        if (filterContainer && pillsBox) {
+          filterContainer.style.display = 'block';
+          pillsBox.innerHTML = `
+            <button class="party-filter-pill btn btn-sm" data-party="all" onclick="filterModalByParty('all')" style="background:var(--teal);color:#fff;border:1px solid var(--teal);padding:3px 9px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;">
+              <span>सभी पर्चियां (${items.length})</span>
+            </button>
+            ${pb.parties.map(p => `
+              <button class="party-filter-pill btn btn-sm" data-party="${p.name.replace(/"/g, '&quot;')}" onclick="filterModalByParty(decodeURIComponent('${encodeURIComponent(p.name)}'))" style="background:#fff;color:var(--text-primary);border:1px solid #CBD5E1;padding:3px 9px;border-radius:14px;font-size:11px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:4px;">
+                <i class="fa-solid fa-user-tag" style="color:var(--gold-dark);font-size:9.5px;"></i>
+                <span>${p.name} (${p.count} • ${fmt(p.amount)})</span>
+              </button>
+            `).join('')}
+          `;
+        }
+
+        if (partySec) {
+          partySec.style.display = 'block';
+          partySec.innerHTML = `
+            <div style="background:#F8FAFC;border:1.5px solid #CBD5E1;border-radius:8px;padding:14px 16px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+                <div>
+                  <h5 style="margin:0;font-size:14px;font-weight:800;color:#1E293B;display:flex;align-items:center;gap:7px;">
+                    <i class="fa-solid fa-gas-pump" style="color:var(--gold);"></i>
+                    <span>पार्टी-वार ईंधन (डीजल/पेट्रोल) वितरण एवं समाधान सारांश</span>
+                  </h5>
+                  <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">विभिन्न वाहनों/पार्टियों को वितरित पर्चियों एवं ईंधन का पार्टी-वार विश्लेषण</div>
+                </div>
+                <div>
+                  ${pb.isMatch ? `
+                    <span style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0;padding:4px 10px;border-radius:14px;font-size:11.5px;font-weight:700;display:inline-flex;align-items:center;gap:5px;">
+                      <i class="fa-solid fa-circle-check"></i> पार्टी योग पूर्णतः सत्यापित (100% Match)
+                    </span>
+                  ` : `
+                    <span style="background:#FEF2F2;color:#B91C1C;border:1px solid #FECACA;padding:4px 10px;border-radius:14px;font-size:11.5px;font-weight:700;display:inline-flex;align-items:center;gap:5px;">
+                      <i class="fa-solid fa-triangle-exclamation"></i> योग बेमेल: ${pb.diff > 0 ? '+' : ''}${fmt(pb.diff)}
+                    </span>
+                  `}
+                </div>
+              </div>
+
+              <div class="table-responsive" style="border:1px solid #E2E8F0;border-radius:6px;overflow:hidden;background:#fff;">
+                <table class="expense-items-table" style="margin:0;">
+                  <thead>
+                    <tr style="background:#F1F5F9;">
+                      <th style="width:38px;text-align:center;">#</th>
+                      <th>पार्टी / वाहन विवरण</th>
+                      <th style="width:85px;text-align:center;">पर्ची संख्या</th>
+                      <th style="width:115px;text-align:right;">कुल मात्रा</th>
+                      <th style="width:125px;text-align:right;">कुल राशि (₹)</th>
+                      <th style="width:80px;text-align:right;">हिस्सा (%)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${pb.parties.map((p, pIdx) => `
+                      <tr style="cursor:pointer;" onclick="filterModalByParty(decodeURIComponent('${encodeURIComponent(p.name)}'))" title="क्लिक करें: ${p.name} की पर्चियां फ़िल्टर करें">
+                        <td style="text-align:center;font-weight:700;color:var(--text-muted);">${pIdx + 1}</td>
+                        <td style="font-weight:700;color:var(--teal);">
+                          <span style="display:inline-flex;align-items:center;gap:6px;">
+                            <i class="fa-solid fa-user-tag" style="color:var(--gold-dark);font-size:11px;"></i>
+                            <span>${p.name}</span>
+                          </span>
+                        </td>
+                        <td style="text-align:center;"><span class="badge" style="background:#F1F5F9;color:#334155;font-weight:600;font-size:11px;">${p.count} पर्चियां</span></td>
+                        <td style="text-align:right;font-weight:600;">${p.qty.toLocaleString('hi-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ${p.unit}</td>
+                        <td style="text-align:right;font-weight:800;color:var(--teal);">${fmt(p.amount)}</td>
+                        <td style="text-align:right;font-weight:700;color:#64748B;">${((p.amount / pb.billTotal) * 100).toFixed(1)}%</td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                  <tfoot>
+                    <tr style="background:#F8FAFC;font-weight:800;border-top:2px solid var(--gold);color:#1E293B;">
+                      <td colspan="2" style="text-align:right;font-weight:800;">पार्टी-वार कुल योग (Party-wise Total):</td>
+                      <td style="text-align:center;"><span class="badge" style="background:#E2E8F0;color:#1E293B;font-weight:800;">${items.length} पर्चियां</span></td>
+                      <td style="text-align:right;font-weight:800;color:var(--teal);">${pb.totalPartyQty.toLocaleString('hi-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})} लीटर</td>
+                      <td style="text-align:right;font-weight:900;color:var(--teal);font-size:14.5px;">${fmt(pb.totalPartyAmount)}</td>
+                      <td style="text-align:right;font-weight:800;color:var(--teal);">100.0%</td>
+                    </tr>
+                    <tr style="background:#FFFBEB;font-weight:700;border-top:1px dashed #CBD5E1;font-size:12.5px;">
+                      <td colspan="4" style="text-align:right;color:#B45309;">वाउचर बिल कुल राशि (Invoice Total):</td>
+                      <td style="text-align:right;font-weight:800;color:#8B263E;font-size:14px;">${fmt(pb.billTotal)}</td>
+                      <td style="text-align:right;color:${pb.isMatch ? '#059669' : '#DC2626'};font-weight:800;">
+                        ${pb.isMatch ? '✓ मेल खाता है' : '⚠️ अंतर: ' + (pb.diff > 0 ? '+' : '') + fmt(pb.diff)}
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+
+              <!-- Audit Verification Callout -->
+              ${pb.isMatch ? `
+                <div style="margin-top:10px;padding:9px 12px;background:#ECFDF5;border:1px solid #A7F3D0;border-radius:6px;font-size:12.5px;color:#065F46;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+                  <div style="display:flex;align-items:center;gap:7px;">
+                    <i class="fa-solid fa-circle-check" style="font-size:16px;color:#059669;"></i>
+                    <span><strong>लेखा समाधान (100% Reconciled):</strong> सभी ${pb.parties.length} पार्टियों का कुल योग (<strong>${fmt(pb.totalPartyAmount)}</strong>) बिल की कुल राशि (<strong>${fmt(pb.billTotal)}</strong>) से पूर्णतः मेल खाता है।</span>
+                  </div>
+                  <span style="background:#10B981;color:#fff;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:800;">अंतर: ₹0.00 (सत्यापित)</span>
+                </div>
+              ` : `
+                <div style="margin-top:10px;padding:9px 12px;background:#FEF2F2;border:1px solid #FECACA;border-radius:6px;font-size:12.5px;color:#991B1B;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+                  <div style="display:flex;align-items:center;gap:7px;">
+                    <i class="fa-solid fa-triangle-exclamation" style="font-size:16px;color:#DC2626;"></i>
+                    <span><strong>⚠️ समाधान बेमेल चेतावनी:</strong> पार्टियों का कुल योग (${fmt(pb.totalPartyAmount)}) बिल की कुल राशि (${fmt(pb.billTotal)}) से मेल नहीं खा रहा है।</span>
+                  </div>
+                  <span style="background:#EF4444;color:#fff;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:800;">अंतर: ${pb.diff > 0 ? '+' : ''}${fmt(pb.diff)}</span>
+                </div>
+              `}
+            </div>
+          `;
+        }
+      } else {
+        if (filterContainer) filterContainer.style.display = 'none';
+        if (partySec) {
+          partySec.style.display = 'none';
+          partySec.innerHTML = '';
         }
       }
+
+      // Render line items table
+      renderModalItemsTable(inv);
 
       const noticeBox = document.getElementById('expModalAuditNotice');
       if (noticeBox) {
