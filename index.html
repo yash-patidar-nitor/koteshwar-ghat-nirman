@@ -736,6 +736,12 @@
       cursor: pointer;
       box-shadow: 0 2px 6px rgba(0,0,0,0.06);
       outline: none;
+      transition: all 0.2s ease;
+    }
+    #accVendorDropdownSelect option.opt-missing-invoice {
+      color: #DC2626 !important;
+      background-color: #FEE2E2 !important;
+      font-weight: 800 !important;
     }
 
     .ledger-card {
@@ -9632,7 +9638,7 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
         const v = inv.payee;
         const accId = inv.accountId || (typeof VENDOR_DIRECTORY !== 'undefined' && VENDOR_DIRECTORY[v] ? VENDOR_DIRECTORY[v].accountId : 'ACC');
         if (!vendorMap[v]) {
-          vendorMap[v] = { name: v, accountId: accId, gstin: inv.gstin, billed: 0, paid: 0, due: 0, transactions: [] };
+          vendorMap[v] = { name: v, accountId: accId, gstin: inv.gstin, billed: 0, paid: 0, due: 0, discount: 0, transactions: [] };
         }
         vendorMap[v].billed += inv.amount;
         if (inv.gstin && !vendorMap[v].gstin) vendorMap[v].gstin = inv.gstin;
@@ -9640,7 +9646,7 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
         vendorMap[v].transactions.push({
           date: inv.date,
           ref: inv.voucherNo + (inv.billNo ? ' (' + inv.billNo + ')' : ''),
-          particulars: `सामग्री आपूर्ति / बिल (${inv.category})`,
+          particulars: 'सामग्री आपूर्ति / बिल (' + inv.category + ')',
           type: 'बिल (Cr)',
           billAmt: inv.amount,
           paidAmt: 0
@@ -9651,14 +9657,14 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
         const v = p.payee;
         const accId = p.accountId || (typeof VENDOR_DIRECTORY !== 'undefined' && VENDOR_DIRECTORY[v] ? VENDOR_DIRECTORY[v].accountId : 'ACC');
         if (!vendorMap[v]) {
-          vendorMap[v] = { name: v, accountId: accId, gstin: '', billed: 0, paid: 0, due: 0, transactions: [] };
+          vendorMap[v] = { name: v, accountId: accId, gstin: '', billed: 0, paid: 0, due: 0, discount: 0, transactions: [] };
         }
         vendorMap[v].paid += p.amount;
 
         const isContra = (p.mode && (p.mode.includes('समायोजन') || p.mode.includes('Contra'))) || (p.ref && p.ref.includes('समायोजन'));
         vendorMap[v].transactions.push({
           date: p.date,
-          ref: `${p.mode} ${p.ref}`,
+          ref: p.mode + ' ' + p.ref,
           particulars: isContra
             ? (p.remarks || 'डीजल आपूर्ति समायोजन')
             : (p.remarks ? 'बैंक चेक भुगतान - ' + p.remarks : ('बैंक चेक भुगतान (चेक: ' + p.ref + ')')),
@@ -9669,19 +9675,54 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
         });
       });
 
+      // Calculate dues, discounts, and advance statuses
       Object.values(vendorMap).forEach(v => {
-        v.due = Math.max(0, v.billed - v.paid);
+        v.rawDiff = v.billed - v.paid;
+        const invoicesCount = v.transactions.filter(t => t.type.includes('Cr')).length;
+        v.noInvoice = (v.billed === 0 || invoicesCount === 0) && v.paid > 0;
+
+        const isMaaNarmadaExotic = v.name && v.name.includes('माँ नर्मदा एक्जॉटिक नर्सरी');
+        const hasSmallBalance = !v.noInvoice && v.billed > 0 && v.rawDiff > 0 && v.rawDiff < 100;
+
+        if (isMaaNarmadaExotic || hasSmallBalance) {
+          const discountAmt = isMaaNarmadaExotic ? 960 : v.rawDiff;
+          v.discount = discountAmt;
+          v.due = 0; // NILL the account!
+
+          const lastDate = v.transactions.length > 0 ? v.transactions[v.transactions.length - 1].date : '2026-09-01';
+          v.transactions.push({
+            date: lastDate,
+            ref: 'छूट समायोजन',
+            particulars: isMaaNarmadaExotic
+              ? 'छूट समायोजन (विशेष बट्टा / Discount) - खाता पूर्ण चुकता (NILL)'
+              : 'छूट / राउंड-ऑफ समायोजन (Round-off / Discount Adjustment) - खाता पूर्ण चुकता (NILL)',
+            type: 'छूट (Dr)',
+            isDiscount: true,
+            billAmt: 0,
+            paidAmt: discountAmt
+          });
+        } else {
+          v.discount = 0;
+          v.due = Math.max(0, v.rawDiff);
+        }
+
         // Sort transactions chronologically
         v.transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
       });
 
-      const vendorNames = Object.keys(vendorMap);
+      // Sort vendor list by account ID for structured view (ACC-101 to ACC-128)
+      const vendorNames = Object.keys(vendorMap).sort((a, b) => {
+        const idA = vendorMap[a].accountId || '';
+        const idB = vendorMap[b].accountId || '';
+        return idA.localeCompare(idB, undefined, { numeric: true });
+      });
+
       if (!vendorMap[targetVendor] && vendorNames.length > 0) {
         targetVendor = vendorNames[0];
       }
       selectedVendorName = targetVendor;
 
-            // Render vendor dropdown options
+      // Render vendor dropdown options
       const dropdownSelect = document.getElementById('accVendorDropdownSelect');
       const balanceBadge = document.getElementById('accVendorDropdownBalanceBadge');
 
@@ -9689,10 +9730,43 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
         dropdownSelect.innerHTML = vendorNames.map(name => {
           const v = vendorMap[name];
           const isSel = name === targetVendor ? 'selected' : '';
-          const dueStatus = v.due > 0 ? `देय शेष: ${fmt(v.due)}` : 'पूर्ण चुकता';
-          return `<option value="${name}" ${isSel}>[${v.accountId || 'ACC'}] ${name} (${dueStatus})</option>`;
+          let optText = '';
+          let optStyle = '';
+
+          if (v.noInvoice) {
+            optText = '🚨 [' + (v.accountId || 'ACC') + '] ' + name + ' [जमा: ' + fmt(v.paid) + ' - बिल अप्राप्त]';
+            optStyle = 'color:#DC2626;background-color:#FEE2E2;font-weight:800;';
+          } else if (v.discount > 0) {
+            optText = '[' + (v.accountId || 'ACC') + '] ' + name + ' (पूर्ण चुकता - छूट: ' + fmt(v.discount) + ' NILL)';
+            optStyle = 'color:#15803D;font-weight:700;';
+          } else if (v.due === 0) {
+            if (v.rawDiff < 0) {
+              optText = '[' + (v.accountId || 'ACC') + '] ' + name + ' (अग्रिम जमा: ' + fmt(Math.abs(v.rawDiff)) + ')';
+              optStyle = 'color:#2563EB;font-weight:600;';
+            } else {
+              optText = '[' + (v.accountId || 'ACC') + '] ' + name + ' (✓ खाता पूर्ण चुकता)';
+              optStyle = 'color:#15803D;font-weight:600;';
+            }
+          } else {
+            optText = '[' + (v.accountId || 'ACC') + '] ' + name + ' (देय शेष: ' + fmt(v.due) + ')';
+            optStyle = 'color:#D97706;font-weight:700;';
+          }
+
+          return '<option value="' + name + '" class="' + (v.noInvoice ? 'opt-missing-invoice' : '') + '" style="' + optStyle + '" ' + isSel + '>' + optText + '</option>';
         }).join('');
         dropdownSelect.value = targetVendor;
+
+        // Visual alert styling for the select box itself
+        const curV = vendorMap[targetVendor];
+        if (curV && curV.noInvoice) {
+          dropdownSelect.style.borderColor = '#DC2626';
+          dropdownSelect.style.color = '#B91C1C';
+          dropdownSelect.style.backgroundColor = '#FFF5F5';
+        } else {
+          dropdownSelect.style.borderColor = 'var(--teal)';
+          dropdownSelect.style.color = 'var(--teal)';
+          dropdownSelect.style.backgroundColor = '#FFFFFF';
+        }
       }
 
       // Render Selected Vendor Ledger
@@ -9700,15 +9774,35 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
       if (!cur) return;
 
       if (balanceBadge) {
-        const isDue = cur.due > 0;
-        balanceBadge.innerHTML = `
-          <div style="background:${isDue ? 'rgba(217,119,6,0.12)' : 'rgba(46,125,50,0.12)'};border:1px solid ${isDue ? 'rgba(217,119,6,0.3)' : 'rgba(46,125,50,0.3)'};padding:6px 14px;border-radius:8px;display:inline-flex;align-items:center;gap:8px;">
-            <span style="font-size:12px;color:var(--text-muted);font-weight:600;">खाता स्थिति:</span>
-            <strong style="color:${isDue ? '#D97706' : '#2E7D32'};font-size:13.5px;">${isDue ? 'देय शेष: ' + fmt(cur.due) : '✓ खाता पूर्ण चुकता'}</strong>
-          </div>
-        `;
+        if (cur.noInvoice) {
+          balanceBadge.innerHTML = '<div style="background:#FEE2E2;border:1.5px solid #EF4444;padding:6px 14px;border-radius:8px;display:inline-flex;align-items:center;gap:8px;">' +
+            '<span style="font-size:12px;color:#991B1B;font-weight:700;"><i class="fa-solid fa-triangle-exclamation" style="color:#DC2626;"></i> खाता स्थिति:</span>' +
+            '<strong style="color:#DC2626;font-size:13.5px;">अग्रिम जमा: ' + fmt(cur.paid) + ' (बिल अप्राप्त)</strong>' +
+          '</div>';
+        } else if (cur.discount > 0) {
+          balanceBadge.innerHTML = '<div style="background:rgba(46,125,50,0.12);border:1.5px solid rgba(46,125,50,0.4);padding:6px 14px;border-radius:8px;display:inline-flex;align-items:center;gap:8px;">' +
+            '<span style="font-size:12px;color:var(--text-muted);font-weight:600;">खाता स्थिति:</span>' +
+            '<strong style="color:#2E7D32;font-size:13.5px;">✓ खाता पूर्ण चुकता (छूट: ' + fmt(cur.discount) + ' समायोजित - NILL)</strong>' +
+          '</div>';
+        } else if (cur.due > 0) {
+          balanceBadge.innerHTML = '<div style="background:rgba(217,119,6,0.12);border:1.5px solid rgba(217,119,6,0.3);padding:6px 14px;border-radius:8px;display:inline-flex;align-items:center;gap:8px;">' +
+            '<span style="font-size:12px;color:var(--text-muted);font-weight:600;">खाता स्थिति:</span>' +
+            '<strong style="color:#D97706;font-size:13.5px;">देय शेष: ' + fmt(cur.due) + '</strong>' +
+          '</div>';
+        } else if (cur.rawDiff < 0) {
+          balanceBadge.innerHTML = '<div style="background:rgba(37,99,235,0.1);border:1px solid rgba(37,99,235,0.3);padding:6px 14px;border-radius:8px;display:inline-flex;align-items:center;gap:8px;">' +
+            '<span style="font-size:12px;color:var(--text-muted);font-weight:600;">खाता स्थिति:</span>' +
+            '<strong style="color:#2563EB;font-size:13.5px;">✓ अग्रिम भुगतान: ' + fmt(Math.abs(cur.rawDiff)) + '</strong>' +
+          '</div>';
+        } else {
+          balanceBadge.innerHTML = '<div style="background:rgba(46,125,50,0.12);border:1px solid rgba(46,125,50,0.3);padding:6px 14px;border-radius:8px;display:inline-flex;align-items:center;gap:8px;">' +
+            '<span style="font-size:12px;color:var(--text-muted);font-weight:600;">खाता स्थिति:</span>' +
+            '<strong style="color:#2E7D32;font-size:13.5px;">✓ खाता पूर्ण चुकता</strong>' +
+          '</div>';
+        }
       }
 
+      // Build Transaction Rows
       let runningBal = 0;
       const rowsHtml = cur.transactions.map((t, idx) => {
         if (t.type.includes('Cr')) {
@@ -9718,74 +9812,160 @@ let currentMainModule = 'campaign'; // 'campaign' or 'accounting'
         }
 
         const isBill = t.billAmt > 0;
-        return `
-          <tr>
-            <td style="text-align:center;font-weight:700;color:var(--text-muted);">${idx + 1}</td>
-            <td style="white-space:nowrap;font-size:12.5px;color:var(--text-secondary);"><i class="fa-regular fa-calendar" style="color:var(--gold);margin-right:4px;"></i>${t.date}</td>
-            <td style="font-weight:700;color:var(--teal);white-space:nowrap;">${t.ref}</td>
-            <td style="font-weight:600;color:var(--text-primary);">${t.particulars}</td>
-            <td style="text-align:center;">
-              <span class="badge" style="background:${isBill ? 'rgba(196,90,56,0.12)' : (t.isContra ? 'rgba(217,119,6,0.14)' : 'rgba(46,125,50,0.12)')};color:${isBill ? '#C45A38' : (t.isContra ? '#D97706' : '#2E7D32')};font-size:11px;font-weight:700;">
-                ${t.isContra ? '<i class="fa-solid fa-gas-pump" style="margin-right:3px;"></i>' : (!isBill ? '<i class="fa-solid fa-check" style="margin-right:3px;"></i>' : '')}${t.type}
-              </span>
-            </td>
-            <td style="text-align:right;font-weight:700;color:#C45A38;">${t.billAmt > 0 ? fmt(t.billAmt) : '-'}</td>
-            <td style="text-align:right;font-weight:700;color:#2E7D32;">${t.paidAmt > 0 ? fmt(t.paidAmt) : '-'}</td>
-            <td style="text-align:right;font-weight:800;color:${runningBal > 0 ? '#D97706' : 'var(--sage)'};font-size:13.5px;">${fmt(Math.max(0, runningBal))} Cr</td>
-          </tr>
-        `;
+        const isDisc = !!t.isDiscount;
+        const isContra = !!t.isContra;
+
+        let badgeHtml = '';
+        if (isBill) {
+          badgeHtml = '<span class="badge" style="background:rgba(196,90,56,0.12);color:#C45A38;font-size:11px;font-weight:700;">' + t.type + '</span>';
+        } else if (isDisc) {
+          badgeHtml = '<span class="badge" style="background:rgba(2,132,199,0.12);color:#0284c7;font-size:11px;font-weight:700;"><i class="fa-solid fa-tag" style="margin-right:3px;"></i>' + t.type + '</span>';
+        } else if (isContra) {
+          badgeHtml = '<span class="badge" style="background:rgba(217,119,6,0.14);color:#D97706;font-size:11px;font-weight:700;"><i class="fa-solid fa-gas-pump" style="margin-right:3px;"></i>' + t.type + '</span>';
+        } else {
+          badgeHtml = '<span class="badge" style="background:rgba(46,125,50,0.12);color:#2E7D32;font-size:11px;font-weight:700;"><i class="fa-solid fa-check" style="margin-right:3px;"></i>' + t.type + '</span>';
+        }
+
+        let balText = '';
+        if (Math.abs(runningBal) < 0.01) {
+          balText = '<span style="color:#2E7D32;font-weight:800;">₹0 (NILL)</span>';
+        } else if (runningBal > 0) {
+          balText = '<span style="color:#D97706;font-weight:800;">' + fmt(runningBal) + ' Cr</span>';
+        } else {
+          balText = '<span style="color:#DC2626;font-weight:800;">' + fmt(Math.abs(runningBal)) + ' Dr (अग्रिम)</span>';
+        }
+
+        return '<tr>' +
+          '<td style="text-align:center;font-weight:700;color:var(--text-muted);">' + (idx + 1) + '</td>' +
+          '<td style="white-space:nowrap;font-size:12.5px;color:var(--text-secondary);"><i class="fa-regular fa-calendar" style="color:var(--gold);margin-right:4px;"></i>' + t.date + '</td>' +
+          '<td style="font-weight:700;color:var(--teal);white-space:nowrap;">' + t.ref + '</td>' +
+          '<td style="font-weight:600;color:var(--text-primary);">' + t.particulars + '</td>' +
+          '<td style="text-align:center;">' + badgeHtml + '</td>' +
+          '<td style="text-align:right;font-weight:700;color:#C45A38;">' + (t.billAmt > 0 ? fmt(t.billAmt) : '-') + '</td>' +
+          '<td style="text-align:right;font-weight:700;color:' + (isDisc ? '#0284c7' : '#2E7D32') + ';">' + (t.paidAmt > 0 ? fmt(t.paidAmt) : '-') + '</td>' +
+          '<td style="text-align:right;font-size:13.5px;">' + balText + '</td>' +
+        '</tr>';
       }).join('');
 
-      displayCard.innerHTML = `
-        <div class="ledger-header">
-          <div>
-            <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">विक्रेता / फर्म आधिकारिक खाता बही</div>
-            <h3 style="margin:4px 0 2px;font-size:19px;color:var(--teal);font-weight:800;">${cur.name}</h3>
-            ${cur.gstin ? `<div style="font-size:11.5px;color:var(--text-secondary);font-family:monospace;"><i class="fa-solid fa-building-shield" style="color:var(--gold);margin-right:4px;"></i>GSTIN: <strong>${cur.gstin}</strong></div>` : ''}
-          </div>
-          <div class="ledger-stats-strip" style="display:flex;gap:12px;flex-wrap:wrap;">
-            <div style="background:#fff;padding:8px 14px;border-radius:8px;border:1px solid var(--sandstone);text-align:right;">
-              <div style="font-size:11px;color:var(--text-muted);font-weight:700;">कुल बिल राशि</div>
-              <div style="font-size:15px;font-weight:800;color:#C45A38;">${fmt(cur.billed)}</div>
-            </div>
-            <div style="background:#fff;padding:8px 14px;border-radius:8px;border:1px solid var(--sandstone);text-align:right;">
-              <div style="font-size:11px;color:var(--text-muted);font-weight:700;">कुल भुगतान चुकता</div>
-              <div style="font-size:15px;font-weight:800;color:#2E7D32;">${fmt(cur.paid)}</div>
-            </div>
-            <div style="background:${cur.due > 0 ? 'rgba(217,119,6,0.1)' : 'rgba(46,125,50,0.1)'};padding:8px 16px;border-radius:8px;border:1px solid ${cur.due > 0 ? 'rgba(217,119,6,0.3)' : 'rgba(46,125,50,0.3)'};text-align:right;">
-              <div style="font-size:11px;color:${cur.due > 0 ? '#D97706' : '#2E7D32'};font-weight:800;">अंतिम देय शेष</div>
-              <div style="font-size:16px;font-weight:800;color:${cur.due > 0 ? '#D97706' : '#2E7D32'};">${fmt(cur.due)}</div>
-            </div>
-          </div>
-        </div>
-        <div class="table-responsive">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th style="width:40px;">क्र.</th>
-                <th>दिनांक</th>
-                <th>संदर्भ क्र. (बिल / चेक)</th>
-                <th>विवरण</th>
-                <th style="text-align:center;">प्रविष्टि प्रकार</th>
-                <th style="text-align:right;">बिल राशि (Cr)</th>
-                <th style="text-align:right;">भुगतान राशि (Dr)</th>
-                <th style="text-align:right;">संचयी देय शेष</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rowsHtml}
-            </tbody>
-            <tfoot>
-              <tr style="background:var(--sandstone-light);font-weight:800;">
-                <td colspan="5" style="text-align:right;font-size:13px;color:var(--teal);">खाता कुल योग:</td>
-                <td style="text-align:right;color:#C45A38;font-size:14px;">${fmt(cur.billed)}</td>
-                <td style="text-align:right;color:#2E7D32;font-size:14px;">${fmt(cur.paid)}</td>
-                <td style="text-align:right;color:${cur.due > 0 ? '#D97706' : '#2E7D32'};font-size:14px;">${fmt(cur.due)} Cr</td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-      `;
+      // Banner Notifications for Special Account Conditions
+      let alertBannerHtml = '';
+      if (cur.noInvoice) {
+        alertBannerHtml = '<div style="background:#FFF5F5;border:1.5px solid #FCA5A5;border-left:5px solid #DC2626;border-radius:10px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:14px;">' +
+          '<i class="fa-solid fa-triangle-exclamation" style="font-size:26px;color:#DC2626;flex-shrink:0;"></i>' +
+          '<div style="flex:1;">' +
+            '<div style="font-size:14px;font-weight:800;color:#991B1B;">⚠️ देयक / बिल अप्राप्त (Invoice Not Received) - अग्रिम जमा खाता</div>' +
+            '<div style="font-size:12.5px;color:#7F1D1D;margin-top:3px;line-height:1.5;">' +
+              'इस वेंडर/फर्म को बैंक चेक के माध्यम से कुल <strong>' + fmt(cur.paid) + '</strong> का भुगतान किया जा चुका है, परंतु संबंधित देयक (Bill / Invoice) रिकॉर्ड में अप्राप्त है। बिल प्राप्त होते ही दर्ज किया जाएगा।' +
+            '</div>' +
+          '</div>' +
+          '<div style="background:#DC2626;color:#FFF;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:800;white-space:nowrap;">' +
+            'जमा: ' + fmt(cur.paid) +
+          '</div>' +
+        '</div>';
+      } else if (cur.discount > 0) {
+        alertBannerHtml = '<div style="background:#F0FDF4;border:1.5px solid #86EFAC;border-left:5px solid #16A34A;border-radius:10px;padding:12px 16px;margin-bottom:18px;display:flex;align-items:center;gap:12px;">' +
+          '<i class="fa-solid fa-circle-check" style="font-size:22px;color:#16A34A;flex-shrink:0;"></i>' +
+          '<div>' +
+            '<div style="font-size:13.5px;font-weight:800;color:#166534;">✓ खाता पूर्ण चुकता (Account NILL - Discount Adjusted)</div>' +
+            '<div style="font-size:12px;color:#14532D;margin-top:2px;">' +
+              'इस फर्म का संचयी शेष <strong>' + fmt(cur.discount) + '</strong> छूट (Discount / Round-off Adjustment) के रूप में समायोजित कर दिया गया है। वर्तमान में कोई देय शेष नहीं है (NILL)।' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }
+
+      // Stats Strip HTML
+      let statsStripHtml = '';
+      if (cur.noInvoice) {
+        statsStripHtml = '<div style="background:#fff;padding:8px 14px;border-radius:8px;border:1px solid var(--sandstone);text-align:right;">' +
+          '<div style="font-size:11px;color:var(--text-muted);font-weight:700;">कुल बिल राशि</div>' +
+          '<div style="font-size:15px;font-weight:800;color:#C45A38;">₹0.00</div>' +
+        '</div>' +
+        '<div style="background:#fff;padding:8px 14px;border-radius:8px;border:1px solid var(--sandstone);text-align:right;">' +
+          '<div style="font-size:11px;color:var(--text-muted);font-weight:700;">कुल भुगतान जमा</div>' +
+          '<div style="font-size:15px;font-weight:800;color:#2E7D32;">' + fmt(cur.paid) + '</div>' +
+        '</div>' +
+        '<div style="background:#FEE2E2;padding:8px 16px;border-radius:8px;border:1px solid #FCA5A5;text-align:right;">' +
+          '<div style="font-size:11px;color:#991B1B;font-weight:800;">स्थिति / अग्रिम शेष</div>' +
+          '<div style="font-size:15px;font-weight:800;color:#DC2626;">-' + fmt(cur.paid) + ' (बिल प्रतीक्षित)</div>' +
+        '</div>';
+      } else if (cur.discount > 0) {
+        statsStripHtml = '<div style="background:#fff;padding:8px 14px;border-radius:8px;border:1px solid var(--sandstone);text-align:right;">' +
+          '<div style="font-size:11px;color:var(--text-muted);font-weight:700;">कुल बिल राशि</div>' +
+          '<div style="font-size:15px;font-weight:800;color:#C45A38;">' + fmt(cur.billed) + '</div>' +
+        '</div>' +
+        '<div style="background:#fff;padding:8px 14px;border-radius:8px;border:1px solid var(--sandstone);text-align:right;">' +
+          '<div style="font-size:11px;color:var(--text-muted);font-weight:700;">कुल भुगतान</div>' +
+          '<div style="font-size:15px;font-weight:800;color:#2E7D32;">' + fmt(cur.paid) + '</div>' +
+        '</div>' +
+        '<div style="background:#F0FDF4;padding:8px 16px;border-radius:8px;border:1px solid #86EFAC;text-align:right;">' +
+          '<div style="font-size:11px;color:#166534;font-weight:800;">छूट समायोजन / देय शेष</div>' +
+          '<div style="font-size:15px;font-weight:800;color:#16A34A;">₹0.00 (छूट: ' + fmt(cur.discount) + ')</div>' +
+        '</div>';
+      } else {
+        const isDue = cur.due > 0;
+        statsStripHtml = '<div style="background:#fff;padding:8px 14px;border-radius:8px;border:1px solid var(--sandstone);text-align:right;">' +
+          '<div style="font-size:11px;color:var(--text-muted);font-weight:700;">कुल बिल राशि</div>' +
+          '<div style="font-size:15px;font-weight:800;color:#C45A38;">' + fmt(cur.billed) + '</div>' +
+        '</div>' +
+        '<div style="background:#fff;padding:8px 14px;border-radius:8px;border:1px solid var(--sandstone);text-align:right;">' +
+          '<div style="font-size:11px;color:var(--text-muted);font-weight:700;">कुल भुगतान चुकता</div>' +
+          '<div style="font-size:15px;font-weight:800;color:#2E7D32;">' + fmt(cur.paid) + '</div>' +
+        '</div>' +
+        '<div style="background:' + (isDue ? 'rgba(217,119,6,0.1)' : 'rgba(46,125,50,0.1)') + ';padding:8px 16px;border-radius:8px;border:1px solid ' + (isDue ? 'rgba(217,119,6,0.3)' : 'rgba(46,125,50,0.3)') + ';text-align:right;">' +
+          '<div style="font-size:11px;color:' + (isDue ? '#D97706' : '#2E7D32') + ';font-weight:800;">अंतिम देय शेष</div>' +
+          '<div style="font-size:16px;font-weight:800;color:' + (isDue ? '#D97706' : '#2E7D32') + ';">' + (isDue ? fmt(cur.due) : (cur.rawDiff < 0 ? '-' + fmt(Math.abs(cur.rawDiff)) + ' (अग्रिम)' : '₹0.00')) + '</div>' +
+        '</div>';
+      }
+
+      // Final Footer Calculation
+      let footerDueText = '';
+      if (cur.noInvoice) {
+        footerDueText = '<span style="color:#DC2626;">-' + fmt(cur.paid) + ' Dr (अग्रिम)</span>';
+      } else if (cur.due > 0) {
+        footerDueText = '<span style="color:#D97706;">' + fmt(cur.due) + ' Cr</span>';
+      } else {
+        footerDueText = '<span style="color:#2E7D32;">✓ ₹0.00 (NILL)</span>';
+      }
+
+      displayCard.innerHTML = '<div class="ledger-header">' +
+        '<div>' +
+          '<div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">विक्रेता / फर्म आधिकारिक खाता बही</div>' +
+          '<h3 style="margin:4px 0 2px;font-size:19px;color:var(--teal);font-weight:800;">[' + (cur.accountId || 'ACC') + '] ' + cur.name + '</h3>' +
+          (cur.gstin ? '<div style="font-size:11.5px;color:var(--text-secondary);font-family:monospace;"><i class="fa-solid fa-building-shield" style="color:var(--gold);margin-right:4px;"></i>GSTIN: <strong>' + cur.gstin + '</strong></div>' : '') +
+        '</div>' +
+        '<div class="ledger-stats-strip" style="display:flex;gap:12px;flex-wrap:wrap;">' +
+          statsStripHtml +
+        '</div>' +
+      '</div>' +
+      alertBannerHtml +
+      '<div class="table-responsive">' +
+        '<table class="data-table">' +
+          '<thead>' +
+            '<tr>' +
+              '<th style="width:40px;">क्र.</th>' +
+              '<th>दिनांक</th>' +
+              '<th>संदर्भ क्र. (बिल / चेक)</th>' +
+              '<th>विवरण</th>' +
+              '<th style="text-align:center;">प्रविष्टि प्रकार</th>' +
+              '<th style="text-align:right;">बिल राशि (Cr)</th>' +
+              '<th style="text-align:right;">भुगतान राशि (Dr)</th>' +
+              '<th style="text-align:right;">संचयी देय शेष</th>' +
+            '</tr>' +
+          '</thead>' +
+          '<tbody>' +
+            rowsHtml +
+          '</tbody>' +
+          '<tfoot>' +
+            '<tr style="background:var(--sandstone-light);font-weight:800;">' +
+              '<td colspan="5" style="text-align:right;font-size:13px;color:var(--teal);">खाता कुल योग:</td>' +
+              '<td style="text-align:right;color:#C45A38;font-size:14px;">' + fmt(cur.billed) + '</td>' +
+              '<td style="text-align:right;color:#2E7D32;font-size:14px;">' + fmt(cur.paid + (cur.discount || 0)) + '</td>' +
+              '<td style="text-align:right;font-size:14px;">' + footerDueText + '</td>' +
+            '</tr>' +
+          '</tfoot>' +
+        '</table>' +
+      '</div>';
     }
 
     function selectVendorLedger(name) {
