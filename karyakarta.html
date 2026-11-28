@@ -3369,6 +3369,9 @@
       try { updateBadges(); } catch (e) { console.error("Error in updateBadges:", e); }
       try { applyUserProfile(); } catch (e) { console.error("Error in applyUserProfile:", e); }
       try { updateRibbon(); } catch (e) { console.error("Error in updateRibbon:", e); }
+      try {
+        if (selectedLedgerDonorSno) renderDonorLedgerView(selectedLedgerDonorSno);
+      } catch (e) {}
     }
 
     function updateBadges() {
@@ -6720,8 +6723,11 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
         '<div style="background:#fff;border-radius:10px;border:1px solid var(--border);padding:18px;margin-bottom:18px;box-shadow:var(--shadow-sm);">' +
           '<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:14px;border-bottom:1px solid var(--border);padding-bottom:12px;">' +
             '<div>' +
-              '<div style="display:flex;align-items:center;gap:8px;">' +
+              '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
                 '<h2 style="margin:0;font-size:20px;font-weight:800;color:var(--teal);">' + donor.name + '</h2>' +
+                '<button onclick="openEditDeclarationModal(' + donor.sno + ')" class="btn-outline-action" style="padding:2px 8px;font-size:11px;color:var(--teal);border:1px dashed var(--teal);border-radius:4px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;" title="नाम, ग्राम, मोबाइल या संकल्प राशि सुधारें">' +
+                  '<i class="fa-solid fa-pen-to-square"></i> विवरण सुधारें' +
+                '</button>' +
                 '<span class="badge" style="background:var(--teal-subtle);color:var(--teal);font-size:12px;padding:3px 8px;font-weight:700;">#' + donor.sno + '</span>' +
                 '<span class="badge" style="background:var(--sandstone-light);color:var(--text);font-size:12px;padding:3px 8px;">' + (donor.city || 'अन्य') + '</span>' +
               '</div>' +
@@ -6733,6 +6739,9 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
             '</div>' +
 
             '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
+              '<button onclick="openEditDeclarationModal(' + donor.sno + ')" class="btn-outline-action" style="padding:6px 12px;font-size:12px;color:var(--teal);background:#fff;border:1px solid var(--teal);display:inline-flex;align-items:center;gap:6px;border-radius:6px;cursor:pointer;" title="दानदाता विवरण (नाम, ग्राम, मोबाइल, संकल्प राशि) सुधारें या संपादित करें">' +
+                '<i class="fa-solid fa-pen-to-square"></i> विवरण सुधारें (Edit)' +
+              '</button>' +
               '<a href="' + waStatementUrl + '" target="_blank" class="btn-outline-action" style="padding:6px 12px;font-size:12px;background:#25D366;color:#fff;border-color:#25D366;display:inline-flex;align-items:center;gap:6px;border-radius:6px;text-decoration:none;">' +
                 '<i class="fa-brands fa-whatsapp"></i> WhatsApp खाता विवरणी भेजें' +
               '</a>' +
