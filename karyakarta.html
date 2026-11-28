@@ -2987,8 +2987,15 @@
                 let finalSno = sno;
                 if (existingIdx >= 0) {
                   const existing = declarationsList[existingIdx];
-                  const hasReceipt = receipt && receipt !== '-' && receipt !== 'undefined' && receipt.trim() !== '';
-                  const initDep = hasReceipt ? amt : 0;
+                  const cleanRcpt = receipt && receipt !== '-' && receipt !== 'undefined' ? String(receipt).trim() : '';
+                  let initDep = 0;
+                  if (cleanRcpt) {
+                    const numOnly = cleanRcpt.replace(/[^0-9.]/g, '');
+                    if (numOnly && !cleanRcpt.includes('/') && !cleanRcpt.toLowerCase().startsWith('r')) {
+                      const pNum = parseFloat(numOnly);
+                      if (pNum > 0 && pNum <= amt) initDep = pNum;
+                    }
+                  }
                   // If name does not match, it's a sequence collision from older client cache!
                   if (existing.name && existing.name.trim().toLowerCase() !== name.toLowerCase()) {
                     maxBulkSno++;
@@ -3013,8 +3020,15 @@
                     });
                   } else {
                     // Genuine edit
-                    const hasReceipt = receipt && receipt !== '-' && receipt !== 'undefined' && receipt.trim() !== '';
-                    const initDep = hasReceipt ? amt : 0;
+                    const cleanRcpt = receipt && receipt !== '-' && receipt !== 'undefined' ? String(receipt).trim() : '';
+                    let initDep = 0;
+                    if (cleanRcpt) {
+                      const numOnly = cleanRcpt.replace(/[^0-9.]/g, '');
+                      if (numOnly && !cleanRcpt.includes('/') && !cleanRcpt.toLowerCase().startsWith('r')) {
+                        const pNum = parseFloat(numOnly);
+                        if (pNum > 0 && pNum <= amt) initDep = pNum;
+                      }
+                    }
                     Object.assign(existing, {
                       name: name,
                       city: city,
@@ -3034,8 +3048,15 @@
                   }
                 } else {
                   if (finalSno > maxBulkSno) maxBulkSno = finalSno;
-                  const hasReceipt = receipt && receipt !== '-' && receipt !== 'undefined' && receipt.trim() !== '';
-                  const initDep = hasReceipt ? amt : 0;
+                  const cleanRcpt = receipt && receipt !== '-' && receipt !== 'undefined' ? String(receipt).trim() : '';
+                  let initDep = 0;
+                  if (cleanRcpt) {
+                    const numOnly = cleanRcpt.replace(/[^0-9.]/g, '');
+                    if (numOnly && !cleanRcpt.includes('/') && !cleanRcpt.toLowerCase().startsWith('r')) {
+                      const pNum = parseFloat(numOnly);
+                      if (pNum > 0 && pNum <= amt) initDep = pNum;
+                    }
+                  }
                   declarationsList.push({
                     sno: finalSno,
                     name: name,
@@ -7330,6 +7351,52 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
     }
 
     // 1. Edit Declaration
+    function getDonorInitialReceivedAmount(donor) {
+      if (!donor) return 0;
+      const rcptRaw = donor.receipt ? String(donor.receipt).trim() : '';
+      if (!rcptRaw || rcptRaw === '-' || rcptRaw.toLowerCase() === 'undefined') {
+        return 0;
+      }
+
+      // 1. Check if matching receipt exists in collectionsList
+      const coll = collectionsList.find(c => {
+        const cRcpt = String(c.receiptNo || '').trim().toLowerCase();
+        const dRcpt = rcptRaw.toLowerCase();
+        if (cRcpt && (cRcpt === dRcpt || cRcpt.replace(/^r\s*/i, '') === dRcpt.replace(/^r\s*/i, ''))) return true;
+        if (c.donorSno && String(c.donorSno).trim() === String(donor.sno).trim()) return true;
+        return false;
+      });
+      if (coll && Number(coll.amount) > 0) {
+        return Number(coll.amount);
+      }
+
+      // 2. If rcptRaw is numeric and represents an amount (e.g. 500000 in Sno 591)
+      const cleanNum = rcptRaw.replace(/[^0-9.]/g, '');
+      if (cleanNum && !rcptRaw.includes('/') && !rcptRaw.includes('-') && !rcptRaw.toLowerCase().startsWith('r')) {
+        const numVal = parseFloat(cleanNum);
+        if (numVal > 0 && numVal <= Number(donor.amount || 0)) {
+          return numVal;
+        }
+      }
+
+      // 3. Check if balance indicates deposit
+      if (donor.balance !== undefined && donor.amount !== undefined && Number(donor.balance) >= 0) {
+        const calcDep = Math.max(0, Number(donor.amount || 0) - Number(donor.balance || 0));
+        if (calcDep > 0) return calcDep;
+      }
+
+      // 4. Check initialDeposited
+      if (donor.initialDeposited !== undefined && donor.initialDeposited !== null) {
+        const id = Number(donor.initialDeposited) || 0;
+        if (donor.balance !== undefined && Number(donor.balance) > 0) {
+          return Math.min(id, Math.max(0, Number(donor.amount || 0) - Number(donor.balance || 0)));
+        }
+        return id;
+      }
+
+      return 0;
+    }
+
     function openEditDeclarationModal(sno) {
       const donor = declarationsList.find(d => String(d.sno) === String(sno));
       if (!donor) return alert("दानदाता रिकॉर्ड नहीं मिला!");
@@ -7351,25 +7418,12 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
 
       document.getElementById('editDeclAmount').value = donor.amount || '';
 
-      // Determine initial received amount
-      let initRec = 0;
-      if (donor.initialDeposited !== undefined && donor.initialDeposited !== null) {
-        initRec = Number(donor.initialDeposited) || 0;
-      } else {
-        const rcpt = donor.receipt && donor.receipt !== '-' ? String(donor.receipt).trim() : '';
-        const coll = collectionsList.find(c => {
-          if (rcpt && String(c.receiptNo).trim() === rcpt) return true;
-          if (String(c.donorSno) === String(donor.sno)) return true;
-          return false;
-        });
-        if (coll) {
-          initRec = Number(coll.amount) || 0;
-        } else if (Number(donor.deposited) > 0) {
-          initRec = Number(donor.deposited);
-        }
-      }
+      // Populate received amount: derived strictly from receipt column or collection record, never default to declaration amount
+      const recAmt = getDonorInitialReceivedAmount(donor);
       const recInput = document.getElementById('editDeclReceivedAmount');
-      if (recInput) recInput.value = initRec > 0 ? initRec : (initRec === 0 ? '0' : '');
+      if (recInput) {
+        recInput.value = recAmt > 0 ? recAmt : '';
+      }
 
       document.getElementById('editDeclMobile').value = donor.mobile || '';
       document.getElementById('editDeclDate').value = toIsoDateInput(donor.date);
