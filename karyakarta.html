@@ -6587,6 +6587,39 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
       }
     }
 
+    function openEditLedgerReceipt(receiptNo, donorSno) {
+      if (!receiptNo) {
+        if (donorSno) openEditDeclarationModal(donorSno);
+        return;
+      }
+      const cleanR = String(receiptNo).trim();
+      const coll = collectionsList.find(c => String(c.receiptNo).trim() === cleanR);
+      if (coll) {
+        openEditCollectionModal(cleanR);
+      } else {
+        // If it was the initial receipt recorded on the declaration itself
+        openEditDeclarationModal(donorSno);
+      }
+    }
+
+    function jumpToDeclarationInList(sno) {
+      switchPortalTab('declarations-ledger');
+      const sInput = document.getElementById('searchDeclTable');
+      if (sInput) {
+        sInput.value = '#' + sno;
+        renderDeclarationsTable();
+      }
+    }
+
+    function jumpToCollectionInList(receiptNo) {
+      switchPortalTab('collections-ledger');
+      const sInput = document.getElementById('searchCollTable');
+      if (sInput) {
+        sInput.value = receiptNo;
+        renderCollectionsTable();
+      }
+    }
+
     function renderDonorLedgerView(targetSno) {
       const display = document.getElementById('donorLedgerDisplay');
       if (!display) return;
@@ -6637,6 +6670,8 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
       const transactions = [];
       // Entry 1: Pledge Declaration (Cr)
       transactions.push({
+        type: 'declaration',
+        sno: donor.sno,
         date: donor.date || '-',
         ref: 'संकल्प क्र. #' + donor.sno,
         particulars: 'पावन जनसहयोग संकल्प घोषणा',
@@ -6649,6 +6684,8 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
       // Subsequent Entries: Each Collection (Dr)
       donorColls.forEach(c => {
         transactions.push({
+          type: 'collection',
+          receiptNo: c.receiptNo,
           date: c.date || '-',
           ref: 'रसीद क्र. ' + c.receiptNo + (c.refNo ? ' (' + c.refNo + ')' : ''),
           particulars: 'किस्त / दान प्राप्ति (' + (c.remarks || c.notes || 'रसीद जारी') + ')',
@@ -6678,18 +6715,51 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
           balText = '<span style="color:#065F46;font-weight:800;">' + fmt(Math.abs(runningBal)) + ' (Advance)</span>';
         }
 
+        const isDecl = t.type === 'declaration' || t.pledgeAmt > 0;
+        let refCellHtml = '';
+        let particularsCellHtml = '';
+        let actionCellHtml = '';
+
+        if (isDecl) {
+          refCellHtml = '<a href="javascript:void(0)" onclick="openEditDeclarationModal(\'' + donor.sno + '\')" style="color:var(--teal);text-decoration:none;border-bottom:1px dotted var(--teal);font-weight:700;display:inline-flex;align-items:center;gap:4px;" title="क्लिक करें: घोषणा प्रविष्टि संपादित करें (#' + donor.sno + ')">' +
+            '<span>' + t.ref + '</span>' +
+            '<i class="fa-solid fa-pen-to-square" style="font-size:10px;opacity:0.75;"></i>' +
+          '</a>';
+
+          particularsCellHtml = '<a href="javascript:void(0)" onclick="openEditDeclarationModal(\'' + donor.sno + '\')" style="color:var(--text);text-decoration:none;display:inline-block;" title="क्लिक करें: घोषणा प्रविष्टि सुधारें">' +
+            '<div style="font-weight:600;color:var(--teal);">' + t.particulars + '</div>' +
+          '</a>';
+
+          actionCellHtml = '<button class="btn-outline-action" onclick="openEditDeclarationModal(\'' + donor.sno + '\')" style="padding:2px 7px;font-size:11px;color:var(--teal);" title="घोषणा प्रविष्टि संपादित करें">' +
+            '<i class="fa-solid fa-pen-to-square"></i> सुधारें' +
+          '</button>';
+        } else {
+          const safeRcpt = String(t.receiptNo || '').replace(/'/g, "\\'");
+          refCellHtml = '<a href="javascript:void(0)" onclick="openEditLedgerReceipt(\'' + safeRcpt + '\', \'' + donor.sno + '\')" style="color:var(--teal);text-decoration:none;border-bottom:1px dotted var(--teal);font-weight:700;display:inline-flex;align-items:center;gap:4px;" title="क्लिक करें: रसीद प्रविष्टि संपादित करें (रसीद #' + safeRcpt + ')">' +
+            '<span>' + t.ref + '</span>' +
+            '<i class="fa-solid fa-pen-to-square" style="font-size:10px;opacity:0.75;"></i>' +
+          '</a>';
+
+          particularsCellHtml = '<a href="javascript:void(0)" onclick="openEditLedgerReceipt(\'' + safeRcpt + '\', \'' + donor.sno + '\')" style="color:var(--text);text-decoration:none;display:inline-block;" title="क्लिक करें: रसीद प्रविष्टि सुधारें">' +
+            '<div style="font-weight:600;">' + t.particulars + '</div>' +
+          '</a>';
+
+          actionCellHtml = '<button class="btn-outline-action" onclick="openEditLedgerReceipt(\'' + safeRcpt + '\', \'' + donor.sno + '\')" style="padding:2px 7px;font-size:11px;color:var(--teal);" title="रसीद प्रविष्टि संपादित करें">' +
+            '<i class="fa-solid fa-pen-to-square"></i> सुधारें' +
+          '</button>';
+        }
+
         return '<tr style="' + (isPledge ? 'background:#F8FAFC;' : '') + '">' +
           '<td style="text-align:center;font-weight:600;color:var(--text-muted);">' + (idx + 1) + '</td>' +
           '<td style="white-space:nowrap;font-size:12px;"><i class="fa-regular fa-calendar" style="margin-right:4px;color:var(--text-muted);"></i>' + formatDisplayDate(t.date) + '</td>' +
-          '<td style="font-weight:700;font-size:12px;color:var(--teal);white-space:nowrap;">' + t.ref + '</td>' +
-          '<td style="font-size:12.5px;">' +
-            '<div style="font-weight:600;">' + t.particulars + '</div>' +
-          '</td>' +
+          '<td style="font-size:12px;white-space:nowrap;">' + refCellHtml + '</td>' +
+          '<td style="font-size:12.5px;">' + particularsCellHtml + '</td>' +
           '<td style="text-align:center;font-size:11.5px;"><span class="badge" style="background:var(--sandstone-light);border:1px solid var(--border);padding:2px 6px;">' + t.mode + '</span></td>' +
           '<td style="font-size:12px;color:var(--text-muted);white-space:nowrap;">' + (t.collector || '-') + '</td>' +
           '<td style="text-align:right;font-weight:700;color:var(--teal);font-size:13px;">' + (t.pledgeAmt > 0 ? fmt(t.pledgeAmt) : '-') + '</td>' +
           '<td style="text-align:right;font-weight:700;color:var(--sage);font-size:13px;">' + (t.paidAmt > 0 ? fmt(t.paidAmt) : '-') + '</td>' +
           '<td style="text-align:right;font-size:13px;">' + balText + '</td>' +
+          '<td style="text-align:center;white-space:nowrap;">' + actionCellHtml + '</td>' +
         '</tr>';
       }).join('');
 
@@ -6786,6 +6856,7 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
                   '<th style="text-align:right;">संकल्प (Cr)</th>' +
                   '<th style="text-align:right;">जमा (Dr)</th>' +
                   '<th style="text-align:right;">संचयी शेष (Balance)</th>' +
+                  '<th style="text-align:center;width:75px;">कार्रवाई</th>' +
                 '</tr>' +
               '</thead>' +
               '<tbody>' +
@@ -6797,6 +6868,7 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
                   '<td style="text-align:right;color:var(--teal);font-size:14px;">' + fmt(donor.amount) + '</td>' +
                   '<td style="text-align:right;color:var(--sage);font-size:14px;">' + fmt(donor.deposited) + '</td>' +
                   '<td style="text-align:right;color:' + (isPaidFull ? '#065F46' : 'var(--saffron)') + ';font-size:14px;">' + (isPaidFull ? '✓ ₹0' : fmt(donor.balance)) + '</td>' +
+                  '<td></td>' +
                 '</tr>' +
               '</tfoot>' +
             '</table>' +
