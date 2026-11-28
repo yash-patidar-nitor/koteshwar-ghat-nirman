@@ -7647,9 +7647,8 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
 
     async function postWebhookData(action, data) {
       let sheetOk = false;
-      let tursoOk = false;
 
-      // 1. Dual-write to Google Apps Script Webhook (Google Sheets)
+      // 1. PRIMARY WRITE: Google Apps Script Webhook (Sole Source of Truth)
       if (webhookUrl) {
         try {
           await fetch(webhookUrl, {
@@ -7660,39 +7659,37 @@ Return ONLY the raw JSON object. No conversational text or markdown code fences.
           });
           sheetOk = true;
         } catch (e) {
-          console.warn("Google Sheet webhook background notice:", e);
+          console.warn("Google Sheet webhook notice:", e);
         }
       }
 
-      // 2. Dual-write to Turso SQLite Database (via Vercel Serverless API)
+      // 2. SECONDARY SHADOW WRITE: Turso SQLite Backup (100% Non-Blocking & Isolated)
+      // Any Turso error or delay will NEVER block, delay, or affect Google Sheets
       try {
         const tursoApiUrl = (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '443'))
           ? 'https://koteshwar-ghat-nirman.vercel.app/api/turso-transaction'
           : '/api/turso-transaction';
 
-        const tursoRes = await fetch(tursoApiUrl, {
+        const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+        const timer = controller ? setTimeout(() => controller.abort(), 4000) : null;
+
+        fetch(tursoApiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: action, data: data })
+          body: JSON.stringify({ action: action, data: data }),
+          signal: controller ? controller.signal : undefined
+        }).then(res => {
+          if (timer) clearTimeout(timer);
+        }).catch(err => {
+          if (timer) clearTimeout(timer);
+          console.warn("Turso shadow backup notice (non-fatal):", err);
         });
-        if (tursoRes.ok) {
-          const resData = await tursoRes.json();
-          if (resData && resData.success) {
-            tursoOk = true;
-          }
-        }
       } catch (err) {
-        console.warn("Turso real-time sync notice:", err);
+        console.warn("Turso trigger notice (non-fatal):", err);
       }
 
-      if (sheetOk && tursoOk) {
-        updateRibbon(false, "✅ Google Sheet एवं Turso DB में डेटा सुरक्षित");
-        return true;
-      } else if (sheetOk) {
+      if (sheetOk) {
         updateRibbon(false, "Google Sheet में डेटा सुरक्षित किया गया");
-        return true;
-      } else if (tursoOk) {
-        updateRibbon(false, "Turso DB में डेटा सुरक्षित किया गया");
         return true;
       } else {
         updateRibbon(false, "स्थानीय रूप से सुरक्षित (ऑफ़लाइन कैश)");
